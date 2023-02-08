@@ -6,6 +6,7 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
+let port = process.env.PORT || 3002;
 
 let app = express();
 app.set("view engine", "ejs");
@@ -32,6 +33,9 @@ if (!dbPath) {
 mongoose.connect(dbPath, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+}, () => {
+  console.log("Connected to db!");
+  app.listen(port, () => console.log("Server Up and running"));
 });
 
 mongoose.connection.on("connected", () => {
@@ -216,10 +220,5 @@ function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) return next();
   res.redirect("/login");
 }
-
-var port = process.env.PORT || 3002;
-app.listen(port, function () {
-  console.log("Server Has Started!");
-});
 
 mongoose.set("strictQuery", false);
