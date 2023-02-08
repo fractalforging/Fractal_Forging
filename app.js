@@ -104,9 +104,9 @@ app.get("/", function (req, res) {
 // Showing secret page
 app.get("/secret", isLoggedIn, async function (req, res) {
   if (req.user.roles === "admin") {
-    res.render("secret_admin", { name: req.user.username });
+    res.render("secret_admin", { name: req.user.username, todoTasks: todoTasks });
   } else if (req.user.roles === "user") {
-    res.render("secret", { name: req.user.username });
+    res.render("secret", { name: req.user.username, todoTasks: todoTasks });
   }
 });
 
@@ -207,7 +207,7 @@ app.get("/secret_admin", isLoggedIn, isAdmin, function (req, res) {
 app.use(function (req, res, next) {
   res.locals.user = req.user;
   next();
-});
+}); 
 
 //=====================
 // TO DO LIST
