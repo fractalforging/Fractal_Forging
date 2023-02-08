@@ -111,6 +111,13 @@ app.get("/secret", isLoggedIn, async function (req, res) {
   }
 });
 
+// Showing edit items
+app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
+  const foundTodoTask = await TodoTask.findById(req.params.id);
+  res.render("secret_edit", { name: req.user.username, todoTask: foundTodoTask });
+});
+
+
 // Showing register form
 app.get("/register", function (req, res) {
   res.render("register");
