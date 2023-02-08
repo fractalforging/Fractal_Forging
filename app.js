@@ -58,8 +58,8 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, "views/css")));
-app.use(express.static("views"));
+app.use(express.static(path.join(__dirname, "public/css")));
+app.use(express.static("public"));
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
