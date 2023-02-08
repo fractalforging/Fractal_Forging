@@ -6,7 +6,10 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
+
+//models
 const User = require("./models/user");
+const TodoTask = require("./models/TodoTask");
 
 // Required for connection to the MongoDB cloud -
 require("dotenv").config({ path: "mongodb.env" });
@@ -21,6 +24,19 @@ if (!dbPath) {
   );
   process.exit(1);
 }
+
+mongoose.connect(dbPath, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+mongoose.connection.on("connected", () => {
+  console.log("MongoDB connected successfully!");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error:", err);
+});
 
 var app = express();
 app.set("view engine", "ejs");
@@ -50,19 +66,6 @@ app.use(
     saveUninitialized: false,
   })
 );
-
-mongoose.connect(dbPath, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-mongoose.connection.on("connected", () => {
-  console.log("MongoDB connected successfully!");
-});
-
-mongoose.connection.on("error", (err) => {
-  console.error("MongoDB connection error:", err);
-});
 
 //
 
