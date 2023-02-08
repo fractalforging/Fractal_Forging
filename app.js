@@ -13,8 +13,8 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // MODELS
-const User = require("./models/user");
 const TodoTask = require("./models/TodoTask");
+const User = require("./models/user");
 
 // CONNECTION TO MONGODB
 require("dotenv").config({ path: "mongodb.env" });
@@ -103,10 +103,11 @@ app.get("/", function (req, res) {
 
 // Showing secret page
 app.get("/secret", isLoggedIn, async function (req, res) {
+  const todoTasks = await TodoTask.find(); // fetch todo tasks from the database
   if (req.user.roles === "admin") {
-    res.render("secret_admin", { name: req.user.username, todoTasks: todoTasks });
+    res.render("secret_admin", { name: req.user.username });
   } else if (req.user.roles === "user") {
-    res.render("secret", { name: req.user.username, todoTasks: todoTasks });
+    res.render("secret", { name: req.user.username, todoTasks });
   }
 });
 
