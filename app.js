@@ -12,11 +12,11 @@ let app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//models
+// MODELS
 const User = require("./models/user");
 const TodoTask = require("./models/TodoTask");
 
-// Required for connection to the MongoDB cloud -
+// CONNECTION TO MONGODB
 require("dotenv").config({ path: "mongodb.env" });
 const dotenv = require("dotenv");
 
@@ -34,12 +34,8 @@ mongoose.connect(dbPath, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }, () => {
-  console.log("Connected to db!");
-  app.listen(port, () => console.log("Server Up and running"));
-});
-
-mongoose.connection.on("connected", () => {
   console.log("MongoDB connected successfully!");
+  app.listen(port, () => console.log("Server Up and running"));
 });
 
 mongoose.connection.on("error", (err) => {
@@ -77,7 +73,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public/css")));
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 
+// CHECK IF LOGGED IN
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -85,6 +83,7 @@ function isLoggedIn(req, res, next) {
   res.redirect("/login");
 }
 
+// CHECK ROLE
 function isAdmin(req, res, next) {
   if (req.isAuthenticated() && req.user.roles === "admin") {
     return res.redirect("/secret_admin", { username: req.user.username });
@@ -116,6 +115,11 @@ app.get("/register", function (req, res) {
   res.render("register");
 });
 
+//Showing login form
+app.get("/login", function (req, res) {
+  res.render("login");
+});
+
 // Handling user signup
 app.post("/register", function (req, res) {
   User.register(
@@ -144,7 +148,6 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
       console.log("User not found");
       return res.render("account", { error: "Error, please try again" });
     }
-
     user.setPassword(req.body.newpassword, (err) => {
       if (err) {
         console.log(err);
@@ -160,17 +163,11 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
             console.log(err);
             return res.render("account", { error: "Error, please try again" });
           }
-          //return res.render("account", { message: "Password changed successfully" });
           res.render("passwordChanged");
         });
       });
     });
   });
-});
-
-//Showing login form
-app.get("/login", function (req, res) {
-  res.render("login");
 });
 
 //Handling user login
@@ -213,12 +210,59 @@ app.use(function (req, res, next) {
 });
 
 //=====================
-// CONNECTION
+// TO DO LIST
 //=====================
 
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.redirect("/login");
-}
+// GET METHOD
+app.get("/", (req, res) => {
+  TodoTask.find({}, (err, tasks) => {
+    res.render("secret.ejs", {
+      todoTasks: tasks
+    });
+  });
+});
+
+// POST METHOD
+app.post('/', async (req, res) => {
+  const todoTask = new TodoTask({
+    content: req.body.content
+  });
+  try {
+    await todoTask.save();
+    res.redirect("/");
+  } catch (err) {
+    res.redirect("/");
+  }
+});
+
+//UPDATE
+app.route("/edit/:id").get((req, res) => {
+  const id = req.params.id;
+  TodoTask.find({}, (err, tasks) => {
+    res.render("secret_edit.ejs", {
+      todoTasks: tasks,
+      idTask: id
+    });
+  });
+}).post((req, res) => {
+  const id = req.params.id;
+  TodoTask.findByIdAndUpdate(id, {
+    content: req.body.content
+  }, err => {
+    if (err) return res.send(500, err);
+    res.redirect("/");
+  });
+});
+
+//DELETE
+app.route("/remove/:id").get((req, res) => {
+  const id = req.params.id;
+  TodoTask.findByIdAndRemove(id, err => {
+    if (err) return res.send(500, err);
+    res.redirect("/");
+  });
+});
 
 mongoose.set("strictQuery", false);
+
+
