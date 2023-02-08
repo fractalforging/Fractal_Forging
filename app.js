@@ -7,6 +7,10 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 
+var app = express();
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({ extended: true }));
+
 //models
 const User = require("./models/user");
 const TodoTask = require("./models/TodoTask");
@@ -37,10 +41,6 @@ mongoose.connection.on("connected", () => {
 mongoose.connection.on("error", (err) => {
   console.error("MongoDB connection error:", err);
 });
-
-var app = express();
-app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({ extended: true }));
 
 const UserSchema = new mongoose.Schema({
   username: {
