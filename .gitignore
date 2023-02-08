@@ -1,0 +1,5 @@
+mongodb.env
+db.env
+node_modules
+.codesandbox
+.DS_Store
