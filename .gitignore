@@ -1,8 +1,7 @@
 mongodb.env
 db.env
-node_modules
-.codesandbox
-.DS_Store
 yarn-error.log
 package-lock.json
+.codesandbox
+.DS_Store
 node_modules
