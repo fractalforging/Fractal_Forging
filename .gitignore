@@ -1,5 +1,6 @@
 mongodb.env
 db.env
+README.md
 yarn-error.log
 package-lock.json
 .codesandbox
