@@ -3,3 +3,6 @@ db.env
 node_modules
 .codesandbox
 .DS_Store
+yarn-error.log
+package-lock.json
+node_modules
