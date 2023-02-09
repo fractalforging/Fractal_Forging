@@ -12,7 +12,7 @@ let app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// MODELS
+// MODELS -
 const TodoTask = require("./models/TodoTask");
 const User = require("./models/user");
 
