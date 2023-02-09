@@ -237,9 +237,9 @@ app.post('/', async (req, res) => {
   });
   try {
     await todoTask.save();
-    res.redirect("/");
+    res.redirect("/secret");
   } catch (err) {
-    res.redirect("/");
+    res.redirect("/secret");
   }
 });
 
@@ -258,7 +258,7 @@ app.route("/edit/:id").get((req, res) => {
     content: req.body.content
   }, err => {
     if (err) return res.send(500, err);
-    res.redirect("/");
+    res.redirect("/secret");
   });
 });
 
@@ -267,7 +267,7 @@ app.route("/remove/:id").get((req, res) => {
   const id = req.params.id;
   TodoTask.findByIdAndRemove(id, err => {
     if (err) return res.send(500, err);
-    res.redirect("/");
+    res.redirect("/secret");
   });
 });
 
