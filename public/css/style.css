@@ -1,104 +1,72 @@
 .todo-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 20px;
-    width: 300px;
-    transform: translate(-50%, -50%);
-    background: #ffffff1a;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 12px;
-}
- 
-.todo {
-    width: 300px;
-}
-
-.todo-container h2 {
-    padding: 10px;
-    font-size: 20px;
+  position: relative;
+  background: #ffffff1a;
+  border-radius: 20px;
+  align-items: center;
+  font-size: 12px;
 }
 
 .todo-header input {
-    width: 92%;
-    border: none;
-    border-radius: 5px;
-    height: 20px;
+  width: 250px;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
 }
 
 .todo-header button {
-    width: 50px;
-    color: white;
-    border: none;
-    border-radius: 5%;
-    cursor: pointer;
-    padding: 5px;
-    background-color: #2ED573;
-}
-
-.todo-container ul {
-    list-style: none;
+  width: 50px;
+  color: white;
+  border: none;
+  border-radius: 5%;
+  cursor: pointer;
+  padding: 5px;
+  background-color: #2ed573;
 }
 
 .todo-list-item {
-    padding: 10px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 5px;
-    background: #0000004d;
-    display: flex;
-    flex-direction: row;
+  width: 250px;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #0000004d;
+  display: flex;
 }
 
-.todo-list-item form {
-    width: 100%;
-    display: flex;
-}
-
-.todo-list-item input {
-    flex-grow: 2;
-    margin-right: 20px;
-    border: none;
-    border-radius: 5px;
-}
-
-.todo-list-item button {
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 5px;
-    background-color: #2ED573;
+.todo-list-item .confirm {
+  width: 100%;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  background-color: #2ed573;
 }
 
 .todo-list-item .cancel {
-    color: white;
-    text-decoration: none;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 5px;
-    background-color: #DF2B2B;
-    margin-left: 5px;
+  width: 100%;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  background-color: #df2b2b;
 }
 
 .todo-list-item div {
-    flex-grow: 2;
+  flex-grow: 2;
 }
 
 .todo-list-item .edit {
-    color: #8FE93A;
-    margin-right: 10px;
-    cursor: pointer;
-    text-decoration: none;
+  color: #8fe93a;
+  margin-right: 10px;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .todo-list-item .remove {
-    color: #F36060;
-    margin-right: 5px;
-    cursor: pointer;
-    text-decoration: none;
+  color: #f36060;
+  margin-right: 5px;
+  cursor: pointer;
+  text-decoration: none;
 }

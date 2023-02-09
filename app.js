@@ -30,13 +30,17 @@ if (!dbPath) {
   process.exit(1);
 }
 
-mongoose.connect(dbPath, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}, () => {
-  console.log("MongoDB connected successfully!");
-  app.listen(port, () => console.log("Server Up and running"));
-});
+mongoose.connect(
+  dbPath,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  () => {
+    console.log("MongoDB connected successfully!");
+    app.listen(port, () => console.log("Server Up and running"));
+  }
+);
 
 mongoose.connection.on("error", (err) => {
   console.error("MongoDB connection error:", err);
@@ -114,9 +118,11 @@ app.get("/secret", isLoggedIn, async function (req, res) {
 // Showing edit items
 app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
   const foundTodoTask = await TodoTask.findById(req.params.id);
-  res.render("secret_edit", { name: req.user.username, todoTask: foundTodoTask });
+  res.render("secret_edit", {
+    name: req.user.username,
+    todoTask: foundTodoTask,
+  });
 });
-
 
 // Showing register form
 app.get("/register", function (req, res) {
@@ -215,7 +221,7 @@ app.get("/secret_admin", isLoggedIn, isAdmin, function (req, res) {
 app.use(function (req, res, next) {
   res.locals.user = req.user;
   next();
-}); 
+});
 
 //=====================
 // TO DO LIST
@@ -225,15 +231,15 @@ app.use(function (req, res, next) {
 app.get("/", (req, res) => {
   TodoTask.find({}, (err, tasks) => {
     res.render("secret.ejs", {
-      todoTasks: tasks
+      todoTasks: tasks,
     });
   });
 });
 
 // POST METHOD
-app.post('/', async (req, res) => {
+app.post("/", async (req, res) => {
   const todoTask = new TodoTask({
-    content: req.body.content
+    content: req.body.content,
   });
   try {
     await todoTask.save();
@@ -244,33 +250,38 @@ app.post('/', async (req, res) => {
 });
 
 //UPDATE
-app.route("/edit/:id").get((req, res) => {
-  const id = req.params.id;
-  TodoTask.find({}, (err, tasks) => {
-    res.render("secret_edit.ejs", {
-      todoTasks: tasks,
-      idTask: id
+app
+  .route("/edit/:id")
+  .get((req, res) => {
+    const id = req.params.id;
+    TodoTask.find({}, (err, tasks) => {
+      res.render("secret_edit.ejs", {
+        todoTasks: tasks,
+        idTask: id,
+      });
     });
+  })
+  .post((req, res) => {
+    const id = req.params.id;
+    TodoTask.findByIdAndUpdate(
+      id,
+      {
+        content: req.body.content,
+      },
+      (err) => {
+        if (err) return res.send(500, err);
+        res.redirect("/secret");
+      }
+    );
   });
-}).post((req, res) => {
-  const id = req.params.id;
-  TodoTask.findByIdAndUpdate(id, {
-    content: req.body.content
-  }, err => {
-    if (err) return res.send(500, err);
-    res.redirect("/secret");
-  });
-});
 
 //DELETE
 app.route("/remove/:id").get((req, res) => {
   const id = req.params.id;
-  TodoTask.findByIdAndRemove(id, err => {
+  TodoTask.findByIdAndRemove(id, (err) => {
     if (err) return res.send(500, err);
     res.redirect("/secret");
   });
 });
 
 mongoose.set("strictQuery", false);
-
-
