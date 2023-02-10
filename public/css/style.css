@@ -4,7 +4,7 @@
 }
 
 .todo-header input {
-  width: 250px;
+  width: 210px;
   border: none;
   border-radius: 5px;
   height: 30px;
@@ -12,15 +12,18 @@
 
 .todo-header button {
   width: 50px;
+  height: 30px;
   color: white;
   border: none;
-  border-radius: 5%;
+  border-radius: 5px;
   cursor: pointer;
-  padding: 5px;
+  padding: 10px;
   background-color: #2ed573;
 }
 
 ul.todo-list {
+  position: relative;
+  top: -20px;
   padding: 0px;
   list-style-type: none;
   display: flex;
