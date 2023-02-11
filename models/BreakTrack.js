@@ -1,9 +1,5 @@
 const mongoose = require('mongoose');
-const todoTaskSchema = new mongoose.Schema({
-  // content: {
-  //   type: String,
-  //   required: true
-  // },
+const breakTrackerSchema = new mongoose.Schema({
   user: {
     type: String,
     required: true
@@ -21,4 +17,4 @@ const todoTaskSchema = new mongoose.Schema({
     default: Date.now
   }
 });
-module.exports = mongoose.model('TodoTask', todoTaskSchema);
+module.exports = mongoose.model('BreakTrack', breakTrackerSchema);

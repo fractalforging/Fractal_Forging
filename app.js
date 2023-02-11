@@ -6,19 +6,20 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
-let port = process.env.PORT || 3005;
+let port = process.env.PORT || 3002;
 
 let app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // MODELS -
-const TodoTask = require("./models/TodoTask");
+const BreakTrack = require("./models/BreakTrack");
 const User = require("./models/user");
 
 // CONNECTION TO MONGODB
 require("dotenv").config({ path: "mongodb.env" });
 const dotenv = require("dotenv");
+//const BreakTrack = require("./models/BreakTrack");
 
 dotenv.config();
 const dbPath = process.env.DB_PATH;
@@ -71,11 +72,11 @@ app.use(
   })
 );
 
-//
+// 
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static(path.join(__dirname, "public/css")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
@@ -107,20 +108,20 @@ app.get("/", function (req, res) {
 
 // Showing secret page
 app.get("/secret", isLoggedIn, async function (req, res) {
-  const todoTasks = await TodoTask.find(); // fetch todo tasks from the database
+  const breakTracker = await BreakTrack.find(); // fetch todo tasks from the database
   if (req.user.roles === "admin") {
     res.render("secret_admin", { name: req.user.username });
   } else if (req.user.roles === "user") {
-    res.render("secret", { name: req.user.username, todoTasks });
+    res.render("secret", { name: req.user.username, breakTracker });
   }
 });
 
 // Showing edit items
 app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
-  const foundTodoTask = await TodoTask.findById(req.params.id);
+  const foundBreakTrack = await BreakTrack.findById(req.params.id);
   res.render("secret_edit", {
     name: req.user.username,
-    todoTask: foundTodoTask,
+    breakTracker: foundBreakTrack,
   });
 });
 
@@ -225,23 +226,22 @@ app.use(function (req, res, next) {
 });
 
 //=====================
-// TO DO LIST
+// BREAK TRACKER
 //=====================
 
 // GET METHOD
 app.get("/", (req, res) => {
-  TodoTask.find({}, (err, tasks) => {
+  BreakTrack.find({}, (err, breaks) => {
     res.render("secret.ejs", {
-      todoTasks: tasks,
+      breakTracker: breaks,
     });
   });
 });
 
-const myLocalTime = new Date(new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000);
-
 // POST METHOD
 app.post("/", async (req, res) => {
-  const todoTask = new TodoTask({
+  const myLocalTime = new Date(new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000);
+  const breakTracker = new BreakTrack({
     //content: req.body.content,
     user: req.user.username,
     startTime: myLocalTime,
@@ -249,29 +249,28 @@ app.post("/", async (req, res) => {
     date: new Date(),
   });
   try {
-    await todoTask.save();
+    await breakTracker.save();
     res.redirect("/secret");
   } catch (err) {
     res.redirect("/secret");
   }
 });
 
-
 //UPDATE
 app
   .route("/edit/:id")
   .get((req, res) => {
     const id = req.params.id;
-    TodoTask.find({}, (err, tasks) => {
+    BreakTrack.find({}, (err, breaks) => {
       res.render("secret_edit.ejs", {
-        todoTasks: tasks,
-        idTask: id,
+        breakTracker: breaks,
+        idBreak: id,
       });
     });
   })
   .post((req, res) => {
     const id = req.params.id;
-    TodoTask.findByIdAndUpdate(
+    BreakTrack.findByIdAndUpdate(
       id,
       {
         content: req.body.content,
@@ -286,10 +285,14 @@ app
 //DELETE
 app.route("/remove/:id").get((req, res) => {
   const id = req.params.id;
-  TodoTask.findByIdAndRemove(id, (err) => {
+  BreakTrack.findByIdAndRemove(id, (err) => {
     if (err) return res.send(500, err);
     res.redirect("/secret");
   });
 });
 
 mongoose.set("strictQuery", false);
+
+// KILL PORT PROCESSES kill -9 $(lsof -t -i:3000)
+
+
