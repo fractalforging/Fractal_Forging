@@ -241,8 +241,8 @@ app.get("/", (req, res) => {
 app.post("/", async (req, res) => {
   const todoTask = new TodoTask({
     //content: req.body.content,
-    user: req.session.username,
-    startTime: new Date(),
+    user: req.user.username,
+    startTime: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
     duration: req.body.duration,
     date: new Date(),
   });
