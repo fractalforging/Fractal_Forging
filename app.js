@@ -237,7 +237,7 @@ app.get("/", (req, res) => {
   });
 });
 
-const myLocalTime = new Date(new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const myLocalTime = new Date(new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000);
 
 // POST METHOD
 app.post("/", async (req, res) => {
