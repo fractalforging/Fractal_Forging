@@ -13,7 +13,7 @@ function startTimer(myDuration, display, callback) {
         }
     }, 1000);
 }
-
+ 
 const onTimerEnded = () =>
     alertTimeOver();
 
