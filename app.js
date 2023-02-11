@@ -185,13 +185,14 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 });
 
 //Handling user login
-app.post(
-  "/login",
+app.post("/login",
   passport.authenticate("local", {
     successRedirect: "/secret",
     failureRedirect: "/login",
   }),
-  function (req, res) {}
+  function (req, res) {
+    req.session.username = req.body.username;
+  }
 );
 
 //Handling user logout
@@ -239,7 +240,11 @@ app.get("/", (req, res) => {
 // POST METHOD
 app.post("/", async (req, res) => {
   const todoTask = new TodoTask({
-    content: req.body.content,
+    //content: req.body.content,
+    user: req.session.username,
+    startTime: new Date(),
+    duration: req.body.duration,
+    date: new Date(),
   });
   try {
     await todoTask.save();
@@ -248,6 +253,7 @@ app.post("/", async (req, res) => {
     res.redirect("/secret");
   }
 });
+
 
 //UPDATE
 app

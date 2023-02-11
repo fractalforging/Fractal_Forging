@@ -1,7 +1,19 @@
 const mongoose = require('mongoose');
 const todoTaskSchema = new mongoose.Schema({
-  content: {
+  // content: {
+  //   type: String,
+  //   required: true
+  // },
+  user: {
     type: String,
+    required: true
+  },
+  startTime: {
+    type: Date,
+    required: true
+  },
+  duration: {
+    type: Number,
     required: true
   },
   date: {
