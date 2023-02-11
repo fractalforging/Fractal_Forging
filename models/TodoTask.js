@@ -9,7 +9,7 @@ const todoTaskSchema = new mongoose.Schema({
     required: true
   },
   startTime: {
-    type: Date,
+    type: String,
     required: true
   },
   duration: {

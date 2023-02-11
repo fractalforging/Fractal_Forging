@@ -7,6 +7,7 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 let port = process.env.PORT || 3002;
+const getDateTime = new Date();
 
 let app = express();
 app.set("view engine", "ejs");
@@ -242,7 +243,7 @@ app.post("/", async (req, res) => {
   const todoTask = new TodoTask({
     //content: req.body.content,
     user: req.user.username,
-    startTime: new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'}),
+    startTime: getDateTime.getHours() + ':' + getDateTime.getMinutes(),
     duration: req.body.duration,
     date: new Date(),
   });
