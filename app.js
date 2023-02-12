@@ -12,7 +12,7 @@ let app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// MODELS -lol
+// MODELS --
 const BreakTrack = require("./models/BreakTrack");
 const User = require("./models/user");
 
