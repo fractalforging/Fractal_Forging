@@ -12,7 +12,7 @@ let app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// MODELS --
+// MODELS - - -
 const BreakTrack = require("./models/BreakTrack");
 const User = require("./models/user");
 
@@ -72,7 +72,7 @@ app.use(
   })
 );
 
-// 
+//
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -186,7 +186,8 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 });
 
 //Handling user login
-app.post("/login",
+app.post(
+  "/login",
   passport.authenticate("local", {
     successRedirect: "/secret",
     failureRedirect: "/login",
@@ -240,7 +241,9 @@ app.get("/", (req, res) => {
 
 // POST METHOD
 app.post("/", async (req, res) => {
-  const myLocalTime = new Date(new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000);
+  const myLocalTime = new Date(
+    new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000
+  );
   const breakTracker = new BreakTrack({
     //content: req.body.content,
     user: req.user.username,
@@ -294,5 +297,3 @@ app.route("/remove/:id").get((req, res) => {
 mongoose.set("strictQuery", false);
 
 // KILL PORT PROCESSES kill -9 $(lsof -t -i:3000)
-
-
