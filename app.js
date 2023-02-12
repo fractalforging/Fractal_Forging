@@ -6,7 +6,7 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
-let port = process.env.PORT || 3002;
+let port = process.env.PORT || 3001;
 
 let app = express();
 app.set("view engine", "ejs");
