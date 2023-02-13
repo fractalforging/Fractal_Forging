@@ -6,7 +6,7 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
-let port = process.env.PORT || 3001;
+let port = process.env.PORT || 3002;
 
 let app = express();
 app.set("view engine", "ejs");
@@ -244,6 +244,7 @@ app.post("/", async (req, res) => {
   const myLocalTime = new Date(
     new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000
   );
+  //const myLocalTime = new Date();
   const breakTracker = new BreakTrack({
     //content: req.body.content,
     user: req.user.username,
