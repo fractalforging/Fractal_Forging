@@ -80,3 +80,18 @@
   cursor: pointer;
   text-decoration: none;
 }
+
+/* /////////////////// - SELECT DROP DOWN - //////////////////// */
+
+select {
+  margin: 0px;
+  width: 35px;
+  font-size: 14px;
+  border: 1px solid #CCC;
+  height: 34px;
+  appearance: none;
+  appearance: none;
+  background: url() 96% / 15% no-repeat #eee;
+  text-align: center;
+  border-radius: 5px;
+}

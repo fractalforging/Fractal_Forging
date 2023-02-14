@@ -33,6 +33,7 @@
     "react-router-dom": "^6.7.0",
     "react-scripts": "^5.0.1",
     "socket.io": "^4.5.4",
-    "username": "^6.0.0"
+    "username": "^6.0.0",
+    "yarn": "^1.22.19"
   }
 }
