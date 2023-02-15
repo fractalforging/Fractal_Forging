@@ -7,3 +7,4 @@ package-lock.json
 .DS_Store
 .gitpod.yml
 node_modules
+myssh
