@@ -111,7 +111,7 @@ app.get("/", function (req, res) {
 app.get("/secret", isLoggedIn, async function (req, res) {
   const breakTracker = await BreakTrack.find(); // fetch todo tasks from the database
   if (req.user.roles === "admin") {
-    res.render("secret_admin", { name: req.user.username });
+    res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
   } else if (req.user.roles === "user") {
     res.render("secret", { name: req.user.username, breakTracker: breakTracker });
   }
