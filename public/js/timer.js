@@ -1,6 +1,6 @@
 /////////////////// - TIMER - /////////////////////
 
-window.startTimer = function (myDuration, display, callback) {
+startTimer = (myDuration, display, callback) => {
     let timer = myDuration - 60;
     let minutes;
     let seconds;
@@ -10,8 +10,12 @@ window.startTimer = function (myDuration, display, callback) {
         display.textContent = minutes + ":" + seconds;
 
         if (--timer < 0) {
-            callback();
-            clearInterval(interval);
+            display.textContent = "BREAK OVER";
+            display.classList.add("time-over");
+            if (callback) {
+                callback();
+                clearInterval(interval);
+            }
         }
     }, 1000);
     console.log("A C T I V E  -  S T A R T   T I M E R");
