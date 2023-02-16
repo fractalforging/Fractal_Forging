@@ -6,6 +6,7 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
+const tz = require('timezone/loaded');
 let port = process.env.PORT || 3001;
 
 let app = express();

@@ -81,6 +81,23 @@
   text-decoration: none;
 }
 
+.time-over {
+  color: red;
+  animation: flash 1s linear infinite;
+}
+
+@keyframes flash {
+  50% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 /* /////////////////// - SELECT DROP DOWN - //////////////////// */
 
 select {
