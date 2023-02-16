@@ -1,6 +1,6 @@
 /////////////////// - TIMER - /////////////////////
 
-window.startTimer = function (myDuration, display, callback) {
+startTimer = (myDuration, display, callback) => {
     let timer = myDuration - 60;
     let minutes;
     let seconds;

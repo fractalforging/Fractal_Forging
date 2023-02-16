@@ -6,7 +6,7 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
-let port = process.env.PORT || 3002;
+let port = process.env.PORT || 3001;
 
 let app = express();
 app.set("view engine", "ejs");
@@ -112,7 +112,7 @@ app.get("/secret", isLoggedIn, async function (req, res) {
   if (req.user.roles === "admin") {
     res.render("secret_admin", { name: req.user.username });
   } else if (req.user.roles === "user") {
-    res.render("secret", { name: req.user.username, breakTracker });
+    res.render("secret", { name: req.user.username, breakTracker: breakTracker });
   }
 });
 
@@ -241,16 +241,15 @@ app.get("/", (req, res) => {
 
 // POST METHOD
 app.post("/", async (req, res) => {
-  const myLocalTime = new Date(
-    new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000
-  );
-  //const myLocalTime = new Date();
+  // const myLocalTime = new Date(
+  //   new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000
+  // );
+  const myLocalTime = new Date();
   const breakTracker = new BreakTrack({
-    //content: req.body.content,
     user: req.user.username,
-    startTime: myLocalTime,
+    startTime: new Date().toUTCString(),
     duration: req.body.duration,
-    date: new Date(),
+    date: new Date().toUTCString(),
   });
   try {
     await breakTracker.save();
@@ -298,3 +297,5 @@ app.route("/remove/:id").get((req, res) => {
 mongoose.set("strictQuery", false);
 
 // KILL PORT PROCESSES kill -9 $(lsof -t -i:3000)
+// netstat -ano | findstr :3002
+
