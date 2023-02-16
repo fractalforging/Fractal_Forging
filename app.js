@@ -31,7 +31,7 @@ if (!dbPath) {
   );
   process.exit(1);
 }
-
+ 
 mongoose.connect(
   dbPath,
   {
@@ -92,9 +92,11 @@ function isLoggedIn(req, res, next) {
 // CHECK ROLE
 function isAdmin(req, res, next) {
   if (req.isAuthenticated() && req.user.roles === "admin") {
-    return res.redirect("/secret_admin", { username: req.user.username });
+    res.locals.role = 'admin';
+    return next();
   } else {
-    return res.redirect("/secret", { username: req.user.username });
+    res.locals.role = 'user';
+    return next();
   }
 }
 
@@ -109,7 +111,7 @@ app.get("/", function (req, res) {
 
 // Showing secret page
 app.get("/secret", isLoggedIn, async function (req, res) {
-  const breakTracker = await BreakTrack.find({ submitter: req.user.username }); // fetch todo tasks from the database submitted by the current user
+  const breakTracker = await BreakTrack.find(); // fetch todo tasks from the database
   if (req.user.roles === "admin") {
     res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
   } else if (req.user.roles === "user") {
@@ -216,9 +218,9 @@ app.get("/account", isLoggedIn, function (req, res) {
 //Handling Admins
 app.get("/secret_admin", isLoggedIn, isAdmin, function (req, res) {
   if (req.user.roles === "admin") {
-    return res.render("secret_admin");
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
   } else {
-    res.redirect("/secret_admin", { username: req.user.username });
+    res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
   }
 });
 
@@ -269,6 +271,7 @@ app
       res.render("secret_edit.ejs", {
         breakTracker: breaks,
         idBreak: id,
+        name: req.user.username
       });
     });
   })
