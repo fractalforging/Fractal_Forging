@@ -31,7 +31,7 @@ if (!dbPath) {
   );
   process.exit(1);
 }
- 
+
 mongoose.connect(
   dbPath,
   {
@@ -109,7 +109,7 @@ app.get("/", function (req, res) {
 
 // Showing secret page
 app.get("/secret", isLoggedIn, async function (req, res) {
-  const breakTracker = await BreakTrack.find(); // fetch todo tasks from the database
+  const breakTracker = await BreakTrack.find({ submitter: req.user.username }); // fetch todo tasks from the database submitted by the current user
   if (req.user.roles === "admin") {
     res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
   } else if (req.user.roles === "user") {
