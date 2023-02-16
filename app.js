@@ -31,7 +31,7 @@ if (!dbPath) {
   );
   process.exit(1);
 }
-
+ 
 mongoose.connect(
   dbPath,
   {

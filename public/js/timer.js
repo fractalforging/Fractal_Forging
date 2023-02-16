@@ -8,7 +8,7 @@ startTimer = (myDuration, display, callback) => {
         minutes = ('00' + parseInt(timer / 60, 10)).slice(-2);
         seconds = ('00' + parseInt(timer % 60, 10)).slice(-2);
         display.textContent = minutes + ":" + seconds;
-
+ 
         if (--timer < 0) {
             display.textContent = "BREAK OVER";
             display.classList.add("time-over");
