@@ -77,12 +77,12 @@
   
   .dark-mode input {
     border: 1px solid #000000;
-    background-color: #3d3d3d;
-    color: #ccc;
+    background-color: #333a46;
+    color: #92a9c9;
   }
 
   .dark-mode input::placeholder {
-    color: #727272; /* Replace with the desired color */
+    color: #4e5768; /* Replace with the desired color */
   }
   
   .dark-mode greet {

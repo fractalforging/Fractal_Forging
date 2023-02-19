@@ -117,7 +117,7 @@
   transition: all 0.7s ease-in-out;
 }
 
-.break-list-item .confirm {
+/* .break-list-item .confirm {
   width: 70px;
   color: white;
   border: none;
@@ -135,7 +135,7 @@
   cursor: pointer;
   padding: 5px;
   background-color: #df2b2b;
-}
+} */
 
 .break-list-item div {
   flex-grow: 2;
