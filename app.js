@@ -166,27 +166,48 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
       console.log("User not found");
       return res.render("account", { error: "Error, please try again" });
     }
-    user.setPassword(req.body.newpassword, (err) => {
+
+    // Check if old password is empty
+    if (!req.body.currentpassword) {
+      console.log("Old password not provided");
+      return res.render("account", { error: "Please provide your old password" });
+    }
+
+    // Check if old password matches
+    user.authenticate(req.body.currentpassword, (err, valid) => {
       if (err) {
         console.log(err);
         return res.render("account", { error: "Error, please try again" });
       }
-      user.save((err) => {
+      if (!valid) {
+        console.log("Old password incorrect");
+        return res.render("account", { error: "Old password incorrect, please try again" });
+      }
+
+      // Update password
+      user.setPassword(req.body.newpassword, (err) => {
         if (err) {
           console.log(err);
           return res.render("account", { error: "Error, please try again" });
         }
-        req.logIn(user, (err) => {
+        user.save((err) => {
           if (err) {
             console.log(err);
             return res.render("account", { error: "Error, please try again" });
           }
-          res.render("passwordChanged");
+          req.logIn(user, (err) => {
+            if (err) {
+              console.log(err);
+              return res.render("account", { error: "Error, please try again" });
+            }
+            res.render("passwordChanged");
+          });
         });
       });
     });
   });
 });
+
 
 //Handling user login
 app.post(
@@ -212,7 +233,7 @@ app.get("/logout", function (req, res) {
 
 //Handling account
 app.get("/account", isLoggedIn, function (req, res) {
-  res.render("account");
+  res.render("account", { error: 'no error' });
 });
 
 //Handling Admins

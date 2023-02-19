@@ -1,12 +1,48 @@
-.break-container {
-  background: #00000000;
-  text-align: center;
+.grid-container {
+  display: inline-grid;
+  width: 180x;
+  gap: 5px;
+  background-color: #80808000;
+  padding: 5px;
+  grid-template-columns: 80px 40px 40px;
+  grid-template-rows: 45px;
 }
 
-.set-timer-container {
+.grid-item {
+  left: 10px;
+  background-color: #80008000;
+  border: none;
   display: flex;
+  align-items: center;
   justify-content: center;
+}
 
+.item1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.item2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.item3 {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+/*/////////////*/
+
+.form-button {
+  width: 100%;
+  background-color: #800080;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .break-header input {
@@ -16,13 +52,24 @@
   height: 30px;
 }
 
-.break-header button {
-  font-size: 35px;
-  color: rgb(0, 190, 57);
+.break-header-button {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  color: #A0DFFF;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #00000000;
+  background-color: #0077A7;
+  transition: all 0.7s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.break-container {
+  background: #00000000;
+  text-align: center;
 }
 
 .break-list {
@@ -39,13 +86,14 @@
   width: 250px;
   padding: 10px;
   margin-top: 10px;
-  border: 1px solid #7c7c7c;
+  border: 1px solid #d4f1ff;
   border-radius: 5px;
-  background: #a0a0a04d;
+  background-color: #ffffff48;
   text-align: left;
   display: flex;
   font-size: 16px;
   font-weight: 390;
+  transition: all 0.7s ease-in-out;
 }
 
 .break-list-item .confirm {
@@ -86,29 +134,11 @@
   text-decoration: none;
 }
 
-agent {
-  font-weight: 650;
-  font-size: 20px;
-}
 
-info {
-  font-weight: 650;
-}
 
 /* /////////////////// - SELECT DROP DOWN - //////////////////// */
 
-select {
-  margin: 0px;
-  width: 35px;
-  font-size: 14px;
-  border: 1px solid #CCC;
-  height: 34px;
-  appearance: none;
-  appearance: none;
-  background: url() 96% / 15% no-repeat #eee;
-  text-align: center;
-  border-radius: 5px;
-}
+
 
 @media screen and (max-width: 768px) {
   .break-list {
@@ -132,9 +162,10 @@ select {
 }
 
 .toggle-mode {
-  color:#ffef5f;
+  color:#ffee00;
   text-align: left;
   font-size: 20px;
+  transition: all 0.7s ease-in-out;
 }
 
 /* ///// - ALIGN NAME AND TIMER IN SECRET.EJS ///// */
@@ -151,7 +182,6 @@ select {
 .time-over {
   color: red;
   animation: flash 1s linear infinite;
-
   font-weight: 400;
 }
 
@@ -205,3 +235,7 @@ filer {
   }
 }
 
+.icon-sun {
+
+}
+  

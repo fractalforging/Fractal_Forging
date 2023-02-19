@@ -13,18 +13,32 @@
 
 <br>
 
-<a href="#" id="toggle-mode-btn" class="text-link">Toggle Mode</a><br><br>
+<li>
+  <a href="#" id="toggle-mode-btn" class="toggle-mode">
+    <i class="fa-regular fa-sun"></i>
+  </a>
+</li>
+
+<br><br><br>
 
 <pagetitle>Change password</pagetitle>
 
 <form action="/changepassword" method="post" class="credentials">
     <input type="password" id="currentpassword" name="currentpassword" placeholder="currentpassword" autocomplete="off">
     <input type="password" id="newpassword" name="newpassword" placeholder="newpassword" autocomplete="off">
-  <button>Submit</button>
+  <button class="form-button">Submit</button>
   <div class="buttons">
     <li><a href="/secret">Back</a></li>
     <li><a href="/logout">Logout</a></li>
   </div>
 </form>
+
+<script>
+  let error;
+if(`<%= error %>` == "no error") {
+} else {
+  alert(`<%= error %>`);
+}
+</script>
 
 <script src="/js/dark.js"></script>
