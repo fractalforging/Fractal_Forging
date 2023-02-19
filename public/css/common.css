@@ -1,37 +1,48 @@
 /* //////// - LIGHT MODE - //////// */
 
+* {
+}
+
 html {
   display: table;
   margin: auto;
+
+}
+
+@property --myColor1 {
+  syntax: '<color>';
+  initial-value: #80b0ff;
+  inherits: false;
+}
+
+@property --myColor2 {
+  syntax: '<color>';
+  initial-value: #3871cc;
+  inherits: false;
 }
 
 body {
   display: table-cell;
   vertical-align: middle;
-  font-family: Verdana, Tahoma, Arial, Helvetica, sans-serif;
+  font-family: "montserrat", sans-serif;
+  font-style: normal;
+  text-align: center;
+  background: linear-gradient(var(--myColor1), var(--myColor2));
+  transition: --myColor1 1s ease-in-out, --myColor2 0.3s ease-in-out;
+  height: 100%;
   margin: 0;
-  padding: 0;
-  text-align: center;
-  background-color: #ffffff;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-h1,
-h2 {
-  margin-top: 50px;
-  color: #444444;
-}
-
-b {
-  text-align: center;
-  font-size: 16px;
-  color: #444444;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 a {
   color: #4caf50;
   text-decoration: none;
   margin-left: 10px;
+}
+
+greet {
+  font-size: 36px;
 }
 
 a:hover {
@@ -47,16 +58,22 @@ a:hover {
   border-radius: 5px;
   box-shadow: 0px 0px 10px #ccc;
   position: relative;
+  transition: all 0.3s ease-in-out;
 }
 
-input[type="text"],
-input[type="password"] {
+input {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
-  border: 2px solid #ccc;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  background-color: #e6e6e6;
+  transition: all 0.3s ease-in-out;
+}
+
+input::placeholder {
+  color: #a1a1a1; /* Replace with the desired color */
 }
 
 button {
@@ -86,4 +103,14 @@ li {
   position: relative;
   margin: 0 auto;
   text-align: center;
+}
+
+navbar {
+  font-weight: 450;
+  font-size: 14px;
+}
+
+pagetitle {
+  font-size: 30px;
+  font-weight: 500;
 }

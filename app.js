@@ -7,7 +7,7 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 const tz = require('timezone/loaded');
-let port = process.env.PORT || 3001;
+let port = process.env.PORT || 3002;
 
 let app = express();
 app.set("view engine", "ejs");
@@ -111,7 +111,7 @@ app.get("/", function (req, res) {
 
 // Showing secret page
 app.get("/secret", isLoggedIn, async function (req, res) {
-  const breakTracker = await BreakTrack.find(); // fetch todo tasks from the database
+  const breakTracker = await BreakTrack.find(); // fetch break tasks from the database
   if (req.user.roles === "admin") {
     res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
   } else if (req.user.roles === "user") {
@@ -302,4 +302,5 @@ mongoose.set("strictQuery", false);
 
 // KILL PORT PROCESSES kill -9 $(lsof -t -i:3000)
 // netstat -ano | findstr :3002
+// taskkill /F /PID 24860
 

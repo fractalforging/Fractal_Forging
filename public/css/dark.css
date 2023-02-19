@@ -1,0 +1,93 @@
+/* //////// - DARK MODE - ////////// */
+
+.dark-mode body {
+}
+
+
+
+
+
+.dark-mode {  /* Will attach to body */
+    background: linear-gradient(to bottom, #001027 50%, #00214e 100%);
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .dark-mode .remove {
+    display: none;
+  }
+  
+  .dark-mode .show {
+    display: block;
+  }
+  
+  /* //// */
+  
+  .dark-mode .break-container {
+    background-color: #00000000;
+    color: #ccc;
+  }
+  
+  .dark-mode .break-header input {
+    background-color: #282828;
+    color: #ccc;
+  }
+  
+  .dark-mode .break-list-item {
+    background-color: #00000086;
+    color: #ccc;
+    border: 1px solid #77777773;
+  }
+  
+  .dark-mode .break-list-item .cancel {
+    background-color: #4a4a4a;
+  }
+  
+  .dark-mode .time-over {
+    color: #f36060;
+  }
+  
+  .dark-mode select {
+    background-color: #4a4a4a;
+    color: #ccc;
+  }
+  
+  .dark-mode .credentials {
+    background-color: #1f1f1f;
+  }
+  
+  .dark-mode select {
+    background-color: #2f2f2f;
+    color: #fff;
+  }
+  
+  .dark-mode .credentials {
+    background-color: #000000;
+    box-shadow: 0px 0px 10px #000000;
+  }
+  
+  .dark-mode input {
+    border: 1px solid #000000;
+    background-color: #3d3d3d;
+    color: #ccc;
+  }
+
+  .dark-mode input::placeholder {
+    color: #727272; /* Replace with the desired color */
+  }
+  
+  .dark-mode greet {
+    color: #ccc;
+  }
+  
+  .dark-mode pagetitle {
+    color: #ccc;
+  }
+
+  .dark-mode .toggle-mode {
+    color:#b7e9e9;
+    text-align: left;
+  }

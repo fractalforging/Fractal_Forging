@@ -1,18 +1,28 @@
+<!-- ////////////////// - HEADER - ////////////////// -->
+
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Baloo+Bhai|Candal|Chewy&display=swap">
+<link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v6.3.0/css/all.css">
+<link rel="stylesheet" href="https://use.typekit.net/fsp2joi.css">
+
+<link rel="stylesheet" type="text/css" href="/css/common.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link rel="stylesheet" type="text/css" href="/css/timer.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css">
+
+<script src="/js/timer.js"></script>
+
 <br>
 
 <a href="#" id="toggle-mode-btn" class="text-link">Toggle Mode</a><br><br>
 
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel="stylesheet" type="text/css" href="/css/style.css">
-
-<h1> Change password </h1>
+<pagetitle>Change password</pagetitle>
 
 <form action="/changepassword" method="post" class="credentials">
-    <input type="password" id="currentpassword" name="currentpassword" placeholder="currentpassword">
-    <input type="password" id="newpassword" name="newpassword" placeholder="newpassword">
+    <input type="password" id="currentpassword" name="currentpassword" placeholder="currentpassword" autocomplete="off">
+    <input type="password" id="newpassword" name="newpassword" placeholder="newpassword" autocomplete="off">
   <button>Submit</button>
   <div class="buttons">
-    <li><a href="/secret">Home</a></li>
+    <li><a href="/secret">Back</a></li>
     <li><a href="/logout">Logout</a></li>
   </div>
 </form>

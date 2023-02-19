@@ -1,27 +1,31 @@
-.todo-container {
+.break-container {
   background: #00000000;
   text-align: center;
 }
 
-.todo-header input {
+.set-timer-container {
+  display: flex;
+  justify-content: center;
+
+}
+
+.break-header input {
   width: 235px;
   border: none;
   border-radius: 5px;
   height: 30px;
 }
 
-.todo-header button {
-  width: 30px;
-  height: 30px;
-  color: white;
+.break-header button {
+  font-size: 35px;
+  color: rgb(0, 190, 57);
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  padding: 10px;
-  background-color: #2ed573;
+  background-color: #00000000;
 }
 
-.todo-list {
+.break-list {
   position: relative;
   top: -20px;
   padding: 0px;
@@ -31,19 +35,20 @@
   display: inline-block;
 }
 
-.todo-list-item {
+.break-list-item {
   width: 250px;
   padding: 10px;
   margin-top: 10px;
-  border: none;
+  border: 1px solid #7c7c7c;
   border-radius: 5px;
-  background: #0000004d;
-  font-size: 12px;
+  background: #a0a0a04d;
   text-align: left;
   display: flex;
+  font-size: 16px;
+  font-weight: 390;
 }
 
-.todo-list-item .confirm {
+.break-list-item .confirm {
   width: 70px;
   color: white;
   border: none;
@@ -53,7 +58,7 @@
   background-color: #2ed573;
 }
 
-.todo-list-item .cancel {
+.break-list-item .cancel {
   width: 100%;
   color: white;
   border: none;
@@ -63,27 +68,91 @@
   background-color: #df2b2b;
 }
 
-.todo-list-item div {
+.break-list-item div {
   flex-grow: 2;
 }
  
-.todo-list-item .edit {
+.break-list-item .edit {
   color: #8fe93a;
   margin-right: 10px;
   cursor: pointer;
   text-decoration: none;
 }
 
-.todo-list-item .remove {
+.break-list-item .remove {
   color: #f36060;
   margin-right: 5px;
   cursor: pointer;
   text-decoration: none;
 }
 
+agent {
+  font-weight: 650;
+  font-size: 20px;
+}
+
+info {
+  font-weight: 650;
+}
+
+/* /////////////////// - SELECT DROP DOWN - //////////////////// */
+
+select {
+  margin: 0px;
+  width: 35px;
+  font-size: 14px;
+  border: 1px solid #CCC;
+  height: 34px;
+  appearance: none;
+  appearance: none;
+  background: url() 96% / 15% no-repeat #eee;
+  text-align: center;
+  border-radius: 5px;
+}
+
+@media screen and (max-width: 768px) {
+  .break-list {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+  .break-list-item {
+    width: 100%;
+    margin: 0;
+  }
+  .break-list-item .remove {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .break-list-item div {
+    margin-left: 20px;
+  }
+}
+
+.toggle-mode {
+  color:#ffef5f;
+  text-align: left;
+  font-size: 20px;
+}
+
+/* ///// - ALIGN NAME AND TIMER IN SECRET.EJS ///// */
+
+.numerical-timer {
+  font-family: roboto-mono, monospace;
+}
+
+.break-list-item-name {
+  display: flex;
+  justify-content: space-between;
+}
+
 .time-over {
   color: red;
   animation: flash 1s linear infinite;
+
+  font-weight: 400;
 }
 
 @keyframes flash {
@@ -106,125 +175,33 @@
   display: block;
 }
 
-/* /////////////////// - SELECT DROP DOWN - //////////////////// */
-
-select {
-  margin: 0px;
-  width: 35px;
-  font-size: 14px;
-  border: 1px solid #CCC;
-  height: 34px;
-  appearance: none;
-  appearance: none;
-  background: url() 96% / 15% no-repeat #eee;
-  text-align: center;
-  border-radius: 5px;
-}
-
-@media screen and (max-width: 768px) {
-  .todo-list {
-    display: block;
-    margin: 0;
-    padding: 0;
-  }
-  .todo-list-item {
-    width: 100%;
-    margin: 0;
-  }
-  .todo-list-item .remove {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  .todo-list-item div {
-    margin-left: 20px;
-  }
-}
-
-/* ///// - ALIGN NAME AND TIMER IN SECRET.EJS ///// */
-
-.todo-list-item-name {
-  display: flex;
-  justify-content: space-between;
-}
-
-.user-name {
-  flex-grow: 1;
-}
-
 .timer-container {
   margin-left: 10px;
   text-align: right;
 }
 
-/* //////// - DARK MODE - ////////// */
-
-.dark-mode {  /* Will attach to body */
-  background-color: #181818;
+filer {
+  color: #00000000;
 }
 
-.dark-mode .remove {
-  display: none;
+.loader::after {
+  content: ".";
+  animation: loading 1s infinite;
+  font-weight: 100;
 }
 
-.dark-mode .show {
-  display: block;
-}
-
-/* //// */
-
-.dark-mode .todo-container {
-  background-color: #00000000;
-  color: #ccc;
-}
-
-.dark-mode .todo-header input {
-  background-color: #282828;
-  color: #ccc;
-}
-
-.dark-mode .todo-header button {
-  background-color: #4a4a4a;
-}
-
-.dark-mode .todo-list-item {
-  background-color: #00000086;
-  color: #ccc;
-}
-
-.dark-mode .todo-list-item .cancel {
-  background-color: #4a4a4a;
-}
-
-.dark-mode .time-over {
-  color: #f36060;
-}
-
-/* .dark-mode .select-container {
-  background-color: #b33030;
-  color: #ccc;
-} */
-
-.dark-mode select {
-  background-color: #4a4a4a;
-  color: #ccc;
-}
-
-.dark-mode a {
-  color: #4caf50;
-}
-
-.dark-mode b {
-  color: #d6d6d6;
-}
-
-.dark-mode .credentials {
-  background-color: #1f1f1f;
-}
-
-.dark-mode select {
-  background-color: #2f2f2f;
-  color: #fff;
+@keyframes loading {
+  0% {
+    content: "";
+  }
+  33% {
+    content: "-";
+  }
+  66% {
+    content: "--";
+  }
+  100% {
+    content: "---";
+  }
 }
 

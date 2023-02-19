@@ -25,14 +25,14 @@ function onTimerEnded(id) {
     let display = document.querySelector(`.timer-${id}`);
     if (!display) return;
 
-    display.textContent = "BREAK OVER";
+    display.textContent = "OVER";
     display.classList.add("time-over");
 
     try {
-        let todoListItem = display.closest('.todo-list-item');
-        if (todoListItem) {
-            let removeButton = todoListItem.querySelector('.remove');
-            let editButton = todoListItem.querySelector('.edit');
+        let breakListItem = display.closest('.break-list-item');
+        if (breakListItem) {
+            let removeButton = breakListItem.querySelector('.remove');
+            let editButton = breakListItem.querySelector('.edit');
             if (removeButton) {
                 removeButton.classList.add("show");
                 editButton.classList.add("remove");
