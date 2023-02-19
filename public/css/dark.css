@@ -15,8 +15,24 @@
   
   /* //// */
 
+  .dark-mode .icon-moon {
+    font-size: 36px;
+    color: #b7e9e9;
+    position: relative;
+    top: 0px;
+    opacity: 1;
+  }
+
+  .dark-mode .icon-sun {
+    font-size: 16px;
+    color:#ff6600;
+    position: relative;
+    top: 75px;
+    opacity: 0;
+  }
+
   .dark-mode a {
-    color: #00A2D3;
+    color: #A979F6;
   }
   
   .dark-mode .break-container {
@@ -81,10 +97,9 @@
     color: #ccc;
   }
 
-  .dark-mode .toggle-mode {
+  /* .dark-mode .toggle-mode {
     color:#b7e9e9;
-    text-align: left;
-  }
+  } */
 
   .dark-mode description {
     color: #ccc;
@@ -95,3 +110,7 @@
     background-color: #6e8eb9;
   }
   
+  .dark-mode .form-button {
+    background-color: #7209B7;
+    color: white;
+  }

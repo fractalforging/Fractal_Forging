@@ -36,8 +36,8 @@ function toggleModeMoon() {
   }
 
 // add event listener to button
-toggleBtnSun.addEventListener('click', toggleModeSun);
-toggleBtnMoon.addEventListener('click', toggleModeMoon);
+toggleBtnSun.addEventListener('click', toggleModeMoon);
+toggleBtnMoon.addEventListener('click', toggleModeSun);
 
 console.log("A C T I V E  -   D A R K   L O A D E D");
 

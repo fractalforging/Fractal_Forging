@@ -35,6 +35,21 @@ body {
   background-attachment: fixed;
 }
 
+/* body {
+  animation: fadeInAnimation ease 0.1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+   }
+} */
+
 a {
   color: #004C7B;
   font-weight: 500;
@@ -52,7 +67,7 @@ a:hover {
   width: 250px;
   margin: 0 auto;
   margin-top: 50px;
-  background-color: #d8e8ff;
+  background-color: #EEF7FB;
   padding: 30px;
   border-radius: 5px;
   box-shadow: 0px 0px 20px #00050c;
@@ -65,9 +80,9 @@ input {
   padding: 12px 20px;
   margin: 8px 0;
   box-sizing: border-box;
-  border: 1px solid #ccc;
+  border: 1px solid #a1bdc7;
   border-radius: 4px;
-  background-color: #e8f8ffbe;
+  background-color: #ffffff;
   transition: all 0.7s ease-in-out;
 }
 
@@ -131,12 +146,12 @@ pagetitle {
 
 
 greet {
-  font-size: 36px;
+  font-size: 30px;
   transition: all 0.7s ease-in-out;
 }
 
 joke {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 300;
   transition: all 0.7s ease-in-out;
 }
