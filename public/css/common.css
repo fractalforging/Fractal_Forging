@@ -6,7 +6,6 @@
 html {
   display: table;
   margin: auto;
-
 }
 
 @property --myColor1 {

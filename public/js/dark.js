@@ -15,16 +15,12 @@ function toggleMode() {
     localStorage.setItem('isDarkMode', false);
     icon.classList.remove("fa-sharp", "fa-solid", "fa-moon");
     icon.classList.add("fa-regular", "fa-sun"); 
-    document.documentElement.style.setProperty('--myColor1', '#80b0ff');
-    document.documentElement.style.setProperty('--myColor2', '#3871cc');
     console.log("LIGHT MODE LOADED")
   } else {
     body.classList.add('dark-mode');
     localStorage.setItem('isDarkMode', true);
     icon.classList.add("fa-sharp", "fa-solid", "fa-moon");
     icon.classList.remove("fa-regular", "fa-sun");  
-    document.documentElement.style.setProperty('--myColor1', '#001027');
-    document.documentElement.style.setProperty('--myColor2', '#00214e');
     console.log("DARK MODE LOADED")
   }
   console.log("button clicked")

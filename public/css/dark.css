@@ -1,11 +1,9 @@
 /* //////// - DARK MODE - ////////// */
 
-.dark-mode body {
+.dark-mode {
+  --myColor1: #001027;
+  --myColor2: #00214e;
 }
-
-
-
-
 
 .dark-mode {  /* Will attach to body */
     background: linear-gradient(to bottom, #001027 50%, #00214e 100%);
