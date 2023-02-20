@@ -208,7 +208,6 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
   });
 });
 
-
 //Handling user login
 app.post(
   "/login",
