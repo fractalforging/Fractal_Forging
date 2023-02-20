@@ -69,6 +69,13 @@ hr.divider {
   background-color: #004C7B; /* Modern Browsers */
 }
 
+hr.divider-spc-nav {
+  border: none;
+  height: 1px;
+  width: 280px;
+  background-color: #004C7B; /* Modern Browsers */
+}
+
 .credentials {
   width: 250px;
   margin: 0 auto;
@@ -141,6 +148,7 @@ agent {
 }
 
 info {
+  font-family: roboto-mono, monospace;
   font-weight: 650;
 }
 
