@@ -34,6 +34,10 @@
   .dark-mode a {
     color: #A979F6;
   }
+
+  .dark-mode hr.divider {
+    background-color: #004C7B; /* Modern Browsers */
+  }
   
   .dark-mode .break-container {
     background-color: #00000000;
@@ -48,9 +52,16 @@
   .dark-mode .break-list-item {
     background-color: #01041ddc;
     color: #ccc;
-    border: 1px solid #004C7B;
+    /* border: 1px solid #004C7B; */
+    border: 2px solid;
+    border-image: 
+      linear-gradient(
+        to bottom, 
+        #004C7B, 
+        #00000000
+      ) 4 100%;
   }
-  
+
   .dark-mode .break-list-item .cancel {
     background-color: #4a4a4a;
   }

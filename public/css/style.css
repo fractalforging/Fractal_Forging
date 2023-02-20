@@ -107,14 +107,20 @@
   width: 250px;
   padding: 10px;
   margin-top: 10px;
-  border: 1px solid #d4f1ff;
-  border-radius: 5px;
-  background-color: #ffffff48;
   text-align: left;
   display: flex;
   font-size: 16px;
   font-weight: 390;
-  transition: all 0.7s ease-in-out;
+  background-color: #ffffff65;
+  color: #040F16;
+  border: 2px solid;
+  border-image: 
+    linear-gradient(
+      to bottom, 
+      #ffffff, 
+      #A0DFFF
+    ) 4 100%;
+  transition: all 1.5s ease-in-out;
 }
 
 /* .break-list-item .confirm {
