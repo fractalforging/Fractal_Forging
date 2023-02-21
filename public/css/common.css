@@ -74,6 +74,7 @@ hr.divider-spc-nav {
 }
 
 input {
+  color: #ccc;
   font-size: 14px;
   width: 100%;
   padding: 12px 20px;
