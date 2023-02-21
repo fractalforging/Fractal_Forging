@@ -161,7 +161,8 @@ app.post("/register", function (req, res) {
         return res.render("register", { error: 'Error creating user.' });
       }
       console.log(user);
-      res.render("secret_admin.ejs", {name: req.user.username, message: "User account has been created successfully!"});
+      req.session.message = "User account has been created successfully!";
+      res.redirect("/secret_admin");
     }
   );
   console.log(req.body.username);
@@ -220,6 +221,7 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
     });
   });
 });
+
 
 //Handling user login
 app.post(
