@@ -1,3 +1,5 @@
+window.addEventListener('load', function() {
+
 const toggleBtnSun = document.getElementById('toggle-mode-btn-sun');
 const toggleBtnMoon = document.getElementById('toggle-mode-btn-moon');
 const body = document.getElementsByTagName('body')[0];
@@ -41,4 +43,4 @@ toggleBtnMoon.addEventListener('click', toggleModeSun);
 
 console.log("A C T I V E  -   D A R K   L O A D E D");
 
-
+});
