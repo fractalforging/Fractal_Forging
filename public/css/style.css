@@ -48,7 +48,7 @@
   font-size: 8px;
   color: #e9e6b7;
   position: relative;
-  top:-75px;
+  top:-85px;
   opacity: 0;
   transition: top 1.5s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 0.9s ease-in-out;
   cursor: pointer;
@@ -83,7 +83,7 @@
   height: 30px;
 }
 
-.break-header-button {
+.break-plus-button {
   width: 30px;
   height: 30px;
   font-size: 30px;
@@ -92,14 +92,13 @@
   border-radius: 5px;
   cursor: pointer;
   background-color: #0077A7;
-  transition: all 0.7s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 1s ease-in-out;
 }
 
 .break-container {
-  background: #00000000;
   text-align: center;
 }
 
@@ -175,9 +174,7 @@
 
 /* /////////////////// - SELECT DROP DOWN - //////////////////// */
 
-
-
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   .break-list {
     display: block;
     margin: 0;
@@ -200,7 +197,7 @@
 
 .spcitems {
   font-size: 14px;
-}
+} */
 
 
 /* ///// - ALIGN NAME AND TIMER IN SECRET.EJS ///// */

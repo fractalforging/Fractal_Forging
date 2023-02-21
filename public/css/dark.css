@@ -1,8 +1,8 @@
 /* //////// - DARK MODE - ////////// */
 
 .dark-mode {
-  --myColor1: #01041d;
-  --myColor2: #00214e;
+  --myBackgroundColor1: #01041d;
+  --myBackgroundColor2: #00214e;
 }
 
   .dark-mode .remove {
@@ -116,7 +116,7 @@
     color: #ccc;
   }
 
-  .dark-mode .break-header-button {
+  .dark-mode .break-plus-button {
     color: #00214E;
     background-color: #6e8eb9;
   }

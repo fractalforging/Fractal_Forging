@@ -1,0 +1,63 @@
+:root[color-theme="light"] {
+    color-scheme: light;
+    --myBackgroundColor1: #A0DFFF;
+    --myBackgroundColor2: #40BEFF;
+    --icon-moon: #e9e6b7;
+    --icon-sun: #ffee00;
+    --credentials-box-background: #EEF7FB;
+    --credentials-box-shadow: #00050c;
+    --credentials-submit-button-background-color: #0077A7;
+    --input-box-background: #ffffff;
+    --input-box-border: #a1bdc7;
+    --input-box-placeholder: #a1a1a1;
+    --text: black;
+    --links: #004C7B;
+    --hr-divider: #004C7B;
+    --grid-container-background-color: #80808000;
+    --grid-item-background-color: #80008000;
+    --break-plus-button-background: #0077A7;
+    --break-plus-button-symbol: #A0DFFF;
+    --select-menu-background:#eee;
+    --select-menu-border: #ccc;
+    --break-list-item-background: #ffffff65;
+    --break-list-item-sidegradient1: #ffffff; 
+    --break-list-item-sidegradient2: #A0DFFF; 
+    --break-list-item-edit: #8fe93a;
+    --break-list-item-remove: #f36060;
+    --break-list-item-time-over: red;
+    --break-list-item-filler: #00000000;
+    --loader-border: #ccc;
+    --loader-border-top-color: #333;
+  }
+
+  :root[color-theme="dark"] {
+    color-scheme: dark;
+    --myBackgroundColor1: #01041d;
+    --myBackgroundColor2: #00214e;
+    --icon-moon: #e9e6b7;
+    --icon-sun: #ffee00;
+    --credentials-box-background: #EEF7FB;
+    --credentials-box-shadow: #00050c;
+    --credentials-submit-button-background-color: #0077A7;
+    --input-box-background: #ffffff;
+    --input-box-border: #a1bdc7;
+    --input-box-placeholder: #a1a1a1;
+    --text: black;
+    --links: #004C7B;
+    --hr-divider: #004C7B;
+    --grid-container-background-color: #80808000;
+    --grid-item-background-color: #80008000;
+    --break-plus-button-background: #0077A7;
+    --break-plus-button-symbol: #A0DFFF;
+    --select-menu-background:#eee;
+    --select-menu-border: #ccc;
+    --break-list-item-background: #ffffff65;
+    --break-list-item-sidegradient1: #ffffff; 
+    --break-list-item-sidegradient2: #A0DFFF; 
+    --break-list-item-edit: #8fe93a;
+    --break-list-item-remove: #f36060;
+    --break-list-item-time-over: red;
+    --break-list-item-filler: #00000000;
+    --loader-border: #ccc;
+    --loader-border-top-color: #333;
+  }
