@@ -8,17 +8,6 @@ html {
   margin: auto;
 }
 
-@property --myBackgroundColor1 {
-  syntax: '<color>';
-  initial-value: #A0DFFF;
-  inherits: false;
-}
-
-@property --myBackgroundColor2 {
-  syntax: '<color>';
-  initial-value: #40BEFF;
-  inherits: false;
-}
 
 body {
   user-select: none;
@@ -36,7 +25,7 @@ body {
 }
 
 a {
-  color: #004C7B;
+  color: var(--links);
   font-weight: 500;
   text-decoration: none;
   margin-left: 10px;
@@ -51,14 +40,14 @@ hr.divider {
   border: none;
   height: 1px;
   width: 200px;
-  background-color: #004C7B; /* Modern Browsers */
+  background-color: var(--hr-divider); /* Modern Browsers */
 }
 
 hr.divider-spc-nav {
   border: none;
   height: 1px;
   width: 280px;
-  background-color: #004C7B; /* Modern Browsers */
+  background-color: var(--hr-divider); /* Modern Browsers */
 }
 
 .credentials {
@@ -74,7 +63,7 @@ hr.divider-spc-nav {
 }
 
 input {
-  color: #000000;
+  color: var(--text);
   font-size: 14px;
   width: 100%;
   padding: 12px 20px;

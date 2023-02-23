@@ -46,7 +46,7 @@
 
 .icon-moon {
   font-size: 8px;
-  color: #e9e6b7;
+  color: var(--icon-moon);
   position: relative;
   top:-85px;
   opacity: 0;
@@ -56,7 +56,7 @@
 
 .icon-sun {
   font-size: 36px;
-  color:#ffee00;
+  color:var(--icon-sun);
   position: relative;
   top: -40px;
   opacity: 1;

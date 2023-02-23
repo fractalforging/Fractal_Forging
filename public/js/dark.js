@@ -1,40 +1,17 @@
-window.addEventListener('load', function () {
+const rootElement = document.querySelector(":root");
+rootElement.dataset.theme = localStorage.getItem("last-theme-used") || "light";
+const themeButtons = document.querySelectorAll(".toggle-mode");
 
-  // Set initial mode and body
-  const body = document.getElementsByTagName('body')[0];
+for (let i = 0; i < themeButtons.length; i++) {
+    themeButtons[i].addEventListener("click", handleClick);
+}
 
-  // initialize the page with the saved state of dark mode
-  if (localStorage.theme) {
-    if (localStorage.getItem('theme') === 'dark') {
-      body.classList.add('dark-mode');
-      console.log("DARK MODE LOADED FROM START");
+function handleClick() {
+    const currentTheme = rootElement.dataset.theme;
+    if (currentTheme === "dark") {
+        rootElement.dataset.theme = "light";
     } else {
-      body.classList.remove('dark-mode');
-      console.log("LIGHT MODE LOADED FROM START");
+        rootElement.dataset.theme = "dark";
     }
-  }
-
-  // define the toggle function
-  function toggleModeSun() {
-    body.classList.remove('dark-mode');
-    localStorage.setItem('theme', 'light');
-    console.log("LIGHT MODE LOADED FROM TOGGLE")
-  }
-
-  function toggleModeMoon() {
-    body.classList.add('dark-mode');
-    localStorage.setItem('theme', 'dark');
-    console.log("DARK MODE LOADED FROM TOGGLE")
-  }
-
-  // Get moon and sun buttons
-  const toggleBtnSun = document.getElementById('toggle-mode-btn-sun');
-  const toggleBtnMoon = document.getElementById('toggle-mode-btn-moon');
-
-  // add event listener to button
-  toggleBtnSun.addEventListener('click', toggleModeMoon);
-  toggleBtnMoon.addEventListener('click', toggleModeSun);
-
-  console.log("A C T I V E  -   D A R K   L O A D E D");
-
-});
+    localStorage.setItem("last-theme-used", rootElement.dataset.theme);
+}

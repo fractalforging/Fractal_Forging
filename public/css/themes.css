@@ -1,7 +1,23 @@
-:root[color-theme="light"] {
+/* ///////////// - SETTING BACKGROUND VALUES FOR FADE TRANSITION - /////////////// */
+
+@property --myBackgroundColor1 {
+  syntax: '<color>';
+  initial-value: var(--backgroundGradientColor1);
+  inherits: false;
+}
+
+@property --myBackgroundColor2 {
+  syntax: '<color>';
+  initial-value: var(--backgroundGradientColor2);
+  inherits: false;
+}
+
+/* ////////////// - THEMES - //////////////// */
+
+:root[data-theme="light"] {
     color-scheme: light;
-    --myBackgroundColor1: #A0DFFF;
-    --myBackgroundColor2: #40BEFF;
+    --backgroundGradientColor1: #A0DFFF;
+    --backgroundGradientColor2: #40BEFF;
     --text: black;
     --links: #004C7B;
     --icon-moon: #e9e6b7;
@@ -32,10 +48,10 @@
     --loader-border-top-color: #333;
   }
 
-  :root[color-theme="dark"] {
+  :root[data-theme="dark"] {
     color-scheme: dark;
-    --myBackgroundColor1: #01041d;
-    --myBackgroundColor2: #00214e;
+    --backgroundGradientColor1: #01041d;
+    --backgroundGradientColor2: #00214e;
     --text: #ccc;
     --links: #A979F6;
     --icon-moon: #b7e9e9;
