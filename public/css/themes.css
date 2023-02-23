@@ -1,0 +1,67 @@
+:root[color-theme="light"] {
+    color-scheme: light;
+    --myBackgroundColor1: #A0DFFF;
+    --myBackgroundColor2: #40BEFF;
+    --text: black;
+    --links: #004C7B;
+    --icon-moon: #e9e6b7;
+    --icon-sun: #ffee00;
+    --credentials-box-background: #EEF7FB;
+    --credentials-box-shadow: #00050c;
+    --credentials-submit-button-background-color: #0077A7;
+    --credentials-submit-button-text: white;
+    --input-box-background: #ffffff;
+    --input-box-border: #a1bdc7;
+    --input-box-placeholder: #a1a1a1;
+    --input-box-text: #ccc;
+    --hr-divider: #004C7B;
+    --grid-container-background-color: #80808000;
+    --grid-item-background-color: #80008000;
+    --break-plus-button-background: #0077A7;
+    --break-plus-button-symbol: #A0DFFF;
+    --select-menu-background:#eee;
+    --select-menu-border: #ccc;
+    --break-list-item-background: #ffffff65;
+    --break-list-item-sidegradient1: #ffffff; 
+    --break-list-item-sidegradient2: #A0DFFF; 
+    --break-list-item-edit: #8fe93a;
+    --break-list-item-remove: #f36060;
+    --break-list-item-time-over: red;
+    --break-list-item-filler: #00000000;
+    --loader-border: #ccc;
+    --loader-border-top-color: #333;
+  }
+
+  :root[color-theme="dark"] {
+    color-scheme: dark;
+    --myBackgroundColor1: #01041d;
+    --myBackgroundColor2: #00214e;
+    --text: #ccc;
+    --links: #A979F6;
+    --icon-moon: #b7e9e9;
+    --icon-sun: #ff6600;
+    --credentials-box-background: #00050c;
+    --credentials-box-shadow: #00050c;
+    --credentials-submit-button-background-color: #7209B7;
+    --credentials-submit-button-text: white;
+    --input-box-background: #333a46;
+    --input-box-border: #000000;
+    --input-box-placeholder: #4e5768;
+    --input-box-text: #92a9c9;
+    --hr-divider: #004C7B;
+    --grid-container-background-color: #80808000;
+    --grid-item-background-color: #80008000;
+    --break-plus-button-background: #6e8eb9;
+    --break-plus-button-symbol: #00214E;
+    --select-menu-background:#7e94b3;
+    --select-menu-border: #7e94b3;
+    --break-list-item-background: #01041ddc;
+    --break-list-item-sidegradient1: #ffffff; 
+    --break-list-item-sidegradient2: #A0DFFF; 
+    --break-list-item-edit: #8fe93a;
+    --break-list-item-remove: #f36060;
+    --break-list-item-time-over: #f36060;
+    --break-list-item-filler: #00000000;
+    --loader-border: #ccc;
+    --loader-border-top-color: #333;
+  }

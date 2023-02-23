@@ -31,7 +31,7 @@ if (!dbPath) {
   );
   process.exit(1);
 }
- 
+
 mongoose.connect(
   dbPath,
   {
@@ -89,16 +89,25 @@ function isLoggedIn(req, res, next) {
   res.redirect("/login");
 }
 
+// fetch break tracker data
+async function getBreakTrackerData() {
+  const breakTracker = await BreakTrack.find();
+  return breakTracker;
+}
+
 // CHECK ROLE
-function isAdmin(req, res, next) {
+// middleware to check if user is an admin
+async function isAdmin(req, res, next) {
   if (req.isAuthenticated() && req.user.roles === "admin") {
     res.locals.role = 'admin';
-    return next();
+    const breakTracker = await getBreakTrackerData();
+    res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
   } else {
     res.locals.role = 'user';
     return next();
   }
 }
+
 
 //=====================
 // ROUTES
@@ -111,7 +120,7 @@ app.get("/", function (req, res) {
 
 // Showing secret page
 app.get("/secret", isLoggedIn, async function (req, res) {
-  const breakTracker = await BreakTrack.find(); // fetch break tasks from the database
+  const breakTracker = await getBreakTrackerData();
   if (req.user.roles === "admin") {
     res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
   } else if (req.user.roles === "user") {
@@ -128,14 +137,14 @@ app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
   });
 });
 
-// Showing register form
-app.get("/register", function (req, res) {
-  res.render("register");
-});
-
 //Showing login form
 app.get("/login", function (req, res) {
   res.render("login");
+});
+
+// Showing register form
+app.get("/register", function (req, res) {
+  res.render("register");
 });
 
 // Handling user signup
@@ -146,13 +155,18 @@ app.post("/register", function (req, res) {
     function (err, user) {
       if (err) {
         console.log(err);
-        return res.render("register");
+        if (err.name === 'MongoError' && err.code === 11000) {
+          return res.render("register", { error: 'Username already taken.' });
+        }
+        return res.render("register", { error: 'Error creating user.' });
       }
-      passport.authenticate("local")(req, res, function () {
-        res.redirect(`/secret?username=${req.user.username}`);
-      });
+      console.log(user);
+      req.session.message = "User account has been created successfully!";
+      res.redirect("/secret_admin");
     }
   );
+  console.log(req.body.username);
+  console.log(req.body.password);
 });
 
 // Handling password change 1
@@ -207,6 +221,7 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
     });
   });
 });
+
 
 //Handling user login
 app.post(

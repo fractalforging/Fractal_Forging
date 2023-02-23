@@ -1,8 +1,8 @@
 /* //////// - DARK MODE - ////////// */
 
 .dark-mode {
-  --myColor1: #01041d;
-  --myColor2: #00214e;
+  --myBackgroundColor1: #01041d;
+  --myBackgroundColor2: #00214e;
 }
 
   .dark-mode .remove {
@@ -39,15 +39,14 @@
     background-color: #004C7B; /* Modern Browsers */
   }
   
-  .dark-mode .break-container {
-    background-color: #00000000;
+  /* .dark-mode .break-container {
     color: #ccc;
-  }
-  
+  } */
+/*   
   .dark-mode .break-header input {
     background-color: #282828;
     color: #ccc;
-  }
+  } */
   
   .dark-mode .break-list-item {
     background-color: #01041ddc;
@@ -62,18 +61,18 @@
       ) 4 100%;
   }
 
-  .dark-mode .break-list-item .cancel {
+  /* .dark-mode .break-list-item .cancel {
     background-color: #4a4a4a;
-  }
+  } */
   
   .dark-mode .time-over {
     color: #f36060;
   }
   
   .dark-mode select {
-    background-color: #4a4a4a;
+    background-color: #2f2f2f;
     border: 1px solid #7e94b3;
-    color: #ccc;
+    color: #fff;
 
   }
   
@@ -81,14 +80,11 @@
     background-color: #00050c;
   }
   
-  .dark-mode select {
-    background-color: #2f2f2f;
-    color: #fff;
-  }
+ 
   
   .dark-mode input {
     border: 1px solid #000000;
-    background-color: #333a46;
+    background-color: #28354d;
     color: #92a9c9;
   }
 
@@ -116,7 +112,7 @@
     color: #ccc;
   }
 
-  .dark-mode .break-header-button {
+  .dark-mode .break-plus-button {
     color: #00214E;
     background-color: #6e8eb9;
   }
