@@ -13,24 +13,6 @@
     display: block;
   }
   
-  /* //// */
-
-  .dark-mode .icon-moon {
-    font-size: 36px;
-    color: #b7e9e9;
-    position: relative;
-    top: 0px;
-    opacity: 1;
-  }
-
-  .dark-mode .icon-sun {
-    font-size: 8px;
-    color:#ff6600;
-    position: relative;
-    top: 75px;
-    opacity: 0;
-  }
-
   .dark-mode a {
     color: #A979F6;
   }
@@ -38,15 +20,6 @@
   .dark-mode hr.divider {
     background-color: #004C7B; /* Modern Browsers */
   }
-  
-  /* .dark-mode .break-container {
-    color: #ccc;
-  } */
-/*   
-  .dark-mode .break-header input {
-    background-color: #282828;
-    color: #ccc;
-  } */
   
   .dark-mode .break-list-item {
     background-color: #01041ddc;
@@ -60,10 +33,6 @@
         #00000000
       ) 4 100%;
   }
-
-  /* .dark-mode .break-list-item .cancel {
-    background-color: #4a4a4a;
-  } */
   
   .dark-mode .time-over {
     color: #f36060;
@@ -73,14 +42,11 @@
     background-color: #2f2f2f;
     border: 1px solid #7e94b3;
     color: #fff;
-
   }
   
   .dark-mode .credentials {
-    background-color: var(--credentials-box-background);
+    background-color: var(--credentials-box-background-color);
   }
-  
- 
   
   .dark-mode input {
     border: 1px solid #000000;
@@ -103,10 +69,6 @@
   .dark-mode pagetitle {
     color: #ccc;
   }
-
-  /* .dark-mode .toggle-mode {
-    color:#b7e9e9;
-  } */
 
   .dark-mode description {
     color: #ccc;
