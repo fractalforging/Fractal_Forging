@@ -11,20 +11,22 @@
   position: var(--toggle-position);
   cursor: var(--toggle-cursor);
   font-size: var(--toggle-sun-font-size);
+  transform: scale(var(--toggle-sun-scale));
   color: var(--toggle-sun-color);
   top: var(--toggle-sun-top);
   opacity: var(--toggle-sun-opacity);
-  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out;
+  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
 }
 
 .toggle-moon {
   position: var(--toggle-position);
   cursor: var(--toggle-cursor);
   font-size: var(--toggle-moon-font-size);
+  transform: scale(var(--toggle-moon-scale));
   color: var(--toggle-moon-color);
   top: var(--toggle-moon-top);
   opacity: var(--toggle-moon-opacity);
-  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out;
+  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
 }
 
 /* ////////////// - THEMES - //////////////// */
@@ -67,18 +69,20 @@
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #df2b2b;
   /*//// - TIMER LOADER - ////*/
-  --loader-border-color: #ccc;
-  --loader-border-top-color: #333;
+  --loader-background-color1: #004C7B;
+  --loader-background-color2: #004C7B;
   /*//// - TOGGLE BUTTONS - ////*/
   --toggle-position: relative;
   --toggle-cursor: pointer;
   /*//// - TOGGLE BUTTONS - SUN ////*/
   --toggle-sun-font-size: 36px;
+  --toggle-sun-scale: 1;
   --toggle-sun-top: -40px;
   --toggle-sun-opacity: 1;
   --toggle-sun-color: #fcf15c;
   /*//// - TOGGLE BUTTONS - MOON ////*/
-  --toggle-moon-font-size: 5px;
+  --toggle-moon-font-size: 36px;
+  --toggle-moon-scale: 0.3;
   --toggle-moon-top: -85px;
   --toggle-moon-opacity: 0;
   --toggle-moon-color: #e9e6b7;
@@ -123,18 +127,20 @@
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #4a4a4a;
   /*//// - TIMER LOADER - ////*/
-  --loader-border-color: #ccc;
-  --loader-border-top-color: #333;
+  --loader-background-color1: #6d9dbb;
+  --loader-background-color2: #6d9dbb;
   /*//// - TOGGLE BUTTONS - ////*/
   --toggle-position: relative;
   --toggle-cursor: pointer;
   /*//// - TOGGLE BUTTONS - SUN ////*/
-  --toggle-sun-font-size: 5px;
+  --toggle-sun-font-size: 36px;
+  --toggle-sun-scale: 0.3;
   --toggle-sun-top: 85px;
   --toggle-sun-opacity: 0;
   --toggle-sun-color: #ff6600;
   /*//// - TOGGLE BUTTONS - MOON ////*/
   --toggle-moon-font-size: 36px;
+  --toggle-moon-scale: 1;
   --toggle-moon-top: 0px;
   --toggle-moon-opacity: 1;
   --toggle-moon-color: #b7e9e9;
