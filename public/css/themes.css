@@ -11,7 +11,7 @@
   position: var(--toggle-position);
   cursor: var(--toggle-cursor);
   font-size: var(--toggle-sun-font-size);
-  color:var(--toggle-sun-color);
+  color: var(--toggle-sun-color);
   top: var(--toggle-sun-top);
   opacity: var(--toggle-sun-opacity);
   transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out;
@@ -22,7 +22,7 @@
   cursor: var(--toggle-cursor);
   font-size: var(--toggle-moon-font-size);
   color: var(--toggle-moon-color);
-  top:var(--toggle-moon-top);
+  top: var(--toggle-moon-top);
   opacity: var(--toggle-moon-opacity);
   transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out;
 }
@@ -31,10 +31,13 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
+  /*//// - BACKGROUND GRADIENT - ////*/
   --backgroundGradientColor1: #A0DFFF;
   --backgroundGradientColor2: #40BEFF;
+  /*//// - TEXT / LINKS - ////*/
   --text-color: black;
   --links-color: #004C7B;
+  /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color: #EEF7FB;
   --credentials-box-shadow-color: #00050c;
   --credentials-submit-button-background-color: #0077A7;
@@ -43,13 +46,16 @@
   --input-box-border-color: #a1bdc7;
   --input-box-placeholder-color: #a1a1a1;
   --input-box-text-color: #ccc;
+  /*//// - DIVIDER - ////*/
   --hr-divider-color: #004C7B;
+  /*//// - BREAKS SELECTION - ////*/
   --grid-container-background-color: #80808000;
   --grid-item-background-color: #80008000;
   --break-plus-button-background-color: #0077A7;
   --break-plus-button-symbol-color: #A0DFFF;
   --select-menu-background-color: #eee;
   --select-menu-border-color: #ccc;
+  /*//// - BREAKS LIST - ////*/
   --break-list-item-background-color: #ffffff65;
   --break-list-item-sidegradient1-color: #ffffff;
   --break-list-item-sidegradient2-color: #A0DFFF;
@@ -60,6 +66,7 @@
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #df2b2b;
+  /*//// - TIMER LOADER - ////*/
   --loader-border-color: #ccc;
   --loader-border-top-color: #333;
   /*//// - TOGGLE BUTTONS - ////*/
@@ -69,8 +76,7 @@
   --toggle-sun-font-size: 36px;
   --toggle-sun-top: -40px;
   --toggle-sun-opacity: 1;
-  --toggle-sun-color: #fcf265;
-  /*--toggle-sun-color: #e9e6b7;*/
+  --toggle-sun-color: #fcf15c;
   /*//// - TOGGLE BUTTONS - MOON ////*/
   --toggle-moon-font-size: 5px;
   --toggle-moon-top: -85px;
@@ -80,10 +86,13 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
+  /*//// - BACKGROUND GRADIENT - ////*/
   --backgroundGradientColor1: #01041d;
   --backgroundGradientColor2: #00214e;
+  /*//// - TEXT / LINKS - ////*/
   --text-color: #ccc;
   --links-color: #A979F6;
+  /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color: #00050c;
   --credentials-box-shadow-color: #00050c;
   --credentials-submit-button-background-color: #7209B7;
@@ -93,22 +102,27 @@
   --input-box-placeholder-color: #4e5768;
   --input-box-text-color: #92a9c9;
   --input-box-color: #c99292;
+  /*//// - DIVIDER - ////*/
   --hr-divider-color: #004C7B;
+  /*//// - BREAKS SELECTION - ////*/
   --grid-container-background-color: #80808000;
   --grid-item-background-color: #80008000;
   --break-plus-button-background-color: #6e8eb9;
   --break-plus-button-symbol-color: #00214E;
   --select-menu-background-color: #414d5f;
   --select-menu-border-color: #7e94b3;
+  /*//// - BREAKS LIST - ////*/
   --break-list-item-background-color: #01041ddc;
   --break-list-item-sidegradient1-color: #004C7B;
   --break-list-item-sidegradient2-color: #00000000;
+  --break-list-item-text-color: #cad4e4;
   --break-list-item-edit-color: #8fe93a;
   --break-list-item-remove-color: #f36060;
   --break-list-item-time-over-color: #f36060;
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #4a4a4a;
+  /*//// - TIMER LOADER - ////*/
   --loader-border-color: #ccc;
   --loader-border-top-color: #333;
   /*//// - TOGGLE BUTTONS - ////*/
@@ -124,4 +138,4 @@
   --toggle-moon-top: 0px;
   --toggle-moon-opacity: 1;
   --toggle-moon-color: #b7e9e9;
-} 
+}

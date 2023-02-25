@@ -27,6 +27,7 @@ function onTimerEnded(id) {
 
     display.textContent = "OVER";
     display.classList.add("time-over");
+    
 
     try {
         let breakListItem = display.closest('.break-list-item');

@@ -92,6 +92,7 @@
   display: inline-block;
 }
 
+
 .break-list-item {
   width: 250px;
   padding: 10px;
@@ -102,13 +103,14 @@
   font-weight: 390;
   background-color: var(--break-list-item-background-color);
   color: var(--break-list-item-text-color);
-  border: 2px solid;
-  border-image: 
+  border: 1px solid var(--break-list-item-sidegradient1-color);
+  border-radius: 5px;
+  /* border-image: 
     linear-gradient(
       to bottom, 
       var(--break-list-item-sidegradient1-color), 
       var(--break-list-item-sidegradient2-color)
-    ) 4 100%;
+    ) 4 100%; */
   transition: all 1.5s ease-in-out;
 }
 

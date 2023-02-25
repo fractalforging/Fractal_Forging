@@ -1,7 +1,8 @@
-
 document.documentElement.dataset.theme = localStorage.getItem("last-theme-used") || "light";
 
 //////////////////////////////////
+
+const rootElement = document.querySelector(":root");
 
 if (localStorage.getItem("last-theme-used") === "dark") {
   injectDarkMode();

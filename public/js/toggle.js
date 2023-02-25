@@ -1,6 +1,6 @@
 // const body = document.body;
 // body.classList.add('current-theme');
-const rootElement = document.querySelector(":root");
+// const rootElement = document.querySelector(":root");
 rootElement.dataset.theme = localStorage.getItem("last-theme-used") || "light";
 const themeButtons = document.querySelectorAll(".toggle-mode");
 

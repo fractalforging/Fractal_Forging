@@ -147,7 +147,7 @@ app.get("/register", function (req, res) {
   res.render("register");
 });
 
-// Handling user signup
+// Handling user registration
 app.post("/register", function (req, res) {
   User.register(
     { username: req.body.username, roles: "user" },
@@ -162,11 +162,19 @@ app.post("/register", function (req, res) {
       }
       console.log(user);
       req.session.message = "User account has been created successfully!";
-      res.redirect("/secret_admin");
+      res.redirect("/secret_admin?newUser=true");
     }
   );
   console.log(req.body.username);
   console.log(req.body.password);
+});
+
+
+// Api for user registration modal message
+app.get("/api/latest-user", isLoggedIn, async function(req, res) {
+  const user = req.user.username;
+  const latestUser = await User.findOne({ username: user }).sort({ date: -1 });
+  res.json(latestUser);
 });
 
 // Handling password change 1
@@ -279,22 +287,36 @@ app.get("/", (req, res) => {
 
 // POST METHOD
 app.post("/", async (req, res) => {
-  // const myLocalTime = new Date(
-  //   new Date().getTime() + (60 + new Date().getTimezoneOffset()) * 60 * 1000
-  // );
-  const myLocalTime = new Date();
-  const breakTracker = new BreakTrack({
-    user: req.user.username,
-    startTime: new Date().toUTCString(),
-    duration: req.body.duration,
-    date: new Date().toUTCString(),
-  });
-  try {
-    await breakTracker.save();
+  const user = req.user.username;
+
+  // Retrieve the latest break for the user
+  const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
+
+  if (latestBreak && !latestBreak.endTime) {
+    // The user is already on a break
     res.redirect("/secret");
-  } catch (err) {
-    res.redirect("/secret");
+  } else {
+    // The user is not on a break, save the new break in the database
+    const breakTracker = new BreakTrack({
+      user,
+      startTime: new Date().toUTCString(),
+      duration: req.body.duration,
+      date: new Date().toUTCString(),
+    });
+    try {
+      await breakTracker.save();
+      res.redirect("/secret");
+    } catch (err) {
+      res.redirect("/secret");
+    }
   }
+});
+
+//ERROR FOR SETTING MORE THAN 1 BREAK
+app.get("/api/latest-break", isLoggedIn, async function(req, res) {
+  const user = req.user.username;
+  const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
+  res.json(latestBreak);
 });
 
 //UPDATE
@@ -332,6 +354,9 @@ app.route("/remove/:id").get((req, res) => {
     res.redirect("/secret");
   });
 });
+
+
+
 
 mongoose.set("strictQuery", false);
 
