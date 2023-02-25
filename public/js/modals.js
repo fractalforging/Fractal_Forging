@@ -9,7 +9,7 @@ var span = document.querySelectorAll(".close")[0];
 document.querySelector("#break-form").addEventListener("submit", function (event) {
     // prevent the form from submitting
     event.preventDefault();
-
+ 
     // get the latest break for the user
     fetch("/api/latest-break")
         .then(response => response.json())

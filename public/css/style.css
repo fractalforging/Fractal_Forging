@@ -144,7 +144,7 @@
   cursor: pointer;
   text-decoration: none;
 }
-
+ 
 .break-list-item .remove {
   color: var(--break-list-item-remove-color);
   margin-right: 5px;
