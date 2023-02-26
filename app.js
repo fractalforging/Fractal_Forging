@@ -290,7 +290,7 @@ app.post('/login', async function(req, res, next) {
       }
       console.log('Login successful for user:', user.username);
       req.session.username = req.body.username;
-      res.render("secret", { message: "Login successful!", name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
+      res.redirect("secret");
     });
   })(req, res, next);
 });
