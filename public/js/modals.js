@@ -12,10 +12,6 @@ const span = document.querySelectorAll(".close")[0];
 ////////////////////// - FOR MORE THAN 1 BREAK - ///////////////////////
 
 try {
-
-    // Get the <span> element that closes the modal
-
-
     document.querySelector("#break-form").addEventListener("submit", function (event) {
         // prevent the form from submitting
         event.preventDefault();
@@ -38,15 +34,13 @@ try {
             });
     });
 
-
+    span.onclick = () => {
+        myModal.style.display = "none";
+    }
 
 } catch (err) {
     console.log();
 }
-
-
-
-
 
 ////////////////////// - FOR USER REGISTRATION - ///////////////////////
 
@@ -69,7 +63,6 @@ try {
 //     modal.style.display = "none";
 // }
 
-
 /////////////////// - TEST - //////////////////////
 
 // select the button element by its id
@@ -82,12 +75,12 @@ loginForm.addEventListener("submit", function (e) {
     const message = "<span class='modal-text'>test</span>";
     MYModalText.innerHTML = message;
     myModal.style.display = "block";
+    loginForm.submit();
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
+    span.onclick = () => {
         myModal.style.display = "none";
         loginForm.submit();
     }
-    
 });
 
 /////////
