@@ -11,7 +11,7 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 //const tz = require('timezone/loaded');
-let port = process.env.PORT || 3001;
+let port = process.env.PORT || 3002;
 
 let app = express();
 app.set("view engine", "ejs");
@@ -266,23 +266,24 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 
 
 //Handling user login
-app.post('/login', async function(req, res, next) {
+app.post('/login', async function (req, res, next) {
   const breakTracker = await getBreakTrackerData();
-  passport.authenticate('local', function(err, user, info) {
+  passport.authenticate('local', function (err, user, info) {
     if (err) {
       console.log('An error occurred while logging in:', err);
       res.render("login", { message: "An error occurred while logging in" });
       //return res.status(500).json({message: 'An error occurred while logging in.'});
     }
     if (!user) {
-      console.log('Incorrect email or password');
+      console.log('Incorrect username or password');
       res.render("login", { message: "Incorrect email or password" });
+      //res.status(200).json({ info: "preset text 💜" })
       //return res.status(401).json({message: 'Incorrect email or password.'});
     }
     if (err || !user) {
       return;
     }
-    req.logIn(user, function(err) {
+    req.logIn(user, function (err) {
       if (err) {
         console.log('An error occurred while logging in:', err);
         res.render("login", { message: "An error occurred while logging in" });
@@ -290,7 +291,7 @@ app.post('/login', async function(req, res, next) {
       }
       console.log('Login successful for user:', user.username);
       req.session.username = req.body.username;
-      res.render("secret", { message: "Login successful!", name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
+      res.redirect("secret");
     });
   })(req, res, next);
 });
@@ -309,7 +310,7 @@ app.get("/logout", function (req, res) {
         console.log(err);
       }
       res.redirect("/");
-    }); 
+    });
   });
 });
 
