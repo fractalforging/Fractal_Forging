@@ -1,3 +1,7 @@
+//=====================
+// NODE.JS SETUP
+//=====================
+
 const path = require("path");
 const passportLocalMongoose = require("passport-local-mongoose");
 const bcrypt = require("bcrypt");
@@ -7,13 +11,16 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 const tz = require('timezone/loaded');
-let port = process.env.PORT || 3002;
- 
+let port = process.env.PORT || 3001;
+
 let app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// MODELS - - ?||
+//=====================
+// DATABASE
+//=====================
+
 const BreakTrack = require("./models/BreakTrack");
 const User = require("./models/user");
 
@@ -64,6 +71,10 @@ passport.deserializeUser(User.deserializeUser());
 
 module.exports = User;
 
+//=====================
+// MIDDLEWARE
+//=====================
+
 // middleware functions that use UserSchema and User go here
 app.use(
   require("express-session")({
@@ -81,7 +92,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
-// CHECK IF LOGGED IN
+// Check if logged in
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -89,14 +100,13 @@ function isLoggedIn(req, res, next) {
   res.redirect("/login");
 }
 
-// fetch break tracker data
+// Fetch break tracker data
 async function getBreakTrackerData() {
   const breakTracker = await BreakTrack.find();
   return breakTracker;
 }
 
-// CHECK ROLE
-// middleware to check if user is an admin
+// Check if user is an admin
 async function isAdmin(req, res, next) {
   if (req.isAuthenticated() && req.user.roles === "admin") {
     res.locals.role = 'admin';
@@ -108,17 +118,21 @@ async function isAdmin(req, res, next) {
   }
 }
 
-
 //=====================
 // ROUTES
 //=====================
 
-// Showing home page
+// INDEX > LOGIN
 app.get("/", function (req, res) {
   res.render("login");
 });
 
-// Showing secret page
+// LOGIN
+app.get("/login", function (req, res) {
+  res.render("login");
+});
+
+// USER LANDING PAGE
 app.get("/secret", isLoggedIn, async function (req, res) {
   const breakTracker = await getBreakTrackerData();
   if (req.user.roles === "admin") {
@@ -128,7 +142,7 @@ app.get("/secret", isLoggedIn, async function (req, res) {
   }
 });
 
-// Showing edit items
+// ADMIN LANDING PAGE
 app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
   const foundBreakTrack = await BreakTrack.findById(req.params.id);
   res.render("secret_edit", {
@@ -137,10 +151,7 @@ app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
   });
 });
 
-//Showing login form
-app.get("/login", function (req, res) {
-  res.render("login");
-});
+
 
 // Showing register form
 app.get("/register", function (req, res) {
@@ -169,15 +180,7 @@ app.post("/register", function (req, res) {
   console.log(req.body.password);
 });
 
-
-// Api for user registration modal message
-app.get("/api/latest-user", isLoggedIn, async function(req, res) {
-  const user = req.user.username;
-  const latestUser = await User.findOne({ username: user }).sort({ date: -1 });
-  res.json(latestUser);
-});
-
-// Handling password change 1
+// Handling password change
 app.post("/changepassword", isLoggedIn, function (req, res) {
   User.findOne({ username: req.user.username }, (err, user) => {
     if (err) {
@@ -204,54 +207,112 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
       if (!valid) {
         console.log("Old password incorrect");
         return res.render("account", { error: "Old password incorrect, please try again" });
-      }
-
-      // Update password
-      user.setPassword(req.body.newpassword, (err) => {
-        if (err) {
-          console.log(err);
-          return res.render("account", { error: "Error, please try again" });
-        }
-        user.save((err) => {
+      } else {
+        // Update password
+        user.setPassword(req.body.newpassword, (err) => {
           if (err) {
             console.log(err);
             return res.render("account", { error: "Error, please try again" });
           }
-          req.logIn(user, (err) => {
+          user.save((err) => {
             if (err) {
               console.log(err);
               return res.render("account", { error: "Error, please try again" });
             }
-            res.render("passwordChanged");
+            req.logIn(user, (err) => {
+              if (err) {
+                console.log(err);
+                return res.render("account", { error: "Error, please try again" });
+              }
+              console.log("Password change for " + `${user.username}` + " was successfull");
+              return res.redirect("/secret");
+            });
           });
         });
-      });
+      }
     });
   });
 });
 
 
+
+// Authenticate old password
+// app.post("/api/authenticate", isLoggedIn, function (req, res) {
+//   User.findOne({ username: req.user.username }, (err, user) => {
+//     if (err) {
+//       console.log(err);
+//       res.status(500).send({ error: "Error, please try again" });
+//     }
+//     if (!user) {
+//       console.log("User not found");
+//       res.status(500).send({ error: "Error, please try again" });
+//     }
+
+//     user.authenticate(req.body.currentpassword, (err, valid) => {
+//       if (err) {
+//         console.log(err);
+//         res.status(500).send({ error: "Error, please try again" });
+//       }
+//       if (!valid) {
+//         console.log("Old password incorrect");
+//         res.status(401).send({ error: "Old password incorrect, please try again" });
+//       }
+
+//       res.status(200).send({ message: "Old password correct" });
+//     });
+//   });
+// });
+
+
+
 //Handling user login
-app.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/secret",
-    failureRedirect: "/login",
-  }),
-  function (req, res) {
-    req.session.username = req.body.username;
-  }
-);
+app.post('/login', async function(req, res, next) {
+  const breakTracker = await getBreakTrackerData();
+  passport.authenticate('local', function(err, user, info) {
+    if (err) {
+      console.log('An error occurred while logging in:', err);
+      res.render("login", { message: "An error occurred while logging in" });
+      //return res.status(500).json({message: 'An error occurred while logging in.'});
+    }
+    if (!user) {
+      console.log('Incorrect email or password');
+      res.render("login", { message: "Incorrect email or password" });
+      //return res.status(401).json({message: 'Incorrect email or password.'});
+    }
+    if (err || !user) {
+      return;
+    }
+    req.logIn(user, function(err) {
+      if (err) {
+        console.log('An error occurred while logging in:', err);
+        res.render("login", { message: "An error occurred while logging in" });
+        //return res.status(500).json({message: 'An error occurred while logging in.'});
+      }
+      console.log('Login successful for user:', user.username);
+      req.session.username = req.body.username;
+      res.render("secret", { message: "Login successful!", name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
+    });
+  })(req, res, next);
+});
+
 
 //Handling user logout
 app.get("/logout", function (req, res) {
+  const username = req.session.username; // Get the username from the session
   req.logout(function (err) {
     if (err) {
       console.log(err);
     }
-    res.redirect("/");
+    console.log('Logout successful for user:', username); // Use the username obtained from the session
+    req.session.destroy(function (err) {
+      if (err) {
+        console.log(err);
+      }
+      res.redirect("/");
+    });
   });
 });
+
 
 //Handling account
 app.get("/account", isLoggedIn, function (req, res) {
@@ -313,7 +374,7 @@ app.post("/", async (req, res) => {
 });
 
 //ERROR FOR SETTING MORE THAN 1 BREAK
-app.get("/api/latest-break", isLoggedIn, async function(req, res) {
+app.get("/api/latest-break", isLoggedIn, async function (req, res) {
   const user = req.user.username;
   const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
   res.json(latestBreak);
@@ -354,9 +415,6 @@ app.route("/remove/:id").get((req, res) => {
     res.redirect("/secret");
   });
 });
-
-
-
 
 mongoose.set("strictQuery", false);
 
