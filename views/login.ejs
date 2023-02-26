@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 <link rel="stylesheet" type="text/css" href="/css/timer.css">
 <link rel="stylesheet" type="text/css" href="/css/modals.css">
-
+ 
 <script src="/js/timer.js"></script>
 
 <br>
@@ -38,12 +38,22 @@
 <form action="/login" method="POST" class="credentials">
     <input type="text" name="username" placeholder="username" autocomplete="off">
     <input type="password" name="password" placeholder="password" autocomplete="off">
-    <button class="form-button">Login</button>
+    <button id="login-submit-button" type="submit" class="form-button">Login</button>
 </form>
 
 <br>
+
+<!-- ////////////// MODALS ////////////////-->
+
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p id="message"></p>
+  </div>
+</div>
 
 <!-- ////////////////// - FETCH JS FILES - ////////////////// -->
 
 <script src="/js/toggle.js"></script>
 <script src="/js/modals.js"></script>
+

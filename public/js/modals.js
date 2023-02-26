@@ -1,39 +1,52 @@
 ////////////////////// - GET MODAL - ///////////////////////
 
+console.log("M O D A L S . J S   L O A D E D")
+
 // Get the modal
-var myModal = document.querySelector("#myModal");
-var MYModalText = document.querySelector("#message");
+const myModal = document.querySelector("#myModal");
+const MYModalText = document.querySelector("#message");
+const span = document.querySelectorAll(".close")[0];
+
+
 
 ////////////////////// - FOR MORE THAN 1 BREAK - ///////////////////////
 
-// Get the <span> element that closes the modal
-var span = document.querySelectorAll(".close")[0];
+try {
 
-document.querySelector("#break-form").addEventListener("submit", function (event) {
-    // prevent the form from submitting
-    event.preventDefault();
+    // Get the <span> element that closes the modal
 
-    // get the latest break for the user
-    fetch("/api/latest-break")
-        .then(response => response.json())
-        .then(latestBreak => {
-            // check if the latest break has an end time
-            if (latestBreak && !latestBreak.endTime) {
-                // show an error message
-                var message = "<span class='modal-text'>You can only set 1 break at a time</span>";
-                MYModalText.innerHTML = message;
-                myModal.style.display = "block";
-            } else {
-                // submit the form
-                document.getElementById("break-form").submit();
-            }
-        });
-});
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-    myModal.style.display = "none";
+    document.querySelector("#break-form").addEventListener("submit", function (event) {
+        // prevent the form from submitting
+        event.preventDefault();
+        console.log("SUBMIT BUTTON CLICKED");
+
+        // get the latest break for the user
+        fetch("/api/latest-break")
+            .then(response => response.json())
+            .then(latestBreak => {
+                // check if the latest break has an end time
+                if (latestBreak && !latestBreak.endTime) {
+                    // show an error message
+                    var message = "<span class='modal-text'>You can only set 1 break at a time</span>";
+                    MYModalText.innerHTML = message;
+                    myModal.style.display = "block";
+                } else {
+                    // submit the form
+                    document.getElementById("break-form").submit();
+                }
+            });
+    });
+
+
+
+} catch (err) {
+    console.log();
 }
+
+
+
+
 
 ////////////////////// - FOR USER REGISTRATION - ///////////////////////
 
@@ -57,48 +70,24 @@ span.onclick = function () {
 // }
 
 
-/////////////////// - PASSWORD CHANGE MODAL MESSAGES - //////////////////////
+/////////////////// - TEST - //////////////////////
 
-var passwordForm = document.querySelector(".credentials");
+// select the button element by its id
+const loginForm = document.querySelector(".credentials");
+const loginButton = document.getElementById("login-submit-button");
 
-passwordForm.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    // // Authenticate old password
-    // fetch("/api/authenticate", {
-    //     method: "POST",
-    //     body: new FormData(passwordForm)
-    // }).then(function (response) {
-    //     if (response.status === 200) {
-    //         // Password change succeeded, show a success message and redirect to the secret page
-    //         response.json().then(function (data) {
-    //             passwordModalText.innerHTML = data.message;
-    //             passwordModal.style.display = "block";
-    //             if (data.redirect) {
-    //                 setTimeout(function () {
-    //                     window.location.href = data.redirect;
-    //                 }, 2000);
-    //             }
-    //         });
-    //     } else {
-    //         // Old password incorrect or other error occurred, show an error message in the modal
-    //         response.json().then(function (data) {
-    //             passwordModalText.innerHTML = data.message;
-    //             passwordModal.style.display = "block";
-    //         });
-    //     }
-    // });
-
-
-    // get the latest break for the user
-    fetch("/api/authenticate")
-        .then(response => response.json())
-        .then(async function () {
-            const json = await response.json();
-            if (json.error) {
-                console.log(json.error);
-            }
-        });
+// add an event listener to the button
+loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const message = "<span class='modal-text'>test</span>";
+    MYModalText.innerHTML = message;
+    myModal.style.display = "block";
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        myModal.style.display = "none";
+        loginForm.submit();
+    }
+    
 });
 
 /////////
@@ -115,3 +104,4 @@ async function getInfo(e) {
     document.querySelector("#message").innerHTML = data.info;
     modal.style.display = "block";
 }
+

@@ -10,8 +10,8 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
-const tz = require('timezone/loaded');
-let port = process.env.PORT || 3001;
+//const tz = require('timezone/loaded');
+let port = process.env.PORT || 3002;
 
 let app = express();
 app.set("view engine", "ejs");
@@ -192,21 +192,21 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
       return res.render("account", { error: "Error, please try again" });
     }
 
-    // Check if old password is empty
+    // Check if current password is empty
     if (!req.body.currentpassword) {
-      console.log("Old password not provided");
-      return res.render("account", { error: "Please provide your old password" });
+      console.log("Current password not provided");
+      return res.render("account", { error: "Please provide your current password" });
     }
 
-    // Check if old password matches
+    // Check if current password matches
     user.authenticate(req.body.currentpassword, (err, valid) => {
       if (err) {
         console.log(err);
         return res.render("account", { error: "Error, please try again" });
       }
       if (!valid) {
-        console.log("Old password incorrect");
-        return res.render("account", { error: "Old password incorrect, please try again" });
+        console.log("Current password incorrect");
+        return res.render("account", { error: "Current password incorrect, please try again" });
       } else {
         // Update password
         user.setPassword(req.body.newpassword, (err) => {
@@ -236,7 +236,7 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 
 
 
-// Authenticate old password
+// Authenticate Current password
 // app.post("/api/authenticate", isLoggedIn, function (req, res) {
 //   User.findOne({ username: req.user.username }, (err, user) => {
 //     if (err) {
@@ -254,11 +254,11 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 //         res.status(500).send({ error: "Error, please try again" });
 //       }
 //       if (!valid) {
-//         console.log("Old password incorrect");
-//         res.status(401).send({ error: "Old password incorrect, please try again" });
+//         console.log("Current password incorrect");
+//         res.status(401).send({ error: "Current password incorrect, please try again" });
 //       }
 
-//       res.status(200).send({ message: "Old password correct" });
+//       res.status(200).send({ message: "Current password correct" });
 //     });
 //   });
 // });
@@ -266,23 +266,24 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 
 
 //Handling user login
-app.post('/login', async function(req, res, next) {
+app.post('/login', async function (req, res, next) {
   const breakTracker = await getBreakTrackerData();
-  passport.authenticate('local', function(err, user, info) {
+  passport.authenticate('local', function (err, user, info) {
     if (err) {
       console.log('An error occurred while logging in:', err);
       res.render("login", { message: "An error occurred while logging in" });
       //return res.status(500).json({message: 'An error occurred while logging in.'});
     }
     if (!user) {
-      console.log('Incorrect email or password');
+      console.log('Incorrect username or password');
       res.render("login", { message: "Incorrect email or password" });
+      //res.status(200).json({ info: "preset text 💜" })
       //return res.status(401).json({message: 'Incorrect email or password.'});
     }
     if (err || !user) {
       return;
     }
-    req.logIn(user, function(err) {
+    req.logIn(user, function (err) {
       if (err) {
         console.log('An error occurred while logging in:', err);
         res.render("login", { message: "An error occurred while logging in" });
