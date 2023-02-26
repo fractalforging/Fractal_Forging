@@ -10,7 +10,7 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
-const tz = require('timezone/loaded');
+//const tz = require('timezone/loaded');
 let port = process.env.PORT || 3001;
 
 let app = express();
@@ -192,21 +192,21 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
       return res.render("account", { error: "Error, please try again" });
     }
 
-    // Check if old password is empty
+    // Check if current password is empty
     if (!req.body.currentpassword) {
-      console.log("Old password not provided");
-      return res.render("account", { error: "Please provide your old password" });
+      console.log("Current password not provided");
+      return res.render("account", { error: "Please provide your current password" });
     }
 
-    // Check if old password matches
+    // Check if current password matches
     user.authenticate(req.body.currentpassword, (err, valid) => {
       if (err) {
         console.log(err);
         return res.render("account", { error: "Error, please try again" });
       }
       if (!valid) {
-        console.log("Old password incorrect");
-        return res.render("account", { error: "Old password incorrect, please try again" });
+        console.log("Current password incorrect");
+        return res.render("account", { error: "Current password incorrect, please try again" });
       } else {
         // Update password
         user.setPassword(req.body.newpassword, (err) => {
@@ -236,7 +236,7 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 
 
 
-// Authenticate old password
+// Authenticate Current password
 // app.post("/api/authenticate", isLoggedIn, function (req, res) {
 //   User.findOne({ username: req.user.username }, (err, user) => {
 //     if (err) {
@@ -254,11 +254,11 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 //         res.status(500).send({ error: "Error, please try again" });
 //       }
 //       if (!valid) {
-//         console.log("Old password incorrect");
-//         res.status(401).send({ error: "Old password incorrect, please try again" });
+//         console.log("Current password incorrect");
+//         res.status(401).send({ error: "Current password incorrect, please try again" });
 //       }
 
-//       res.status(200).send({ message: "Old password correct" });
+//       res.status(200).send({ message: "Current password correct" });
 //     });
 //   });
 // });
@@ -309,7 +309,7 @@ app.get("/logout", function (req, res) {
         console.log(err);
       }
       res.redirect("/");
-    });
+    }); 
   });
 });
 
