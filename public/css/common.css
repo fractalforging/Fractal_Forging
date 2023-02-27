@@ -14,7 +14,7 @@ body {
   font-style: normal;
   text-align: center;
   background: linear-gradient(var(--myBackgroundColor1), var(--myBackgroundColor2));
-  transition: --myBackgroundColor1 1s ease-in-out, --myBackgroundColor2 2s ease-in-out;
+  transition: --myBackgroundColor1 var(--animation-duration-more) ease-in-out, --myBackgroundColor2 var(--animation-duration-long) ease-in-out;
   height: 100%;
   margin: 0;
   background-repeat: no-repeat;
@@ -26,7 +26,7 @@ a {
   font-weight: 500;
   text-decoration: none;
   margin-left: 10px;
-  transition: all 0.7s ease-in-out;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
 
 a:hover {
@@ -56,7 +56,7 @@ hr.divider-spc-nav {
   border-radius: 5px;
   box-shadow: 0px 0px 20px var(--credentials-box-shadow-color);
   position: relative;
-  transition: all 1s ease-in-out;
+  transition: all var(--animation-duration-more) ease-in-out;
 }
 
 input {
@@ -69,12 +69,12 @@ input {
   border: 1px solid var(--input-box-border-color);
   border-radius: 4px;
   background-color: var(--input-box-background-color);
-  transition: all 1s ease-in-out;
+  transition: all var(--animation-duration-more) ease-in-out;
 }
 
 input::placeholder {
   color: var(--input-box-placeholder-color); /* Replace with the desired color */
-  transition: all 1s ease-in-out;
+  transition: all var(--animation-duration-more) ease-in-out;
 }
 
 /* ///// */
@@ -103,7 +103,7 @@ select {
   text-align: center;
   border-radius: 5px;
   text-indent: -1px;
-  transition: all 1s ease-in-out;
+  transition: all var(--animation-duration-more) ease-in-out;
   cursor: pointer;
 }
 
@@ -125,23 +125,23 @@ navbar {
 pagetitle {
   font-size: 30px;
   font-weight: 400;
-  transition: all 0.7s ease-in-out;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
 
 
 greet {
   font-size: 30px;
-  transition: all 0.7s ease-in-out;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
 
 joke {
   font-size: 20px;
   font-weight: 300;
-  transition: all 0.7s ease-in-out;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
  
 description {
   font-size: 16px;
   font-weight: 400;
-  transition: all 0.7s ease-in-out;
+  transition: all var(--animation-duration-base) ease-in-out;
 }

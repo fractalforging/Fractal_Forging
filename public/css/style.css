@@ -53,7 +53,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.7s ease-in-out;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
 
 .break-header input {
@@ -75,7 +75,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 1s ease-in-out;
+  transition: all var(--animation-duration-more) ease-in-out;
 }
 
 .break-container {
@@ -111,7 +111,7 @@
       var(--break-list-item-sidegradient1-color), 
       var(--break-list-item-sidegradient2-color)
     ) 4 100%; */
-  transition: all 1.5s ease-in-out;
+  transition: all var(--animation-duration-more) ease-in-out;
 }
 
 /* .break-list-item .confirm {
@@ -137,14 +137,14 @@
 .break-list-item div {
   flex-grow: 2;
 }
- 
+
 .break-list-item .edit {
   color: var(--break-list-item-edit-color);
   margin-right: 10px;
   cursor: pointer;
   text-decoration: none;
 }
- 
+
 .break-list-item .remove {
   color: var(--break-list-item-remove-color);
   margin-right: 5px;
@@ -173,7 +173,7 @@
 .time-over {
   color: var(--break-list-item-time-over-color);
   font-family: roboto, monospace;
-  animation: flash 1s linear infinite;
+  animation: flash var(--animation-duration-more) linear infinite;
   font-weight: 400;
 }
 
@@ -181,9 +181,11 @@
   50% {
     opacity: 1;
   }
+
   90% {
     opacity: 0;
   }
+
   100% {
     opacity: 1;
   }
@@ -202,7 +204,7 @@
   text-align: right;
 }
 
-filer {
+ filer {
   color: var(--break-list-item-filler-color);
 }
 
@@ -213,7 +215,7 @@ filer {
   display: inline-block;
   width: 50px;
   height: 2px;
-  background-color: #00000000;
+  background-color: var(--canvas-loader-background-color);
 }
 
 .loader:before {
@@ -224,8 +226,8 @@ filer {
   left: 0%;
   width: 100%;
   height: 50%;
-  background-image: linear-gradient(to right, var(--loader-background-color1),var(--loader-background-color2));
-  animation: loader 2s infinite linear;
+  background-image: linear-gradient(to right, var(--loader-background-color1), var(--loader-background-color2));
+  animation: loader var(--animation-duration-long) infinite linear;
 }
 
 
@@ -238,4 +240,3 @@ filer {
     transform: scaleX(1);
   }
 }
-

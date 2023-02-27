@@ -26,9 +26,14 @@
   left: 50%;
 }
 
+/* ////////////// - COMMON - //////////////// */
+:root {
+  --animation-duration-base: 0.7s;
+  --animation-duration-more: 1s;
+  --animation-duration-long: 2s;
+}
 
 /* ////////////// - THEMES - //////////////// */
-
 :root[data-theme="light"] {
   color-scheme: light;
   /*//// - BACKGROUND GRADIENT - ////*/
@@ -67,6 +72,7 @@
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #df2b2b;
   /*//// - TIMER LOADER - ////*/
+  --canvas-loader-background-color: #00000000;
   --loader-background-color1: #004C7B;
   --loader-background-color2: #004C7B;
   /*//// - TOGGLE BUTTONS - ////*/
@@ -85,8 +91,12 @@
   --toggle-moon-opacity: 0;
   --toggle-moon-color: #e9e6b7;
   /*//// - MODAL ////*/
-  --modal-text-font-size: 14px;
-  --modal-text-color: #ffffff;
+  --canvas-modal-background-color: #00000000;
+  --modal-background-color: #ffffff65;
+  --modal-border-color: #ffffff;
+  --modal-text-font-size: 16px;
+  --modal-font-weight: 400;
+  --modal-text-color: #040F16;
 }
 
 :root[data-theme="dark"] {
@@ -128,7 +138,8 @@
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #4a4a4a;
   /*//// - TIMER LOADER - ////*/
-  --loader-background-color1: #6d9dbb; 
+  --loader-canvas-background-color: #00000000;
+  --loader-background-color1: #6d9dbb;
   --loader-background-color2: #6d9dbb;
   /*//// - TOGGLE BUTTONS - ////*/
   --toggle-position: absolute;
@@ -145,7 +156,12 @@
   --toggle-moon-top: 0px;
   --toggle-moon-opacity: 1;
   --toggle-moon-color: #b7e9e9;
-    /*//// - MODAL ////*/
-  --modal-text-font-size: 14px;
-  --modal-text-color: #ffffff;
+  /*//// - MODAL ////*/
+  --canvas-modal-background-color: #00000000;
+  --modal-background-color: #0000008a;
+  --modal-border-color: #09588d;
+  --modal-close-color: #768c96;
+  --modal-text-font-size: 16px;
+  --modal-font-weight: 400;
+  --modal-text-color: #d1ecff;
 }

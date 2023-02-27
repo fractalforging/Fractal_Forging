@@ -8,31 +8,33 @@
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: #00000000; /* Fallback color */
+  background-color: var(--canvas-modal-background-color); /* Fallback color */
   pointer-events: none; /* Added to allow interactions with elements below the modal */
+  transition: all var(--animation-duration-base) ease-in-out;
 }
 
 /* Modal Content/Box */
 .modal-content {
   padding-top: 100px;
-  background-color: #0000008a;
+  background-color: var(--modal-background-color);
   margin: 4% auto 0; /* 15% from the top and centered */
   padding: 0px;
-  border: 1px solid #09588d;
+  border: 1px solid var(--modal-border-color);
   border-radius: 10px;
   width: 25%; /* Could be more or less, depending on screen size */
   pointer-events: all; /* Added to allow interactions with modal */
-  transition: all 0.7s ease-in-out;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
  
 /* The Close Button */
 .close {
   position: relative;
   right: 15px;
-  color: #768c96;
+  color: var(--modal-close-color);
   float: right;
   font-size: 28px;
   font-weight: bold;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
 
 .close:hover,
@@ -44,7 +46,8 @@
 
 .modal-text {
   font-family: "montserrat", sans-serif;
-  font-weight: 350;
+  font-weight: var(--modal-font-weight);
   color: var(--modal-text-color);
   font-size: var(--modal-text-font-size);
+  transition: all var(--animation-duration-base) ease-in-out;
 }
