@@ -269,7 +269,7 @@ app.post('/login', async function (req, res, next) {
 // Login messages
 app.get('/api/login', async function (req, res) {
   if (req.session.loggedIn === "true") {
-    return res.status(200).json({ message: 'Login successful!.' });
+    //return res.status(200).json({ message: 'Login successful!.' });
   } else if (req.session.loggedIn === "false") {
     return res.status(401).json({ message: 'Incorrect username or password' });
   } else if (req.session.loggedIn === "error1") {
