@@ -234,66 +234,51 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
   });
 });
 
-
-
-// Authenticate Current password
-// app.post("/api/authenticate", isLoggedIn, function (req, res) {
-//   User.findOne({ username: req.user.username }, (err, user) => {
-//     if (err) {
-//       console.log(err);
-//       res.status(500).send({ error: "Error, please try again" });
-//     }
-//     if (!user) {
-//       console.log("User not found");
-//       res.status(500).send({ error: "Error, please try again" });
-//     }
-
-//     user.authenticate(req.body.currentpassword, (err, valid) => {
-//       if (err) {
-//         console.log(err);
-//         res.status(500).send({ error: "Error, please try again" });
-//       }
-//       if (!valid) {
-//         console.log("Current password incorrect");
-//         res.status(401).send({ error: "Current password incorrect, please try again" });
-//       }
-
-//       res.status(200).send({ message: "Current password correct" });
-//     });
-//   });
-// });
-
-
-
 //Handling user login
+//req.session.loggedIn ="";
 app.post('/login', async function (req, res, next) {
-  const breakTracker = await getBreakTrackerData();
   passport.authenticate('local', function (err, user, info) {
     if (err) {
-      console.log('An error occurred while logging in:', err);
+      req.session.loggedIn = "error1";
+      console.log('An error1 occurred while logging in:', err);
       res.render("login", { message: "An error occurred while logging in" });
-      //return res.status(500).json({message: 'An error occurred while logging in.'});
     }
     if (!user) {
+      req.session.loggedIn = "false";
       console.log('Incorrect username or password');
       res.render("login", { message: "Incorrect email or password" });
-      //res.status(200).json({ info: "preset text 💜" })
-      //return res.status(401).json({message: 'Incorrect email or password.'});
     }
     if (err || !user) {
+      req.session.loggedIn = "errorx";
       return;
     }
     req.logIn(user, function (err) {
       if (err) {
-        console.log('An error occurred while logging in:', err);
+        req.session.loggedIn = "error2";
+        console.log('An error2 occurred while logging in:', err);
         res.render("login", { message: "An error occurred while logging in" });
-        //return res.status(500).json({message: 'An error occurred while logging in.'});
       }
       console.log('Login successful for user:', user.username);
       req.session.username = req.body.username;
+      req.session.loggedIn = "true";
       res.redirect("secret");
     });
   })(req, res, next);
+});
+
+// Login messages
+app.get('/api/login', async function (req, res) {
+  if (req.session.loggedIn === "true") {
+    return res.status(200).json({ message: 'Login successful!.' });
+  } else if (req.session.loggedIn === "false") {
+    return res.status(401).json({ message: 'Incorrect username or password' });
+  } else if (req.session.loggedIn === "error1") {
+    return res.status(401).json({ message: 'Error1' });
+  } else if (req.session.loggedIn === "error2") {
+    return res.status(401).json({ message: 'error2' });
+  } else if (req.session.loggedIn === "errorx") {
+    return res.status(401).json({ message: 'errorx' });
+  }
 });
 
 
