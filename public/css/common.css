@@ -6,6 +6,7 @@ html {
 }
 
 body {
+  padding-top: 100px;
   user-select: none;
   display: table-cell;
   vertical-align: middle;

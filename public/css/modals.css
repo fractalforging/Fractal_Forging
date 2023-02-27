@@ -14,12 +14,13 @@
 
 /* Modal Content/Box */
 .modal-content {
+  padding-top: 100px;
   background-color: #0000008a;
-  margin: 4.5% auto 0; /* 15% from the top and centered */
+  margin: 4% auto 0; /* 15% from the top and centered */
   padding: 0px;
   border: 1px solid #09588d;
   border-radius: 10px;
-  width: 35%; /* Could be more or less, depending on screen size */
+  width: 25%; /* Could be more or less, depending on screen size */
   pointer-events: all; /* Added to allow interactions with modal */
   transition: all 0.7s ease-in-out;
 }
