@@ -53,7 +53,7 @@
   --break-list-item-sidegradient2-color: #A0DFFF;
   --break-list-item-text-color: #040F16;
   --break-list-item-edit-color: #8fe93a;
-  --break-list-item-remove-color: #040F16;
+  --break-list-item-remove-color: #004C7B;
   --break-list-item-time-over-color: red;
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
@@ -86,7 +86,7 @@
   --modal-background-color: #ffffff65;
   --modal-border-color: #ffffff;
   --modal-border-thickness: 1px;
-  --modal-close-color: #0b3244;
+  --modal-close-color: #004C7B;
   --modal-text-font-size: 16px;
   --modal-font-weight: 400;
   --modal-text-color: #040F16;
