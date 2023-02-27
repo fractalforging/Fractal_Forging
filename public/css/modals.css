@@ -2,28 +2,33 @@
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  z-index: 9999; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: #00000080; /* Fallback color */
+  background-color: #00000000; /* Fallback color */
+  pointer-events: none; /* Added to allow interactions with elements below the modal */
 }
 
 /* Modal Content/Box */
 .modal-content {
   background-color: #0000008a;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
+  margin: 4.5% auto 0; /* 15% from the top and centered */
+  padding: 0px;
   border: 1px solid #09588d;
   border-radius: 10px;
-  width: 40%; /* Could be more or less, depending on screen size */
+  width: 35%; /* Could be more or less, depending on screen size */
+  pointer-events: all; /* Added to allow interactions with modal */
+  transition: all 0.7s ease-in-out;
 }
  
 /* The Close Button */
 .close {
-  color: #aaa;
+  position: relative;
+  right: 15px;
+  color: #768c96;
   float: right;
   font-size: 28px;
   font-weight: bold;
@@ -39,6 +44,6 @@
 .modal-text {
   font-family: "montserrat", sans-serif;
   font-weight: 350;
-  color: rgb(255, 255, 255);
-  font-size: 24px;
+  color: var(--modal-text-color);
+  font-size: var(--modal-text-font-size);
 }

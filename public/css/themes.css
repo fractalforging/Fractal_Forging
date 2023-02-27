@@ -86,6 +86,9 @@
   --toggle-moon-top: -85px;
   --toggle-moon-opacity: 0;
   --toggle-moon-color: #e9e6b7;
+  /*//// - MODAL ////*/
+  --modal-text-font-size: 14px;
+  --modal-text-color: #ffffff;
 }
 
 :root[data-theme="dark"] {
@@ -144,4 +147,7 @@
   --toggle-moon-top: 0px;
   --toggle-moon-opacity: 1;
   --toggle-moon-color: #b7e9e9;
+    /*//// - MODAL ////*/
+  --modal-text-font-size: 14px;
+  --modal-text-color: #ffffff;
 }
