@@ -15,8 +15,7 @@
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: var(--modal-background-color);
-  background: url(../icons/exclamation-multi-size.ico) 4% / 8% no-repeat #000000;
+  background: url(../icons/warning.ico) 2% / 7% no-repeat var(--modal-background-color);
   color: var(--modal-text-color);
   margin: 40px auto 0; /* 15% from the top and centered */
   padding: 0px;
@@ -36,6 +35,7 @@
 /* The Close Button */
 .close {
   position: relative;
+  top: 7px;
   right: 15px;
   color: var(--modal-close-color);
   float: right;

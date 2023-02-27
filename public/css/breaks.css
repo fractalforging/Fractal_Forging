@@ -203,6 +203,14 @@ info {
 
 .remove {
   display: none;
+  transform: scale(1) translateX(0);
+  font-size: 0;
+}
+
+.material-symbols-outlined {
+  position: relative;
+  top: 1px;
+  font-size: 16px;
 }
 
 .show {
