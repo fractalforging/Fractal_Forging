@@ -100,8 +100,6 @@
   margin-top: 10px;
   text-align: left;
   display: flex;
-  font-size: var(--break-list-item-font-size);
-  font-weight: var(--break-list-item-font-weight);
   background-color: var(--break-list-item-background-color);
   color: var(--break-list-item-text-color);
   border: 1px solid var(--break-list-item-sidegradient1-color);
@@ -171,7 +169,8 @@ info {
   height: 20px;
   display: flex;
   justify-content: space-between;
-  font-size: 16px;
+  font-size: var(--break-list-item-font-size);
+  font-weight: var(--break-list-item-font-weight);
 }
 
 .break-list-item-name-spc {

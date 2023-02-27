@@ -71,7 +71,7 @@
   --toggle-cursor: pointer;
   /*//// - TOGGLE BUTTONS - SUN ////*/
   --toggle-sun-font-size: 36px;
-  --toggle-sun-scale: 1;
+  --toggle-sun-scale: 1.5;
   --toggle-sun-top: 0px;
   --toggle-sun-opacity: 1;
   --toggle-sun-color: #fcf15c;
@@ -85,6 +85,7 @@
   --canvas-modal-background-color: #00000000;
   --modal-background-color: #ffffff65;
   --modal-border-color: #ffffff;
+  --modal-border-thickness: 2px;
   --modal-text-font-size: 16px;
   --modal-font-weight: 400;
   --modal-text-color: #040F16;
@@ -132,7 +133,7 @@
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #4a4a4a;
   --break-list-item-font-size: 16px;
-  --break-list-item-font-weight: 100;
+  --break-list-item-font-weight: 400;
   --break-list-item-timer-font-size: 18px;
   --break-list-item-timer-font-weight: 400;
   /*//// - TIMER LOADER - ////*/
@@ -150,7 +151,7 @@
   --toggle-sun-color: #ff6600;
   /*//// - TOGGLE BUTTONS - MOON ////*/
   --toggle-moon-font-size: 36px;
-  --toggle-moon-scale: 1;
+  --toggle-moon-scale: 1.5;
   --toggle-moon-top: 0px;
   --toggle-moon-opacity: 1;
   --toggle-moon-color: #b7e9e9;
@@ -158,6 +159,7 @@
   --canvas-modal-background-color: #00000000;
   --modal-background-color: #0000008a;
   --modal-border-color: #09588d;
+  --modal-border-thickness: 2px;
   --modal-close-color: #768c96;
   --modal-text-font-size: 16px;
   --modal-font-weight: 200;
@@ -168,7 +170,7 @@
 
 .toggle-sun {
   z-index: 2;
-  left: 50%;
+  left: 50px;
   transform: scale(var(--toggle-sun-scale)) translateX(-45%);
   position: var(--toggle-position);
   cursor: var(--toggle-cursor);
@@ -177,12 +179,11 @@
   top: var(--toggle-sun-top);
   opacity: var(--toggle-sun-opacity);
   transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
-
 }
 
 .toggle-moon {
   z-index: 2;
-  left: 50%;
+  left: 50px;
   transform: scale(var(--toggle-moon-scale)) translateX(-45%);
   position: var(--toggle-position);
   cursor: var(--toggle-cursor);

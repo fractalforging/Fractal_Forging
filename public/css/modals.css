@@ -15,15 +15,22 @@
 
 /* Modal Content/Box */
 .modal-content {
-  padding-top: 100px;
   background-color: var(--modal-background-color);
-  margin: 75px auto 0; /* 15% from the top and centered */
+  background: url(../icons/exclamation-multi-size.ico) 4% / 8% no-repeat #000000;
+  color: var(--modal-text-color);
+  margin: 40px auto 0; /* 15% from the top and centered */
   padding: 0px;
-  border: 1px solid var(--modal-border-color);
+  border: var(--modal-border-thickness) solid var(--modal-border-color);
   border-radius: 10px;
   width: 400px; /* Could be more or less, depending on screen size */
   pointer-events: all; /* Added to allow interactions with modal */
-  transition: background-color var(--animation-duration-more) linear, border var(--animation-duration-more) linear;
+  font-family: "montserrat", sans-serif;
+  font-weight: var(--modal-font-weight);
+  font-size: var(--modal-text-font-size);
+  transition: background-color var(--animation-duration-more) ease-in-out, 
+              border var(--animation-duration-more) ease-in-out, 
+              color var(--animation-duration-short) ease-in-out,
+              font-weight var(--animation-duration-short) ease-in-out;
 }
  
 /* The Close Button */
@@ -34,7 +41,7 @@
   float: right;
   font-size: 28px;
   font-weight: bold;
-  transition: all var(--animation-duration-base) ease-in-out;
+  transition: color var(--animation-duration-short) ease-in-out;
 }
 
 .close:hover,
@@ -42,12 +49,5 @@
   cursor: pointer;
 }
 
-/* Modal text */
-
-.modal-text {
-  font-family: "montserrat", sans-serif;
-  font-weight: var(--modal-font-weight);
-  color: var(--modal-text-color);
-  font-size: var(--modal-text-font-size);
-  transition: all var(--animation-duration-more) ease-in-out;
-}
+/* .modal-text {
+} */
