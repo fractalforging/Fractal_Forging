@@ -1,50 +1,37 @@
-/* ///////////// - TOGGLE MODE BUTTONS - /////////////// */
+/* ///////////// - IMPORT FONTS - /////////////// */
 
-.toggle-sun {
-  z-index: 2;
-  position: var(--toggle-position);
-  cursor: var(--toggle-cursor);
-  font-size: var(--toggle-sun-font-size);
-  transform: scale(var(--toggle-sun-scale)) translateX(-45%);
-  color: var(--toggle-sun-color);
-  top: var(--toggle-sun-top);
-  opacity: var(--toggle-sun-opacity);
-  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
-  left: 50%;
-}
-
-.toggle-moon {
-  z-index: 2;
-  position: var(--toggle-position);
-  cursor: var(--toggle-cursor);
-  font-size: var(--toggle-moon-font-size);
-  transform: scale(var(--toggle-moon-scale)) translateX(-45%);
-  color: var(--toggle-moon-color);
-  top: var(--toggle-moon-top);
-  opacity: var(--toggle-moon-opacity);
-  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
-  left: 50%;
-}
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100;200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 
 /* ////////////// - COMMON - //////////////// */
 :root {
+  /*//// - ANIMATION DURATION - ////*/
+  --animation-duration-short: 0.4s;
   --animation-duration-base: 0.7s;
   --animation-duration-more: 1s;
   --animation-duration-long: 2s;
+  /*//// - FONTS - ////*/
+  --break-list-item-timer-font-family: share tech mono;
 }
 
 /* ////////////// - THEMES - //////////////// */
 :root[data-theme="light"] {
   color-scheme: light;
+  --main-body-font: "Montserrat";
   /*//// - BACKGROUND GRADIENT - ////*/
   --backgroundGradientColor1: #A0DFFF;
   --backgroundGradientColor2: #40BEFF;
-  /*//// - TEXT / LINKS - ////*/
+  /*//// - TEXT - ////*/
   --text-color: black;
+  /*//// - LINKS - ////*/
   --links-color: #004C7B;
+  --links-font-weight: 650;
+  --links-font-size: 16px;
   /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color: #EEF7FB;
-  --credentials-box-shadow-color: #00050c;
+  --credentials-box-shadow-color: #00060a81;
   --credentials-submit-button-background-color: #0077A7;
   --credentials-submit-button-text-color: white;
   --input-box-background-color: #ffffff;
@@ -71,6 +58,10 @@
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #df2b2b;
+  --break-list-item-font-size: 16px;
+  --break-list-item-font-weight: 400;
+  --break-list-item-timer-font-size: 18px;
+  --break-list-item-timer-font-weight: 400;
   /*//// - TIMER LOADER - ////*/
   --canvas-loader-background-color: #00000000;
   --loader-background-color1: #004C7B;
@@ -104,9 +95,12 @@
   /*//// - BACKGROUND GRADIENT - ////*/
   --backgroundGradientColor1: #01041d;
   --backgroundGradientColor2: #00214e;
-  /*//// - TEXT / LINKS - ////*/
+  /*//// - TEXT - ////*/
   --text-color: #ccc;
+  /*//// - LINKS - ////*/
   --links-color: #A979F6;
+  --links-font-weight: 550;
+  --links-font-size: 16px;
   /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color: #00050c;
   --credentials-box-shadow-color: #00050c;
@@ -137,6 +131,10 @@
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #4a4a4a;
+  --break-list-item-font-size: 16px;
+  --break-list-item-font-weight: 100;
+  --break-list-item-timer-font-size: 18px;
+  --break-list-item-timer-font-weight: 400;
   /*//// - TIMER LOADER - ////*/
   --loader-canvas-background-color: #00000000;
   --loader-background-color1: #6d9dbb;
@@ -162,6 +160,35 @@
   --modal-border-color: #09588d;
   --modal-close-color: #768c96;
   --modal-text-font-size: 16px;
-  --modal-font-weight: 400;
+  --modal-font-weight: 200;
   --modal-text-color: #d1ecff;
+}
+
+/* ///////////// - TOGGLE MODE BUTTONS - /////////////// */
+
+.toggle-sun {
+  z-index: 2;
+  left: 50%;
+  transform: scale(var(--toggle-sun-scale)) translateX(-45%);
+  position: var(--toggle-position);
+  cursor: var(--toggle-cursor);
+  font-size: var(--toggle-sun-font-size);
+  color: var(--toggle-sun-color);
+  top: var(--toggle-sun-top);
+  opacity: var(--toggle-sun-opacity);
+  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
+
+}
+
+.toggle-moon {
+  z-index: 2;
+  left: 50%;
+  transform: scale(var(--toggle-moon-scale)) translateX(-45%);
+  position: var(--toggle-position);
+  cursor: var(--toggle-cursor);
+  font-size: var(--toggle-moon-font-size);
+  color: var(--toggle-moon-color);
+  top: var(--toggle-moon-top);
+  opacity: var(--toggle-moon-opacity);
+  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
 }

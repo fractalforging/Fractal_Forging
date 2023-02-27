@@ -17,13 +17,13 @@
 .modal-content {
   padding-top: 100px;
   background-color: var(--modal-background-color);
-  margin: 4% auto 0; /* 15% from the top and centered */
+  margin: 75px auto 0; /* 15% from the top and centered */
   padding: 0px;
   border: 1px solid var(--modal-border-color);
   border-radius: 10px;
-  width: 25%; /* Could be more or less, depending on screen size */
+  width: 400px; /* Could be more or less, depending on screen size */
   pointer-events: all; /* Added to allow interactions with modal */
-  transition: all var(--animation-duration-base) ease-in-out;
+  transition: background-color var(--animation-duration-more) linear, border var(--animation-duration-more) linear;
 }
  
 /* The Close Button */
@@ -49,5 +49,5 @@
   font-weight: var(--modal-font-weight);
   color: var(--modal-text-color);
   font-size: var(--modal-text-font-size);
-  transition: all var(--animation-duration-base) ease-in-out;
+  transition: all var(--animation-duration-more) ease-in-out;
 }

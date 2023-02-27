@@ -94,13 +94,14 @@
 
 
 .break-list-item {
+  /*font-family: "montserrat", sans-serif;*/
   width: 250px;
   padding: 10px;
   margin-top: 10px;
   text-align: left;
   display: flex;
-  font-size: 16px;
-  font-weight: 390;
+  font-size: var(--break-list-item-font-size);
+  font-weight: var(--break-list-item-font-weight);
   background-color: var(--break-list-item-background-color);
   color: var(--break-list-item-text-color);
   border: 1px solid var(--break-list-item-sidegradient1-color);
@@ -140,7 +141,7 @@
 
 .break-list-item .edit {
   color: var(--break-list-item-edit-color);
-  margin-right: 10px;
+  margin-right: var(--links-font-size);
   cursor: pointer;
   text-decoration: none;
 }
@@ -152,16 +153,25 @@
   text-decoration: none;
 }
 
-/* ///// - ALIGN NAME AND TIMER IN SECRET.EJS ///// */
-
 .numerical-timer {
-  font-family: roboto-mono, monospace;
+  position: relative;
+  top: 0%;
+  font-family: var(--break-list-item-timer-font-family);
+  font-size: var(--break-list-item-timer-font-size);
+  font-weight: var(--break-list-item-timer-font-weight);
+}
+
+info {
+  font-family: var(--break-list-item-timer-font-family);
+  font-size: var(--break-list-item-timer-font-size);
+  font-weight: var(--break-list-item-timer-font-weight);
 }
 
 .break-list-item-name {
   height: 20px;
   display: flex;
   justify-content: space-between;
+  font-size: 16px;
 }
 
 .break-list-item-name-spc {
@@ -172,9 +182,10 @@
 
 .time-over {
   color: var(--break-list-item-time-over-color);
-  font-family: roboto, monospace;
+  font-family: var(--break-list-item-timer-font-family);
+  font-size: var(--break-list-item-timer-font-size);
+  font-weight: var(--break-list-item-timer-font-weight);
   animation: flash var(--animation-duration-more) linear infinite;
-  font-weight: 400;
 }
 
 @keyframes flash {
@@ -204,7 +215,7 @@
   text-align: right;
 }
 
- filer {
+filer {
   color: var(--break-list-item-filler-color);
 }
 

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway:200');
+
 
 html {
   display: table;
@@ -10,7 +10,7 @@ body {
   user-select: none;
   display: table-cell;
   vertical-align: middle;
-  font-family: "montserrat", sans-serif;
+  font-family: "Montserrat";
   font-style: normal;
   text-align: center;
   background: linear-gradient(var(--myBackgroundColor1), var(--myBackgroundColor2));
@@ -23,7 +23,8 @@ body {
  
 a {
   color: var(--links-color);
-  font-weight: 500;
+  font-weight: var(--links-font-weight);
+  font-size: 16px;
   text-decoration: none;
   margin-left: 10px;
   transition: all var(--animation-duration-base) ease-in-out;
@@ -54,7 +55,7 @@ hr.divider-spc-nav {
   background-color: var(--credentials-box-background-color);
   padding: 30px;
   border-radius: 5px;
-  box-shadow: 0px 0px 20px var(--credentials-box-shadow-color);
+  box-shadow: 0px 0px 15px var(--credentials-box-shadow-color);
   position: relative;
   transition: all var(--animation-duration-more) ease-in-out;
 }
@@ -112,10 +113,7 @@ agent {
   font-size: 18px;
 }
 
-info {
-  font-family: roboto-mono, monospace;
-  font-weight: 650;
-}
+
 
 navbar {
   font-weight: 450;
