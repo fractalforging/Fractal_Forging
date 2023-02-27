@@ -128,7 +128,7 @@
   --break-list-item-sidegradient2-color: #00000000;
   --break-list-item-text-color: #cad4e4;
   --break-list-item-edit-color: #8fe93a;
-  --break-list-item-remove-color: #768c96;
+  --break-list-item-remove-color: #A979F6;
   --break-list-item-time-over-color: #f36060;
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
@@ -161,7 +161,7 @@
   --modal-background-color: #0000008a;
   --modal-border-color: #09588d;
   --modal-border-thickness: 1px;
-  --modal-close-color: #768c96;
+  --modal-close-color: #A979F6;
   --modal-text-font-size: 16px;
   --modal-font-weight: 200;
   --modal-text-color: #d1ecff;

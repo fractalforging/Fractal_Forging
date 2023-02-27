@@ -30,7 +30,6 @@ body {
   'opsz' 48
 }
 
-
 a {
   color: var(--links-color);
   font-weight: var(--links-font-weight);
