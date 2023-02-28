@@ -22,7 +22,7 @@ try {
                 // check if the latest break has an end time
                 if (latestBreak && !latestBreak.endTime) {
                     // show an error message
-                    var message = "<span class='modal-text'>You can only set 1 break at a time</span>";
+                    var message = "<span class='modal-text'>Only 1 break allowed</span>";
                     myModalText.innerHTML = message;
                     myModal.style.display = "block";
                 } else {

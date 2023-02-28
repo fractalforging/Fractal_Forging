@@ -1,47 +1,61 @@
 /* The Modal (background) */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 9999; /* Sit on top */
+  display: none; 
+  position: fixed; 
+  z-index: 9999; 
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: var(--canvas-modal-background-color); /* Fallback color */
-  pointer-events: none; /* Added to allow interactions with elements below the modal */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: var(--canvas-modal-background-color); 
+  pointer-events: none; 
   transition: all var(--animation-duration-base) ease-in-out;
 }
 
 /* Modal Content/Box */
 .modal-content {
-  background: url(../icons/warning.ico) 2% / 7% no-repeat var(--modal-background-color);
+  background: var(--modal-background-color); 
   color: var(--modal-text-color);
-  margin: 40px auto 0; /* 15% from the top and centered */
-  padding: 0px;
+  margin: 40px auto 0; 
   border: var(--modal-border-thickness) solid var(--modal-border-color);
-  border-radius: 10px;
-  width: 400px; /* Could be more or less, depending on screen size */
-  pointer-events: all; /* Added to allow interactions with modal */
-  font-family: "montserrat", sans-serif;
+  border-radius: var(--modal-border-radius);
+  width: 280px;
+  height: 45px;
+  pointer-events: all; 
   font-weight: var(--modal-font-weight);
   font-size: var(--modal-text-font-size);
   transition: background-color var(--animation-duration-more) ease-in-out, 
               border var(--animation-duration-more) ease-in-out, 
               color var(--animation-duration-short) ease-in-out,
               font-weight var(--animation-duration-short) ease-in-out;
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between
 }
- 
-/* The Close Button */
+
+.exclamation,
 .close {
   position: relative;
-  top: 7px;
-  right: 15px;
+  top:-1px;
+  flex-basis: 20%;
+  align-items: center;
   color: var(--modal-close-color);
-  float: right;
-  font-size: 28px;
+  font-size: 18px;
+  transform: scale(1) translateX(0);
   font-weight: bold;
   transition: color var(--animation-duration-short) ease-in-out;
+  vertical-align: middle;
+}
+
+.exclamation {
+  left: -10px;
+  font-size: 28px;
+}
+
+.close {
+  right: -10px;
+  font-size: 18px;
 }
 
 .close:hover,
@@ -49,5 +63,7 @@
   cursor: pointer;
 }
 
-/* .modal-text {
-} */
+.modal-text {
+  top: 50%;
+  transform: translateY(-0%);
+} 

@@ -271,7 +271,7 @@ app.get('/api/login', async function (req, res) {
   if (req.session.loggedIn === "true") {
     //return res.status(200).json({ message: 'Login successful!.' });
   } else if (req.session.loggedIn === "false") {
-    return res.status(401).json({ message: 'Incorrect username or password' });
+    return res.status(401).json({ message: 'Wrong credentials' });
   } else if (req.session.loggedIn === "error1") {
     return res.status(401).json({ message: 'Error1' });
   } else if (req.session.loggedIn === "error2") {

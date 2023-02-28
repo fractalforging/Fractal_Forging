@@ -1,9 +1,13 @@
 /* ///////////// - IMPORT FONTS - /////////////// */
 
-@import url('https://fonts.googleapis.com/css?family=Raleway');
-@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@100;200&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono');
+@import url('https://fonts.googleapis.com/css2?family=Raleway');
+@import url('https://fonts.googleapis.com/css2?family=Kanit');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1');
 
 /* ////////////// - COMMON - //////////////// */
 :root {
@@ -13,13 +17,13 @@
   --animation-duration-more: 1s;
   --animation-duration-long: 2s;
   /*//// - FONTS - ////*/
-  --break-list-item-timer-font-family: share tech mono;
+  --main-body-font-family: "Montserrat";
+  --break-list-item-timer-font-family: "Share Tech Mono";
 }
 
 /* ////////////// - THEMES - //////////////// */
 :root[data-theme="light"] {
   color-scheme: light;
-  --main-body-font: "Montserrat";
   /*//// - BACKGROUND GRADIENT - ////*/
   --backgroundGradientColor1: #A0DFFF;
   --backgroundGradientColor2: #40BEFF;
@@ -59,7 +63,7 @@
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #df2b2b;
   --break-list-item-font-size: 16px;
-  --break-list-item-font-weight: 400;
+  --break-list-item-font-weight: 600;
   --break-list-item-timer-font-size: 18px;
   --break-list-item-timer-font-weight: 400;
   /*//// - TIMER LOADER - ////*/
@@ -83,13 +87,14 @@
   --toggle-moon-color: #e9e6b7;
   /*//// - MODAL ////*/
   --canvas-modal-background-color: #00000000;
-  --modal-background-color: #ffffff65;
-  --modal-border-color: #ffffff;
+  --modal-background-color: #dba3a37e;
+  --modal-border-color: #8d0909;
   --modal-border-thickness: 1px;
-  --modal-close-color: #004C7B;
-  --modal-text-font-size: 16px;
-  --modal-font-weight: 400;
-  --modal-text-color: #040F16;
+  --modal-border-radius: 5px;
+  --modal-close-color: #8d0909;
+  --modal-text-font-size: 14px;
+  --modal-font-weight: 600;
+  --modal-text-color: #8d0909;
 }
 
 :root[data-theme="dark"] {
@@ -121,20 +126,20 @@
   --break-plus-button-background-color: #6e8eb9;
   --break-plus-button-symbol-color: #00214E;
   --select-menu-background-color: #414d5f;
-  --select-menu-border-color: #7e94b3;
+  --select-menu-border-color: #6e8eb9;
   /*//// - BREAKS LIST - ////*/
   --break-list-item-background-color: #01041ddc;
   --break-list-item-sidegradient1-color: #004C7B;
   --break-list-item-sidegradient2-color: #00000000;
   --break-list-item-text-color: #cad4e4;
   --break-list-item-edit-color: #8fe93a;
-  --break-list-item-remove-color: #A979F6;
+  --break-list-item-remove-color: #6e8eb9;
   --break-list-item-time-over-color: #f36060;
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #4a4a4a;
   --break-list-item-font-size: 16px;
-  --break-list-item-font-weight: 400;
+  --break-list-item-font-weight: 600;
   --break-list-item-timer-font-size: 18px;
   --break-list-item-timer-font-weight: 400;
   /*//// - TIMER LOADER - ////*/
@@ -158,13 +163,14 @@
   --toggle-moon-color: #b7e9e9;
   /*//// - MODAL ////*/
   --canvas-modal-background-color: #00000000;
-  --modal-background-color: #0000008a;
-  --modal-border-color: #09588d;
+  --modal-background-color: #3500008a;
+  --modal-border-color: #8d0909;
   --modal-border-thickness: 1px;
-  --modal-close-color: #A979F6;
-  --modal-text-font-size: 16px;
-  --modal-font-weight: 200;
-  --modal-text-color: #d1ecff;
+  --modal-border-radius: 5px;
+  --modal-close-color: #D85B53;
+  --modal-text-font-size: 14px;
+  --modal-font-weight: 600;
+  --modal-text-color: #ffd1d1;
 }
 
 /* ///////////// - TOGGLE MODE BUTTONS - /////////////// */
