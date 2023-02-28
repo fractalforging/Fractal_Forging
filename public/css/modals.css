@@ -27,8 +27,7 @@
   font-size: var(--modal-text-font-size);
   transition: background-color var(--animation-duration-more) ease-in-out, 
               border var(--animation-duration-more) ease-in-out, 
-              color var(--animation-duration-short) ease-in-out,
-              font-weight var(--animation-duration-short) ease-in-out;
+              color var(--animation-duration-short) ease-in-out;
   display: flex; 
   align-items: center; 
   justify-content: space-between
@@ -41,11 +40,7 @@
   flex-basis: 20%;
   align-items: center;
   color: var(--modal-close-color);
-  font-size: 18px;
-  transform: scale(1) translateX(0);
-  font-weight: bold;
   transition: color var(--animation-duration-short) ease-in-out;
-  vertical-align: middle;
 }
 
 .exclamation {
@@ -65,5 +60,4 @@
 
 .modal-text {
   top: 50%;
-  transform: translateY(-0%);
 } 
