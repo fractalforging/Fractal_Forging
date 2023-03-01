@@ -12,19 +12,15 @@ span.onclick = () => {
 
 /////////////////// - LOGIN ERROR - //////////////////////
 
-try {
-    fetch('/api/login')
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                myModalText.innerHTML = data.message;
-                myModal.style.display = "block";
-            }
-        });
-} catch (err) {
-    console.log(err);
-}
-
+fetch('/api/login')
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            myModalText.innerHTML = data.message;
+            myModal.style.display = "block";
+        }
+    })
+    .catch(error => console.error(error));
 
 ////////////////////// - FOR MORE THAN 1 BREAK - ///////////////////////
 
@@ -37,3 +33,29 @@ fetch('/api/latest-break')
         }
     })
     .catch(error => console.error(error));
+
+
+// try {
+//     document.querySelector("#break-form").addEventListener("submit", function (e) {
+//         e.preventDefault();
+//         console.log("SUBMIT BUTTON CLICKED");
+//         fetch('/api/latest-break')
+//             .then(response => response.json())
+//             .then(latestBreak => {
+//                 console.log("1st stage");
+//                 if (latestBreak && !latestBreak.endTime) {
+//                     fetch('/api/latest-break')
+//                         .then(response => response.json())
+//                         .then(data => {
+//                             console.log("2nd stage");
+//                             myModalText.innerHTML = data.message;
+//                             myModal.style.display = 'block';
+//                         });
+//                 } else {
+//                     document.getElementById("break-form").submit();
+//                 }
+//             })
+//     })
+// } catch (err) {
+//     //console.log(err);
+// }
