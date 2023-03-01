@@ -6,15 +6,17 @@ document.documentElement.dataset.theme = localStorage.getItem("last-theme-used")
 
 ///////////// - GET LAST THEME CHOSEN - //////////////////
 
+const myRoot = document.querySelector(":root");
+
 if (localStorage.getItem("last-theme-used") === "dark") {
   injectDarkMode();
-  document.documentElement.dataset.theme = "dark";
+  myRoot.dataset.theme = "dark";
 } else if (localStorage.getItem("last-theme-used") === "light") {
   injectLightMode();
-  document.documentElement.dataset.theme = "light";
+  myRoot.dataset.theme = "light";
 } else {
   injectLightMode();
-  document.documentElement.dataset.theme = "light";
+  myRoot.dataset.theme = "light";
 }
 
 ///////////// - SETTING CSS PROPERTY DYNAMICALLY FOR GRADIENT BACKGROUND TRANSITION - ///////////////
@@ -69,6 +71,8 @@ function injectDarkMode() {
   }, 50);
 }
 
+///////////// - REMOVE THEME FUNCTIONS - ///////////////
+
 function removeLightMode() {
   const myCSSLightProperties = document.getElementById("light-property");
   if (myCSSLightProperties) {
@@ -82,32 +86,3 @@ function removeDarkMode() {
     myCSSDarkProperties.remove();
   }
 }
-
-////////////// - INJECT ICON AFTER LOADING - ///////////////
-
-var cssFiles = [
-  'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'
-];
-
-function loadCssFiles(cssFiles, callback) {
-  var loaded = 0;
-  for (var i = 0; i < cssFiles.length; i++) {
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = cssFiles[i];
-    link.onload = function() {
-      loaded++;
-      if (loaded == cssFiles.length) {
-        callback();
-      }
-    };
-    document.head.appendChild(link);
-  }
-}
-
-loadCssFiles(cssFiles, function() {
-  var icons = document.getElementsByClassName('material-symbols-outlined');
-  for (var i = 0; i < icons.length; i++) {
-    icons[i].style.display = 'inline-block';
-  }
-});

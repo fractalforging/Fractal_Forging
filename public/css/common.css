@@ -4,7 +4,6 @@ html {
 }
 
 body {
-  background: black;
   padding-top: 80px;
   user-select: none;
   display: table-cell;
@@ -18,15 +17,6 @@ body {
   margin: 0;
   background-repeat: no-repeat;
   background-attachment: fixed;
-}
-
-.material-symbols-outlined {
-  display: none;
-  font-variation-settings:
-  'FILL' 1,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 48
 }
 
 a {

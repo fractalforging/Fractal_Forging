@@ -1,13 +1,11 @@
 <!-- ////////////////// - 1ST IN DOM > PREVENT FLICKER - ////////////////// -->
 
-<script>
-  document.documentElement.dataset.theme = localStorage.getItem("last-theme-used") || "light";
-</script>
+<script src="/js/theme_setup.js"></script>
 
 <!-- ////////////////// - LINED STYLES AND SCRIPTS - ////////////////// -->
 
-<link rel="stylesheet" type="text/css" href="/css/themes.css">
 <link rel="stylesheet" type="text/css" href="/css/common.css">
+<link rel="stylesheet" type="text/css" href="/css/themes.css">
 <link rel="stylesheet" type="text/css" href="/css/breaks.css">
 <link rel="stylesheet" type="text/css" href="/css/timer.css">
 <link rel="stylesheet" type="text/css" href="/css/modals.css">
@@ -20,17 +18,13 @@
 
 <li style="display: block;" class="toggle-moon">
   <icon href="#" id="toggle-mode-btn-moon" class="toggle-mode">
-    <span class="material-symbols-outlined">
-      brightness_3
-      </span>
+    <span class="material-symbols-outlined">brightness_3</span>
   </icon>
 </li>
 
 <li style="display: block;" class="toggle-sun">
   <icon href="#" id="toggle-mode-btn-sun" class="toggle-mode">
-    <span class="material-symbols-outlined">
-      wb_sunny
-      </span>
+    <span class="material-symbols-outlined">sunny</span>
   </icon>
 </li>
 
@@ -64,9 +58,9 @@ if(`<%= error %>` == "no error") {
     <span class="close material-symbols-outlined">close</span>
   </div>
 </div>
+
 <!-- ////////////////// - FETCH JS FILES - ////////////////// -->
 
-<script src="/js/theme_setup.js"></script>
 <script src="/js/toggle.js"></script>
 <script src="/js/modals.js"></script>
   

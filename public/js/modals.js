@@ -1,6 +1,7 @@
 console.log("M O D A L S . J S   L O A D E D")
 
-// Get the modals
+////////////////////// - GET THE MODALS - ///////////////////////
+
 const myModal = document.querySelector("#myModal");
 const myModalText = document.querySelector("#message");
 const span = document.querySelectorAll(".close")[0];
