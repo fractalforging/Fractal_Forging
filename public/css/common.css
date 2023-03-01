@@ -4,6 +4,7 @@ html {
 }
 
 body {
+  background: black;
   padding-top: 80px;
   user-select: none;
   display: table-cell;
@@ -20,6 +21,7 @@ body {
 }
 
 .material-symbols-outlined {
+  display: none;
   font-variation-settings:
   'FILL' 1,
   'wght' 400,

@@ -1,3 +1,5 @@
+console.log("T I M E R . J S   L O A D E D");
+
 /////////////////// - TIMER - /////////////////////
 
 startTimer = (myDuration, display, id) => {

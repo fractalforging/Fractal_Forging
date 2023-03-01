@@ -1,7 +1,8 @@
-// const body = document.body;
-// body.classList.add('current-theme');
-// const rootElement = document.querySelector(":root");
-rootElement.dataset.theme = localStorage.getItem("last-theme-used") || "light";
+console.log("T O G G L E . J S   L O A D E D");
+
+///////////// - TOGGLE THEME - ////////////////
+
+document.documentElement.dataset.theme = localStorage.getItem("last-theme-used") || "light";
 const themeButtons = document.querySelectorAll(".toggle-mode");
 
 for (let i = 0; i < themeButtons.length; i++) {
@@ -11,21 +12,21 @@ for (let i = 0; i < themeButtons.length; i++) {
 ///////////// - ON TOGGLE BUTTON CLICK - ///////////////
 
 function handleClick() {
-    const currentTheme = rootElement.dataset.theme;
+    const currentTheme = document.documentElement.dataset.theme;
     if (currentTheme === "dark") {
         injectLightMode();
-        rootElement.dataset.theme = "light";
+        document.documentElement.dataset.theme = "light";
         setTimeout(() => {
             removeDarkMode();
         }, 1000);
     } else {
         injectDarkMode();
-        rootElement.dataset.theme = "dark";
+        document.documentElement.dataset.theme = "dark";
         setTimeout(() => {
             removeLightMode();
         }, 1000);
     }
-    localStorage.setItem("last-theme-used", rootElement.dataset.theme);
+    localStorage.setItem("last-theme-used", document.documentElement.dataset.theme);
 }
 
 // ///////////// - SETTING CSS PROPERTY DYNAMICALLY FOR GRADIENT BACKGROUND TRANSITION - ///////////////

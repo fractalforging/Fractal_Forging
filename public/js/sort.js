@@ -1,3 +1,7 @@
+console.log("S O R T . J S   L O A D E D");
+
+//////////////// - INITIATE SORTABLE - ///////////////////
+
 window.addEventListener("load", function () {
 
     new Sortable(foo, {
