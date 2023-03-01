@@ -22,5 +22,3 @@ window.addEventListener("load", function () {
       animation: 100
     });
 });
-
-console.log("SORT LOADED")

@@ -8,7 +8,6 @@ for (let i = 0; i < themeButtons.length; i++) {
   themeButtons[i].addEventListener("click", handleClick);
 }
 
-
 function handleClick() {
   const currentTheme = document.documentElement.dataset.theme;
   if (currentTheme === "dark") {
