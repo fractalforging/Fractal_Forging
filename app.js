@@ -47,7 +47,7 @@ mongoose.connect(
   },
   () => {
     console.log("MongoDB connected successfully!");
-    app.listen(port, () => console.log("Server Up and running"));
+    app.listen(port, () => console.log("Server Up and running on port: ", port));
   }
 );
 
