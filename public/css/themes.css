@@ -204,7 +204,6 @@
 }
 
 .material-symbols-outlined {
-  font-size: var(--break-list-item-remove-size);
   display: none; 
   font-variation-settings:
   'FILL' 1,
