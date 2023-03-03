@@ -92,12 +92,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
-// Initiate chache for certain period
-app.use((req, res, next) => {
-  res.set('Cache-Control', 'public, max-age=86400');
-  next();
-});
-
 // Check if logged in
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
