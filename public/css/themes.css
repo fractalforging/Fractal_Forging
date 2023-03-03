@@ -64,6 +64,7 @@
   --break-list-item-cancel-color: #df2b2b;
   --break-list-item-font-size: 16px;
   --break-list-item-font-weight: 600;
+  --break-list-item-remove-size: 12px;
   --break-list-item-timer-font-size: 18px;
   --break-list-item-timer-font-weight: 400;
   /*//// - TIMER LOADER - ////*/
@@ -140,6 +141,7 @@
   --break-list-item-cancel-color: #4a4a4a;
   --break-list-item-font-size: 16px;
   --break-list-item-font-weight: 600;
+  --break-list-item-remove-size: 12px;
   --break-list-item-timer-font-size: 18px;
   --break-list-item-timer-font-weight: 400;
   /*//// - TIMER LOADER - ////*/
@@ -202,6 +204,7 @@
 }
 
 .material-symbols-outlined {
+  font-size: var(--break-list-item-remove-size);
   display: none; 
   font-variation-settings:
   'FILL' 1,

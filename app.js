@@ -11,7 +11,7 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 //const tz = require('timezone/loaded');
-let port = process.env.PORT || 3002;
+let port = process.env.PORT || 3001;
 
 let app = express();
 app.set("view engine", "ejs");
@@ -151,8 +151,6 @@ app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
   });
 });
 
-
-
 // Showing register form
 app.get("/register", function (req, res) {
   res.render("register");
@@ -235,7 +233,6 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 });
 
 //Handling user login
-//req.session.loggedIn ="";
 app.post('/login', async function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
     if (err) {
@@ -267,23 +264,25 @@ app.post('/login', async function (req, res, next) {
 });
 
 // Login messages
-app.get('/api/login', async function (req, res) {
+app.get('/api/login', async function (req, res, next) {
   if (req.session.loggedIn === "true") {
     //return res.status(200).json({ message: 'Login successful!.' });
   } else if (req.session.loggedIn === "false") {
-    return res.status(401).json({ message: 'Wrong credentials' });
+    return res.status(401).json({ message: 'Wrong credentials!' });
   } else if (req.session.loggedIn === "error1") {
     return res.status(401).json({ message: 'Error1' });
   } else if (req.session.loggedIn === "error2") {
     return res.status(401).json({ message: 'error2' });
   } else if (req.session.loggedIn === "errorx") {
     return res.status(401).json({ message: 'errorx' });
+  } else {
+    // console.log("nothing");
+    // res.status(200).json({ message: 'No message' });
   }
 });
 
-
 //Handling user logout
-app.get("/logout", function (req, res) {
+app.get("/logout", function (req, res, next) {
   const username = req.session.username; // Get the username from the session
   req.logout(function (err) {
     if (err) {
@@ -299,14 +298,13 @@ app.get("/logout", function (req, res) {
   });
 });
 
-
 //Handling account
-app.get("/account", isLoggedIn, function (req, res) {
+app.get("/account", isLoggedIn, function (req, res, next) {
   res.render("account", { error: 'no error' });
 });
 
 //Handling Admins
-app.get("/secret_admin", isLoggedIn, isAdmin, function (req, res) {
+app.get("/secret_admin", isLoggedIn, isAdmin, function (req, res, next) {
   if (req.user.roles === "admin") {
     return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
   } else {
@@ -324,7 +322,7 @@ app.use(function (req, res, next) {
 //=====================
 
 // GET METHOD
-app.get("/", (req, res) => {
+app.get("/", (req, res, next) => {
   BreakTrack.find({}, (err, breaks) => {
     res.render("secret.ejs", {
       breakTracker: breaks,
@@ -333,17 +331,16 @@ app.get("/", (req, res) => {
 });
 
 // POST METHOD
-app.post("/", async (req, res) => {
+app.post("/", async function (req, res, next) {
   const user = req.user.username;
-
-  // Retrieve the latest break for the user
   const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
-
   if (latestBreak && !latestBreak.endTime) {
-    // The user is already on a break
+    req.session.message = 'Only 1 break at a time';
+    console.log(req.session.message);
     res.redirect("/secret");
   } else {
-    // The user is not on a break, save the new break in the database
+    req.session.message = 'Break submitted';
+    console.log(req.session.message, "for", req.user.username);
     const breakTracker = new BreakTrack({
       user,
       startTime: new Date().toUTCString(),
@@ -356,29 +353,38 @@ app.post("/", async (req, res) => {
     } catch (err) {
       res.redirect("/secret");
     }
+  } (req, res, next);
+});
+
+// GET METHOD to retrieve latest break
+app.get("/api/latest-break", async function (req, res, next) {
+  // const user = req.user.username;
+  // const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
+  // res.json(latestBreak);
+  if (req.session.message === 'Only 1 break at a time') {
+    console.log("message:", req.session.message, "sent");
+    res.status(401).json({ message: 'Only 1 break at a time' });
+  } else if (req.session.message === 'Break submitted') {
+    console.log("message:", req.session.message, "sent");
+    res.status(200).json({ message: 'Break submitted' });
+  } else {
+    // console.log("nothing");
+    // res.status(200).json({ message: 'No message' });
   }
 });
 
-//ERROR FOR SETTING MORE THAN 1 BREAK
-app.get("/api/latest-break", isLoggedIn, async function (req, res) {
-  const user = req.user.username;
-  const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
-  res.json(latestBreak);
-});
 
 //UPDATE
-app
-  .route("/edit/:id")
-  .get((req, res) => {
-    const id = req.params.id;
-    BreakTrack.find({}, (err, breaks) => {
-      res.render("secret_edit.ejs", {
-        breakTracker: breaks,
-        idBreak: id,
-        name: req.user.username
-      });
+app.route("/edit/:id").get((req, res) => {
+  const id = req.params.id;
+  BreakTrack.find({}, (err, breaks) => {
+    res.render("secret_edit.ejs", {
+      breakTracker: breaks,
+      idBreak: id,
+      name: req.user.username
     });
-  })
+  });
+})
   .post((req, res) => {
     const id = req.params.id;
     BreakTrack.findByIdAndUpdate(

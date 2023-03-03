@@ -6,55 +6,56 @@ const myModal = document.querySelector("#myModal");
 const myModalText = document.querySelector("#message");
 const span = document.querySelectorAll(".close")[0];
 
+span.onclick = () => {
+    myModal.style.display = "none";
+};
+
+/////////////////// - LOGIN ERROR - //////////////////////
+
+fetch('/api/login')
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            myModalText.innerHTML = data.message;
+            myModal.style.display = "block";
+        }
+    })
+    .catch(error => console.error(error));
+
 ////////////////////// - FOR MORE THAN 1 BREAK - ///////////////////////
 
-try {
-    document.querySelector("#break-form").addEventListener("submit", function (e) {
-        // prevent the form from submitting
-        e.preventDefault();
-        console.log("SUBMIT BUTTON CLICKED");
+fetch('/api/latest-break')
+    .then(response => response.json())
+    .then(data => {
+        if (data.message) {
+            myModalText.innerHTML = data.message;
+            myModal.style.display = 'block';
+        }
+    })
+    .catch(error => console.error(error));
 
-        // get the latest break for the user
-        fetch("/api/latest-break")
-            .then(response => response.json())
-            .then(latestBreak => {
-                // check if the latest break has an end time
-                if (latestBreak && !latestBreak.endTime) {
-                    // show an error message
-                    var message = "<span class='modal-text'>Only 1 break allowed</span>";
-                    myModalText.innerHTML = message;
-                    myModal.style.display = "block";
-                } else {
-                    // submit the form
-                    document.getElementById("break-form").submit();
-                }
-            });
-    });
 
-    span.onclick = () => {
-        myModal.style.display = "none";
-    }
-
-} catch (err) {
-    //console.log(err);
-}
-
-/////////////////// - TEST - //////////////////////
-
-try {
-    fetch('/api/login')
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-              myModalText.innerHTML = data.message;
-              myModal.style.display = "block";
-            } 
-        });
-
-    span.onclick = () => {
-        myModal.style.display = "none";
-    }
-// });
-} catch (err) {
-console.log(err);
-}
+// try {
+//     document.querySelector("#break-form").addEventListener("submit", function (e) {
+//         e.preventDefault();
+//         console.log("SUBMIT BUTTON CLICKED");
+//         fetch('/api/latest-break')
+//             .then(response => response.json())
+//             .then(latestBreak => {
+//                 console.log("1st stage");
+//                 if (latestBreak && !latestBreak.endTime) {
+//                     fetch('/api/latest-break')
+//                         .then(response => response.json())
+//                         .then(data => {
+//                             console.log("2nd stage");
+//                             myModalText.innerHTML = data.message;
+//                             myModal.style.display = 'block';
+//                         });
+//                 } else {
+//                     document.getElementById("break-form").submit();
+//                 }
+//             })
+//     })
+// } catch (err) {
+//     //console.log(err);
+// }
