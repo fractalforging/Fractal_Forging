@@ -93,9 +93,29 @@
 }
 
 
-.break-list-item {
+.break-list-item-user {
   width: 250px;
   height: 20px;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: left;
+  display: flex;
+  background-color: var(--break-list-item-background-color);
+  color: var(--break-list-item-text-color);
+  border: 1px solid var(--break-list-item-sidegradient1-color);
+  border-radius: 5px;
+  /* border-image: 
+    linear-gradient(
+      to bottom, 
+      var(--break-list-item-sidegradient1-color), 
+      var(--break-list-item-sidegradient2-color)
+    ) 4 100%; */
+  transition: all var(--animation-duration-more) ease-in-out;
+}
+
+.break-list-item-admin {
+  width: 250px;
+  height: 80px;
   padding: 10px;
   margin-top: 10px;
   text-align: left;
@@ -133,18 +153,21 @@
   background-color: var(--break-list-item-cancel);
 } */
 
-.break-list-item div {
+.break-list-item-user div,
+.break-list-item-admin div {
   flex-grow: 2;
 }
 
-.break-list-item .edit {
+.break-list-item-user .edit,
+.break-list-item-admin .edit {
   color: var(--break-list-item-edit-color);
   margin-right: var(--links-font-size);
   cursor: pointer;
   text-decoration: none;
 }
 
-.break-list-item .remove {
+.break-list-item-user .remove,
+.break-list-item-admin .remove {
   color: var(--break-list-item-remove-color);
   margin-right: 5px;
   cursor: pointer;
@@ -163,18 +186,16 @@ info {
   font-family: var(--break-list-item-timer-font-family);
   font-size: var(--break-list-item-timer-font-size);
   font-weight: var(--break-list-item-timer-font-weight);
-}
+} 
 
-.break-list-item-name {
-  height: 20px;
+.break-list-item-name-user {
   display: flex;
   justify-content: space-between;
   font-size: var(--break-list-item-font-size);
   font-weight: var(--break-list-item-font-weight);
 }
 
-.break-list-item-name-spc {
-  height: 80px;
+.break-list-item-name-admin {
   display: flex;
   justify-content: space-between;
 }
@@ -207,7 +228,6 @@ info {
   right: -10px;
   margin-left: -7px;
   transform: scale(0.8) translateX(0);
-  /* font-size: var(--break-list-item-remove-size); */
   display: none;
 }
 

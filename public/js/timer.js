@@ -3,7 +3,6 @@ console.log("T I M E R . J S   L O A D E D");
 /////////////////// - TIMER - /////////////////////
 
 startTimer = (myDuration, display, id) => {
-    //console.log("id inside startTimer function: ", id);
     let timer = myDuration - 60;
     let minutes;
     let seconds;
@@ -32,7 +31,7 @@ function onTimerEnded(id) {
     
 
     try {
-        let breakListItem = display.closest('.break-list-item');
+        let breakListItem = display.closest('.break-list-item-user');
         if (breakListItem) {
             let removeButton = breakListItem.querySelector('.remove');
             let editButton = breakListItem.querySelector('.edit');
