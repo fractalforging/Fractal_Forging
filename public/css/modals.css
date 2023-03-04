@@ -1,64 +1,96 @@
 /* The Modal (background) */
 .modal {
-  display: none; 
-  position: fixed; 
-  z-index: 9999; 
+  display: none;
+  position: fixed;
+  z-index: 9999;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: var(--canvas-modal-background-color); 
-  pointer-events: none; 
+  background-color: var(--canvas-modal-background-color);
+  pointer-events: none;
   transition: all var(--animation-duration-base) ease-in-out;
 }
 
 /* Modal Content/Box */
-.modal-content {
-  background: var(--modal-background-color); 
-  color: var(--modal-text-color);
-  margin: 40px auto 0; 
-  border: var(--modal-border-thickness) solid var(--modal-border-color);
+.modal-content-neg {
+  background: var(--modal-neg-background-color);
+  color: var(--modal-neg-text-color);
+  border: var(--modal-border-thickness) solid var(--modal-neg-border-color);
+}
+
+.modal-content-pos {
+  background: var(--modal-pos-background-color);
+  color: var(--modal-pos-text-color);
+  border: var(--modal-border-thickness) solid var(--modal-pos-border-color);
+}
+
+
+.modal-content-neg,
+.modal-content-pos {
+  margin: 40px auto 0;
   border-radius: var(--modal-border-radius);
   width: 280px;
   height: 45px;
-  pointer-events: all; 
+  pointer-events: all;
   font-weight: var(--modal-font-weight);
   font-size: var(--modal-text-font-size);
-  transition: background-color var(--animation-duration-more) ease-in-out, 
-              border var(--animation-duration-more) ease-in-out, 
-              color var(--animation-duration-short) ease-in-out;
-  display: flex; 
-  align-items: center; 
+  transition: background-color var(--animation-duration-more) ease-in-out,
+    border var(--animation-duration-more) ease-in-out,
+    color var(--animation-duration-short) ease-in-out;
+  display: flex;
+  align-items: center;
   justify-content: space-between
 }
 
 .exclamation,
-.close {
+.check,
+.close-neg,
+.close-pos {
   position: relative;
-  top:-1px;
+  top: -1px;
   flex-basis: 20%;
   align-items: center;
-  color: var(--modal-close-color);
   transition: color var(--animation-duration-short) ease-in-out;
 }
 
+.close-neg {
+  color: var(--modal-neg-close-icon-color);
+}
+
+.close-pos {
+  color: var(--modal-pos-close-icon-color);
+}
+
+.exclamation {
+  color: var(--modal-neg-close-icon-color);
+}
+
+.check {
+  color: var(--modal-pos-close-icon-color);
+}
+
+.check,
 .exclamation {
   left: -10px;
   font-size: 28px;
 }
 
-.close {
+.close-neg,
+.close-pos {
   right: -10px;
   transform: scale(0.8);
   /* font-size: 20px; */
 }
 
-.close:hover,
-.close:focus {
+.close-neg:hover,
+.close-pos:hover,
+.close-neg:focus,
+.close-neg:focus {
   cursor: pointer;
 }
 
 .modal-text {
   top: 50%;
-} 
+}

@@ -11,7 +11,7 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 //const tz = require('timezone/loaded');
-let port = process.env.PORT || 3001;
+let port = process.env.PORT || 3002;
 
 let app = express();
 app.set("view engine", "ejs");
@@ -358,9 +358,6 @@ app.post("/", async function (req, res, next) {
 
 // GET METHOD to retrieve latest break
 app.get("/api/latest-break", async function (req, res, next) {
-  // const user = req.user.username;
-  // const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
-  // res.json(latestBreak);
   if (req.session.message === 'Only 1 break at a time') {
     console.log("message:", req.session.message, "sent");
     res.status(401).json({ message: 'Only 1 break at a time' });
@@ -373,6 +370,17 @@ app.get("/api/latest-break", async function (req, res, next) {
   }
 });
 
+// CLEAR MODAL MESSAGES
+app.post('/clear-message', function(req, res) {
+  req.session.message = null;
+  res.sendStatus(200);
+});
+
+// CATCH ERRORS
+app.use(function (err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 //UPDATE
 app.route("/edit/:id").get((req, res) => {

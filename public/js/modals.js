@@ -2,60 +2,60 @@ console.log("M O D A L S . J S   L O A D E D")
 
 ////////////////////// - GET THE MODALS - ///////////////////////
 
-const myModal = document.querySelector("#myModal");
-const myModalText = document.querySelector("#message");
-const span = document.querySelectorAll(".close")[0];
+const myModal_Neg = document.querySelector("#myModal-Neg");
+const myModalText_Neg = document.querySelector("#message-neg");
+const myModal_Pos = document.querySelector("#myModal-Pos");
+const myModalText_Pos = document.querySelector("#message-pos");
 
-span.onclick = () => {
-    myModal.style.display = "none";
-};
+
+///////////////////// - CLOSE MODAL & CLEAR SERVER VARIABLE - //////////////////
+
+const closeBtns = document.querySelectorAll('.close-neg, .close-pos');
+
+closeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        myModal_Neg.style.display = "none";
+        myModal_Pos.style.display = "none";
+        fetch('/clear-message', { method: 'POST' })
+            .catch(function (error) {
+                console.error(error);
+            });
+    });
+});
 
 /////////////////// - LOGIN ERROR - //////////////////////
 
-fetch('/api/login')
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            myModalText.innerHTML = data.message;
-            myModal.style.display = "block";
-        }
-    })
-    .catch(error => console.error(error));
+try {
+    fetch('/api/login')
+        .then(response => response.json())
+        .then(data => {
+            if (data.message) {
+                myModalText_Neg.innerHTML = data.message;
+                myModal_Neg.style.display = "block";
+            }
+        }).catch(error => console.error(error));
+} catch (err) {
+    console.error(err)
+}
 
-////////////////////// - FOR MORE THAN 1 BREAK - ///////////////////////
+/////////////////// - FOR MORE THAN 1 BREAK - ///////////////////////
 
-fetch('/api/latest-break')
-    .then(response => response.json())
-    .then(data => {
-        if (data.message) {
-            myModalText.innerHTML = data.message;
-            myModal.style.display = 'block';
-        }
-    })
-    .catch(error => console.error(error));
+try {
+    fetch('/api/latest-break')
+        .then(response => {
+            if (response.status === 200) {
+                return response.json().then(data => {
+                    myModalText_Pos.innerHTML = data.message;
+                    myModal_Pos.style.display = 'block';
+                });
+            } else if (response.status === 401 || response.status === 500) {
+                return response.json().then(data => {
+                    myModalText_Neg.innerHTML = data.message;
+                    myModal_Neg.style.display = 'block';
+                });
+            }
+        }).catch(error => console.error(error));
+} catch (err) {
+    console.error(err)
+}
 
-
-// try {
-//     document.querySelector("#break-form").addEventListener("submit", function (e) {
-//         e.preventDefault();
-//         console.log("SUBMIT BUTTON CLICKED");
-//         fetch('/api/latest-break')
-//             .then(response => response.json())
-//             .then(latestBreak => {
-//                 console.log("1st stage");
-//                 if (latestBreak && !latestBreak.endTime) {
-//                     fetch('/api/latest-break')
-//                         .then(response => response.json())
-//                         .then(data => {
-//                             console.log("2nd stage");
-//                             myModalText.innerHTML = data.message;
-//                             myModal.style.display = 'block';
-//                         });
-//                 } else {
-//                     document.getElementById("break-form").submit();
-//                 }
-//             })
-//     })
-// } catch (err) {
-//     //console.log(err);
-// }
