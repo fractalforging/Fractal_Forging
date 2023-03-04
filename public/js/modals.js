@@ -7,8 +7,7 @@ const myModalText_Neg = document.querySelector("#message-neg");
 const myModal_Pos = document.querySelector("#myModal-Pos");
 const myModalText_Pos = document.querySelector("#message-pos");
 
-
-///////////////////// - CLOSE MODAL & CLEAR SERVER VARIABLE - //////////////////
+///////////////////// - CLOSE MODAL - //////////////////
 
 const closeBtns = document.querySelectorAll('.close-neg, .close-pos');
 
@@ -16,92 +15,36 @@ closeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
         myModal_Neg.style.display = "none";
         myModal_Pos.style.display = "none";
-        fetch('/clear-message', { method: 'POST' })
-            .catch(function (error) {
-                console.error(error);
-            });
+        fetch('/clear-message', { method: 'POST' });
     });
 });
 
-/////////////////// - LOGIN ERROR - //////////////////////
+/////////////////// - SERVER > API > MODALS - //////////////////////
 
-try {
-    fetch('/api/login')
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                myModal_Pos.style.display = 'none';
-                myModalText_Neg.innerHTML = data.message;
-                myModal_Neg.style.display = "block";
-                fetch('/clear-message', { method: 'POST' })
-                    .catch(function (error) {
-                        console.error(error);
-                    });
-            }
-        }).catch(error => console.error(error));
-} catch (err) {
-    console.error(err)
-}
-
-/////////////////// - FOR PASSWORD CHANGE - ///////////////////////
-
-try {
-    fetch('/api/changepassword')
+function makeApiCall(apiEndpoint) {
+    return fetch(apiEndpoint)
         .then(response => {
             if (response.status === 200) {
                 return response.json().then(data => {
                     myModal_Neg.style.display = 'none';
                     myModalText_Pos.innerHTML = data.message;
                     myModal_Pos.style.display = 'block';
-                    fetch('/clear-message', { method: 'POST' })
-                        .catch(function (error) {
-                            console.error(error);
-                        });
+                    fetch('/clear-message', { method: 'POST' });
                 });
             } else if (response.status === 401 || response.status === 500) {
                 return response.json().then(data => {
                     myModal_Pos.style.display = 'none';
                     myModalText_Neg.innerHTML = data.message;
                     myModal_Neg.style.display = 'block';
-                    fetch('/clear-message', { method: 'POST' })
-                        .catch(function (error) {
-                            console.error(error);
-                        });
+                    fetch('/clear-message', { method: 'POST' });
                 });
             }
         }).catch(error => console.error(error));
-} catch (err) {
-    console.error(err)
 }
-
-/////////////////// - FOR MORE THAN 1 BREAK - ///////////////////////
 
 try {
-    fetch('/api/latest-break')
-        .then(response => {
-            if (response.status === 200) {
-                return response.json().then(data => {
-                    myModal_Neg.style.display = 'none';
-                    myModalText_Pos.innerHTML = data.message;
-                    myModal_Pos.style.display = 'block';
-                    fetch('/clear-message', { method: 'POST' })
-                        .catch(function (error) {
-                            console.error(error);
-                        });
-                });
-            } else if (response.status === 401 || response.status === 500) {
-                return response.json().then(data => {
-                    myModal_Pos.style.display = 'hidden';
-                    myModalText_Neg.innerHTML = data.message;
-                    myModal_Neg.style.display = 'block';
-                    fetch('/clear-message', { method: 'POST' })
-                        .catch(function (error) {
-                            console.error(error);
-                        });
-                });
-            }
-        }).catch(error => console.error(error));
+    Promise.all([makeApiCall('/api/login'), makeApiCall('/api/changepassword'), makeApiCall('/api/latest-break'), makeApiCall('/api/register')])
+        .catch(error => console.error(error));
 } catch (err) {
-    console.error(err)
+    console.error(err);
 }
-

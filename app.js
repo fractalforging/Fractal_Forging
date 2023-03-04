@@ -111,7 +111,7 @@ async function isAdmin(req, res, next) {
   if (req.isAuthenticated() && req.user.roles === "admin") {
     res.locals.role = 'admin';
     const breakTracker = await getBreakTrackerData();
-    res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
   } else {
     res.locals.role = 'user';
     return next();
@@ -124,28 +124,28 @@ async function isAdmin(req, res, next) {
 
 // INDEX > LOGIN
 app.get("/", function (req, res) {
-  res.render("login");
+  return res.render("login");
 });
 
 // LOGIN
 app.get("/login", function (req, res) {
-  res.render("login");
+  return res.render("login");
 });
 
 // USER LANDING PAGE
 app.get("/secret", isLoggedIn, async function (req, res) {
   const breakTracker = await getBreakTrackerData();
   if (req.user.roles === "admin") {
-    res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
   } else if (req.user.roles === "user") {
-    res.render("secret", { name: req.user.username, breakTracker: breakTracker });
+    return res.render("secret", { name: req.user.username, breakTracker: breakTracker });
   }
 });
 
 // ADMIN LANDING PAGE
 app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
   const foundBreakTrack = await BreakTrack.findById(req.params.id);
-  res.render("secret_edit", {
+  return res.render("secret_edit", {
     name: req.user.username,
     breakTracker: foundBreakTrack,
   });
@@ -153,7 +153,7 @@ app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
 
 // Showing register form
 app.get("/register", function (req, res) {
-  res.render("register");
+  return res.render("register");
 });
 
 // Handling user registration
@@ -165,17 +165,33 @@ app.post("/register", function (req, res) {
       if (err) {
         console.log(err);
         if (err.name === 'MongoError' && err.code === 11000) {
-          return res.render("register", { error: 'Username already taken.' });
+          req.session.newAccount = "Taken";
+          return res.render("register", { error: 'Username taken' });
         }
-        return res.render("register", { error: 'Error creating user.' });
+        req.session.newAccount = "Error";
+        return res.render("register", { error: 'Error creating user' });
       }
       console.log(user);
-      req.session.message = "User account has been created successfully!";
-      res.redirect("/secret_admin?newUser=true");
+      req.session.newAccount = "Ok";
+      return res.redirect("/secret_admin?newUser=true");
     }
   );
   console.log(req.body.username);
   console.log(req.body.password);
+});
+
+// Uer registration messages
+app.get('/api/register', isLoggedIn, async function (req, res, next) {
+  if (req.session.newAccount === "Ok") {
+    return res.status(200).json({ message: 'Account registered!' });
+  } else if (req.session.newAccount === "Taken") {
+    return res.status(401).json({ message: 'Username taken' });
+  } else if (req.session.newAccount === "Error") {
+    return res.status(500).json({ message: 'Error! Try again.' });
+  } else {
+    // console.log("nothing");
+    // res.status(200).json({ message: 'No message' });
+  }
 });
 
 //Handling user login
@@ -184,12 +200,12 @@ app.post('/login', async function (req, res, next) {
     if (err) {
       req.session.loggedIn = "error1";
       console.log('An error1 occurred while logging in:', err);
-      res.render("login", { message: "An error occurred while logging in" });
+      return res.render("login", { message: "An error occurred while logging in" });
     }
     if (!user) {
       req.session.loggedIn = "false";
       console.log('Incorrect username or password');
-      res.render("login", { message: "Incorrect email or password" });
+      return res.render("login", { message: "Incorrect email or password" });
     }
     if (err || !user) {
       req.session.loggedIn = "errorx";
@@ -199,12 +215,12 @@ app.post('/login', async function (req, res, next) {
       if (err) {
         req.session.loggedIn = "error2";
         console.log('An error2 occurred while logging in:', err);
-        res.render("login", { message: "An error occurred while logging in" });
+        return res.render("login", { message: "An error occurred while logging in" });
       }
       console.log('Login successful for user:', user.username);
       req.session.username = req.body.username;
       req.session.loggedIn = "true";
-      res.redirect("secret");
+      return res.redirect("secret");
     });
   })(req, res, next);
 });
@@ -212,7 +228,7 @@ app.post('/login', async function (req, res, next) {
 // Login messages
 app.get('/api/login', async function (req, res, next) {
   if (req.session.loggedIn === "true") {
-    //return res.status(200).json({ message: 'Login successful!.' });
+    return res.status(200).json({ message: 'Login successful!' });
   } else if (req.session.loggedIn === "false") {
     return res.status(401).json({ message: 'Wrong credentials!' });
   } else if (req.session.loggedIn === "error1") {
@@ -221,8 +237,8 @@ app.get('/api/login', async function (req, res, next) {
     return res.status(401).json({ message: 'error2' });
   } else if (req.session.loggedIn === "errorx") {
     return res.status(401).json({ message: 'errorx' });
-  } else if (req.session.loggedIn === "true") {
-    return res.status(200).json({ message: 'Login successful!' });
+  } else {
+    //
   }
 });
 
@@ -232,16 +248,14 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
     if (err || !user) {
       req.session.passChange = "Error";
       console.log(err || "User not found");
-      res.render("account", { error: "Error, please try again" });
-      return;
+      return res.render("account", { error: "Error, please try again" });
     }
 
     // Check if current password is empty
     if (!req.body.currentpassword) {
       req.session.passChange = "Wrong";
       console.log("Current password is empty");
-      res.render("account", { error: "Current password is empty!" });
-      return;
+      return res.render("account", { error: "Current password is empty!" });
     }
 
     // Check if current password matches
@@ -249,34 +263,30 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
       if (err || !valid) {
         req.session.passChange = "Wrong";
         console.log("Current password is wrong 2");
-        res.render("account", { error: "Current password is incorrect!" });
-        return;
+        return res.render("account", { error: "Current password is incorrect!" });
       }
       // Update password
       user.setPassword(req.body.newpassword, (err) => {
         if (err) {
           req.session.passChange = "Error";
           console.log(err);
-          res.render("account", { error: "Error, please try again" });
-          return;
+          return res.render("account", { error: "Error, please try again" });
         }
         user.save((err) => {
           if (err) {
             req.session.passChange = "Error";
             console.log(err);
-            res.render("account", { error: "Error, please try again" });
-            return;
+            return res.render("account", { error: "Error, please try again" });
           }
           req.logIn(user, (err) => {
             if (err) {
               req.session.passChange = "Error";
               console.log(err);
-              res.render("account", { error: "Error, please try again" });
-              return;
+              return res.render("account", { error: "Error, please try again" });
             }
             req.session.passChange = "Ok";
             console.log("Password change for " + `${user.username}` + " was successfull");
-            res.redirect("/secret");
+            return res.redirect("/secret");
           });
         });
       });
@@ -287,7 +297,7 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
 // Password change messages
 app.get('/api/changepassword', isLoggedIn, async function (req, res, next) {
   if (req.session.passChange === "Ok") {
-    return res.status(200).json({ message: 'Password was changed!' });
+    return res.status(200).json({ message: 'Password changed!' });
   } else if (req.session.passChange === "Wrong") {
     return res.status(401).json({ message: 'Current password incorrect!' });
   } else if (req.session.passChange === "Error") {
@@ -310,14 +320,14 @@ app.get("/logout", function (req, res, next) {
       if (err) {
         console.log(err);
       }
-      res.redirect("/");
+      return res.redirect("/");
     });
   });
 });
 
 //Handling account
 app.get("/account", isLoggedIn, function (req, res, next) {
-  res.render("account", { error: 'no error' });
+  return res.render("account", { error: 'no error' });
 });
 
 //Handling Admins
@@ -325,13 +335,13 @@ app.get("/secret_admin", isLoggedIn, isAdmin, function (req, res, next) {
   if (req.user.roles === "admin") {
     return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
   } else {
-    res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
+    return res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
   }
 });
 
 app.use(function (req, res, next) {
   res.locals.user = req.user;
-  next();
+  return next();
 });
 
 //=====================
@@ -341,7 +351,7 @@ app.use(function (req, res, next) {
 // GET METHOD
 app.get("/", (req, res, next) => {
   BreakTrack.find({}, (err, breaks) => {
-    res.render("secret.ejs", {
+    return res.render("secret.ejs", {
       breakTracker: breaks,
     });
   });
@@ -354,7 +364,7 @@ app.post("/", async function (req, res, next) {
   if (latestBreak && !latestBreak.endTime) {
     req.session.message = 'Only 1 break at a time';
     console.log(req.session.message);
-    res.redirect("/secret");
+    return res.redirect("/secret");
   } else {
     req.session.message = 'Break submitted';
     console.log(req.session.message, "for", req.user.username);
@@ -366,9 +376,9 @@ app.post("/", async function (req, res, next) {
     });
     try {
       await breakTracker.save();
-      res.redirect("/secret");
+      return res.redirect("/secret");
     } catch (err) {
-      res.redirect("/secret");
+      return res.redirect("/secret");
     }
   } (req, res, next);
 });
@@ -377,10 +387,10 @@ app.post("/", async function (req, res, next) {
 app.get("/api/latest-break", async function (req, res, next) {
   if (req.session.message === 'Only 1 break at a time') {
     console.log("message:", req.session.message, "sent");
-    res.status(401).json({ message: 'Only 1 break at a time' });
+    return res.status(401).json({ message: 'Only 1 break at a time' });
   } else if (req.session.message === 'Break submitted') {
     console.log("message:", req.session.message, "sent");
-    res.status(200).json({ message: 'Break submitted' });
+    return res.status(200).json({ message: 'Break submitted' });
   } else {
     // console.log("nothing");
     // res.status(200).json({ message: 'No message' });
@@ -389,23 +399,24 @@ app.get("/api/latest-break", async function (req, res, next) {
 
 // CLEAR MODAL MESSAGES
 app.post('/clear-message', function (req, res) {
-  req.session.loggedIn = undefined;
-  req.session.passChange = undefined;
-  req.session.message = undefined;
-  res.sendStatus(204);
+  delete req.session.loggedIn;
+  delete req.session.passChange;
+  delete req.session.newAccount;
+  delete req.session.message;
+  return res.sendStatus(204);
 });
 
 // CATCH ERRORS
 app.use(function (err, req, res, next) {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  return res.status(500).send('Something broke!');
 });
 
 //UPDATE
 app.route("/edit/:id").get((req, res) => {
   const id = req.params.id;
   BreakTrack.find({}, (err, breaks) => {
-    res.render("secret_edit.ejs", {
+    return res.render("secret_edit.ejs", {
       breakTracker: breaks,
       idBreak: id,
       name: req.user.username
@@ -421,7 +432,7 @@ app.route("/edit/:id").get((req, res) => {
       },
       (err) => {
         if (err) return res.send(500, err);
-        res.redirect("/secret");
+        return res.redirect("/secret");
       }
     );
   });
@@ -431,7 +442,7 @@ app.route("/remove/:id").get((req, res) => {
   const id = req.params.id;
   BreakTrack.findByIdAndRemove(id, (err) => {
     if (err) return res.send(500, err);
-    res.redirect("/secret");
+    return res.redirect("/secret");
   });
 });
 
