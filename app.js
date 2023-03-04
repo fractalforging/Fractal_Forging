@@ -11,7 +11,7 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 //const tz = require('timezone/loaded');
-let port = process.env.PORT || 3002;
+let port = process.env.PORT || 3003;
 
 let app = express();
 app.set("view engine", "ejs");
@@ -178,60 +178,6 @@ app.post("/register", function (req, res) {
   console.log(req.body.password);
 });
 
-// Handling password change
-app.post("/changepassword", isLoggedIn, function (req, res) {
-  User.findOne({ username: req.user.username }, (err, user) => {
-    if (err) {
-      console.log(err);
-      return res.render("account", { error: "Error, please try again" });
-    }
-    if (!user) {
-      console.log("User not found");
-      return res.render("account", { error: "Error, please try again" });
-    }
-
-    // Check if current password is empty
-    if (!req.body.currentpassword) {
-      console.log("Current password not provided");
-      return res.render("account", { error: "Please provide your current password" });
-    }
-
-    // Check if current password matches
-    user.authenticate(req.body.currentpassword, (err, valid) => {
-      if (err) {
-        console.log(err);
-        return res.render("account", { error: "Error, please try again" });
-      }
-      if (!valid) {
-        console.log("Current password incorrect");
-        return res.render("account", { error: "Current password incorrect, please try again" });
-      } else {
-        // Update password
-        user.setPassword(req.body.newpassword, (err) => {
-          if (err) {
-            console.log(err);
-            return res.render("account", { error: "Error, please try again" });
-          }
-          user.save((err) => {
-            if (err) {
-              console.log(err);
-              return res.render("account", { error: "Error, please try again" });
-            }
-            req.logIn(user, (err) => {
-              if (err) {
-                console.log(err);
-                return res.render("account", { error: "Error, please try again" });
-              }
-              console.log("Password change for " + `${user.username}` + " was successfull");
-              return res.redirect("/secret");
-            });
-          });
-        });
-      }
-    });
-  });
-});
-
 //Handling user login
 app.post('/login', async function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
@@ -275,6 +221,77 @@ app.get('/api/login', async function (req, res, next) {
     return res.status(401).json({ message: 'error2' });
   } else if (req.session.loggedIn === "errorx") {
     return res.status(401).json({ message: 'errorx' });
+  } else if (req.session.loggedIn === "true") {
+    return res.status(200).json({ message: 'Login successful!' });
+  }
+});
+
+// Handling password change
+app.post("/changepassword", isLoggedIn, function (req, res) {
+  User.findOne({ username: req.user.username }, (err, user) => {
+    if (err || !user) {
+      req.session.passChange = "Error";
+      console.log(err || "User not found");
+      res.render("account", { error: "Error, please try again" });
+      return;
+    }
+
+    // Check if current password is empty
+    if (!req.body.currentpassword) {
+      req.session.passChange = "Wrong";
+      console.log("Current password is empty");
+      res.render("account", { error: "Current password is empty!" });
+      return;
+    }
+
+    // Check if current password matches
+    user.authenticate(req.body.currentpassword, (err, valid) => {
+      if (err || !valid) {
+        req.session.passChange = "Wrong";
+        console.log("Current password is wrong 2");
+        res.render("account", { error: "Current password is incorrect!" });
+        return;
+      }
+      // Update password
+      user.setPassword(req.body.newpassword, (err) => {
+        if (err) {
+          req.session.passChange = "Error";
+          console.log(err);
+          res.render("account", { error: "Error, please try again" });
+          return;
+        }
+        user.save((err) => {
+          if (err) {
+            req.session.passChange = "Error";
+            console.log(err);
+            res.render("account", { error: "Error, please try again" });
+            return;
+          }
+          req.logIn(user, (err) => {
+            if (err) {
+              req.session.passChange = "Error";
+              console.log(err);
+              res.render("account", { error: "Error, please try again" });
+              return;
+            }
+            req.session.passChange = "Ok";
+            console.log("Password change for " + `${user.username}` + " was successfull");
+            res.redirect("/secret");
+          });
+        });
+      });
+    });
+  });
+});
+
+// Password change messages
+app.get('/api/changepassword', isLoggedIn, async function (req, res, next) {
+  if (req.session.passChange === "Ok") {
+    return res.status(200).json({ message: 'Password was changed!' });
+  } else if (req.session.passChange === "Wrong") {
+    return res.status(401).json({ message: 'Current password incorrect!' });
+  } else if (req.session.passChange === "Error") {
+    return res.status(500).json({ message: 'Error! Try again.' });
   } else {
     // console.log("nothing");
     // res.status(200).json({ message: 'No message' });
@@ -371,9 +388,11 @@ app.get("/api/latest-break", async function (req, res, next) {
 });
 
 // CLEAR MODAL MESSAGES
-app.post('/clear-message', function(req, res) {
-  req.session.message = null;
-  res.sendStatus(200);
+app.post('/clear-message', function (req, res) {
+  req.session.loggedIn = undefined;
+  req.session.passChange = undefined;
+  req.session.message = undefined;
+  res.sendStatus(204);
 });
 
 // CATCH ERRORS

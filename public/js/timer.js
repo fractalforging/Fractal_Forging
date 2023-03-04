@@ -41,7 +41,7 @@ function onTimerEnded(id) {
             }
         }
     } catch (error) { 
-        console.log(error);
+        //console.log(error);
      }
 }
 
