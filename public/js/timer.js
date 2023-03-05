@@ -33,10 +33,15 @@ function onTimerEnded(id) {
     try {
         let breakListItem = display.closest('.break-list-item-user');
         if (breakListItem) {
-            let removeButton = breakListItem.querySelector('.remove');
+            let removeButton_user = breakListItem.querySelector('.remove-user');
+            let removeButton_admin = breakListItem.querySelector('.remove-admin');
             let editButton = breakListItem.querySelector('.edit');
-            if (removeButton) {
-                removeButton.classList.add("show");
+            if (removeButton_user) {
+                removeButton_user.classList.add("show");
+                editButton.classList.add("remove");
+            }
+            if (removeButton_admin) {
+                removeButton_admin.classList.add("show");
                 editButton.classList.add("remove");
             }
         }
