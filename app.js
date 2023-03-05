@@ -10,7 +10,6 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
-//const tz = require('timezone/loaded');
 let port = process.env.PORT || 3003;
 
 let app = express();
@@ -21,8 +20,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // DATABASE
 //=====================
 
-const BreakTrack = require("./models/BreakTrack");
+// SCHEMAS
 const User = require("./models/user");
+const BreakTrack = require("./models/BreakTrack");
+const BreakSlots = require('./models/BreakSlots');
 
 // CONNECTION TO MONGODB
 require("dotenv").config({ path: "mongodb.env" });
@@ -106,6 +107,13 @@ async function getBreakTrackerData() {
   return breakTracker;
 }
 
+// Fetch break slots data
+async function getBreakSlotsData() {
+  const breakSlots = await BreakSlots.findOne();
+  return breakSlots;
+}
+
+
 // Check if user is an admin
 async function isAdmin(req, res, next) {
   if (req.isAuthenticated() && req.user.roles === "admin") {
@@ -135,10 +143,11 @@ app.get("/login", function (req, res) {
 // USER LANDING PAGE
 app.get("/secret", isLoggedIn, async function (req, res) {
   const breakTracker = await getBreakTrackerData();
+  const breakSlots = await getBreakSlotsData();
   if (req.user.roles === "admin") {
-    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
   } else if (req.user.roles === "user") {
-    return res.render("secret", { name: req.user.username, breakTracker: breakTracker });
+    return res.render("secret", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
   }
 });
 
@@ -254,16 +263,16 @@ app.post("/changepassword", isLoggedIn, function (req, res) {
     // Check if current password is empty
     if (!req.body.currentpassword) {
       req.session.passChange = "Wrong";
-      console.log("Current password is empty");
-      return res.render("account", { error: "Current password is empty!" });
+      console.log("Current password empty");
+      return res.render("account", { error: "Current password empty!" });
     }
 
     // Check if current password matches
     user.authenticate(req.body.currentpassword, (err, valid) => {
       if (err || !valid) {
         req.session.passChange = "Wrong";
-        console.log("Current password is wrong 2");
-        return res.render("account", { error: "Current password is incorrect!" });
+        console.log("Current password wrong 2");
+        return res.render("account", { error: "Current password incorrect!" });
       }
       // Update password
       user.setPassword(req.body.newpassword, (err) => {
@@ -299,7 +308,7 @@ app.get('/api/changepassword', isLoggedIn, async function (req, res, next) {
   if (req.session.passChange === "Ok") {
     return res.status(200).json({ message: 'Password changed!' });
   } else if (req.session.passChange === "Wrong") {
-    return res.status(401).json({ message: 'Current password incorrect!' });
+    return res.status(401).json({ message: 'Old password wrong!' });
   } else if (req.session.passChange === "Error") {
     return res.status(500).json({ message: 'Error! Try again.' });
   } else {
@@ -333,9 +342,9 @@ app.get("/account", isLoggedIn, function (req, res, next) {
 //Handling Admins
 app.get("/secret_admin", isLoggedIn, isAdmin, function (req, res, next) {
   if (req.user.roles === "admin") {
-    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots });
   } else {
-    return res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role });
+    return res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots });
   }
 });
 
@@ -343,6 +352,31 @@ app.use(function (req, res, next) {
   res.locals.user = req.user;
   return next();
 });
+
+
+// SLOTS AVAILABLE
+app.post("/break-slots", async function (req, res) {
+  try {
+    const newSlotsValue = req.body.duration;
+
+    // Update the break slots value in the database
+    const breakSlots = await BreakSlots.findOneAndUpdate(
+      {},
+      { $set: { slots: newSlotsValue } },
+      { new: true, upsert: true }
+    );
+
+    // Render the updated slots value in the secret_admin page
+    const breakTracker = await getBreakTrackerData();
+    res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+
+
 
 //=====================
 // BREAK TRACKER

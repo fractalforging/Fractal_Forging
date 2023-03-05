@@ -12,10 +12,10 @@
 /* ////////////// - COMMON - //////////////// */
 :root {
   /*//// - ANIMATION DURATION - ////*/
-  --animation-duration-short: 0.4s;
-  --animation-duration-base: 0.7s;
-  --animation-duration-more: 1s;
-  --animation-duration-long: 2s;
+  --animation-duration-base: 0.5s;
+  --animation-duration-short: calc(var(--animation-duration-base) * 0.5714);
+  --animation-duration-more: calc(var(--animation-duration-base) * 1.428);
+  --animation-duration-long: calc(var(--animation-duration-base) * 2.857);
   /*//// - FONTS - ////*/
   --main-body-font-family: "Montserrat";
   --break-list-item-timer-font-family: "Share Tech Mono";
@@ -34,14 +34,15 @@
   --links-font-weight: 650;
   --links-font-size: 16px;
   /*//// - CREDENTIALS BOX - ////*/
-  --credentials-box-background-color: #EEF7FB;
-  --credentials-box-shadow-color: #00060a81;
+  --credentials-box-background-color: #ffffff65;
+  --credentials-box-shadow-color: #00060a44;
+  --credentials-border-color: #ffffff;
   --credentials-submit-button-background-color: #0077A7;
-  --credentials-submit-button-text-color: white;
+  --credentials-submit-button-text-color: #ffffff;
   --input-box-background-color: #ffffff;
   --input-box-border-color: #a1bdc7;
   --input-box-placeholder-color: #a1a1a1;
-  --input-box-text-color: #ccc;
+  --input-box-text-color: #cccccc;
   /*//// - DIVIDER - ////*/
   --hr-divider-color: #004C7B;
   /*//// - BREAKS SELECTION - ////*/
@@ -49,8 +50,8 @@
   --grid-item-background-color: #80008000;
   --break-plus-button-background-color: #0077A7;
   --break-plus-button-symbol-color: #A0DFFF;
-  --select-menu-background-color: #eee;
-  --select-menu-border-color: #ccc;
+  --select-menu-background-color: #eeeeee;
+  --select-menu-border-color: #cccccc;
   /*//// - BREAKS LIST - ////*/
   --break-list-item-background-color: #ffffff65;
   --break-list-item-sidegradient1-color: #ffffff;
@@ -118,10 +119,11 @@
   --links-font-weight: 550;
   --links-font-size: 16px;
   /*//// - CREDENTIALS BOX - ////*/
-  --credentials-box-background-color: #00050c;
+  --credentials-box-background-color: #01041ddc;
   --credentials-box-shadow-color: #00050c;
+  --credentials-border-color: #004C7B;
   --credentials-submit-button-background-color: #7209B7;
-  --credentials-submit-button-text-color: white;
+  --credentials-submit-button-text-color: #f5e7ff;
   --input-box-background-color: #333a46;
   --input-box-border-color: #000000;
   --input-box-placeholder-color: #4e5768;

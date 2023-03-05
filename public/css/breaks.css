@@ -82,6 +82,7 @@
   text-align: center;
 }
 
+.queue-list,
 .break-list {
   position: relative;
   top: -20px;
