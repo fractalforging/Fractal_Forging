@@ -433,10 +433,10 @@ app.get("/api/latest-break", async function (req, res, next) {
 
 // CLEAR MODAL MESSAGES
 app.post('/clear-message', function (req, res) {
-  delete req.session.loggedIn;
-  delete req.session.passChange;
-  delete req.session.newAccount;
-  delete req.session.message;
+  req.session.loggedIn = undefined;
+  req.session.passChange = undefined;
+  req.session.newAccount = undefined;
+  req.session.message = undefined;
   return res.sendStatus(204);
 });
 
