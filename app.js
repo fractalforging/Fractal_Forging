@@ -109,17 +109,24 @@ async function getBreakTrackerData() {
 
 // Fetch break slots data
 async function getBreakSlotsData() {
-  const breakSlots = await BreakSlots.findOne();
-  return breakSlots;
+  try {
+    const breakSlots = await BreakSlots.findOne({});
+    return breakSlots;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 }
+
 
 
 // Check if user is an admin
 async function isAdmin(req, res, next) {
   if (req.isAuthenticated() && req.user.roles === "admin") {
-    res.locals.role = 'admin';
+    const breakSlots = await getBreakSlotsData();
     const breakTracker = await getBreakTrackerData();
-    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker });
+    res.locals.role = 'admin';
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
   } else {
     res.locals.role = 'user';
     return next();
@@ -166,27 +173,35 @@ app.get("/register", function (req, res) {
 });
 
 // Handling user registration
-app.post("/register", function (req, res) {
-  User.register(
-    { username: req.body.username, roles: "user" },
-    req.body.password,
-    function (err, user) {
-      if (err) {
-        console.log(err);
-        if (err.name === 'MongoError' && err.code === 11000) {
-          req.session.newAccount = "Taken";
-          return res.render("register", { error: 'Username taken' });
+app.post("/register", async function (req, res) {
+  try {
+    // Get the current break slots value from the database
+    const breakSlots = await BreakSlots.findOne({});
+
+    User.register(
+      { username: req.body.username, roles: "user", breakSlots: breakSlots },
+      req.body.password,
+      function (err, user) {
+        if (err) {
+          console.log(err);
+          if (err.name === 'MongoError' && err.code === 11000) {
+            req.session.newAccount = "Taken";
+            return res.render("register", { error: 'Username taken' });
+          }
+          req.session.newAccount = "Error";
+          return res.render("register", { error: 'Error creating user' });
         }
-        req.session.newAccount = "Error";
-        return res.render("register", { error: 'Error creating user' });
+        console.log(user);
+        req.session.newAccount = "Ok";
+        return res.redirect("/secret_admin");
       }
-      console.log(user);
-      req.session.newAccount = "Ok";
-      return res.redirect("/secret_admin?newUser=true");
-    }
-  );
-  console.log(req.body.username);
-  console.log(req.body.password);
+    );
+    console.log(req.body.username);
+    console.log(req.body.password);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal server error');
+  }
 });
 
 // Uer registration messages
@@ -340,7 +355,9 @@ app.get("/account", isLoggedIn, function (req, res, next) {
 });
 
 //Handling Admins
-app.get("/secret_admin", isLoggedIn, isAdmin, function (req, res, next) {
+app.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
+  const breakSlots = await getBreakSlotsData();
+  const breakTracker = await getBreakTrackerData();
   if (req.user.roles === "admin") {
     return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots });
   } else {
@@ -368,7 +385,6 @@ app.post("/break-slots", async function (req, res) {
 
     // Render the updated slots value in the secret_admin page
     const breakTracker = await getBreakTrackerData();
-
     return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
   } catch (error) {
     console.error(error);
