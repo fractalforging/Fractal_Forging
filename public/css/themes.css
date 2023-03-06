@@ -12,7 +12,7 @@
 /* ////////////// - COMMON - //////////////// */
 :root {
   /*//// - ANIMATION DURATION - ////*/
-  --animation-duration-base: 0.5s;
+  --animation-duration-base: 0.7s;
   --animation-duration-short: calc(var(--animation-duration-base) * 0.5714);
   --animation-duration-more: calc(var(--animation-duration-base) * 1.428);
   --animation-duration-long: calc(var(--animation-duration-base) * 2.857);
@@ -33,6 +33,7 @@
   --links-color: #004C7B;
   --links-font-weight: 650;
   --links-font-size: 16px;
+  --links-divider-color: #004C7B;
   /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color: #ffffff65;
   --credentials-box-shadow-color: #00060a44;
@@ -118,6 +119,7 @@
   --links-color: #A979F6;
   --links-font-weight: 550;
   --links-font-size: 16px;
+  --links-divider-color: #665f68;
   /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color: #01041ddc;
   --credentials-box-shadow-color: #00050c;

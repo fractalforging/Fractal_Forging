@@ -86,7 +86,7 @@ app.use(
 );
 
 //
-
+ 
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
@@ -368,13 +368,13 @@ app.post("/break-slots", async function (req, res) {
 
     // Render the updated slots value in the secret_admin page
     const breakTracker = await getBreakTrackerData();
-    res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
+
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Internal server error');
+    return res.status(500).send('Internal server error');
   }
 });
-
 
 
 

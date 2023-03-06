@@ -78,6 +78,27 @@
   transition: all var(--animation-duration-more) ease-in-out;
 }
 
+.break-enter-button {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  color: var(--break-plus-button-symbol-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: var(--break-plus-button-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--animation-duration-more) ease-in-out;
+}
+
+enter {
+  position: relative;
+  top: 3px;
+  left: -1px;
+}
+
 .break-container {
   text-align: center;
 }
