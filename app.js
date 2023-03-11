@@ -86,7 +86,7 @@ app.use(
 );
 
 //
- 
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, "public")));
@@ -167,7 +167,7 @@ app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
   });
 });
 
-// Showing register form
+// REGISTER FORM
 app.get("/register", function (req, res) {
   return res.render("register");
 });
@@ -177,27 +177,31 @@ app.post("/register", async function (req, res) {
   try {
     // Get the current break slots value from the database
     const breakSlots = await BreakSlots.findOne({});
-
+    const { UserExistsError } = require('passport-local-mongoose');
     User.register(
       { username: req.body.username, roles: "user", breakSlots: breakSlots },
       req.body.password,
       function (err, user) {
         if (err) {
-          console.log(err);
+          console.log("Error:", err, typeof err);
           if (err.name === 'MongoError' && err.code === 11000) {
             req.session.newAccount = "Taken";
             return res.render("register", { error: 'Username taken' });
+          } else if (err.name === 'UserExistsError') {
+            req.session.newAccount = "Taken";
+            return res.render("register", { error: 'Username taken' });
+          } else {
+            req.session.newAccount = "Error";
+            return res.render("register", { error: 'Error creating user' });
           }
-          req.session.newAccount = "Error";
-          return res.render("register", { error: 'Error creating user' });
         }
         console.log(user);
         req.session.newAccount = "Ok";
         return res.redirect("/secret_admin");
       }
     );
-    console.log(req.body.username);
-    console.log(req.body.password);
+    console.log("Resgistered new user: ", req.body.username);
+    //console.log(req.body.password);
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal server error');
