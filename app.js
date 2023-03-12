@@ -184,12 +184,15 @@ app.post("/register", async function (req, res) {
       function (err, user) {
         if (err) {
           console.log("Error:", err, typeof err);
-          if (err.name === 'MongoError' && err.code === 11000) {
+          if (err.name === 'UserExistsError') {
             req.session.newAccount = "Taken";
             return res.render("register", { error: 'Username taken' });
-          } else if (err.name === 'UserExistsError') {
-            req.session.newAccount = "Taken";
-            return res.render("register", { error: 'Username taken' });
+          } else if (err.name === 'MissingUsernameError') {
+            req.session.newAccount = "NoUser";
+            return res.render("register", { error: 'No username given' });
+          } else if (err.name === 'MissingPasswordError') {
+            req.session.newAccount = "NoPass";
+            return res.render("register", { error: 'No password given' });
           } else {
             req.session.newAccount = "Error";
             return res.render("register", { error: 'Error creating user' });
@@ -215,7 +218,11 @@ app.get('/api/register', isLoggedIn, async function (req, res, next) {
   } else if (req.session.newAccount === "Taken") {
     return res.status(401).json({ message: 'Username taken' });
   } else if (req.session.newAccount === "Error") {
-    return res.status(500).json({ message: 'Error! Try again.' });
+    return res.status(500).json({ message: 'Error! Try again' });
+  } else if (req.session.newAccount === "NoUser") {
+    return res.status(500).json({ message: 'No username given' });
+  } else if (req.session.newAccount === "NoPass") {
+    return res.status(500).json({ message: 'No password given' });
   } else {
     // console.log("nothing");
     // res.status(200).json({ message: 'No message' });
