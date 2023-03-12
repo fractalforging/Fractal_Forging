@@ -1,50 +1,37 @@
 console.log("M O D A L S . J S   L O A D E D")
 
-////////////////////// - GET THE MODALS - ///////////////////////
+///////// - GET MODALS - /////////
 
-const myModal_Neg = document.querySelector("#myModal-Neg");
-const myModalText_Neg = document.querySelector("#message-neg");
-const myModal_Pos = document.querySelector("#myModal-Pos");
-const myModalText_Pos = document.querySelector("#message-pos");
+const [myModal_Neg, myModalText_Neg, myModal_Pos, myModalText_Pos] = 
+    ["#myModal-Neg", "#message-neg", "#myModal-Pos", "#message-pos"].map(document.querySelector.bind(document))
 
-///////////////////// - CLOSE MODAL - //////////////////
+///////// - CLOSE BUTTON - /////////
 
-const closeBtns = document.querySelectorAll('.close-neg, .close-pos');
-
-closeBtns.forEach(btn => {
+document.querySelectorAll('.close-neg, .close-pos').forEach(btn => {
     btn.addEventListener('click', () => {
-        myModal_Neg.style.display = "none";
-        myModal_Pos.style.display = "none";
+        myModal_Neg.style.display = myModal_Pos.style.display = "none";
         fetch('/clear-message', { method: 'POST' });
     });
 });
 
-/////////////////// - SERVER > API > MODALS - //////////////////////
+///////// - MAIN FUNCTION - /////////
 
-function makeApiCall(apiEndpoint) {
-    return fetch(apiEndpoint)
-        .then(response => {
-            if (response.status === 200) {
-                return response.json().then(data => {
-                    myModal_Neg.style.display = 'none';
-                    myModalText_Pos.innerHTML = data.message;
-                    myModal_Pos.style.display = 'block';
-                    fetch('/clear-message', { method: 'POST' });
-                });
-            } else if (response.status === 401 || response.status === 500) {
-                return response.json().then(data => {
-                    myModal_Pos.style.display = 'none';
-                    myModalText_Neg.innerHTML = data.message;
-                    myModal_Neg.style.display = 'block';
-                    fetch('/clear-message', { method: 'POST' });
-                });
-            }
-        }).catch(error => console.error(error));
+const makeApiCall = async apiEndpoint => {
+    const response = await fetch(apiEndpoint);
+    const {message} = await response.json();
+    if (response.status === 200) {
+        [myModal_Neg, myModal_Pos].forEach(modal => modal.style.display = 'none');
+        myModalText_Pos.innerHTML = message;
+        myModal_Pos.style.display = 'block';
+    } else if ([401, 500].includes(response.status)) {
+        [myModal_Pos, myModal_Neg].forEach(modal => modal.style.display = 'none');
+        myModalText_Neg.innerHTML = message;
+        myModal_Neg.style.display = 'block';
+    }
+    fetch('/clear-message', { method: 'POST' });
 }
 
-try {
-    Promise.all([makeApiCall('/api/login'), makeApiCall('/api/changepassword'), makeApiCall('/api/latest-break'), makeApiCall('/api/register')])
-        .catch(error => console.error(error));
-} catch (err) {
-    console.error(err);
-}
+///////// - GET APIS - /////////
+
+Promise.all(['/api/login', '/api/changepassword', '/api/latest-break', '/api/register'].map(makeApiCall))
+.catch(console.error)

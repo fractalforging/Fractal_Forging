@@ -51,7 +51,7 @@ mongoose.connect(
   },
   () => {
     console.log("MongoDB connected successfully!");
-    app.listen(port, () => console.log("Server Up and running on port: ", port, "Date: ", serverTime));
+    app.listen(port, () => console.log("Server Up and running on port: ", port, "- Date: ", serverTime));
   }
 );
 
@@ -434,9 +434,9 @@ app.post("/", async function (req, res, next) {
     console.log(req.session.message, "for", req.user.username);
     const breakTracker = new BreakTrack({
       user,
-      startTime: serverTime, //new Date().toUTCString(),
+      startTime: new Date().toUTCString(),//serverTime, //new Date().toUTCString(),
       duration: req.body.duration,
-      date: serverTime, //new Date().toUTCString(),
+      date: new Date().toUTCString(),//serverTime, //new Date().toUTCString(),
     });
     try {
       await breakTracker.save();
