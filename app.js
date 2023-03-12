@@ -12,6 +12,9 @@ const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 let port = process.env.PORT || 3002;
 
+const moment = require('moment-timezone');
+const serverTime = moment.tz(new Date(), 'Europe/Helsinki').format('ddd, DD MMM YYYY HH:mm:ss [GMT] ZZ');
+
 let app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -48,7 +51,7 @@ mongoose.connect(
   },
   () => {
     console.log("MongoDB connected successfully!");
-    app.listen(port, () => console.log("Server Up and running on port: ", port));
+    app.listen(port, () => console.log("Server Up and running on port: ", port, "Date: ", serverTime));
   }
 );
 
@@ -431,9 +434,9 @@ app.post("/", async function (req, res, next) {
     console.log(req.session.message, "for", req.user.username);
     const breakTracker = new BreakTrack({
       user,
-      startTime: new Date().toUTCString(),
+      startTime: serverTime, //new Date().toUTCString(),
       duration: req.body.duration,
-      date: new Date().toUTCString(),
+      date: serverTime, //new Date().toUTCString(),
     });
     try {
       await breakTracker.save();
