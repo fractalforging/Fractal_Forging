@@ -33,5 +33,4 @@ const makeApiCall = async apiEndpoint => {
 
 ///////// - GET APIS - /////////
 
-Promise.all(['/api/login', '/api/changepassword', '/api/latest-break', '/api/register'].map(makeApiCall))
-.catch(console.error)
+Promise.all(['/api/login', '/api/changepassword', '/api/latest-break', '/api/register'].map(makeApiCall));
