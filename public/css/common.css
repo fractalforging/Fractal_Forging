@@ -110,6 +110,10 @@ select {
   cursor: pointer;
 }
 
+option {
+  border-radius: 5px;
+}
+
 agent {
   font-weight: 650;
   font-size: 18px;
