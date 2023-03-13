@@ -16,6 +16,7 @@ const moment = require('moment-timezone');
 const serverTime = moment.tz(new Date(), 'Europe/Helsinki').format('ddd, DD MMM YYYY HH:mm:ss [GMT] ZZ');
 
 let app = express();
+app.set('views', 'pages');
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
