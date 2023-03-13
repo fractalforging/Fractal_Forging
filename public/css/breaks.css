@@ -93,6 +93,12 @@
   transition: all var(--animation-duration-more) ease-in-out;
 }
 
+plus {
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+
 enter {
   position: relative;
   top: 3px;
