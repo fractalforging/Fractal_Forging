@@ -110,6 +110,21 @@ select {
   cursor: pointer;
 }
 
+select:hover {
+  background-color: #62728d;
+  transition: all var(--animation-duration-short) ease-in-out;
+}
+
+select:focus {
+  background-color: #62728d;
+  transition: all var(--animation-duration-short) ease-in-out;
+}
+
+select option {
+  background: url() 96% / 15% no-repeat var(--select-menu-background-color);
+  border-radius: 15px;
+}
+
 option {
   border-radius: 5px;
 }
