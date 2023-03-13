@@ -127,24 +127,24 @@ pagetitle {
 }
 
 greet {
-  font-size: 30px;
+  font-size: 24px;
   transition: all var(--animation-duration-base) ease-in-out;
 }
 
 joke {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 300;
   transition: all var(--animation-duration-base) ease-in-out;
 }
 
 description {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   transition: all var(--animation-duration-base) ease-in-out;
 }
 
 slots {
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 500;
   font-family: "Share Tech Mono";
   transition: all var(--animation-duration-base) ease-in-out;
