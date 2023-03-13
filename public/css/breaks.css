@@ -44,18 +44,6 @@
 
 /*///////////*/
 
-.form-button {
-  width: 100%;
-  background-color: var(--credentials-submit-button-background-color);
-  color: var(--credentials-submit-button-text-color);
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all var(--animation-duration-base) ease-in-out;
-}
-
 .break-header input {
   width: 235px;
   border: none;
