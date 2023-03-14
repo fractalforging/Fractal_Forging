@@ -1,8 +1,14 @@
 mongodb.env
 db.env
-node_modules
-.codesandbox
-.DS_Store
+README.md
 yarn-error.log
 package-lock.json
+.codesandbox
+.DS_Store
+.gitpod.yml
 node_modules
+myssh
+yarn-error-G02PLXN05925.log
+yarn-error.log
+yarn-G02PLXN01257-G02PLXN05925.lock
+yarn-G02PLXN01257.lock

@@ -1,98 +1,198 @@
+html {
+  display: table;
+  margin: auto;
+}
+
 body {
-    background-color: #f2f2f2;
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-}
-
-h1,h2 {
-    margin-top: 50px;
-    color: #333;
-}
-
-b {
-    text-align: center;
-    font-size: 1.5em;
-    color: #333;
-    margin-top: 20px;
-}
-
-li {
-    list-style-type: none;
-    display: inline-block;
-    margin-top: 20px;
-    text-align: center;
+  padding-top: 80px;
+  user-select: none;
+  display: table-cell;
+  vertical-align: middle;
+  font-family: var(--main-body-font-family);
+  font-style: normal;
+  text-align: center;
+  background: linear-gradient(var(--myBackgroundColor1), var(--myBackgroundColor2));
+  transition: --myBackgroundColor1 var(--animation-duration-more) ease-in-out, --myBackgroundColor2 var(--animation-duration-long) ease-in-out;
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 a {
-    color: #4CAF50;
-    text-decoration: none;
-    margin-left: 10px;
+  color: var(--links-color);
+  font-weight: var(--links-font-weight);
+  font-size: 16px;
+  text-decoration: none;
+  margin-left: 10px;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-form {
-    width: 250px;
-    margin: 0 auto;
-    margin-top: 50px;
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px #ccc;
-    position: relative;
+hr.divider {
+  border: none;
+  height: 1px;
+  width: 200px;
+  background-color: var(--hr-divider-color);
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-
-input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
+hr.divider-spc-nav {
+  border: none;
+  height: 1px;
+  width: 280px;
+  background-color: var(--hr-divider-color);
 }
 
-button {
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.credentials {
+  width: 230px;
+  margin: 0 auto;
+  margin-top: 50px;
+  background-color: var(--credentials-box-background-color);
+  border: 1px solid var(--credentials-border-color);
+  padding-top: 25px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 25px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 15px var(--credentials-box-shadow-color);
+  position: relative;
+  transition: all var(--animation-duration-more) ease-in-out;
 }
 
-button:hover {
-    background-color: #45a049;
+input {
+  color: var(--text-color);
+  font-size: 14px;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid var(--input-box-border-color);
+  border-radius: 4px;
+  background-color: var(--input-box-background-color);
+  transition: all var(--animation-duration-short) ease-in-out;
 }
 
-a {
-    color: #4CAF50;
-    text-decoration: none;
-    margin-left: 10px;
+input::placeholder {
+  color: var(--input-box-placeholder-color);
+  /* Replace with the desired color */
+  transition: all var(--animation-duration-more) ease-in-out;
 }
 
-a:hover {
-    text-decoration: underline;
+.form-button {
+  height: 40px;
+  width: 100%;
+  background-color: var(--credentials-submit-button-background-color);
+  color: var(--credentials-submit-button-text-color);
+  padding: 0px 0px;
+  margin: 10px 0px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
-
 
 /* ///// */
 
 li {
-    list-style-type: none;
-    display: inline-block;
-    margin-top: 20px;
+  list-style-type: none;
+  display: inline-block;
+  margin-top: 20px;
 }
 
-.buttons{
-    position:relative;
-    margin:0 auto;
-    text-align: center;
+.buttons {
+  position: relative;
+  margin: -10px auto;
+  text-align: center;
+}
 
+select {
+  position: relative;
+  margin: 0px;
+  width: 35px;
+  font-size: 18px;
+  border: 1px solid var(--select-menu-border-color);
+  height: 34px;
+  appearance: none;
+  background: url() 96% / 15% no-repeat var(--select-menu-background-color);
+  text-align: center;
+  border-radius: 5px;
+  text-indent: -1px;
+  transition: all var(--animation-duration-more) ease-in-out;
+  cursor: pointer;
+}
+
+select:hover {
+  background-color: #62728d;
+  transition: all var(--animation-duration-short) ease-in-out;
+}
+
+select:focus {
+  background-color: #62728d;
+  transition: all var(--animation-duration-short) ease-in-out;
+}
+
+select option {
+  background: url() 96% / 15% no-repeat var(--select-menu-background-color);
+  border-radius: 15px;
+}
+
+option {
+  border-radius: 5px;
+}
+
+agent {
+  font-weight: 650;
+  font-size: 18px;
+}
+
+navbar {
+  font-weight: 450;
+  font-size: 14px;
+}
+
+pagetitle {
+  font-size: 24px;
+  font-weight: 400;
+  transition: all var(--animation-duration-base) ease-in-out;
+}
+
+greet {
+  font-size: 24px;
+  transition: all var(--animation-duration-base) ease-in-out;
+}
+
+joke {
+  font-size: 16px;
+  font-weight: 300;
+  transition: all var(--animation-duration-base) ease-in-out;
+}
+
+description {
+  font-size: 14px;
+  font-weight: 400;
+  transition: all var(--animation-duration-base) ease-in-out;
+}
+
+slots {
+  font-size: 28px;
+  font-weight: 500;
+  font-family: "Share Tech Mono";
+  transition: all var(--animation-duration-base) ease-in-out;
+}
+
+.vertical-line {
+  margin-left: 10px;
+  margin-right: 0px;
+  display: inline-block;
+  align-items: center;
+  border-right: 1px solid var(--links-divider-color);
+  width: 1px;
+  height: 10px; /* increase the height value */
+  overflow: hidden;
+  transition: all var(--animation-duration-base) ease-in-out;
 }

@@ -1,0 +1,232 @@
+/* ///////////// - IMPORT FONTS - /////////////// */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono');
+/* @import url('https://fonts.googleapis.com/css2?family=Raleway');
+@import url('https://fonts.googleapis.com/css2?family=Kanit');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1'); */
+
+/* ////////////// - COMMON - //////////////// */
+:root {
+  /*//// - ANIMATION DURATION - ////*/
+  --animation-duration-base: 0.7s;
+  --animation-duration-short: calc(var(--animation-duration-base) * 0.5714);
+  --animation-duration-more: calc(var(--animation-duration-base) * 1.428);
+  --animation-duration-long: calc(var(--animation-duration-base) * 2.857);
+  /*//// - FONTS - ////*/
+  --main-body-font-family: "Montserrat";
+  --break-list-item-timer-font-family: "Share Tech Mono";
+}
+
+/* ////////////// - THEMES - //////////////// */
+:root[data-theme="light"] {
+  color-scheme: light;
+  /*//// - BACKGROUND GRADIENT - ////*/
+  --backgroundGradientColor1: #A0DFFF;
+  --backgroundGradientColor2: #40BEFF;
+  /*//// - TEXT - ////*/
+  --text-color: black;
+  /*//// - LINKS - ////*/
+  --links-color: #004C7B;
+  --links-font-weight: 650;
+  --links-font-size: 16px;
+  --links-divider-color: #004C7B;
+  /*//// - CREDENTIALS BOX - ////*/
+  --credentials-box-background-color: #ffffff65;
+  --credentials-box-shadow-color: #00060a44;
+  --credentials-border-color: #ffffff;
+  --credentials-submit-button-background-color: #0077A7;
+  --credentials-submit-button-text-color: #ffffff;
+  --input-box-background-color: #ffffff;
+  --input-box-border-color: #a1bdc7;
+  --input-box-placeholder-color: #a1a1a1;
+  --input-box-text-color: #cccccc;
+  /*//// - DIVIDER - ////*/
+  --hr-divider-color: #004C7B;
+  /*//// - BREAKS SELECTION - ////*/
+  --grid-container-background-color: #80808000;
+  --grid-item-background-color: #80008000;
+  --break-plus-button-background-color: #0077A7;
+  --break-plus-button-symbol-color: #A0DFFF;
+  --select-menu-background-color: #eeeeee;
+  --select-menu-border-color: #cccccc;
+  /*//// - BREAKS LIST - ////*/
+  --break-list-item-background-color: #ffffff65;
+  --break-list-item-sidegradient1-color: #ffffff;
+  --break-list-item-sidegradient2-color: #A0DFFF;
+  --break-list-item-text-color: #040F16;
+  --break-list-item-edit-color: #8fe93a;
+  --break-list-item-remove-color: #004C7B;
+  --break-list-item-time-over-color: red;
+  --break-list-item-filler-color: #00000000;
+  --break-list-item-confirm-color: #2ed573;
+  --break-list-item-cancel-color: #df2b2b;
+  --break-list-item-font-size: 16px;
+  --break-list-item-font-weight: 600;
+  --break-list-item-remove-size: 12px;
+  --break-list-item-timer-font-size: 18px;
+  --break-list-item-timer-font-weight: 400;
+  /*//// - TIMER LOADER - ////*/
+  --canvas-loader-background-color: #00000000;
+  --loader-background-color1: #004C7B;
+  --loader-background-color2: #004C7B;
+  /*//// - TOGGLE BUTTONS - ////*/
+  --toggle-position: absolute;
+  --toggle-cursor: pointer;
+  /*//// - TOGGLE BUTTONS - SUN ////*/
+  --toggle-sun-font-size: 36px;
+  --toggle-sun-scale: 1.5;
+  --toggle-sun-top: 0px;
+  --toggle-sun-opacity: 1;
+  --toggle-sun-color: #fcf15c;
+  /*//// - TOGGLE BUTTONS - MOON ////*/
+  --toggle-moon-font-size: 36px;
+  --toggle-moon-scale: 0.3;
+  --toggle-moon-top: -85px;
+  --toggle-moon-opacity: 0;
+  --toggle-moon-color: #e9e6b7;
+  /*//// - MODAL ////*/
+  --canvas-modal-background-color: #00000000;
+  --modal-border-thickness: 1px;
+  --modal-border-radius: 5px;
+  --modal-text-font-size: 14px;
+  --modal-font-weight: 600;
+  /*//// - MODAL NEGATIVE ////*/
+  --modal-neg-background-color: #dba3a37e;
+  --modal-neg-border-color: #8d0909;
+  --modal-neg-close-icon-color: #8d0909;
+  --modal-neg-text-color: #8d0909;
+  /*//// - MODAL POSITIVE ////*/
+  --modal-pos-background-color: #a2cc557e;
+  --modal-pos-border-color: #3f6100;
+  --modal-pos-close-icon-color: #3f6100;
+  --modal-pos-text-color: #3f6100;
+
+
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  /*//// - BACKGROUND GRADIENT - ////*/
+  --backgroundGradientColor1: #01041d;
+  --backgroundGradientColor2: #00214e;
+  /*//// - TEXT - ////*/
+  --text-color: #ccc;
+  /*//// - LINKS - ////*/
+  --links-color: #A979F6;
+  --links-font-weight: 550;
+  --links-font-size: 16px;
+  --links-divider-color: #665f68;
+  /*//// - CREDENTIALS BOX - ////*/
+  --credentials-box-background-color: #01041ddc;
+  --credentials-box-shadow-color: #00050c;
+  --credentials-border-color: #004C7B;
+  --credentials-submit-button-background-color: #7209B7;
+  --credentials-submit-button-text-color: #f5e7ff;
+  --input-box-background-color: #333a46;
+  --input-box-border-color: #000000;
+  --input-box-placeholder-color: #4e5768;
+  --input-box-text-color: #92a9c9;
+  --input-box-color: #c99292;
+  /*//// - DIVIDER - ////*/
+  --hr-divider-color: #004C7B;
+  /*//// - BREAKS SELECTION - ////*/
+  --grid-container-background-color: #80808000;
+  --grid-item-background-color: #80008000;
+  --break-plus-button-background-color: #6e8eb9;
+  --break-plus-button-symbol-color: #00214E;
+  --select-menu-background-color: #414d5f;
+  --select-menu-border-color: #6e8eb9;
+  /*//// - BREAKS LIST - ////*/
+  --break-list-item-background-color: #01041ddc;
+  --break-list-item-sidegradient1-color: #004C7B;
+  --break-list-item-sidegradient2-color: #00000000;
+  --break-list-item-text-color: #cad4e4;
+  --break-list-item-edit-color: #8fe93a;
+  --break-list-item-remove-color: #6e8eb9;
+  --break-list-item-time-over-color: #f36060;
+  --break-list-item-filler-color: #00000000;
+  --break-list-item-confirm-color: #2ed573;
+  --break-list-item-cancel-color: #4a4a4a;
+  --break-list-item-font-size: 16px;
+  --break-list-item-font-weight: 600;
+  --break-list-item-remove-size: 12px;
+  --break-list-item-timer-font-size: 18px;
+  --break-list-item-timer-font-weight: 400;
+  /*//// - TIMER LOADER - ////*/
+  --loader-canvas-background-color: #00000000;
+  --loader-background-color1: #6d9dbb;
+  --loader-background-color2: #6d9dbb;
+  /*//// - TOGGLE BUTTONS - ////*/
+  --toggle-position: absolute;
+  --toggle-cursor: pointer;
+  /*//// - TOGGLE BUTTONS - SUN ////*/
+  --toggle-sun-font-size: 36px;
+  --toggle-sun-scale: 0.3;
+  --toggle-sun-top: 120px;
+  --toggle-sun-opacity: 0;
+  --toggle-sun-color: #ff6600;
+  /*//// - TOGGLE BUTTONS - MOON ////*/
+  --toggle-moon-font-size: 36px;
+  --toggle-moon-scale: 1.5;
+  --toggle-moon-top: 0px;
+  --toggle-moon-opacity: 1;
+  --toggle-moon-color: #b7e9e9;
+  /*//// - MODAL ////*/
+  --canvas-modal-background-color: #00000000;
+  --modal-border-thickness: 1px;
+  --modal-border-radius: 5px;
+  --modal-text-font-size: 14px;
+  --modal-font-weight: 600;
+  /*//// - MODAL NEGATIVE - ////*/
+  --modal-neg-background-color: #3500008a;
+  --modal-neg-border-color: #8d0909;
+  --modal-neg-close-icon-color: #D85B53;
+  --modal-neg-text-color: #e4adad;
+  /*//// - MODAL POSITIVE - ////*/
+  --modal-pos-background-color: #2c44005d;
+  --modal-pos-border-color: #3f6100;
+  --modal-pos-close-icon-color: #82a83a;
+  --modal-pos-text-color: #d1e4ad;
+
+}
+
+/* ///////////// - TOGGLE MODE BUTTONS - /////////////// */
+
+.toggle-sun {
+  z-index: 2;
+  left: 50px;
+  transform: scale(var(--toggle-sun-scale)) translateX(-45%);
+  position: var(--toggle-position);
+  cursor: var(--toggle-cursor);
+  font-size: var(--toggle-sun-font-size);
+  color: var(--toggle-sun-color);
+  top: var(--toggle-sun-top);
+  opacity: var(--toggle-sun-opacity);
+  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
+}
+
+.toggle-moon {
+  z-index: 2;
+  left: 50px;
+  transform: scale(var(--toggle-moon-scale)) translateX(-45%);
+  position: var(--toggle-position);
+  cursor: var(--toggle-cursor);
+  font-size: var(--toggle-moon-font-size);
+  color: var(--toggle-moon-color);
+  top: var(--toggle-moon-top);
+  opacity: var(--toggle-moon-opacity);
+  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
+}
+
+.material-symbols-outlined {
+  display: none;
+  font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 48
+}

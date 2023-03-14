@@ -1,0 +1,31 @@
+const mongoose = require('mongoose');
+
+const breakQueueSchema = new mongoose.Schema({
+    user: {
+        type: String,
+        required: true
+    },
+    startTime: {
+        type: String,
+        required: true
+    },
+    duration: {
+        type: Number,
+        required: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    }
+    //   endTime: {
+    //     type: Date,
+    //     required: true
+    //   },
+    //   status: {
+    //     type: String,
+    //     enum: ['active', 'completed', 'queued'],
+    //     required: true
+    //   }
+});
+
+module.exports = mongoose.model('BreakQueue', breakQueueSchema);

@@ -1,0 +1,309 @@
+.grid-container {
+  display: inline-grid;
+  width: 180x;
+  gap: 5px;
+  background-color: var(--grid-container-background-color);
+  padding: 5px;
+  grid-template-columns: 80px 40px 40px;
+  grid-template-rows: 45px;
+}
+
+.grid-container-spc {
+  display: inline-grid;
+  width: 180x;
+  gap: 5px;
+  background-color: var(--grid-container-background-color);
+  padding: 5px;
+  grid-template-columns: 125px 40px 40px;
+  grid-template-rows: 45px;
+}
+
+.grid-item {
+  left: 10px;
+  background-color: var(--grid-item-background-color);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.item2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.item3 {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+/*///////////*/
+
+.break-header input {
+  width: 235px;
+  border: none;
+  border-radius: 5px;
+  height: 30px;
+}
+
+.break-plus-button {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  color: var(--break-plus-button-symbol-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: var(--break-plus-button-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--animation-duration-more) ease-in-out;
+}
+
+.break-enter-button {
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  color: var(--break-plus-button-symbol-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: var(--break-plus-button-background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--animation-duration-more) ease-in-out;
+}
+
+plus {
+  position: relative;
+  top: 0px;
+  left: 0px;
+}
+
+enter {
+  position: relative;
+  top: 3px;
+  left: -1px;
+}
+
+.break-container {
+  text-align: center;
+}
+
+.queue-list,
+.break-list {
+  position: relative;
+  top: -20px;
+  padding: 0px;
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  display: inline-block;
+}
+
+
+.break-list-item-user {
+  width: 250px;
+  height: 20px;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: left;
+  display: flex;
+  background-color: var(--break-list-item-background-color);
+  color: var(--break-list-item-text-color);
+  border: 1px solid var(--break-list-item-sidegradient1-color);
+  border-radius: 5px;
+  /* border-image: 
+    linear-gradient(
+      to bottom, 
+      var(--break-list-item-sidegradient1-color), 
+      var(--break-list-item-sidegradient2-color)
+    ) 4 100%; */
+  transition: all var(--animation-duration-more) ease-in-out;
+}
+
+.break-list-item-admin {
+  width: 250px;
+  height: 80px;
+  padding: 10px;
+  margin-top: 10px;
+  text-align: left;
+  display: flex;
+  background-color: var(--break-list-item-background-color);
+  color: var(--break-list-item-text-color);
+  border: 1px solid var(--break-list-item-sidegradient1-color);
+  border-radius: 5px;
+  /* border-image: 
+    linear-gradient(
+      to bottom, 
+      var(--break-list-item-sidegradient1-color), 
+      var(--break-list-item-sidegradient2-color)
+    ) 4 100%; */
+  transition: all var(--animation-duration-more) ease-in-out;
+}
+
+/* .break-list-item .confirm {
+  width: 70px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  background-color: var(--break-list-item-confirm);
+}
+
+.break-list-item .cancel {
+  width: 100%;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 5px;
+  background-color: var(--break-list-item-cancel);
+} */
+
+.break-list-item-user div,
+.break-list-item-admin div {
+  flex-grow: 2;
+}
+
+.break-list-item-user .edit,
+.break-list-item-admin .edit {
+  color: var(--break-list-item-edit-color);
+  margin-right: var(--links-font-size);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.break-list-item-user .remove-user,
+.break-list-item-admin .remove-admin {
+  color: var(--break-list-item-remove-color);
+  margin-right: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.numerical-timer {
+  position: relative;
+  top: 0%;
+  font-family: var(--break-list-item-timer-font-family);
+  font-size: var(--break-list-item-timer-font-size);
+  font-weight: var(--break-list-item-timer-font-weight);
+}
+
+info {
+  font-family: var(--break-list-item-timer-font-family);
+  font-size: var(--break-list-item-timer-font-size);
+  font-weight: var(--break-list-item-timer-font-weight);
+} 
+
+.break-list-item-name-user {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--break-list-item-font-size);
+  font-weight: var(--break-list-item-font-weight);
+}
+
+.break-list-item-name-admin {
+  display: flex;
+  justify-content: space-between;
+}
+
+.time-over {
+  color: var(--break-list-item-time-over-color);
+  font-family: var(--break-list-item-timer-font-family);
+  font-size: var(--break-list-item-timer-font-size);
+  font-weight: var(--break-list-item-timer-font-weight);
+  animation: flash var(--animation-duration-more) linear infinite;
+}
+
+@keyframes flash {
+  50% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.remove-user {
+  position: relative;
+  top: -3px;
+  right: -10px;
+  margin-left: -7px;
+  transform: scale(0.8) translateX(0);
+  display: none;
+}
+
+.remove-admin {
+  position: relative;
+  top: -13px;
+  right: -10px;
+  margin-left: -7px;
+  transform: scale(0.8) translateX(0);
+  display: none;
+}
+
+
+.material-symbols-outlined {
+  position: relative;
+  top: 1px;
+}
+
+.show {
+  display: block;
+}
+
+.timer-container {
+  margin-left: 10px;
+  text-align: right;
+}
+
+filer {
+  color: var(--break-list-item-filler-color);
+}
+
+/*///// - PRE-TINER LOADER - //////*/
+
+.loader {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 2px;
+  background-color: var(--canvas-loader-background-color);
+}
+
+.loader:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 10px;
+  left: 0%;
+  width: 100%;
+  height: 50%;
+  background-image: linear-gradient(to right, var(--loader-background-color1), var(--loader-background-color2));
+  animation: loader var(--animation-duration-long) infinite linear;
+}
+
+
+@keyframes loader {
+  0% {
+    transform: scaleX(0);
+  }
+
+  100% {
+    transform: scaleX(1);
+  }
+}
