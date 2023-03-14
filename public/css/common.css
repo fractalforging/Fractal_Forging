@@ -74,7 +74,7 @@ input {
   border: 1px solid var(--input-box-border-color);
   border-radius: 4px;
   background-color: var(--input-box-background-color);
-  transition: all var(--animation-duration-more) ease-in-out;
+  transition: all var(--animation-duration-short) ease-in-out;
 }
 
 input::placeholder {
