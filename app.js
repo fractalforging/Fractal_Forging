@@ -10,12 +10,12 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
-let port = process.env.PORT || 3002;
-
 const moment = require('moment-timezone');
-const serverTime = moment.tz(new Date(), 'Europe/Helsinki').format('ddd, DD MMM YYYY HH:mm:ss [GMT] ZZ');
 
-let app = express();
+const serverTime = moment.tz(new Date(), 'Europe/Helsinki').format('ddd, DD MMM YYYY HH:mm:ss [GMT] ZZ');
+const port = process.env.PORT || 3002;
+
+const app = express();
 app.set('views', 'pages');
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -406,7 +406,21 @@ app.post("/break-slots", async function (req, res) {
     return res.status(500).send('Internal server error');
   }
 });
+ 
+// START BUTTON FOR BREAKS
+app.post('/breaks/start/:id', (req, res) => {
+  const breakId = req.params.id;
+  const breakStartTimeStamp = new Date().toISOString(); // Get the current timestamp
 
+  BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, (err, breakEntry) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("An error occurred while updating the break status.");
+    } else {
+      res.status(200).send("Break status updated successfully.");
+    }
+  });
+});
 
 
 //=====================

@@ -204,6 +204,13 @@ info {
   font-weight: var(--break-list-item-timer-font-weight);
 } 
 
+nonstart {
+  font-family: var(--break-list-item-timer-font-family);
+  font-weight: 100;
+}
+
+
+
 .break-list-item-name-user {
   display: flex;
   justify-content: space-between;
@@ -296,7 +303,7 @@ filer {
   background-image: linear-gradient(to right, var(--loader-background-color1), var(--loader-background-color2));
   animation: loader var(--animation-duration-long) infinite linear;
 }
-
+ 
 
 @keyframes loader {
   0% {
@@ -307,3 +314,4 @@ filer {
     transform: scaleX(1);
   }
 }
+

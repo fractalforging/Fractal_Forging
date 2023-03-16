@@ -74,13 +74,12 @@ input {
   border: 1px solid var(--input-box-border-color);
   border-radius: 4px;
   background-color: var(--input-box-background-color);
-  transition: all var(--animation-duration-short) ease-in-out;
+  transition: all var(--animation-duration-more) ease-in-out;
 }
 
 input::placeholder {
   color: var(--input-box-placeholder-color);
-  /* Replace with the desired color */
-  transition: all var(--animation-duration-more) ease-in-out;
+  transition: color var(--animation-duration-more) ease-in-out;
 }
 
 .form-button {

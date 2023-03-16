@@ -15,6 +15,15 @@ const breakTrackerSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  hasStarted: {
+    type: Boolean,
+    default: false
+  },
+  breakStartTimeStamp: { 
+    type: String,
+    default: null
   }
 });
 module.exports = mongoose.model('BreakTrack', breakTrackerSchema);
+ 
