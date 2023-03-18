@@ -28,6 +28,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const User = require("./models/user");
 const BreakTrack = require("./models/BreakTrack");
 const BreakSlots = require('./models/BreakSlots');
+const BreakQueue = require('./models/BreakQueue');
+
 
 // CONNECTION TO MONGODB
 require("dotenv").config({ path: "mongodb.env" });

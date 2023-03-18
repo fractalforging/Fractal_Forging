@@ -16,16 +16,13 @@ const breakQueueSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    status: {
+        type: String,
+        enum: ['active', 'completed', 'queued'],
+        required: true,
+        default: 'queued'
     }
-    //   endTime: {
-    //     type: Date,
-    //     required: true
-    //   },
-    //   status: {
-    //     type: String,
-    //     enum: ['active', 'completed', 'queued'],
-    //     required: true
-    //   }
 });
 
 module.exports = mongoose.model('BreakQueue', breakQueueSchema);
