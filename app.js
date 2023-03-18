@@ -4,7 +4,7 @@
 
 const path = require("path");
 const passportLocalMongoose = require("passport-local-mongoose");
-const bcrypt = require("bcrypt");
+//const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const express = require("express");
 const passport = require("passport");
@@ -25,7 +25,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //=====================
 
 // SCHEMAS
-const User = require("./models/user");
+const createAdminUser = require("./models/firstRun");
+const User = require('./models/user');
 const BreakTrack = require("./models/BreakTrack");
 const BreakSlots = require('./models/BreakSlots');
 const BreakQueue = require('./models/BreakQueue');
@@ -54,6 +55,7 @@ mongoose.connect(
   },
   () => {
     console.log("MongoDB connected successfully!");
+    createAdminUser();
     app.listen(port, () => console.log("Server Up and running on port: ", port, "- Date: ", serverTime));
   }
 );
@@ -107,6 +109,15 @@ function isLoggedIn(req, res, next) {
   res.redirect("/login");
 }
 
+// Check if user is an admin
+async function isAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.roles === "admin") {
+    return next();
+  } else {
+    return res.redirect('/secret');
+  }
+}
+
 // Fetch break tracker data
 async function getBreakTrackerData() {
   const breakTracker = await BreakTrack.find();
@@ -116,26 +127,15 @@ async function getBreakTrackerData() {
 // Fetch break slots data
 async function getBreakSlotsData() {
   try {
-    const breakSlots = await BreakSlots.findOne({});
+    let breakSlots = await BreakSlots.findOne({});
+    if (!breakSlots) {
+      breakSlots = new BreakSlots();
+      await breakSlots.save();
+    }
     return breakSlots;
   } catch (err) {
     console.log(err);
     return null;
-  }
-}
-
-
-
-// Check if user is an admin
-async function isAdmin(req, res, next) {
-  if (req.isAuthenticated() && req.user.roles === "admin") {
-    const breakSlots = await getBreakSlotsData();
-    const breakTracker = await getBreakTrackerData();
-    res.locals.role = 'admin';
-    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
-  } else {
-    res.locals.role = 'user';
-    return next();
   }
 }
 
@@ -144,17 +144,17 @@ async function isAdmin(req, res, next) {
 //=====================
 
 // INDEX > LOGIN
-app.get("/", function (req, res) {
+app.get("/", function (req, res, next) {
   return res.render("login");
 });
 
 // LOGIN
-app.get("/login", function (req, res) {
+app.get("/login", function (req, res, next) {
   return res.render("login");
 });
 
 // USER LANDING PAGE
-app.get("/secret", isLoggedIn, async function (req, res) {
+app.get("/secret", isLoggedIn, async function (req, res, next) {
   const breakTracker = await getBreakTrackerData();
   const breakSlots = await getBreakSlotsData();
   if (req.user.roles === "admin") {
@@ -165,7 +165,7 @@ app.get("/secret", isLoggedIn, async function (req, res) {
 });
 
 // ADMIN LANDING PAGE
-app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
+app.get("/secret_edit/:id", isAdmin, async function (req, res, next) {
   const foundBreakTrack = await BreakTrack.findById(req.params.id);
   return res.render("secret_edit", {
     name: req.user.username,
@@ -174,12 +174,12 @@ app.get("/secret_edit/:id", isLoggedIn, async function (req, res) {
 });
 
 // REGISTER FORM
-app.get("/register", function (req, res) {
+app.get("/register", isAdmin, function (req, res, next) {
   return res.render("register");
 });
 
 // Handling user registration
-app.post("/register", async function (req, res) {
+app.post("/register", isAdmin, async function (req, res, next) {
   try {
     // Get the current break slots value from the database
     const breakSlots = await BreakSlots.findOne({});
@@ -284,7 +284,7 @@ app.get('/api/login', async function (req, res, next) {
 });
 
 // Handling password change
-app.post("/changepassword", isLoggedIn, function (req, res) {
+app.post("/changepassword", isLoggedIn, function (req, res, next) {
   User.findOne({ username: req.user.username }, (err, user) => {
     if (err || !user) {
       req.session.passChange = "Error";
@@ -368,7 +368,7 @@ app.get("/logout", function (req, res, next) {
 
 //Handling account
 app.get("/account", isLoggedIn, function (req, res, next) {
-  return res.render("account", { error: 'no error' });
+  return res.render("account", { error: 'no error', currentUser: req.user });
 });
 
 //Handling Admins
@@ -389,7 +389,7 @@ app.use(function (req, res, next) {
 
 
 // SLOTS AVAILABLE
-app.post("/break-slots", async function (req, res) {
+app.post("/break-slots", isAdmin, async function (req, res, next) {
   try {
     const newSlotsValue = req.body.duration;
 
@@ -410,7 +410,7 @@ app.post("/break-slots", async function (req, res) {
 });
  
 // START BUTTON FOR BREAKS
-app.post('/breaks/start/:id', (req, res) => {
+app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
   const breakId = req.params.id;
   const breakStartTimeStamp = new Date().toISOString(); // Get the current timestamp
 
@@ -422,6 +422,14 @@ app.post('/breaks/start/:id', (req, res) => {
       res.status(200).send("Break status updated successfully.");
     }
   });
+});
+
+// USERS PAGE
+app.get('/users', isAdmin, async (req, res, next) => {
+  const users = await User.find({});
+  const adminUsers = users.filter(user => user.roles === 'admin');
+  const normalUsers = users.filter(user => user.roles === 'user');
+  return res.render('users', { adminUsers, normalUsers, currentUser: req.user });
 });
 
 
@@ -479,7 +487,7 @@ app.get("/api/latest-break", async function (req, res, next) {
 });
 
 // CLEAR MODAL MESSAGES
-app.post('/clear-message', function (req, res) {
+app.post('/clear-message', function (req, res, next) {
   req.session.loggedIn = undefined;
   req.session.passChange = undefined;
   req.session.newAccount = undefined;
@@ -494,7 +502,7 @@ app.use(function (err, req, res, next) {
 });
 
 //UPDATE
-app.route("/edit/:id").get((req, res) => {
+app.route("/edit/:id").get((req, res, next) => {
   const id = req.params.id;
   BreakTrack.find({}, (err, breaks) => {
     return res.render("secret_edit.ejs", {
@@ -504,7 +512,7 @@ app.route("/edit/:id").get((req, res) => {
     });
   });
 })
-  .post((req, res) => {
+  .post((req, res, next) => {
     const id = req.params.id;
     BreakTrack.findByIdAndUpdate(
       id,
@@ -519,7 +527,7 @@ app.route("/edit/:id").get((req, res) => {
   });
 
 //DELETE
-app.route("/remove/:id").get((req, res) => {
+app.route("/remove/:id").get((req, res, next) => {
   const id = req.params.id;
   BreakTrack.findByIdAndRemove(id, (err) => {
     if (err) return res.send(500, err);

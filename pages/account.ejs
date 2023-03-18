@@ -17,20 +17,37 @@
 <!-- ////////////////// - DARK MODE - ////////////////// -->
 
 <li style="display: block;" class="toggle-moon">
-  <icon href="#" id="toggle-mode-btn-moon" class="toggle-mode">
-    <span class="material-symbols-outlined">brightness_3</span>
-  </icon>
+    <icon href="#" id="toggle-mode-btn-moon" class="toggle-mode">
+        <span class="material-symbols-outlined">brightness_3</span>
+    </icon>
 </li>
 
 <li style="display: block;" class="toggle-sun">
-  <icon href="#" id="toggle-mode-btn-sun" class="toggle-mode">
-    <span class="material-symbols-outlined">sunny</span>
-  </icon>
+    <icon href="#" id="toggle-mode-btn-sun" class="toggle-mode">
+        <span class="material-symbols-outlined">sunny</span>
+    </icon>
 </li>
 
-<!-- ////////////////// - FORM - ////////////////// -->
+<!-- ////////////////// - NAV - ////////////////// -->
 
+<navbar>
+  <li><a href="/account">Password</a></li>
+  <section class="vertical-line"></section>
+  <% if (currentUser.roles === 'admin') { %>
+      <li><a href="/register">Register</a></li>
+      <section class="vertical-line"></section>
+      <li><a href="/users">Users</a></li>
+      <section class="vertical-line"></section>
+  <% } %>
+  <li><a href="/logout">Logout</a></li>
+</navbar>
+
+&nbsp;
 <br>
+
+<hr class="divider">
+
+<!-- ////////////////// - FORM - ////////////////// -->
 
 <pagetitle>Change your password</pagetitle>
 

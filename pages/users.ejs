@@ -1,0 +1,158 @@
+<!-- ////////////////// - 1ST IN DOM > PREVENT FLICKER - ////////////////// -->
+
+<script src="/js/theme_setup.js"></script>
+
+<!-- ////////////////// - LINED STYLES AND SCRIPTS - ////////////////// -->
+
+<link rel="stylesheet" type="text/css" href="/css/common.css">
+<link rel="stylesheet" type="text/css" href="/css/themes.css">
+<link rel="stylesheet" type="text/css" href="/css/breaks.css">
+<link rel="stylesheet" type="text/css" href="/css/timer.css">
+<link rel="stylesheet" type="text/css" href="/css/modals.css">
+
+<script src="/js/timer.js"></script>
+
+<br>
+
+<!-- ////////////////// - DARK MODE - ////////////////// -->
+
+<li style="display: block;" class="toggle-moon">
+    <icon href="#" id="toggle-mode-btn-moon" class="toggle-mode">
+        <span class="material-symbols-outlined">brightness_3</span>
+    </icon>
+</li>
+
+<li style="display: block;" class="toggle-sun">
+    <icon href="#" id="toggle-mode-btn-sun" class="toggle-mode">
+        <span class="material-symbols-outlined">sunny</span>
+    </icon>
+</li>
+
+<!-- ////////////////// - NAV - ////////////////// -->
+
+<navbar>
+    <li><a href="/account">Password</a></li>
+    <section class="vertical-line"></section>
+    <li><a href="/register">Register</a></li>
+    <section class="vertical-line"></section>
+    <li><a href="/users">Users</a></li>
+    <section class="vertical-line"></section>
+    <li><a href="/logout">Logout</a></li>
+</navbar>
+&nbsp;
+<br>
+
+<hr class="divider">
+
+<!-- users.ejs -->
+
+<greet>Users</greet><br><br>
+
+<!-- List all the admin users first -->
+<joke>Admin Users</joke>
+<ul id="admin-users">
+    <% adminUsers.forEach(user=> { %>
+        <li data-id="<%= user._id %>" data-role="<%= user.roles %>">
+            <span>
+                <%= user.username %>
+            </span>
+            <select class="role-select">
+                <% if (user.roles==='admin' ) { %>
+                    <option value="admin" selected>Admin</option>
+                    <option value="user">User</option>
+                    <% } else { %>
+                        <option value="admin">Admin</option>
+                        <option value="user" selected>User</option>
+                        <% } %>
+            </select>
+        </li>
+        <% }); %>
+</ul>
+
+
+<!-- List all the normal users -->
+<joke>Normal Users</joke>
+<ul id="normal-users">
+    <% normalUsers.forEach(user=> { %>
+        <li data-id="<%= user._id %>" data-role="<%= user.roles %>">
+            <span>
+                <%= user.username %>
+            </span>
+            <select class="role-select">
+                <% if (user.roles==='admin' ) { %>
+                    <option value="admin" selected>Admin</option>
+                    <option value="user">User</option>
+                    <% } else { %>
+                        <option value="admin">Admin</option>
+                        <option value="user" selected>User</option>
+                        <% } %>
+            </select>
+        </li>
+        <% }); %>
+</ul>
+
+
+<button id="save-btn">Save Changes</button>
+
+<script>
+    const adminUsers = document.querySelectorAll('#admin-users li');
+    const normalUsers = document.querySelectorAll('#normal-users li');
+    const saveBtn = document.querySelector('#save-btn');
+
+    function onChangeRole(e) {
+        const userLi = e.target.parentNode;
+        const userId = userLi.dataset.id;
+        const newRole = e.target.value;
+
+        // Update the user's role in the DOM
+        userLi.dataset.role = newRole;
+    }
+
+    function onSaveChanges() {
+        const users = [];
+
+        // Collect all the users and their roles
+        adminUsers.forEach(userLi => {
+            const userId = userLi.dataset.id;
+            const newRole = userLi.dataset.role;
+            users.push({ id: userId, role: newRole });
+        });
+
+        normalUsers.forEach(userLi => {
+            const userId = userLi.dataset.id;
+            const newRole = userLi.dataset.role;
+            users.push({ id: userId, role: newRole });
+        });
+
+        // Send the changes to the server via an HTTP request
+        fetch('/users', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ users: users })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Changes saved successfully!');
+                } else {
+                    alert('Failed to save changes. Please try again.');
+                }
+            });
+    }
+
+
+
+    // Attach event listeners
+    adminUsers.forEach(userLi => {
+        const select = userLi.querySelector('.role-select');
+        select.addEventListener('change', onChangeRole);
+    });
+
+    normalUsers.forEach(userLi => {
+        const select = userLi.querySelector('.role-select');
+        select.addEventListener('change', onChangeRole);
+    });
+
+    saveBtn.addEventListener('click', onSaveChanges);
+</script>
