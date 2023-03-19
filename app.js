@@ -289,14 +289,14 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
     if (err || !user) {
       req.session.passChange = "Error";
       console.log(err || "User not found");
-      return res.render("account", { error: "Error, please try again" });
+      return res.render("account", { error: "Error, please try again", currentUser: req.user });
     }
 
     // Check if current password is empty
     if (!req.body.currentpassword) {
       req.session.passChange = "Wrong";
       console.log("Current password empty");
-      return res.render("account", { error: "Current password empty!" });
+      return res.render("account", { error: "Current password empty!", currentUser: req.user  });
     }
 
     // Check if current password matches
@@ -304,26 +304,26 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
       if (err || !valid) {
         req.session.passChange = "Wrong";
         console.log("Current password wrong 2");
-        return res.render("account", { error: "Current password incorrect!" });
+        return res.render("account", { error: "Current password incorrect!", currentUser: req.user  });
       }
       // Update password
       user.setPassword(req.body.newpassword, (err) => {
         if (err) {
           req.session.passChange = "Error";
           console.log(err);
-          return res.render("account", { error: "Error, please try again" });
+          return res.render("account", { error: "Error, please try again", currentUser: req.user  });
         }
         user.save((err) => {
           if (err) {
             req.session.passChange = "Error";
             console.log(err);
-            return res.render("account", { error: "Error, please try again" });
+            return res.render("account", { error: "Error, please try again", currentUser: req.user  });
           }
           req.logIn(user, (err) => {
             if (err) {
               req.session.passChange = "Error";
               console.log(err);
-              return res.render("account", { error: "Error, please try again" });
+              return res.render("account", { error: "Error, please try again", currentUser: req.user  });
             }
             req.session.passChange = "Ok";
             console.log("Password change for " + `${user.username}` + " was successfull");

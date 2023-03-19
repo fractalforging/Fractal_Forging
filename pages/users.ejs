@@ -31,6 +31,8 @@
 <!-- ////////////////// - NAV - ////////////////// -->
 
 <navbar>
+    <li><a href="/secret">Breaks</a></li>
+    <section class="vertical-line"></section>
     <li><a href="/account">Password</a></li>
     <section class="vertical-line"></section>
     <li><a href="/register">Register</a></li>
@@ -49,7 +51,6 @@
 <greet>Users</greet><br><br>
 
 <!-- List all the admin users first -->
-<joke>Admin Users</joke>
 <ul id="admin-users">
     <% adminUsers.forEach(user=> { %>
         <li data-id="<%= user._id %>" data-role="<%= user.roles %>">
@@ -65,13 +66,12 @@
                         <option value="user" selected>User</option>
                         <% } %>
             </select>
-        </li>
+        </li><br>
         <% }); %>
 </ul>
 
-
 <!-- List all the normal users -->
-<joke>Normal Users</joke>
+
 <ul id="normal-users">
     <% normalUsers.forEach(user=> { %>
         <li data-id="<%= user._id %>" data-role="<%= user.roles %>">
@@ -87,10 +87,11 @@
                         <option value="user" selected>User</option>
                         <% } %>
             </select>
-        </li>
+        </li><br>
         <% }); %>
 </ul>
 
+<br><br>
 
 <button id="save-btn">Save Changes</button>
 
