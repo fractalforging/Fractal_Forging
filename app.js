@@ -10,11 +10,22 @@ const express = require("express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
+const consoleStamp = require('console-stamp');
 const moment = require('moment-timezone');
-
-
-const serverTime = moment.tz(new Date(), 'Europe/Helsinki').format('ddd, DD MMM YYYY HH:mm:ss [GMT] ZZ');
 const port = process.env.PORT || 3002;
+
+// const serverTime = moment.tz(new Date(), 'Europe/Warsaw').format('ddd, DD MMM YYYY HH:mm:ss');
+// consoleStamp(console, {
+//   format: function() {
+//     return moment().tz('Europe/Warsaw').format('ddd, DD MMM YYYY HH:mm:ss');
+//   }
+// });
+
+require('console-stamp')(console, { 
+  format: ':date(yyyy/mm/dd HH:MM:ss.l)' 
+} );
+
+
 
 const app = express();
 app.set('views', 'pages');
@@ -58,7 +69,7 @@ mongoose.connect(
   () => {
     console.log("MongoDB connected successfully!");
     createAdminUser();
-    app.listen(port, () => console.log("Server Up and running on port: ", port, "- Date: ", serverTime));
+    app.listen(port, () => console.log("Server Up and running on port: ", port, "- Date: "));
   }
 );
 
@@ -377,10 +388,8 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
 
     // Fetch the current number of available slots from the database
     const currentSlots = await BreakSlots.findOne();
-    console.log("1", newSlotsValue, currentSlots.slots);
     // Check if the selected number of available slots is the same as the current number
     if (newSlotsValue != currentSlots.slots) {
-      console.log("2", newSlotsValue, currentSlots.slots);
       // Update the break slots value in the database
       const breakSlots = await BreakSlots.findOneAndUpdate(
         {},
@@ -390,7 +399,6 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
 
       req.session.slotsAvailable = "Updated";
       console.error("Slots were updated to:", newSlotsValue);
-      console.log("3", newSlotsValue, currentSlots.slots);
       // Render the updated slots value in the secret_admin page
       return res.render("secret_admin", {
         name: req.user.username,
@@ -398,7 +406,6 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
         breakSlots: breakSlots
       });
     } else if (newSlotsValue == currentSlots.slots) { // <-- Updated condition
-      console.log("4", newSlotsValue, currentSlots.slots);
       req.session.slotsAvailable = "Same value";
       return res.render("secret_admin", {
         name: req.user.username,
