@@ -11,6 +11,8 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 const moment = require('moment-timezone');
+const methodOverride = require('method-override');
+
 
 const serverTime = moment.tz(new Date(), 'Europe/Helsinki').format('ddd, DD MMM YYYY HH:mm:ss [GMT] ZZ');
 const port = process.env.PORT || 3002;
@@ -19,6 +21,8 @@ const app = express();
 app.set('views', 'pages');
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+
 
 //=====================
 // DATABASE
@@ -184,6 +188,12 @@ app.post("/register", isAdmin, async function (req, res, next) {
     // Get the current break slots value from the database
     const breakSlots = await BreakSlots.findOne({});
     const { UserExistsError } = require('passport-local-mongoose');
+    // Confirm password
+    if (req.body.password !== req.body.confirmpassword) {
+      req.session.newAccount = "Mismatch";
+      console.log("Password and confirm password do not match");
+      return res.render("register", { error: "Password and confirm password do not match" });
+    }
     User.register(
       { username: req.body.username, roles: "user", breakSlots: breakSlots },
       req.body.password,
@@ -229,6 +239,8 @@ app.get('/api/register', isLoggedIn, async function (req, res, next) {
     return res.status(500).json({ message: 'No username given' });
   } else if (req.session.newAccount === "NoPass") {
     return res.status(500).json({ message: 'No password given' });
+  } else if (req.session.newAccount === "Mismatch") {
+    return res.status(500).json({ message: "Passwords don't match" });
   } else {
     // console.log("nothing");
     // res.status(200).json({ message: 'No message' });
@@ -296,7 +308,14 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
     if (!req.body.currentpassword) {
       req.session.passChange = "Wrong";
       console.log("Current password empty");
-      return res.render("account", { error: "Current password empty!", currentUser: req.user  });
+      return res.render("account", { error: "Current password empty!", currentUser: req.user });
+    }
+
+    // Confirm new password
+    if (req.body.newpassword !== req.body.confirmpassword) {
+      req.session.passChange = "Mismatch";
+      console.log("New password and confirm password do not match");
+      return res.render("account", { error: "New password and confirm password do not match", currentUser: req.user });
     }
 
     // Check if current password matches
@@ -304,26 +323,26 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
       if (err || !valid) {
         req.session.passChange = "Wrong";
         console.log("Current password wrong 2");
-        return res.render("account", { error: "Current password incorrect!", currentUser: req.user  });
+        return res.render("account", { error: "Current password incorrect!", currentUser: req.user });
       }
       // Update password
       user.setPassword(req.body.newpassword, (err) => {
         if (err) {
           req.session.passChange = "Error";
           console.log(err);
-          return res.render("account", { error: "Error, please try again", currentUser: req.user  });
+          return res.render("account", { error: "Error, please try again", currentUser: req.user });
         }
         user.save((err) => {
           if (err) {
             req.session.passChange = "Error";
             console.log(err);
-            return res.render("account", { error: "Error, please try again", currentUser: req.user  });
+            return res.render("account", { error: "Error, please try again", currentUser: req.user });
           }
           req.logIn(user, (err) => {
             if (err) {
               req.session.passChange = "Error";
               console.log(err);
-              return res.render("account", { error: "Error, please try again", currentUser: req.user  });
+              return res.render("account", { error: "Error, please try again", currentUser: req.user });
             }
             req.session.passChange = "Ok";
             console.log("Password change for " + `${user.username}` + " was successfull");
@@ -343,6 +362,8 @@ app.get('/api/changepassword', isLoggedIn, async function (req, res, next) {
     return res.status(401).json({ message: 'Old password wrong!' });
   } else if (req.session.passChange === "Error") {
     return res.status(500).json({ message: 'Error! Try again.' });
+  } else if (req.session.passChange === "Mismatch") {
+    return res.status(500).json({ message: "Passwords don't match" });
   } else {
     // console.log("nothing");
     // res.status(200).json({ message: 'No message' });
@@ -408,7 +429,7 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
     return res.status(500).send('Internal server error');
   }
 });
- 
+
 // START BUTTON FOR BREAKS
 app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
   const breakId = req.params.id;
@@ -432,6 +453,36 @@ app.get('/users', isAdmin, async (req, res, next) => {
   return res.render('users', { adminUsers, normalUsers, currentUser: req.user });
 });
 
+// PUT request to update user's role
+app.put('/users/:id', isAdmin, (req, res, next) => {
+  const userId = req.params.id;
+  const newRole = req.body.role;
+
+  User.findByIdAndUpdate(userId, { roles: newRole }, (err, user) => {
+    if (err) {
+      console.error(`Error updating user ${userId} role: ${err.message}`);
+      res.status(500).send(`Error updating user ${userId} role: ${err.message}`);
+    } else {
+      console.log(`User ${userId} role updated to ${newRole}`);
+      res.status(200).send(`User ${userId} role updated to ${newRole}`);
+    }
+  });
+});
+
+// DELETE request to delete a user
+app.delete('/accounts/:id', isAdmin, (req, res, next) => {
+  const userId = req.params.id;
+
+  User.findByIdAndDelete(userId, (err, user) => {
+    if (err) {
+      console.error(`Error deleting user ${userId}: ${err.message}`);
+      res.status(500).send(`Error deleting user ${userId}: ${err.message}`);
+    } else {
+      console.log(`User ${userId} deleted`);
+      res.status(200).send(`User ${userId} deleted`);
+    }
+  });
+});
 
 //=====================
 // BREAK TRACKER

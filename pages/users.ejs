@@ -51,109 +51,150 @@
 <greet>Users</greet><br><br>
 
 <!-- List all the admin users first -->
-<ul id="admin-users">
+<ul id="admin-users" class="roles-list">
     <% adminUsers.forEach(user=> { %>
-        <li data-id="<%= user._id %>" data-role="<%= user.roles %>">
-            <span>
-                <%= user.username %>
-            </span>
-            <select class="role-select">
-                <% if (user.roles==='admin' ) { %>
-                    <option value="admin" selected>Admin</option>
-                    <option value="user">User</option>
-                    <% } else { %>
-                        <option value="admin">Admin</option>
-                        <option value="user" selected>User</option>
+        <ul>
+            <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
+                <div class="break-list-item-name-user">
+                    <span>
+                        <%= user.username %>
+                    </span>
+                    <% if (user.username !=='admin' ) { %>
+                        <select class="item-button">
+                            <% if (user.roles==='admin' ) { %>
+                                <option value="admin" selected>Admin</option>
+                                <option value="user">User</option>
+                                <% } else { %>
+                                    <option value="admin">Admin</option>
+                                    <option value="user" selected>User</option>
+                                    <% } %>
+                                        <option value="delete" class="delete-option">Delete</option>
+                        </select>
                         <% } %>
-            </select>
-        </li><br>
+                </div>
+            </li>
+        </ul>
         <% }); %>
 </ul>
+
+<br>
 
 <!-- List all the normal users -->
-
-<ul id="normal-users">
+<ul id="normal-users" class="roles-list">
     <% normalUsers.forEach(user=> { %>
-        <li data-id="<%= user._id %>" data-role="<%= user.roles %>">
-            <span>
-                <%= user.username %>
-            </span>
-            <select class="role-select">
-                <% if (user.roles==='admin' ) { %>
-                    <option value="admin" selected>Admin</option>
-                    <option value="user">User</option>
-                    <% } else { %>
-                        <option value="admin">Admin</option>
-                        <option value="user" selected>User</option>
+        <ul>
+            <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
+                <div class="break-list-item-name-user">
+                    <span>
+                        <%= user.username %>
+                    </span>
+                    <% if (user.username !=='admin' ) { %>
+                        <select class="item-button">
+                            <% if (user.roles==='admin' ) { %>
+                                <option value="admin" selected>Admin</option>
+                                <option value="user">User</option>
+                                <% } else { %>
+                                    <option value="admin">Admin</option>
+                                    <option value="user" selected>User</option>
+                                    <% } %>
+                                        <option value="delete" class="delete-option">Delete</option>
+                        </select>
                         <% } %>
-            </select>
-        </li><br>
+                </div>
+            </li>
+        </ul>
         <% }); %>
 </ul>
 
-<br><br>
 
-<button id="save-btn">Save Changes</button>
-
+<!-- Add this script tag at the end of your users.ejs file, before the closing </body> tag -->
 <script>
-    const adminUsers = document.querySelectorAll('#admin-users li');
-    const normalUsers = document.querySelectorAll('#normal-users li');
-    const saveBtn = document.querySelector('#save-btn');
-
-    function onChangeRole(e) {
-        const userLi = e.target.parentNode;
-        const userId = userLi.dataset.id;
-        const newRole = e.target.value;
-
-        // Update the user's role in the DOM
-        userLi.dataset.role = newRole;
-    }
-
-    function onSaveChanges() {
-        const users = [];
-
-        // Collect all the users and their roles
-        adminUsers.forEach(userLi => {
-            const userId = userLi.dataset.id;
-            const newRole = userLi.dataset.role;
-            users.push({ id: userId, role: newRole });
-        });
-
-        normalUsers.forEach(userLi => {
-            const userId = userLi.dataset.id;
-            const newRole = userLi.dataset.role;
-            users.push({ id: userId, role: newRole });
-        });
-
-        // Send the changes to the server via an HTTP request
-        fetch('/users', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ users: users })
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert('Changes saved successfully!');
-                } else {
-                    alert('Failed to save changes. Please try again.');
-                }
+    // Helper function to send a PUT request to update user's role
+    const updateUserRole = async (userId, newRole) => {
+        try {
+            const response = await fetch(`/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ role: newRole }),
             });
-    }
 
+            if (response.ok) {
+                console.log(`User ${userId} role updated to ${newRole}`);
+                location.reload();
+            } else {
+                console.error(`Error updating user ${userId} role`);
+            }
+        } catch (error) {
+            console.error(`Error updating user ${userId} role: ${error.message}`);
+        }
+    };
 
+    // Helper function to send a DELETE request to delete a user
+    const deleteUser = async (userId, username) => {
+        const confirmed = confirm(`Please confirm deletion of account: ${username}`);
+        if (!confirmed) {
+            return;
+        }
 
-    // Attach event listeners
-    adminUsers.forEach(userLi => {
-        const select = userLi.querySelector('.role-select');
-        select.addEventListener('change', onChangeRole);
+        try {
+            const response = await fetch(`/accounts/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                console.log(`User ${userId} deleted`);
+                location.reload();
+            } else {
+                console.error(`Error deleting user ${userId}`);
+            }
+        } catch (error) {
+            console.error(`Error deleting user ${userId}: ${error.message}`);
+        }
+    };
+
+    // Add event listeners to all select elements
+    const selectElements = document.querySelectorAll('.item-button');
+    selectElements.forEach(selectElement => {
+        selectElement.addEventListener('change', event => {
+            const liElement = event.target.closest('li');
+            const userId = liElement.dataset.id;
+            const newRole = event.target[selectElement.selectedIndex].value;
+
+            if (newRole === 'delete') {
+                const username = liElement.querySelector('span').textContent;
+                deleteUser(userId, username);
+            } else {
+                updateUserRole(userId, newRole);
+            }
+        });
     });
-
-    normalUsers.forEach(userLi => {
-        const select = userLi.querySelector('.role-select');
-        select.addEventListener('change', onChangeRole);
-    });
-
-    saveBtn.addEventListener('click', onSaveChanges);
 </script>
+
+
+<!-- ////////////// MODALS ////////////////-->
+
+<div id="myModal-Neg" class="modal">
+    <div class="modal-content-neg">
+        <span class="exclamation material-symbols-outlined">exclamation</span>
+        <span id="message-neg" class="modal-text"></span>
+        <span class="close-neg material-symbols-outlined">close</span>
+    </div>
+</div>
+
+<div id="myModal-Pos" class="modal">
+    <div class="modal-content-pos">
+        <span class="check material-symbols-outlined">check</span>
+        <span id="message-pos" class="modal-text"></span>
+        <span class="close-pos material-symbols-outlined">close</span>
+    </div>
+</div>
+
+<!-- ////////////////// - FETCH JS FILES - ////////////////// -->
+
+<script src="/js/toggle.js"></script>
+<script src="/js/modals.js"></script>

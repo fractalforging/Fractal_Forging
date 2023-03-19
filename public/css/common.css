@@ -109,7 +109,7 @@ li {
   text-align: center;
 }
 
-select {
+.number-selector {
   position: relative;
   margin: 0px;
   width: 35px;
@@ -125,17 +125,39 @@ select {
   cursor: pointer;
 }
 
-select:hover {
-  background-color: #62728d;
+.item-button {
+  font-family: "Share Tech Mono";
+  position: relative;
+  top: -1px;
+  margin: 0px;
+  width: 65px;
+  font-size: 14px;
+  border: 1px solid var(--credentials-border-color);
+  height: 22px;
+  color: var(--input-box-text-color);
+  background: url() 96% / 15% no-repeat var(--credentials-box-background-color);
+  text-align: center;
+  border-radius: 3px;
+  text-indent: -1px;
+  cursor: pointer;
   transition: all var(--animation-duration-short) ease-in-out;
 }
 
-select:focus {
-  background-color: #62728d;
-  transition: all var(--animation-duration-short) ease-in-out;
+.item-button:hover {
+  background: url() 96% / 15% no-repeat var(--break-plus-button-symbol-color);
 }
 
-select option {
+/* .number-selector:hover {
+  background-color: #62728d;
+  transition: all var(--animation-duration-short) ease-in-out;
+} */
+
+/* .number-selector:focus {
+  background-color: #62728d;
+  transition: all var(--animation-duration-short) ease-in-out;
+} */
+
+.number-selector option {
   background: url() 96% / 15% no-repeat var(--select-menu-background-color);
   border-radius: 15px;
 }
