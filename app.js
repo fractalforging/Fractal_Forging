@@ -11,7 +11,6 @@ const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 const moment = require('moment-timezone');
-const methodOverride = require('method-override');
 
 
 const serverTime = moment.tz(new Date(), 'Europe/Helsinki').format('ddd, DD MMM YYYY HH:mm:ss [GMT] ZZ');
@@ -34,7 +33,6 @@ const User = require('./models/user');
 const BreakTrack = require("./models/BreakTrack");
 const BreakSlots = require('./models/BreakSlots');
 const BreakQueue = require('./models/BreakQueue');
-
 
 // CONNECTION TO MONGODB
 require("dotenv").config({ path: "mongodb.env" });
@@ -147,6 +145,23 @@ async function getBreakSlotsData() {
 // ROUTES
 //=====================
 
+// SERVER SCRIPTS
+const apiMessages = require('./serverjs/apiMessages');
+
+// API MESSAGES FOR MODAL MESSAGING
+app.get('/api/messaging', apiMessages.myMessages);
+
+// CLEAR SESSION VARIABLES FOR MODAL MESSAGING
+app.post('/clear-message', function (req, res, next) {
+  req.session.loggedIn = undefined;
+  req.session.passChange = undefined;
+  req.session.newAccount = undefined;
+  req.session.message = undefined;
+  req.session.roleChange = undefined;
+  req.session.slotsAvailable = undefined;
+  return res.sendStatus(204);
+});
+
 // INDEX > LOGIN
 app.get("/", function (req, res, next) {
   return res.render("login");
@@ -227,26 +242,6 @@ app.post("/register", isAdmin, async function (req, res, next) {
   }
 });
 
-// Uer registration messages
-app.get('/api/register', isLoggedIn, async function (req, res, next) {
-  if (req.session.newAccount === "Ok") {
-    return res.status(200).json({ message: 'Account registered!' });
-  } else if (req.session.newAccount === "Taken") {
-    return res.status(401).json({ message: 'Username taken' });
-  } else if (req.session.newAccount === "Error") {
-    return res.status(500).json({ message: 'Error! Try again' });
-  } else if (req.session.newAccount === "NoUser") {
-    return res.status(500).json({ message: 'No username given' });
-  } else if (req.session.newAccount === "NoPass") {
-    return res.status(500).json({ message: 'No password given' });
-  } else if (req.session.newAccount === "Mismatch") {
-    return res.status(500).json({ message: "Passwords don't match" });
-  } else {
-    // console.log("nothing");
-    // res.status(200).json({ message: 'No message' });
-  }
-});
-
 //Handling user login
 app.post('/login', async function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
@@ -276,23 +271,6 @@ app.post('/login', async function (req, res, next) {
       return res.redirect("secret");
     });
   })(req, res, next);
-});
-
-// Login messages
-app.get('/api/login', async function (req, res, next) {
-  if (req.session.loggedIn === "true") {
-    //return res.status(200).json({ message: 'Login successful!' });
-  } else if (req.session.loggedIn === "false") {
-    return res.status(401).json({ message: 'Wrong credentials!' });
-  } else if (req.session.loggedIn === "error1") {
-    return res.status(401).json({ message: 'Error1' });
-  } else if (req.session.loggedIn === "error2") {
-    return res.status(401).json({ message: 'error2' });
-  } else if (req.session.loggedIn === "errorx") {
-    return res.status(401).json({ message: 'errorx' });
-  } else {
-    //
-  }
 });
 
 // Handling password change
@@ -354,22 +332,6 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
   });
 });
 
-// Password change messages
-app.get('/api/changepassword', isLoggedIn, async function (req, res, next) {
-  if (req.session.passChange === "Ok") {
-    return res.status(200).json({ message: 'Password changed!' });
-  } else if (req.session.passChange === "Wrong") {
-    return res.status(401).json({ message: 'Old password wrong!' });
-  } else if (req.session.passChange === "Error") {
-    return res.status(500).json({ message: 'Error! Try again.' });
-  } else if (req.session.passChange === "Mismatch") {
-    return res.status(500).json({ message: "Passwords don't match" });
-  } else {
-    // console.log("nothing");
-    // res.status(200).json({ message: 'No message' });
-  }
-});
-
 //Handling user logout
 app.get("/logout", function (req, res, next) {
   const username = req.session.username; // Get the username from the session
@@ -408,7 +370,6 @@ app.use(function (req, res, next) {
   return next();
 });
 
-
 // SLOTS AVAILABLE
 app.post("/break-slots", isAdmin, async function (req, res, next) {
   try {
@@ -421,14 +382,22 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
       { new: true, upsert: true }
     );
 
+    req.session.slotsAvailable = "Updated";
+    console.error("Slots were updated to:", newSlotsValue);
+
     // Render the updated slots value in the secret_admin page
-    const breakTracker = await getBreakTrackerData();
-    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
+    return res.render("secret_admin", {
+      name: req.user.username,
+      breakTracker: await getBreakTrackerData(),
+      breakSlots: breakSlots
+    });
   } catch (error) {
     console.error(error);
+    req.session.slotsAvailable = "Error";
     return res.status(500).send('Internal server error');
   }
 });
+
 
 // START BUTTON FOR BREAKS
 app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
@@ -445,7 +414,7 @@ app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
   });
 });
 
-// USERS PAGE
+// USER'S PAGE
 app.get('/users', isAdmin, async (req, res, next) => {
   const users = await User.find({});
   const adminUsers = users.filter(user => user.roles === 'admin');
@@ -453,35 +422,44 @@ app.get('/users', isAdmin, async (req, res, next) => {
   return res.render('users', { adminUsers, normalUsers, currentUser: req.user });
 });
 
-// PUT request to update user's role
-app.put('/users/:id', isAdmin, (req, res, next) => {
-  const userId = req.params.id;
-  const newRole = req.body.role;
-
-  User.findByIdAndUpdate(userId, { roles: newRole }, (err, user) => {
-    if (err) {
-      console.error(`Error updating user ${userId} role: ${err.message}`);
-      res.status(500).send(`Error updating user ${userId} role: ${err.message}`);
-    } else {
-      console.log(`User ${userId} role updated to ${newRole}`);
-      res.status(200).send(`User ${userId} role updated to ${newRole}`);
-    }
-  });
+// UPDATE USER'S ROLE
+app.put('/users/:id', isAdmin, async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    const adminUsers = users.filter(user => user.roles === 'admin');
+    const normalUsers = users.filter(user => user.roles === 'user');
+    const userId = req.params.id;
+    const newRole = req.body.role;
+    await User.findByIdAndUpdate(userId, { roles: newRole });
+    req.session.roleChange = "Role changed";
+    console.log(`User ${userId} role updated to ${newRole}`);
+    return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
+  } catch (err) {
+    req.session.roleChange = "Error1";
+    console.error(`Error updating user ${userId} role: ${err.message}`);
+    console.log(err);
+    return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
+  }
 });
 
 // DELETE request to delete a user
-app.delete('/accounts/:id', isAdmin, (req, res, next) => {
-  const userId = req.params.id;
-
-  User.findByIdAndDelete(userId, (err, user) => {
-    if (err) {
-      console.error(`Error deleting user ${userId}: ${err.message}`);
-      res.status(500).send(`Error deleting user ${userId}: ${err.message}`);
-    } else {
-      console.log(`User ${userId} deleted`);
-      res.status(200).send(`User ${userId} deleted`);
-    }
-  });
+app.delete('/accounts/:id', isAdmin, async (req, res, next) => {
+  let userId; // Define userId outside the try block
+  try {
+    const users = await User.find({});
+    const adminUsers = users.filter(user => user.roles === 'admin');
+    const normalUsers = users.filter(user => user.roles === 'user');
+    userId = req.params.id;
+    await User.findByIdAndDelete(userId);
+    req.session.roleChange = "Deleted";
+    console.log(`User ${userId} deleted`);
+    return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
+  } catch (err) {
+    req.session.roleChange = "Error2";
+    console.error(`Error deleting user ${userId}: ${err.message}`);
+    console.log(err);
+    return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
+  }
 });
 
 //=====================
@@ -521,29 +499,6 @@ app.post("/", async function (req, res, next) {
       return res.redirect("/secret");
     }
   } (req, res, next);
-});
-
-// GET METHOD to retrieve latest break
-app.get("/api/latest-break", async function (req, res, next) {
-  if (req.session.message === 'Only 1 break at a time') {
-    console.log("message:", req.session.message, "sent");
-    return res.status(401).json({ message: 'Only 1 break at a time' });
-  } else if (req.session.message === 'Break submitted') {
-    console.log("message:", req.session.message, "sent");
-    return res.status(200).json({ message: 'Break submitted' });
-  } else {
-    // console.log("nothing");
-    // res.status(200).json({ message: 'No message' });
-  }
-});
-
-// CLEAR MODAL MESSAGES
-app.post('/clear-message', function (req, res, next) {
-  req.session.loggedIn = undefined;
-  req.session.passChange = undefined;
-  req.session.newAccount = undefined;
-  req.session.message = undefined;
-  return res.sendStatus(204);
 });
 
 // CATCH ERRORS

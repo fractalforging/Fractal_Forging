@@ -2,7 +2,7 @@ console.log("M O D A L S . J S   L O A D E D")
 
 ///////// - GET MODALS - /////////
 
-const [myModal_Neg, myModalText_Neg, myModal_Pos, myModalText_Pos] = 
+const [myModal_Neg, myModalText_Neg, myModal_Pos, myModalText_Pos] =
     ["#myModal-Neg", "#message-neg", "#myModal-Pos", "#message-pos"].map(document.querySelector.bind(document))
 
 ///////// - CLOSE BUTTON - /////////
@@ -18,7 +18,7 @@ document.querySelectorAll('.close-neg, .close-pos').forEach(btn => {
 
 const makeApiCall = async apiEndpoint => {
     const response = await fetch(apiEndpoint);
-    const {message} = await response.json();
+    const { message } = await response.json();
     if (response.status === 200) {
         [myModal_Neg, myModal_Pos].forEach(modal => modal.style.display = 'none');
         myModalText_Pos.innerHTML = message;
@@ -33,4 +33,6 @@ const makeApiCall = async apiEndpoint => {
 
 ///////// - GET APIS - /////////
 
-Promise.all(['/api/login', '/api/changepassword', '/api/latest-break', '/api/register'].map(makeApiCall));
+  Promise.all([
+    "/api/messaging"
+  ].map(makeApiCall));
