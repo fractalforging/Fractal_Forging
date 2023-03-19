@@ -13,9 +13,7 @@ async function myMessages(req, res, next) {
         return res.status(401).json({ message: 'errorx' });
     }
     // USER REGISTRATION
-    if (req.session.newAccount === "Ok") {
-        return res.status(200).json({ message: 'Account registered!' });
-    } else if (req.session.newAccount === "Taken") {
+    if (req.session.newAccount === "Taken") {
         return res.status(401).json({ message: 'Username taken' });
     } else if (req.session.newAccount === "Error") {
         return res.status(500).json({ message: 'Error! Try again' });
@@ -25,26 +23,28 @@ async function myMessages(req, res, next) {
         return res.status(500).json({ message: 'No password given' });
     } else if (req.session.newAccount === "Mismatch") {
         return res.status(500).json({ message: "Passwords don't match" });
+    } else if (req.session.newAccount === "Ok") {
+        return res.status(200).json({ message: 'Account registered!' });
     }
     // PASSWORD
-    if (req.session.passChange === "Ok") {
-        return res.status(200).json({ message: 'Password changed!' });
-    } else if (req.session.passChange === "Wrong") {
+    if (req.session.passChange === "Wrong") {
         return res.status(401).json({ message: 'Old password wrong!' });
     } else if (req.session.passChange === "Error") {
         return res.status(500).json({ message: 'Error! Try again.' });
     } else if (req.session.passChange === "Mismatch") {
         return res.status(500).json({ message: "Passwords don't match" });
+    } else if (req.session.passChange === "Ok") {
+        return res.status(200).json({ message: 'Password changed!' });
     }
     // ACCOUNT MANAGEMENT
-    if (req.session.roleChange === "Role changed") {
-        return res.status(200).json({ message: 'Role changed' });
-    } else if (req.session.roleChange === "Error1") {
+    if (req.session.roleChange === "Error1") {
         return res.status(401).json({ message: 'Error! Try again.' });
     } else if (req.session.roleChange === "Error2") {
         return res.status(401).json({ message: 'Error! Try again.' });
     } else if (req.session.roleChange === "Deleted") {
         return res.status(200).json({ message: "Account deleted" });
+    } else if (req.session.roleChange === "Role changed") {
+        return res.status(200).json({ message: 'Role changed' });
     }
     // BREAKS
     if (req.session.message === 'Only 1 break at a time') {
@@ -55,6 +55,8 @@ async function myMessages(req, res, next) {
     // SLOTS AVAILABLE
     if (req.session.slotsAvailable === 'Error') {
         return res.status(401).json({ message: 'Error! Try again' });
+    } else if (req.session.slotsAvailable === 'Same value') { // update the condition
+        return res.status(401).json({ message: 'Same value!' });
     } else if (req.session.slotsAvailable === 'Updated') {
         return res.status(200).json({ message: 'Slots updated' });
     }

@@ -373,31 +373,45 @@ app.use(function (req, res, next) {
 // SLOTS AVAILABLE
 app.post("/break-slots", isAdmin, async function (req, res, next) {
   try {
-    const newSlotsValue = req.body.duration;
+    const newSlotsValue = req.body.slotsavailable;
 
-    // Update the break slots value in the database
-    const breakSlots = await BreakSlots.findOneAndUpdate(
-      {},
-      { $set: { slots: newSlotsValue } },
-      { new: true, upsert: true }
-    );
+    // Fetch the current number of available slots from the database
+    const currentSlots = await BreakSlots.findOne();
+    console.log("1", newSlotsValue, currentSlots.slots);
+    // Check if the selected number of available slots is the same as the current number
+    if (newSlotsValue != currentSlots.slots) {
+      console.log("2", newSlotsValue, currentSlots.slots);
+      // Update the break slots value in the database
+      const breakSlots = await BreakSlots.findOneAndUpdate(
+        {},
+        { $set: { slots: newSlotsValue } },
+        { new: true, upsert: true }
+      );
 
-    req.session.slotsAvailable = "Updated";
-    console.error("Slots were updated to:", newSlotsValue);
-
-    // Render the updated slots value in the secret_admin page
-    return res.render("secret_admin", {
-      name: req.user.username,
-      breakTracker: await getBreakTrackerData(),
-      breakSlots: breakSlots
-    });
+      req.session.slotsAvailable = "Updated";
+      console.error("Slots were updated to:", newSlotsValue);
+      console.log("3", newSlotsValue, currentSlots.slots);
+      // Render the updated slots value in the secret_admin page
+      return res.render("secret_admin", {
+        name: req.user.username,
+        breakTracker: await getBreakTrackerData(),
+        breakSlots: breakSlots
+      });
+    } else if (newSlotsValue == currentSlots.slots) { // <-- Updated condition
+      console.log("4", newSlotsValue, currentSlots.slots);
+      req.session.slotsAvailable = "Same value";
+      return res.render("secret_admin", {
+        name: req.user.username,
+        breakTracker: await getBreakTrackerData(),
+        breakSlots: currentSlots // pass currentSlots instead of breakSlots
+      });
+    }
   } catch (error) {
     console.error(error);
     req.session.slotsAvailable = "Error";
-    return res.status(500).send('Internal server error');
+    return res.redirect("secret_admin");
   }
 });
-
 
 // START BUTTON FOR BREAKS
 app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
