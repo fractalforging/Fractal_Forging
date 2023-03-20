@@ -1,0 +1,22 @@
+[[33m20/03/2023 23:28:45[39m] info: MongoDB connected successfully!
+[[33m20/03/2023 23:28:45[39m] info: Starting server on port:
+[[33m20/03/2023 23:28:45[39m] info: Server Up and running on port: 
+[[33m20/03/2023 23:29:50[39m] [90minfo[39m: MongoDB connected successfully!
+[[33m20/03/2023 23:29:50[39m] [90minfo[39m: Starting server on port:
+[[33m20/03/2023 23:29:50[39m] [90minfo[39m: Server Up and running on port: 
+[[33m20/03/2023 23:30:23[39m] [90minfo[39m: MongoDB connected successfully!
+[[33m20/03/2023 23:30:23[39m] [90minfo[39m: Starting server on port:
+[[33m20/03/2023 23:30:23[39m] [90minfo[39m: Server Up and running on port: 
+[[33m20/03/2023 23:36:14[39m] [90minfo[39m: MongoDB connected successfully!
+[[33m20/03/2023 23:36:14[39m] [90minfo[39m: Starting server on port:
+[[33m20/03/2023 23:36:14[39m] [90minfo[39m: Server Up and running on port: 
+[[33m20/03/2023 23:36:31[39m] [33mwarn[39m: Login successful for user:
+[[33m20/03/2023 23:36:44[39m] [31merror[39m: Current password empty
+[[33m20/03/2023 23:36:50[39m] [31merror[39m: Current password empty
+[[33m20/03/2023 23:36:52[39m] [31merror[39m: Current password empty
+[[33m20/03/2023 23:36:55[39m] [33mwarn[39m: Resgistered new user: 
+[[33m20/03/2023 23:36:55[39m] [31merror[39m: Error: No username was given
+[[33m20/03/2023 23:37:00[39m] [33mwarn[39m: User Bruno role updated to user
+[[33m20/03/2023 23:37:02[39m] [33mwarn[39m: User Nutka role updated to admin
+[[33m20/03/2023 23:37:04[39m] [33mwarn[39m: User Nutka role updated to user
+[[33m20/03/2023 23:37:07[39m] [33mwarn[39m: User Bruno role updated to admin

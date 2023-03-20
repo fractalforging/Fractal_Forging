@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 const consoleStamp = require('console-stamp');
 const moment = require('moment-timezone');
+const logger = require('./serverjs/logger.js');
 
 // ENVIRONMENT VARIABLES
 const dotenv = require("dotenv")
@@ -19,15 +20,14 @@ const port = process.env.PORT;
 const location = process.env.LOCATION
 
 // CONSOLE TIME STAMPS
-const serverTime = "["+ moment.tz(new Date(), 'Europe/'+location).format('DD/MM/YYYY HH:mm:ss')+"]";
-require( 'console-stamp' )( console, {
+require('console-stamp')(console, {
   format: '(:foo()).yellow',
-  tokens:{
-      foo: () => {
-          return serverTime;
-      }
-  }
-} );
+  tokens: {
+    foo: () => {
+      return "[" + moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss') + "]";
+    },
+  },
+});
 
 // EXPRESS WEB SERVER CONFIGURATION
 const app = express();
@@ -49,7 +49,7 @@ const BreakQueue = require('./models/BreakQueue');
 
 // CONNECTION TO MONGODB
 if (!dbPath) {
-  console.error(
+  logger.error(
     "Error: No database path found in environment variables. Make sure to set the DB_PATH variable in your .env file."
   );
   process.exit(1);
@@ -62,15 +62,15 @@ mongoose.connect(
     useUnifiedTopology: true,
   },
   () => {
-    console.log("MongoDB connected successfully!");
+    logger.info("MongoDB connected successfully!");
     createAdminUser();
-    console.log("Starting server on port:", port); // Add this log before starting the server
-    app.listen(port, () => console.log("Server Up and running on port: ", port));
+    logger.info("Starting server on port:", port); // Add this log before starting the server
+    app.listen(port, () => logger.info("Server Up and running on port: ", port));
   }
 );
 
 mongoose.connection.on("error", (err) => {
-  console.error("MongoDB connection error:", err);
+  logger.error("MongoDB connection error:", err);
 });
 
 const UserSchema = new mongoose.Schema({
@@ -143,7 +143,7 @@ async function getBreakSlotsData() {
     }
     return breakSlots;
   } catch (err) {
-    console.log(err);
+    logger.error(err);
     return null;
   }
 }
@@ -213,7 +213,7 @@ app.post("/register", isAdmin, async function (req, res, next) {
     // Confirm password
     if (req.body.password !== req.body.confirmpassword) {
       req.session.newAccount = "Mismatch";
-      console.log("Password and confirm password do not match");
+      logger.error("Password and confirm password do not match");
       return res.render("register", { error: "Password and confirm password do not match" });
     }
     User.register(
@@ -221,7 +221,7 @@ app.post("/register", isAdmin, async function (req, res, next) {
       req.body.password,
       function (err, user) {
         if (err) {
-          console.log("Error:", err, typeof err);
+          logger.error("Error:", err, typeof err);
           if (err.name === 'UserExistsError') {
             req.session.newAccount = "Taken";
             return res.render("register", { error: 'Username taken' });
@@ -236,15 +236,15 @@ app.post("/register", isAdmin, async function (req, res, next) {
             return res.render("register", { error: 'Error creating user' });
           }
         }
-        console.log(user);
+        logger.info(user);
         req.session.newAccount = "Ok";
         return res.redirect("/secret_admin");
       }
     );
-    console.log("Resgistered new user: ", req.body.username);
+    logger.warn("Resgistered new user: ", req.body.username);
     //console.log(req.body.password);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).send('Internal server error');
   }
 });
@@ -254,12 +254,12 @@ app.post('/login', async function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
     if (err) {
       req.session.loggedIn = "error1";
-      console.log('An error1 occurred while logging in:', err);
+      logger.error('An error1 occurred while logging in:', err);
       return res.render("login", { message: "An error occurred while logging in" });
     }
     if (!user) {
       req.session.loggedIn = "false";
-      console.log('Incorrect username or password');
+      logger.error('Incorrect username or password');
       return res.render("login", { message: "Incorrect email or password" });
     }
     if (err || !user) {
@@ -269,10 +269,10 @@ app.post('/login', async function (req, res, next) {
     req.logIn(user, function (err) {
       if (err) {
         req.session.loggedIn = "error2";
-        console.log('An error2 occurred while logging in:', err);
+        logger.error('An error2 occurred while logging in:', err);
         return res.render("login", { message: "An error occurred while logging in" });
       }
-      console.log('Login successful for user:', user.username);
+      logger.warn('Login successful for user:', user.username);
       req.session.username = req.body.username;
       req.session.loggedIn = "true";
       return res.redirect("secret");
@@ -285,14 +285,14 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
   User.findOne({ username: req.user.username }, (err, user) => {
     if (err || !user) {
       req.session.passChange = "Error";
-      console.log(err || "User not found");
+      logger.error(err || "User not found");
       return res.render("account", { error: "Error, please try again", currentUser: req.user });
     }
 
     // Check if current password is empty
     if (!req.body.currentpassword) {
       req.session.passChange = "Wrong";
-      console.log("Current password empty");
+      logger.error("Current password empty");
       return res.render("account", { error: "Current password empty!", currentUser: req.user });
     }
 
@@ -307,30 +307,30 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
     user.authenticate(req.body.currentpassword, (err, valid) => {
       if (err || !valid) {
         req.session.passChange = "Wrong";
-        console.log("Current password wrong 2");
+        logger.error("Current password wrong 2");
         return res.render("account", { error: "Current password incorrect!", currentUser: req.user });
       }
       // Update password
       user.setPassword(req.body.newpassword, (err) => {
         if (err) {
           req.session.passChange = "Error";
-          console.log(err);
+          logger.error(err);
           return res.render("account", { error: "Error, please try again", currentUser: req.user });
         }
         user.save((err) => {
           if (err) {
             req.session.passChange = "Error";
-            console.log(err);
+            logger.error(err);
             return res.render("account", { error: "Error, please try again", currentUser: req.user });
           }
           req.logIn(user, (err) => {
             if (err) {
               req.session.passChange = "Error";
-              console.log(err);
+              logger.error(err);
               return res.render("account", { error: "Error, please try again", currentUser: req.user });
             }
             req.session.passChange = "Ok";
-            console.log("Password change for " + `${user.username}` + " was successfull");
+            logger.error("Password change for " + `${user.username}` + " was successfull");
             return res.redirect("/secret");
           });
         });
@@ -344,12 +344,12 @@ app.get("/logout", function (req, res, next) {
   const username = req.session.username; // Get the username from the session
   req.logout(function (err) {
     if (err) {
-      console.log(err);
+      logger.error(err);
     }
-    console.log('Logout successful for user:', username); // Use the username obtained from the session
+    logger.warn('Logout successful for user:', username); // Use the username obtained from the session
     req.session.destroy(function (err) {
       if (err) {
-        console.log(err);
+        logger.error(err);
       }
       return res.redirect("/");
     });
@@ -394,7 +394,7 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
       );
 
       req.session.slotsAvailable = "Updated";
-      console.error("Slots were updated to:", newSlotsValue);
+      logger.error("Slots were updated to:", newSlotsValue);
       // Render the updated slots value in the secret_admin page
       return res.redirect("secret_admin");
     } else if (newSlotsValue == currentSlots.slots) { // <-- Updated condition
@@ -402,7 +402,7 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
       return res.redirect("secret_admin");
     }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     req.session.slotsAvailable = "Error";
     return res.redirect("secret_admin");
   }
@@ -415,7 +415,7 @@ app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
 
   BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, (err, breakEntry) => {
     if (err) {
-      console.error(err);
+      logger.error(err);
       res.status(500).send("An error occurred while updating the break status.");
     } else {
       res.status(200).send("Break status updated successfully.");
@@ -438,15 +438,16 @@ app.put('/users/:id', isAdmin, async (req, res, next) => {
     const adminUsers = users.filter(user => user.roles === 'admin');
     const normalUsers = users.filter(user => user.roles === 'user');
     const userId = req.params.id;
+    const userToUpdate = await User.findById(userId);
     const newRole = req.body.role;
     await User.findByIdAndUpdate(userId, { roles: newRole });
     req.session.roleChange = "Role changed";
-    console.log(`User ${userId} role updated to ${newRole}`);
+    logger.warn(`User ${userToUpdate.username} role updated to ${newRole}`);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } catch (err) {
     req.session.roleChange = "Error1";
-    console.error(`Error updating user ${userId} role: ${err.message}`);
-    console.log(err);
+    logger.error(`Error updating user ${userToUpdate.username} role: ${err.message}`);
+    logger.error(err);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   }
 });
@@ -454,19 +455,21 @@ app.put('/users/:id', isAdmin, async (req, res, next) => {
 // DELETE request to delete a user
 app.delete('/accounts/:id', isAdmin, async (req, res, next) => {
   let userId; // Define userId outside the try block
+  let userToDelete; // Define userToDelete outside the try block
   try {
     const users = await User.find({});
     const adminUsers = users.filter(user => user.roles === 'admin');
     const normalUsers = users.filter(user => user.roles === 'user');
     userId = req.params.id;
+    userToDelete = await User.findById(userId);
     await User.findByIdAndDelete(userId);
     req.session.roleChange = "Deleted";
-    console.log(`User ${userId} deleted`);
+    logger.warn(`User ${userToDelete.username} deleted`);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } catch (err) {
     req.session.roleChange = "Error2";
-    console.error(`Error deleting user ${userId}: ${err.message}`);
-    console.log(err);
+    logger.error(`Error deleting user ${userToDelete.username}: ${err.message}`);
+    logger.error(err);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   }
 });
@@ -490,11 +493,11 @@ app.post("/", async function (req, res, next) {
   const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
   if (latestBreak && !latestBreak.endTime) {
     req.session.message = 'Only 1 break at a time';
-    console.log(req.session.message);
+    logger.info(req.session.message);
     return res.redirect("/secret");
   } else {
     req.session.message = 'Break submitted';
-    console.log(req.session.message, "for", req.user.username);
+    logger.info(req.session.message, "for", req.user.username);
     const breakTracker = new BreakTrack({
       user,
       startTime: new Date().toUTCString(),//serverTime, //new Date().toUTCString(),
@@ -512,7 +515,7 @@ app.post("/", async function (req, res, next) {
 
 // CATCH ERRORS
 app.use(function (err, req, res, next) {
-  console.error(err.stack);
+  logger.error(err.stack);
   return res.status(500).send('Something broke!');
 });
 
