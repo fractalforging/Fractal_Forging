@@ -1,10 +1,10 @@
 const responseMap = {
-    // // LOGIN
-    // "true": { status: 200, message: "Login successful!" },
-    // "false": { status: 401, message: "Wrong credentials!" },
-    // "error1": { status: 401, message: "Error1" },
-    // "error2": { status: 401, message: "error2" },
-    // "errorx": { status: 401, message: "errorx" },
+    // LOGIN
+    "true": { status: 200, message: "Login successful!" },
+    "false": { status: 401, message: "Wrong credentials!" },
+    "error1": { status: 401, message: "Error1" },
+    "error2": { status: 401, message: "error2" },
+    "errorx": { status: 401, message: "errorx" },
     // USER REGISTRATION
     "Taken": { status: 401, message: "Username taken" },
     "Error": { status: 500, message: "Error! Try again" },

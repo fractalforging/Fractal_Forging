@@ -275,7 +275,7 @@ app.post('/login', async function (req, res, next) {
         return res.render("login", { message: "An error occurred while logging in" });
       }
       logger.warn('Login successful for user: ' + user.username);
-
+      req.session.loggedIn = "true";
       return res.redirect("secret");
     });
   })(req, res, next);
