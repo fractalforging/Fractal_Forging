@@ -69,7 +69,7 @@ mongoose.connect(
   () => {
     console.log("MongoDB connected successfully!");
     createAdminUser();
-    app.listen(port, () => console.log("Server Up and running on port: ", port, "- Date: "));
+    app.listen(port, () => console.log("Server Up and running on port: ", port));
   }
 );
 
@@ -400,18 +400,10 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
       req.session.slotsAvailable = "Updated";
       console.error("Slots were updated to:", newSlotsValue);
       // Render the updated slots value in the secret_admin page
-      return res.render("secret_admin", {
-        name: req.user.username,
-        breakTracker: await getBreakTrackerData(),
-        breakSlots: breakSlots
-      });
+      return res.redirect("secret_admin");
     } else if (newSlotsValue == currentSlots.slots) { // <-- Updated condition
       req.session.slotsAvailable = "Same value";
-      return res.render("secret_admin", {
-        name: req.user.username,
-        breakTracker: await getBreakTrackerData(),
-        breakSlots: currentSlots // pass currentSlots instead of breakSlots
-      });
+      return res.redirect("secret_admin");
     }
   } catch (error) {
     console.error(error);
