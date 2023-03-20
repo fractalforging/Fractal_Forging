@@ -64,10 +64,10 @@ mongoose.connect(
   () => {
     logger.info("MongoDB connected successfully!");
     createAdminUser();
-    logger.info("Starting server on port:", port); // Add this log before starting the server
-    app.listen(port, () => logger.info("Server Up and running on port: ", port));
+    app.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
   }
 );
+
 
 mongoose.connection.on("error", (err) => {
   logger.error("MongoDB connection error:", err);
@@ -252,6 +252,8 @@ app.post("/register", isAdmin, async function (req, res, next) {
 //Handling user login
 app.post('/login', async function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
+    req.session.username = req.body.username;
+    req.session.loggedIn = "true";
     if (err) {
       req.session.loggedIn = "error1";
       logger.error('An error1 occurred while logging in:', err);
@@ -272,9 +274,8 @@ app.post('/login', async function (req, res, next) {
         logger.error('An error2 occurred while logging in:', err);
         return res.render("login", { message: "An error occurred while logging in" });
       }
-      logger.warn('Login successful for user:', user.username);
-      req.session.username = req.body.username;
-      req.session.loggedIn = "true";
+      logger.warn('Login successful for user: ' + user.username);
+
       return res.redirect("secret");
     });
   })(req, res, next);
@@ -341,12 +342,12 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
 
 //Handling user logout
 app.get("/logout", function (req, res, next) {
-  const username = req.session.username; // Get the username from the session
+  const username = req.user.username; // Get the username from the user object
   req.logout(function (err) {
     if (err) {
       logger.error(err);
     }
-    logger.warn('Logout successful for user:', username); // Use the username obtained from the session
+    logger.warn('Logout successful for user: ' + username); // Use the username obtained from the user object
     req.session.destroy(function (err) {
       if (err) {
         logger.error(err);
