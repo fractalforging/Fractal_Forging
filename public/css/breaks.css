@@ -130,8 +130,9 @@ enter {
 }
 
 .break-list-item-admin {
+  font-size: var(--break-list-item-timer-font-size-admin);
   width: 250px;
-  height: 103px;
+  height: 98px;
   padding: 10px;
   margin-top: 10px;
   text-align: left;
@@ -198,9 +199,19 @@ enter {
   font-weight: var(--break-list-item-timer-font-weight);
 }
 
+.numerical-timer-admin {
+  position: relative;
+  top: 0%;
+  font-family: var(--break-list-item-timer-font-family);
+  font-size: var(--break-list-item-timer-font-size-admin);
+  font-weight: var(--break-list-item-timer-font-weight);
+}
+
+
+
 info {
   font-family: var(--break-list-item-timer-font-family);
-  font-size: var(--break-list-item-timer-font-size);
+  font-size: var(--break-list-item-timer-font-size-admin);
   font-weight: var(--break-list-item-timer-font-weight);
 } 
 
@@ -224,6 +235,8 @@ nonstart {
 }
 
 .time-over {
+  position: relative;
+  top: 1px;
   color: var(--break-list-item-time-over-color);
   font-family: var(--break-list-item-timer-font-family);
   font-size: var(--break-list-item-timer-font-size);

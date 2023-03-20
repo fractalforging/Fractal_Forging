@@ -48,18 +48,18 @@
 
 <!-- users.ejs -->
 
-<greet>Users</greet><br><br>
+<greet>Accounts</greet><br><br>
 
 <!-- List all the admin users first -->
 <ul id="admin-users" class="roles-list">
     <% adminUsers.forEach(user=> { %>
         <ul>
-            <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
-                <div class="break-list-item-name-user">
-                    <span>
-                        <%= user.username %>
-                    </span>
-                    <% if (user.username !=='admin' ) { %>
+            <% if (user.username !=='admin' ) { %>
+                <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
+                    <div class="break-list-item-name-user">
+                        <span>
+                            <%= user.username %>
+                        </span>
                         <select class="item-button">
                             <% if (user.roles==='admin' ) { %>
                                 <option value="admin" selected>Admin</option>
@@ -71,8 +71,8 @@
                                         <option value="delete" class="delete-option">Delete</option>
                         </select>
                         <% } %>
-                </div>
-            </li>
+                    </div>
+                </li>
         </ul>
         <% }); %>
 </ul>
@@ -88,18 +88,16 @@
                     <span>
                         <%= user.username %>
                     </span>
-                    <% if (user.username !=='admin' ) { %>
-                        <select class="item-button">
-                            <% if (user.roles==='admin' ) { %>
-                                <option value="admin" selected>Admin</option>
-                                <option value="user">User</option>
-                                <% } else { %>
-                                    <option value="admin">Admin</option>
-                                    <option value="user" selected>User</option>
-                                    <% } %>
-                                        <option value="delete" class="delete-option">Delete</option>
-                        </select>
-                        <% } %>
+                    <select class="item-button">
+                        <% if (user.roles==='admin' ) { %>
+                            <option value="admin" selected>Admin</option>
+                            <option value="user">User</option>
+                            <% } else { %>
+                                <option value="admin">Admin</option>
+                                <option value="user" selected>User</option>
+                                <% } %>
+                                    <option value="delete" class="delete-option">Delete</option>
+                    </select>
                 </div>
             </li>
         </ul>

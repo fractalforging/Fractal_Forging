@@ -22,7 +22,7 @@ const responseMap = {
     "Break submitted": { status: 200, message: "Break submitted" },
     // SLOTS AVAILABLE
     "Same value": { status: 401, message: "Same value!" },
-    "Updated": { status: 200, message: "Slots updated" }
+    "Updated": { status: 200, message: "Slots updated to" }
 };
 
 async function myMessages(req, res, next) {

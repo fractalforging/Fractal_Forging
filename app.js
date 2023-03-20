@@ -1,44 +1,46 @@
 //=====================
 // NODE.JS SETUP
 //=====================
-
-const path = require("path");
-const passportLocalMongoose = require("passport-local-mongoose");
-//const bcrypt = require("bcrypt");
-const mongoose = require("mongoose");
 const express = require("express");
+const path = require("path");
+const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 const consoleStamp = require('console-stamp');
 const moment = require('moment-timezone');
-const port = process.env.PORT || 3002;
 
-// const serverTime = moment.tz(new Date(), 'Europe/Warsaw').format('ddd, DD MMM YYYY HH:mm:ss');
-// consoleStamp(console, {
-//   format: function() {
-//     return moment().tz('Europe/Warsaw').format('ddd, DD MMM YYYY HH:mm:ss');
-//   }
-// });
+// ENVIRONMENT VARIABLES
+const dotenv = require("dotenv")
+dotenv.config({ path: "variables.env" });
+const dbPath = process.env.DB_PATH;
+const port = process.env.PORT;
+const location = process.env.LOCATION
 
-require('console-stamp')(console, { 
-  format: ':date(yyyy/mm/dd HH:MM:ss.l)' 
+// CONSOLE TIME STAMPS
+const serverTime = "["+ moment.tz(new Date(), 'Europe/'+location).format('DD/MM/YYYY HH:mm:ss')+"]";
+require( 'console-stamp' )( console, {
+  format: '(:foo()).yellow',
+  tokens:{
+      foo: () => {
+          return serverTime;
+      }
+  }
 } );
 
-
-
+// EXPRESS WEB SERVER CONFIGURATION
 const app = express();
 app.set('views', 'pages');
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-
 //=====================
 // DATABASE
 //=====================
 
-// SCHEMAS
+// SCHEMAS / MODELS
 const createAdminUser = require("./models/firstRun");
 const User = require('./models/user');
 const BreakTrack = require("./models/BreakTrack");
@@ -46,13 +48,6 @@ const BreakSlots = require('./models/BreakSlots');
 const BreakQueue = require('./models/BreakQueue');
 
 // CONNECTION TO MONGODB
-require("dotenv").config({ path: "mongodb.env" });
-const dotenv = require("dotenv");
-//const BreakTrack = require("./models/BreakTrack");
-
-dotenv.config();
-const dbPath = process.env.DB_PATH;
-
 if (!dbPath) {
   console.error(
     "Error: No database path found in environment variables. Make sure to set the DB_PATH variable in your .env file."
@@ -69,6 +64,7 @@ mongoose.connect(
   () => {
     console.log("MongoDB connected successfully!");
     createAdminUser();
+    console.log("Starting server on port:", port); // Add this log before starting the server
     app.listen(port, () => console.log("Server Up and running on port: ", port));
   }
 );
