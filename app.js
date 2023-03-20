@@ -157,7 +157,7 @@ async function getBreakSlotsData() {
 //=====================
 
 // SERVER SCRIPTS
-const apiMessages = require('./serverjs/apiMessages');
+const apiMessages = require('./serverjs/apiMessages.js');
 
 // API MESSAGES FOR MODAL MESSAGING
 app.get('/api/messaging', apiMessages.myMessages);
