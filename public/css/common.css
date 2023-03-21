@@ -202,7 +202,7 @@ description {
 }
 
 slots {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 500;
   font-family: "Share Tech Mono";
   transition: all var(--animation-duration-base) ease-in-out;
