@@ -110,6 +110,7 @@ enter {
 
 
 .break-list-item-user {
+  
   width: 250px;
   height: 20px;
   padding: 10px;
@@ -192,12 +193,13 @@ enter {
 }
 
 .numerical-timer {
+  opacity: 0;
   position: relative;
   top: 1px;
   font-family: var(--break-list-item-timer-font-family);
   font-size: var(--break-list-item-timer-font-size);
   font-weight: var(--break-list-item-timer-font-weight);
-  animation: fade-in 2s ease-in;
+  animation: fade-in 0.5s ease-in 1s forwards;
 }
 
 .numerical-timer-admin {
@@ -206,16 +208,7 @@ enter {
   font-family: var(--break-list-item-timer-font-family);
   font-size: var(--break-list-item-timer-font-size-admin);
   font-weight: var(--break-list-item-timer-font-weight);
-  animation: fade-in 1s ease-in;
-}
-
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+  animation: fade-in 0.5s ease-in 1s forwards;
 }
 
 info {
@@ -244,13 +237,14 @@ nonstart {
 }
 
 .time-over {
+  opacity: 0;
   position: relative;
   top: 1px;
   color: var(--break-list-item-time-over-color);
   font-family: var(--break-list-item-timer-font-family);
   font-size: var(--break-list-item-timer-font-size);
   font-weight: var(--break-list-item-timer-font-weight);
-  animation: flash var(--animation-duration-more) linear infinite;
+  animation: flash var(--animation-duration-more) ease-in-out infinite;
 }
 
 @keyframes flash {
@@ -258,22 +252,26 @@ nonstart {
     opacity: 1;
   }
 
-  90% {
-    opacity: 0;
-  }
 
   100% {
-    opacity: 1;
+    opacity: 0;
   }
 }
 
+.start-break {
+  opacity: 0;
+  animation: fade-in 1s ease-in-out forwards;
+}
+
 .remove-user {
+  opacity: 0;
   position: relative;
   top: -3px;
   right: -10px;
   margin-left: -7px;
   transform: scale(0.8) translateX(0);
   display: none;
+  animation: fade-in 1s ease-in-out forwards;
 }
 
 .remove-admin {
@@ -337,3 +335,30 @@ filer {
   }
 }
 
+/* /////////// - FADES - //////////// */
+
+.fade-in {
+  animation: fade-in 0.5s ease-in-out forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.fade-out {
+  animation: fade-out 0.3s ease-in-out forwards;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

@@ -59,42 +59,36 @@ function onTimerEnded(id) {
 ///////// - START BUTTON - //////////
 
 async function onStartButtonClick(event) {
-  socket.emit('reload');
-  //setTimeout(() => { location.reload(); }, 250);
   console.log('Start button clicked');
   const breakId = event.target.dataset.id;
   try {
     const response = await fetch(`/breaks/start/${breakId}`, { method: 'POST' });
     if (response.ok) {
-      //socket.emit('reload');
       event.target.style.display = 'none';
-      location.reload();
       const timerElement = document.querySelector(`.timer-${breakId}`);
       timerElement.style.display = 'inline';
       document.querySelector(`#remove_user_${breakId}`).style.display = 'none';
       myFingTimer(breakId, true);
+      socket.emit('reload');
+      setTimeout(() => { location.reload(); }, 250);
     } else {
       console.error("Error starting the break.");
     }
-  } catch (error) {
-    console.error("Error starting the break: ", error);
-  }
+  } catch (error) { console.error("Error starting the break: ", error); }
 }
 
 async function removeBreak(breakId, beforeStart) {
-  socket.emit('reload');
-  //setTimeout(() => { location.reload(); }, 250);
   try {
     const response = await fetch(`/remove/${breakId}?beforeStart=${beforeStart}`, { method: 'GET' });
+    const liElement = document.querySelector(`li.break-list-item-user #remove_user_${breakId}`).closest("li");
+    liElement.classList.add("fade-out");
+    socket.emit('reload');
+    setTimeout(() => { location.reload(); }, 250);
     if (response.ok) {
-      //socket.emit('reload');
-      //location.reload();
     } else {
       console.error("Error removing the break.");
     }
-  } catch (error) {
-    console.error("Error removing the break: ", error);
-  }
+  } catch (error) { console.error("Error removing the break: ", error); }
 }
 
 document.querySelectorAll('.start-break').forEach(button => {
