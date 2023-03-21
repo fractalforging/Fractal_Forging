@@ -2,7 +2,6 @@
 // NODE.JS SETUP
 //=====================
 const express = require("express");
-const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
@@ -13,23 +12,24 @@ const consoleStamp = require('console-stamp');
 const moment = require('moment-timezone');
 const logger = require('./serverjs/logger.js');
 
-//TEST
-const http = require('http');
-const socketio = require('socket.io');
-const server = http.createServer(app);
-const io = socketio(server);
-io.on('connection', (socket) => {
-  logger.warn('A user connected');
-  // Listen for the "reload" event
-  socket.on('reload', () => {
-    logger.warn('Reload event received');
-    io.emit('reload'); // Broadcast the "reload" event to all connected clients
-  });
-  socket.on('disconnect', () => {
-    logger.warn('A user disconnected');
-  });
-});
-
+// EXPRESS WEB SERVER CONFIGURATION
+const app = express();
+app.set('views', 'pages');
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(
+  require("express-session")({
+    secret: "Rusty is a dog",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 
 // ENVIRONMENT VARIABLES
 const dotenv = require("dotenv")
@@ -38,22 +38,28 @@ const dbPath = process.env.DB_PATH;
 const port = process.env.PORT;
 const location = process.env.LOCATION
 
-// // CONSOLE TIME STAMPS
-// require('console-stamp')(console, {
-//   format: '(:foo()).yellow',
-//   tokens: {
-//     foo: () => {
-//       return "[" + moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss') + "]";
-//     },
-//   },
-// });
+//SOCKET.IO BROADCASTING CHANGES
+const http = require('http');
+const { Server } = require('socket.io');
+const server = http.createServer(app);
+const io = new Server(server, {
+  serveClient: true
+});
 
-// EXPRESS WEB SERVER CONFIGURATION
+app.get('/socket.io/socket.io.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'node_modules', 'socket.io', 'client-dist', 'socket.io.js'));
+});
 
-app.set('views', 'pages');
-app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
+io.on('connection', (socket) => {
+  //logger.warn('A user connected');
+  socket.on('reload', () => {
+    //logger.warn('Reload event received');
+    io.emit('reload'); 
+  });
+  socket.on('disconnect', () => {
+    //logger.warn('A user disconnected');
+  });
+});
 
 //=====================
 // DATABASE
@@ -83,10 +89,9 @@ mongoose.connect(
   () => {
     logger.info("MongoDB connected successfully!");
     createAdminUser();
-    app.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
+    server.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
   }
 );
-
 
 mongoose.connection.on("error", (err) => {
   logger.error("MongoDB connection error:", err);
@@ -101,33 +106,18 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.plugin(passportLocalMongoose);
-
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-
 module.exports = User;
 
 //=====================
 // MIDDLEWARE
 //=====================
 
-// middleware functions that use UserSchema and User go here
-app.use(
-  require("express-session")({
-    secret: "Rusty is a dog",
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+
 
 //
-
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
 
 // Check if logged in
 function isLoggedIn(req, res, next) {
@@ -223,7 +213,7 @@ app.get("/register", isAdmin, function (req, res, next) {
   return res.render("register");
 });
 
-// Handling user registration
+// HANDLING USER REGISTRATION
 app.post("/register", isAdmin, async function (req, res, next) {
   try {
     // Get the current break slots value from the database
@@ -268,7 +258,7 @@ app.post("/register", isAdmin, async function (req, res, next) {
   }
 });
 
-//Handling user login
+// HANDLING USER LOGIN
 app.post('/login', async function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
     req.session.username = req.body.username;
@@ -300,7 +290,7 @@ app.post('/login', async function (req, res, next) {
   })(req, res, next);
 });
 
-// Handling password change
+// HANDLING PASSWORD CHANGE
 app.post("/changepassword", isLoggedIn, function (req, res, next) {
   User.findOne({ username: req.user.username }, (err, user) => {
     if (err || !user) {
@@ -359,7 +349,7 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
   });
 });
 
-//Handling user logout
+//HANDLING USER LOGOUT
 app.get("/logout", function (req, res, next) {
   const username = req.user.username; // Get the username from the user object
   req.logout(function (err) {
@@ -376,12 +366,12 @@ app.get("/logout", function (req, res, next) {
   });
 });
 
-//Handling account
+//HANDLING ACCOUNT
 app.get("/account", isLoggedIn, function (req, res, next) {
   return res.render("account", { error: 'no error', currentUser: req.user });
 });
 
-//Handling Admins
+//HANDLING ADMINS
 app.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
   const breakSlots = await getBreakSlotsData();
   const breakTracker = await getBreakTrackerData();
@@ -401,7 +391,6 @@ app.use(function (req, res, next) {
 app.post("/break-slots", isAdmin, async function (req, res, next) {
   try {
     const newSlotsValue = req.body.slotsavailable;
-
     // Fetch the current number of available slots from the database
     const currentSlots = await BreakSlots.findOne();
     // Check if the selected number of available slots is the same as the current number
@@ -412,9 +401,9 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
         { $set: { slots: newSlotsValue } },
         { new: true, upsert: true }
       );
-
       req.session.slotsAvailable = "Updated";
-      logger.info("Slots were updated to: " + newSlotsValue);
+      io.emit('reload');
+      logger.info(`${req.user.username} updated the available slots to: ${newSlotsValue}`);
       // Render the updated slots value in the secret_admin page
       return res.redirect("secret_admin");
     } else if (newSlotsValue == currentSlots.slots) { // <-- Updated condition
@@ -458,7 +447,7 @@ app.put('/users/:id', isAdmin, async (req, res, next) => {
   }
 });
 
-// DELETE request to delete a user
+// DELETE ACCOUNT
 app.delete('/accounts/:id', isAdmin, async (req, res, next) => {
   let userId; // Define userId outside the try block
   let userToDelete; // Define userToDelete outside the try block
@@ -541,6 +530,7 @@ app.route("/edit/:id").get((req, res, next) => {
 })
   .post((req, res, next) => {
     const id = req.params.id;
+    io.emit('reload');
     BreakTrack.findByIdAndUpdate(
       id,
       {
@@ -557,15 +547,13 @@ app.route("/edit/:id").get((req, res, next) => {
 app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
   const breakId = req.params.id;
   const breakStartTimeStamp = new Date().toISOString(); // Get the current timestamp
-
   BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, (err, breakEntry) => {
     if (err) {
       logger.error(err);
       res.status(500).send("An error occurred while updating the break status.");
     } else {
-      // Log the message
+      //io.emit('reload');
       logger.info(`${req.user.username} confirmed a break of ${breakEntry.duration} minute(s)`);
-
       res.status(200).send("Break status updated successfully.");
     }
   });
@@ -576,33 +564,30 @@ app.get("/remove/:id", async (req, res, next) => {
   const id = req.params.id;
   const beforeStart = req.query.beforeStart === 'true';
   const isAdmin = req.query.isAdmin === 'true';
-
   try {
     const breakToRemove = await BreakTrack.findById(id);
     const userToUpdate = await User.findOne({ username: breakToRemove.user });
     let actionUser;
-
     if (isAdmin) {
       actionUser = await User.findOne({ username: "admin" });
     } else {
       actionUser = await User.findOne({ username: userToUpdate.username });
     }
-
     await BreakTrack.findByIdAndRemove(id);
-
     let logMessage = '';
-
     if (isAdmin) {
       logMessage = `admin removed ${userToUpdate.username}'s break `;
     } else {
       logMessage = `${userToUpdate.username} removed break `;
     }
-
     if (beforeStart) {
+      io.emit('reload');
       logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break before break start`);
     } else if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
+      io.emit('reload');
       logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break after break start`);
     } else {
+      io.emit('reload');
       logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break after break end`);
     }
     // logger.debug("beforeStart: " + beforeStart);
@@ -630,7 +615,5 @@ app.post("/breaks/:id/end", async (req, res, next) => {
 
 
 
-// KILL PORT PROCESSES kill -9 $(lsof -t -i:3000)
-// netstat -ano | findstr :3002
-// taskkill /F /PID 24860
+
 
