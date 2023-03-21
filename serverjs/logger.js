@@ -9,7 +9,7 @@ dotenv.config({ path: "variables.env" });
 const location = process.env.LOCATION
 
 const timestampInTimeZone = () => {
-  return kleur.yellow(moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss'));
+  return kleur.cyan(moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss'));
 };
 
 const dailyRotateFileTransport = new transports.DailyRotateFile({
@@ -26,7 +26,7 @@ const logger = createLogger({
       let colorizedLevel;
       switch (level) {
         case 'info':
-          colorizedLevel = kleur.grey(level);
+          colorizedLevel = kleur.green(level);
           break;
         case 'error':
           colorizedLevel = kleur.red(level);
