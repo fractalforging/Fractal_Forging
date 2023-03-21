@@ -576,6 +576,7 @@ app.route("/edit/:id").get((req, res, next) => {
 app.get("/remove/:id", async (req, res, next) => {
   const id = req.params.id;
   const beforeStart = req.query.beforeStart === 'true';
+  const isAdmin = req.query.isAdmin === 'true';
 
   try {
     const breakToRemove = await BreakTrack.findById(id);
@@ -583,11 +584,22 @@ app.get("/remove/:id", async (req, res, next) => {
 
     await BreakTrack.findByIdAndRemove(id);
 
-    if (beforeStart) {
-      logger.info(`${userToUpdate.username} removed break before break start`);
+    let logMessage = '';
+
+    if (isAdmin) {
+      logMessage = `admin removed ${userToUpdate.username}'s break `;
     } else {
-      logger.info(`${userToUpdate.username} removed break after break end`);
+      logMessage = `${userToUpdate.username} removed break `;
     }
+
+    if (beforeStart) {
+      logger.info(logMessage + 'before break start');
+    } else if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
+      logger.info(logMessage + 'after break start');
+    } else {
+      logger.info(logMessage + 'after break end');
+    }
+
     //io.emit('reload');
     return res.redirect("/secret");
   } catch (err) {
@@ -595,6 +607,7 @@ app.get("/remove/:id", async (req, res, next) => {
     return res.status(500).send(err);
   }
 });
+
 
 
 // KILL PORT PROCESSES kill -9 $(lsof -t -i:3000)
