@@ -2,6 +2,7 @@
 // NODE.JS SETUP
 //=====================
 const express = require("express");
+const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
@@ -11,6 +12,24 @@ const LocalStrategy = require("passport-local");
 const consoleStamp = require('console-stamp');
 const moment = require('moment-timezone');
 const logger = require('./serverjs/logger.js');
+
+//TEST
+const http = require('http');
+const socketio = require('socket.io');
+const server = http.createServer(app);
+const io = socketio(server);
+io.on('connection', (socket) => {
+  logger.warn('A user connected');
+  // Listen for the "reload" event
+  socket.on('reload', () => {
+    logger.warn('Reload event received');
+    io.emit('reload'); // Broadcast the "reload" event to all connected clients
+  });
+  socket.on('disconnect', () => {
+    logger.warn('A user disconnected');
+  });
+});
+
 
 // ENVIRONMENT VARIABLES
 const dotenv = require("dotenv")
@@ -30,7 +49,7 @@ require('console-stamp')(console, {
 });
 
 // EXPRESS WEB SERVER CONFIGURATION
-const app = express();
+
 app.set('views', 'pages');
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -499,6 +518,7 @@ app.post("/", async function (req, res, next) {
   } else {
     req.session.message = 'Break submitted';
     logger.info(req.session.message, "for", req.user.username);
+    io.emit('reload');
     const breakTracker = new BreakTrack({
       user,
       startTime: new Date().toUTCString(),//serverTime, //new Date().toUTCString(),
@@ -550,6 +570,7 @@ app.route("/remove/:id").get((req, res, next) => {
   const id = req.params.id;
   BreakTrack.findByIdAndRemove(id, (err) => {
     if (err) return res.send(500, err);
+    io.emit('reload');
     return res.redirect("/secret");
   });
 });
