@@ -38,15 +38,15 @@ const dbPath = process.env.DB_PATH;
 const port = process.env.PORT;
 const location = process.env.LOCATION
 
-// CONSOLE TIME STAMPS
-require('console-stamp')(console, {
-  format: '(:foo()).yellow',
-  tokens: {
-    foo: () => {
-      return "[" + moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss') + "]";
-    },
-  },
-});
+// // CONSOLE TIME STAMPS
+// require('console-stamp')(console, {
+//   format: '(:foo()).yellow',
+//   tokens: {
+//     foo: () => {
+//       return "[" + moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss') + "]";
+//     },
+//   },
+// });
 
 // EXPRESS WEB SERVER CONFIGURATION
 
@@ -414,11 +414,12 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
       );
 
       req.session.slotsAvailable = "Updated";
-      logger.error("Slots were updated to:", newSlotsValue);
+      logger.info("Slots were updated to: " + newSlotsValue);
       // Render the updated slots value in the secret_admin page
       return res.redirect("secret_admin");
     } else if (newSlotsValue == currentSlots.slots) { // <-- Updated condition
       req.session.slotsAvailable = "Same value";
+      logger.error("Slots were NOT updated, same value chosen");
       return res.redirect("secret_admin");
     }
   } catch (error) {
