@@ -1,10 +1,10 @@
 .grid-container {
   display: inline-grid;
-  width: 180x;
+  width: 125x;
   gap: 5px;
   background-color: var(--grid-container-background-color);
   padding: 5px;
-  grid-template-columns: 80px 40px 40px;
+  grid-template-columns: 80px 40px;
   grid-template-rows: 45px;
 }
 
@@ -37,10 +37,10 @@
   grid-row: 1;
 }
 
-.item3 {
+/* .item3 {
   grid-column: 3;
   grid-row: 1;
-}
+} */
 
 /*///////////*/
 

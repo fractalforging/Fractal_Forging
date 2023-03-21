@@ -493,7 +493,7 @@ app.get("/", (req, res, next) => {
   });
 });
 
-// POST METHOD
+// SUBMIT BREAKS 
 app.post("/", async function (req, res, next) {
   const user = req.user.username;
   const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
@@ -605,9 +605,9 @@ app.get("/remove/:id", async (req, res, next) => {
     } else {
       logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break after break end`);
     }
-    logger.debug("beforeStart: " + beforeStart);
-    logger.debug("breakToRemove.hasStarted: " + breakToRemove.hasStarted);
-    logger.debug("breakToRemove.hasEnded: " + breakToRemove.hasEnded);
+    // logger.debug("beforeStart: " + beforeStart);
+    // logger.debug("breakToRemove.hasStarted: " + breakToRemove.hasStarted);
+    // logger.debug("breakToRemove.hasEnded: " + breakToRemove.hasEnded);
     //io.emit('reload');
     return res.redirect("/secret");
   } catch (err) {
