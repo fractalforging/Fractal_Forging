@@ -24,24 +24,38 @@ startTimer = (myDuration, display, id) => {
 function onTimerEnded(id) {
     let display = document.querySelector(`.timer-${id}`);
     if (!display) return;
-
+  
     display.textContent = "OVER";
     display.classList.add("time-over");
-
+  
     try {
-        let breakListItem = display.closest('.break-list-item-user');
-        if (breakListItem) {
-            let removeButton = breakListItem.querySelector('.remove-user');
-            if (removeButton) {
-                removeButton.style.display = "inline";
-                // Add this line to update the onclick attribute of the remove button
-                removeButton.setAttribute('onclick', `removeBreak('${id}', false)`);
-            }
+      let breakListItem = display.closest('.break-list-item-user');
+      if (breakListItem) {
+        let removeButton = breakListItem.querySelector('.remove-user');
+        if (removeButton) {
+          removeButton.style.display = "inline";
+          // Add this line to update the onclick attribute of the remove button
+          removeButton.setAttribute('onclick', `removeBreak('${id}', false)`);
         }
+      }
     } catch (error) {
-        //console.log(error);
+      console.log(error);
     }
-}
+  
+    // send a request to the server to update hasEnded field
+    fetch(`/breaks/${id}/end`, { method: 'POST' })
+    .then(response => {
+      if (response.ok) {
+        logger.info(`Break ${id} has ended`);
+      } else {
+          logger.error(`Failed to update the hasEnded field for break ${id}`);
+      }
+    })
+    .catch(error => {
+      logger.error(`Error updating the hasEnded field for break ${id}: `, error);
+    });
+  }
+  
 
 
 ///////// - START BUTTON - //////////

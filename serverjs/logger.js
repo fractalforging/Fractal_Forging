@@ -2,6 +2,7 @@ const { createLogger, format, transports } = require('winston');
 const DailyRotateFile = require('winston-daily-rotate-file');
 const moment = require('moment-timezone');
 const kleur = require('kleur');
+const debug = require('debug')('myapp:debug');
 
 // ENVIRONMENT VARIABLES
 const dotenv = require("dotenv")
@@ -20,6 +21,7 @@ const dailyRotateFileTransport = new transports.DailyRotateFile({
 });
 
 const logger = createLogger({
+  level: 'debug', // set log level to debug
   format: format.combine(
     format.timestamp({ format: timestampInTimeZone }),
     format.printf(({ timestamp, level, message }) => {
@@ -34,6 +36,9 @@ const logger = createLogger({
         case 'warn':
           colorizedLevel = kleur.yellow(level);
           break;
+        case 'debug':
+          colorizedLevel = kleur.magenta(level);
+          break;
         default:
           colorizedLevel = level;
       }
@@ -42,5 +47,7 @@ const logger = createLogger({
   ),
   transports: [dailyRotateFileTransport, new transports.Console()],
 });
+
+debug('Debug log message'); // output debug log message to console
 
 module.exports = logger;

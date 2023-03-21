@@ -429,25 +429,6 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
   }
 });
 
-// START BUTTON FOR BREAKS
-app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
-  const breakId = req.params.id;
-  const breakStartTimeStamp = new Date().toISOString(); // Get the current timestamp
-
-  BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, (err, breakEntry) => {
-    if (err) {
-      logger.error(err);
-      res.status(500).send("An error occurred while updating the break status.");
-    } else {
-      // Log the message
-      logger.info(`${req.user.username} confirmed a break of ${breakEntry.duration} minute(s)`);
-
-      res.status(200).send("Break status updated successfully.");
-    }
-  });
-});
-
-
 // USER'S PAGE
 app.get('/users', isAdmin, async (req, res, next) => {
   const users = await User.find({});
@@ -572,6 +553,24 @@ app.route("/edit/:id").get((req, res, next) => {
     );
   });
 
+// START BUTTON FOR BREAKS
+app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
+  const breakId = req.params.id;
+  const breakStartTimeStamp = new Date().toISOString(); // Get the current timestamp
+
+  BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, (err, breakEntry) => {
+    if (err) {
+      logger.error(err);
+      res.status(500).send("An error occurred while updating the break status.");
+    } else {
+      // Log the message
+      logger.info(`${req.user.username} confirmed a break of ${breakEntry.duration} minute(s)`);
+
+      res.status(200).send("Break status updated successfully.");
+    }
+  });
+});
+
 // DELETE
 app.get("/remove/:id", async (req, res, next) => {
   const id = req.params.id;
@@ -581,6 +580,13 @@ app.get("/remove/:id", async (req, res, next) => {
   try {
     const breakToRemove = await BreakTrack.findById(id);
     const userToUpdate = await User.findOne({ username: breakToRemove.user });
+    let actionUser;
+
+    if (isAdmin) {
+      actionUser = await User.findOne({ username: "admin" });
+    } else {
+      actionUser = await User.findOne({ username: userToUpdate.username });
+    }
 
     await BreakTrack.findByIdAndRemove(id);
 
@@ -593,18 +599,32 @@ app.get("/remove/:id", async (req, res, next) => {
     }
 
     if (beforeStart) {
-      logger.info(logMessage + 'before break start');
+      logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break before break start`);
     } else if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
-      logger.info(logMessage + 'after break start');
+      logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break after break start`);
     } else {
-      logger.info(logMessage + 'after break end');
+      logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break after break end`);
     }
-
+    logger.debug("beforeStart: " + beforeStart);
+    logger.debug("breakToRemove.hasStarted: " + breakToRemove.hasStarted);
+    logger.debug("breakToRemove.hasEnded: " + breakToRemove.hasEnded);
     //io.emit('reload');
     return res.redirect("/secret");
   } catch (err) {
     console.error("Error removing the break: ", err);
     return res.status(500).send(err);
+  }
+});
+
+// BREAK ENDED
+app.post("/breaks/:id/end", async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    await BreakTrack.findByIdAndUpdate(id, { hasEnded: true });
+    res.sendStatus(200);
+  } catch (err) {
+    console.error("Error updating hasEnded field: ", err);
+    res.sendStatus(500);
   }
 });
 

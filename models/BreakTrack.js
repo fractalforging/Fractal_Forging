@@ -20,10 +20,13 @@ const breakTrackerSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  hasEnded: {
+    type: Boolean,
+    default: false
+  },
   breakStartTimeStamp: { 
     type: String,
     default: null
   }
 });
 module.exports = mongoose.model('BreakTrack', breakTrackerSchema);
- 
