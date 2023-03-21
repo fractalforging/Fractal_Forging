@@ -60,7 +60,7 @@ function onTimerEnded(id) {
 
 async function onStartButtonClick(event) {
   socket.emit('reload');
-  setTimeout(() => { location.reload(); }, 100);
+  //setTimeout(() => { location.reload(); }, 250);
   console.log('Start button clicked');
   const breakId = event.target.dataset.id;
   try {
@@ -68,6 +68,7 @@ async function onStartButtonClick(event) {
     if (response.ok) {
       //socket.emit('reload');
       event.target.style.display = 'none';
+      location.reload();
       const timerElement = document.querySelector(`.timer-${breakId}`);
       timerElement.style.display = 'inline';
       document.querySelector(`#remove_user_${breakId}`).style.display = 'none';
@@ -81,10 +82,12 @@ async function onStartButtonClick(event) {
 }
 
 async function removeBreak(breakId, beforeStart) {
+  socket.emit('reload');
+  //setTimeout(() => { location.reload(); }, 250);
   try {
     const response = await fetch(`/remove/${breakId}?beforeStart=${beforeStart}`, { method: 'GET' });
     if (response.ok) {
-      socket.emit('reload');
+      //socket.emit('reload');
       //location.reload();
     } else {
       console.error("Error removing the break.");
