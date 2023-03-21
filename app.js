@@ -439,10 +439,14 @@ app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
       logger.error(err);
       res.status(500).send("An error occurred while updating the break status.");
     } else {
+      // Log the message
+      logger.info(`${req.user.username} confirmed a break of ${breakEntry.duration} minute(s)`);
+
       res.status(200).send("Break status updated successfully.");
     }
   });
 });
+
 
 // USER'S PAGE
 app.get('/users', isAdmin, async (req, res, next) => {
@@ -512,19 +516,21 @@ app.get("/", (req, res, next) => {
 app.post("/", async function (req, res, next) {
   const user = req.user.username;
   const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
+  const breakDuration = req.body.duration;
+
   if (latestBreak && !latestBreak.endTime) {
     req.session.message = 'Only 1 break at a time';
     logger.info(req.session.message);
     return res.redirect("/secret");
   } else {
     req.session.message = 'Break submitted';
-    logger.info(req.session.message, "for", req.user.username);
+    logger.info(`${user} submitted a break of ${breakDuration} minute(s)`);
     io.emit('reload');
     const breakTracker = new BreakTrack({
       user,
-      startTime: new Date().toUTCString(),//serverTime, //new Date().toUTCString(),
-      duration: req.body.duration,
-      date: new Date().toUTCString(),//serverTime, //new Date().toUTCString(),
+      startTime: new Date().toUTCString(),
+      duration: breakDuration,
+      date: new Date().toUTCString(),
     });
     try {
       await breakTracker.save();
@@ -566,17 +572,30 @@ app.route("/edit/:id").get((req, res, next) => {
     );
   });
 
-//DELETE
-app.route("/remove/:id").get((req, res, next) => {
+// DELETE
+app.get("/remove/:id", async (req, res, next) => {
   const id = req.params.id;
-  BreakTrack.findByIdAndRemove(id, (err) => {
-    if (err) return res.send(500, err);
-    io.emit('reload');
+  const beforeStart = req.query.beforeStart === 'true';
+
+  try {
+    const breakToRemove = await BreakTrack.findById(id);
+    const userToUpdate = await User.findOne({ username: breakToRemove.user });
+
+    await BreakTrack.findByIdAndRemove(id);
+
+    if (beforeStart) {
+      logger.info(`${userToUpdate.username} removed break before break start`);
+    } else {
+      logger.info(`${userToUpdate.username} removed break after break end`);
+    }
+    //io.emit('reload');
     return res.redirect("/secret");
-  });
+  } catch (err) {
+    console.error("Error removing the break: ", err);
+    return res.status(500).send(err);
+  }
 });
 
-mongoose.set("strictQuery", false);
 
 // KILL PORT PROCESSES kill -9 $(lsof -t -i:3000)
 // netstat -ano | findstr :3002

@@ -31,22 +31,18 @@ function onTimerEnded(id) {
     try {
         let breakListItem = display.closest('.break-list-item-user');
         if (breakListItem) {
-            let removeButton_user = breakListItem.querySelector('.remove-user');
-            let removeButton_admin = breakListItem.querySelector('.remove-admin');
-            let editButton = breakListItem.querySelector('.edit');
-            if (removeButton_user) {
-                removeButton_user.classList.add("show");
-                editButton.classList.add("remove");
-            }
-            if (removeButton_admin) {
-                removeButton_admin.classList.add("show");
-                editButton.classList.add("remove");
+            let removeButton = breakListItem.querySelector('.remove-user');
+            if (removeButton) {
+                removeButton.style.display = "inline";
+                // Add this line to update the onclick attribute of the remove button
+                removeButton.setAttribute('onclick', `removeBreak('${id}', false)`);
             }
         }
     } catch (error) {
         //console.log(error);
     }
 }
+
 
 ///////// - START BUTTON - //////////
 
@@ -62,7 +58,10 @@ async function onStartButtonClick(event) {
             event.target.style.display = 'none';
             const timerElement = document.querySelector(`.timer-${breakId}`);
             timerElement.style.display = 'inline';
- 
+
+            // Add this line to hide the remove button
+            document.querySelector(`#remove_user_${breakId}`).style.display = 'none';
+
             // Call the myFingTimer function to start the timer
             myFingTimer(breakId, true);
         } else {
@@ -72,6 +71,21 @@ async function onStartButtonClick(event) {
         console.error("Error starting the break: ", error);
     }
 }
+
+async function removeBreak(breakId, beforeStart) {
+    try {
+      const response = await fetch(`/remove/${breakId}?beforeStart=${beforeStart}`, { method: 'GET' });
+  
+      if (response.ok) {
+        location.reload();
+      } else {
+        console.error("Error removing the break.");
+      }
+    } catch (error) {
+      console.error("Error removing the break: ", error);
+    }
+  }
+  
 
 document.querySelectorAll('.start-break').forEach(button => {
     button.addEventListener('click', onStartButtonClick);

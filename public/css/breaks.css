@@ -10,11 +10,11 @@
 
 .grid-container-spc {
   display: inline-grid;
-  width: 180x;
+  width: 190x;
   gap: 5px;
   background-color: var(--grid-container-background-color);
   padding: 5px;
-  grid-template-columns: 125px 40px 40px;
+  grid-template-columns: 125px 40px;
   grid-template-rows: 45px;
 }
 

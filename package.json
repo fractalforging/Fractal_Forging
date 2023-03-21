@@ -43,6 +43,7 @@
     "username": "^6.0.0",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
+    "ws": "^8.13.0",
     "yarn": "^1.22.19"
   }
 }
