@@ -46,18 +46,16 @@ function onTimerEnded(id) {
     fetch(`/breaks/${id}/end`, { method: 'POST' })
     .then(response => {
       if (response.ok) {
-        logger.info(`Break ${id} has ended`);
+        console.info(`Break ${id} has ended`);
       } else {
-          logger.error(`Failed to update the hasEnded field for break ${id}`);
+          console.error(`Failed to update the hasEnded field for break ${id}`);
       }
     })
     .catch(error => {
-      logger.error(`Error updating the hasEnded field for break ${id}: `, error);
+        console.error(`Error updating the hasEnded field for break ${id}: `, error);
     });
   }
   
-
-
 ///////// - START BUTTON - //////////
 
 async function onStartButtonClick(event) {
@@ -100,7 +98,6 @@ async function removeBreak(breakId, beforeStart) {
     }
   }
   
-
 document.querySelectorAll('.start-break').forEach(button => {
     button.addEventListener('click', onStartButtonClick);
 });
