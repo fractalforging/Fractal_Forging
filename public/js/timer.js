@@ -77,19 +77,26 @@ async function onStartButtonClick(event) {
   } catch (error) { console.error("Error starting the break: ", error); }
 }
 
-async function removeBreak(breakId, beforeStart) {
+async function removeBreak(breakId, beforeStart, isAdmin = false) {
   try {
-    const response = await fetch(`/remove/${breakId}?beforeStart=${beforeStart}`, { method: 'GET' });
-    const liElement = document.querySelector(`li.break-list-item-user #remove_user_${breakId}`).closest("li");
+    const url = isAdmin
+      ? `/remove/${breakId}?isAdmin=true&beforeStart=${beforeStart}`
+      : `/remove/${breakId}?beforeStart=${beforeStart}`;
+    const response = await fetch(url, { method: 'GET' });
+
+    const removeId = isAdmin ? `remove_admin_${breakId}` : `remove_user_${breakId}`;
+    const liElement = document.querySelector(`#${removeId}`).closest("li");
     liElement.classList.add("fade-out");
     socket.emit('reload');
     setTimeout(() => { location.reload(); }, 250);
+
     if (response.ok) {
     } else {
       console.error("Error removing the break.");
     }
   } catch (error) { console.error("Error removing the break: ", error); }
 }
+
 
 document.querySelectorAll('.start-break').forEach(button => {
   button.addEventListener('click', onStartButtonClick);
