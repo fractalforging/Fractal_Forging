@@ -11,6 +11,7 @@ const LocalStrategy = require("passport-local");
 const consoleStamp = require('console-stamp');
 const moment = require('moment-timezone');
 const logger = require('./serverjs/logger.js');
+const kleur = require('kleur');
 
 // EXPRESS WEB SERVER CONFIGURATION
 const app = express();
@@ -283,7 +284,7 @@ app.post('/login', async function (req, res, next) {
         logger.error('An error2 occurred while logging in:', err);
         return res.render("login", { message: "An error occurred while logging in" });
       }
-      logger.warn('Login successful for user: ' + user.username);
+      logger.warn('Login successful for user: ' + kleur.grey(user.username));
       req.session.loggedIn = "true";
       return res.redirect("secret");
     });
@@ -340,7 +341,7 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
               return res.render("account", { error: "Error, please try again", currentUser: req.user });
             }
             req.session.passChange = "Ok";
-            logger.error("Password change for " + `${user.username}` + " was successfull");
+            logger.error("Password change for " + `${kleur.grey(user.username)}` + " was successfull");
             return res.redirect("/secret");
           });
         });
@@ -356,7 +357,7 @@ app.get("/logout", function (req, res, next) {
     if (err) {
       logger.error(err);
     }
-    logger.warn('Logout successful for user: ' + username); // Use the username obtained from the user object
+    logger.warn('Logout successful for user: ' + kleur.grey(username)); // Use the username obtained from the user object
     req.session.destroy(function (err) {
       if (err) {
         logger.error(err);
@@ -403,7 +404,7 @@ app.post("/break-slots", isAdmin, async function (req, res, next) {
       );
       req.session.slotsAvailable = "Updated";
       io.emit('reload');
-      logger.info(`${req.user.username} updated the available slots to: ${newSlotsValue}`);
+      logger.info(`${kleur.grey(req.user.username)} updated the available slots to: ${newSlotsValue}`);
       // Render the updated slots value in the secret_admin page
       return res.redirect("secret_admin");
     } else if (newSlotsValue == currentSlots.slots) { // <-- Updated condition
@@ -426,22 +427,26 @@ app.get('/users', isAdmin, async (req, res, next) => {
   return res.render('users', { adminUsers, normalUsers, currentUser: req.user });
 });
 
-// UPDATE USER'S ROLE
+// MANAGING ACCOUNT ROLE
 app.put('/users/:id', isAdmin, async (req, res, next) => {
+  let userToUpdate;
+  let actionUser;
   try {
+    const isAdmin = req.query.isAdmin === 'true';
     const users = await User.find({});
     const adminUsers = users.filter(user => user.roles === 'admin');
     const normalUsers = users.filter(user => user.roles === 'user');
     const userId = req.params.id;
-    const userToUpdate = await User.findById(userId);
+    userToUpdate = await User.findById(userId);
+    actionUser = req.user; // Get the current logged-in user
     const newRole = req.body.role;
     await User.findByIdAndUpdate(userId, { roles: newRole });
     req.session.roleChange = "Role changed";
-    logger.warn(`User ${userToUpdate.username} role updated to ${newRole}`);
+    logger.warn(`${kleur.grey(actionUser.username)} updated ${kleur.grey(userToUpdate.username)}'s role to ${newRole}`);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } catch (err) {
     req.session.roleChange = "Error1";
-    logger.error(`Error updating user ${userToUpdate.username} role: ${err.message}`);
+    logger.error(`Error updating user ${kleur.grey(userToUpdate.username)} role: ${err.message}`);
     logger.error(err);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   }
@@ -463,7 +468,7 @@ app.delete('/accounts/:id', isAdmin, async (req, res, next) => {
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } catch (err) {
     req.session.roleChange = "Error2";
-    logger.error(`Error deleting user ${userToDelete.username}: ${err.message}`);
+    logger.error(`Error deleting user ${kleur.grey(userToDelete.username)}: ${err.message}`);
     logger.error(err);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   }
@@ -494,7 +499,7 @@ app.post("/", async function (req, res, next) {
     return res.redirect("/secret");
   } else {
     req.session.message = 'Break submitted';
-    logger.info(`${user} submitted a break of ${breakDuration} minute(s)`);
+    logger.info(`${kleur.grey(user)} submitted a break of ${breakDuration} minute(s)`);
     io.emit('reload');
     const breakTracker = new BreakTrack({
       user,
@@ -553,13 +558,13 @@ app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
       res.status(500).send("An error occurred while updating the break status.");
     } else {
       //io.emit('reload');
-      logger.info(`${req.user.username} confirmed a break of ${breakEntry.duration} minute(s)`);
+      logger.info(`${kleur.grey(req.user.username)} confirmed a break of ${breakEntry.duration} minute(s)`);
       res.status(200).send("Break status updated successfully.");
     }
   });
 });
 
-// DELETE
+// REMOVE BREAKS
 app.get("/remove/:id", async (req, res, next) => {
   const id = req.params.id;
   const beforeStart = req.query.beforeStart === 'true';
@@ -567,39 +572,34 @@ app.get("/remove/:id", async (req, res, next) => {
   try {
     const breakToRemove = await BreakTrack.findById(id);
     const userToUpdate = await User.findOne({ username: breakToRemove.user });
-    let actionUser;
-    if (isAdmin) {
-      actionUser = await User.findOne({ username: "admin" });
-    } else {
-      actionUser = await User.findOne({ username: userToUpdate.username });
-    }
+    let actionUser = req.user; // Get the current logged-in user
     await BreakTrack.findByIdAndRemove(id);
     let logMessage = '';
     if (isAdmin) {
-      logMessage = `admin removed ${userToUpdate.username}'s break `;
+      logMessage = `admin removed ${kleur.grey(userToUpdate.username)}'s break `;
     } else {
-      logMessage = `${userToUpdate.username} removed break `;
+      logMessage = `${kleur.grey(userToUpdate.username)} removed break `;
     }
     if (beforeStart) {
       io.emit('reload');
-      logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break before break start`);
+      logger.info(`${kleur.grey(actionUser.username)} removed ${kleur.grey(userToUpdate.username)}'s break before break start`);
     } else if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
       io.emit('reload');
-      logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break after break start`);
+      logger.info(`${kleur.grey(actionUser.username)} removed ${kleur.grey(userToUpdate.username)}'s break after break start`);
     } else {
       io.emit('reload');
-      logger.info(`${actionUser.username} removed ${userToUpdate.username}'s break after break end`);
+      logger.info(`${kleur.grey(actionUser.username)} removed ${kleur.grey(userToUpdate.username)}'s break after break end`);
     }
     // logger.debug("beforeStart: " + beforeStart);
     // logger.debug("breakToRemove.hasStarted: " + breakToRemove.hasStarted);
     // logger.debug("breakToRemove.hasEnded: " + breakToRemove.hasEnded);
-    //io.emit('reload');
     return res.redirect("/secret");
   } catch (err) {
     console.error("Error removing the break: ", err);
     return res.status(500).send(err);
   }
 });
+
 
 // BREAK ENDED
 app.post("/breaks/:id/end", async (req, res, next) => {
