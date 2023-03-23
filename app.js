@@ -449,7 +449,7 @@ app.put('/users/:id', isAdmin, async (req, res, next) => {
     logger.error(`Error updating user ${kleur.magenta(userToUpdate.username)} role: ${err.message}`);
     logger.error(err);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
-  }
+  } 
 });
 
 // DELETE ACCOUNT

@@ -218,6 +218,7 @@ info {
 } 
 
 nonstart {
+  color: #da9500;
   font-family: var(--break-list-item-timer-font-family);
   font-weight: 100;
 }
@@ -336,14 +337,19 @@ filer {
 }
 
 /*/////// - TIMER INFO - ///////*/
-
+nonstart,
+infotitle,
 info {
-  opacity: 0;
+  visibility: hidden;
   transition: all 1s ease-in-out;
+  animation: fade-in 0.5s ease-in-out forwards;
 }
 
 .visible {
-  opacity: 1;
+  visibility: visible;
+  transition-delay: 0.5s;
+  transition: all 1s ease-in-out;
+  animation: fade-in 0.5s ease-in-out forwards;
 }
 
 
