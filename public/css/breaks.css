@@ -333,19 +333,7 @@ filer {
   100% {
     transform: scaleX(1);
   }
-} 
-
-/*/////// - TIMER INFO - ///////*/
-
-info {
-  opacity: 0;
-  transition: all 1s ease-in-out;
 }
-
-.visible {
-  opacity: 1;
-}
-
 
 /* /////////// - FADES - //////////// */
 
