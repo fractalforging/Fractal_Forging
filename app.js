@@ -290,7 +290,7 @@ app.post('/login', async function (req, res, next) {
     });
   })(req, res, next);
 });
-
+ 
 // HANDLING PASSWORD CHANGE
 app.post("/changepassword", isLoggedIn, function (req, res, next) {
   User.findOne({ username: req.user.username }, (err, user) => {
