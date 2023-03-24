@@ -81,20 +81,16 @@ if (!dbPath) {
   process.exit(1);
 }
 
-mongoose.connect(
-  dbPath,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  () => {
-    logger.info("MongoDB connected successfully!");
-    createAdminUser();
-    server.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
-  }
-);
-
-mongoose.connection.on("error", (err) => {
+mongoose.connect(dbPath, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  logger.info("MongoDB connected successfully!");
+  createAdminUser();
+  server.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
+})
+.catch((err) => {
   logger.error("MongoDB connection error:", err);
 });
 
