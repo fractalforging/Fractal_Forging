@@ -541,6 +541,7 @@ resetTime.setHours(23, 0, 0, 0);
 const millisecondsUntilReset = resetTime.getTime() - Date.now();
 setTimeout(() => {
   resetBreakTimes();
+  io.emit('reload');
   setInterval(resetBreakTimes, 24 * 60 * 60 * 1000); // Set interval to run every 24 hours
 }, millisecondsUntilReset);
 
