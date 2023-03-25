@@ -200,10 +200,10 @@ animation: fade-in 0.5s ease-in-out forwards;
 
 .not-started {
   opacity: 0;
-  /* position: relative;
-  top: -3px; */
+  position: relative;
+  top: 2px;
   font-family: var(--break-list-item-timer-font-family);
-  font-size: var(--break-list-item-timer-font-size-admin);
+  font-size: 15px;
   font-weight: var(--break-list-item-timer-font-weight);
   animation: fade-in 0.5s ease-in 0s forwards;
 }
