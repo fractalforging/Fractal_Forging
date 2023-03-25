@@ -238,9 +238,22 @@ nonstart {
 }
 
 .start-break {
-  opacity: 0;
-  animation: fade-in 1s ease-in-out forwards;
+opacity: 0;
+font-family: "Share Tech Mono";
+width: 65px;
+height: 22px;
+font-size: 14px;
+border: 1px solid var(--credentials-border-color);
+color: var(--break-list-item-text-color);
+background: url() 96% / 15% no-repeat var(--credentials-box-background-color);
+text-align: center;
+border-radius: 3px;
+text-indent: -1px;
+cursor: pointer;
+animation: fade-in 1s ease-in-out forwards 0s;
 }
+
+
 
 .remove-user,
 .remove-admin {
@@ -278,7 +291,11 @@ filer {
   color: var(--break-list-item-filler-color);
 }
 
-.item-button {
+/* .item-button {
+  opacity: 0;
+  animation: fade-in 1s ease-in-out forwards;
+  position: relative;
+  top: -20px;
   font-family: "Share Tech Mono";
   margin: 0px;
   width: 65px;
@@ -292,7 +309,7 @@ filer {
   text-indent: -1px;
   cursor: pointer;
   transition: all var(--animation-duration-more) ease-in-out;
-}
+} */
 
 .item-button:hover {
   background: url() 96% / 15% no-repeat var(--break-plus-button-symbol-color);
