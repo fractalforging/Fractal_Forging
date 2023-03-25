@@ -174,13 +174,13 @@
   flex-grow: 2;
 }
 
-.break-list-item-user .edit,
+/* .break-list-item-user .edit,
 .break-list-item-admin .edit {
   color: var(--break-list-item-edit-color);
   margin-right: var(--links-font-size);
   cursor: pointer;
   text-decoration: none;
-}
+} */
 
 .numerical-timer {
   opacity: 0;
