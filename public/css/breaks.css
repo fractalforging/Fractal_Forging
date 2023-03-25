@@ -126,6 +126,11 @@
   flex-wrap: wrap; /* Add this line */
 }
 
+username{
+  position: absolute;
+  left: 28px;
+}
+
 .arrow {
   position: relative;
   top: -2px;
