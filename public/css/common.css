@@ -35,7 +35,7 @@ a:hover {
 hr.divider {
   border: none;
   height: 1px;
-  width: 200px;
+  width: 255px;
   background-color: var(--hr-divider-color);
   margin-top: 20px;
   margin-bottom: 20px;
@@ -99,13 +99,13 @@ input::placeholder {
 
 .grid-container-2 {
   display: inline-grid;
-  width: 265px;
+  width: 285px;
   height: 50px;
   gap: 5px;
   background-color: #80808000;
   padding: 5px;
-  grid-template-columns: 130px 130px;
-  grid-template-rows: 50px 50px;
+  grid-template-columns: 130px 20px 130px;
+  grid-template-rows: 50px;
 }
 
 .grid-item-2 {
@@ -117,13 +117,18 @@ input::placeholder {
   flex-direction: column;
 }
 
-.item1 {
+.item1-2 {
   grid-column: 1;
   grid-row: 1;
 }
 
-.item2 {
+.item2-2 {
   grid-column: 2;
+  grid-row: 1;
+}
+
+.item3-2 {
+  grid-column: 3;
   grid-row: 1;
 }
 
@@ -214,6 +219,7 @@ slots {
   transition: all var(--animation-duration-base) ease-in-out;
 }
 
+.vertical-line-2,
 .vertical-line {
   margin-left: 10px;
   margin-right: 0px;
@@ -221,9 +227,18 @@ slots {
   align-items: center;
   border-right: 1px solid var(--links-divider-color);
   width: 1px;
-  height: 10px; /* increase the height value */
   overflow: hidden;
   transition: all var(--animation-duration-base) ease-in-out;
+}
+
+.vertical-line {
+  border-right: 1px solid var(--links-divider-color);
+  height: 10px;
+}
+
+.vertical-line-2 {
+  border-right: 1px solid var(--hr-divider-color);
+  height: 50px;
 }
 
 .roles-list {
