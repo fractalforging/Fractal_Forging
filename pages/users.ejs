@@ -51,10 +51,38 @@
 <greet>Accounts</greet><br><br>
 
 <!-- List all the admin users first -->
-<ul id="admin-users" class="roles-list">
-    <% adminUsers.forEach(user=> { %>
-        <ul>
-            <% if (user.username !=='admin' ) { %>
+    <ul id="admin-users" class="roles-list">
+        <% adminUsers.forEach(user=> { %>
+            <ul>
+                <% if (user.username !=='admin' ) { %>
+                    <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
+                        <div class="break-list-item-name-user">
+                            <span>
+                                <%= user.username %>
+                            </span>
+                            <select class="item-button">
+                                <% if (user.roles==='admin' ) { %>
+                                    <option value="admin" selected>Admin</option>
+                                    <option value="user">User</option>
+                                    <% } else { %>
+                                        <option value="admin">Admin</option>
+                                        <option value="user" selected>User</option>
+                                        <% } %>
+                                            <option value="delete" class="delete-option">Delete</option>
+                            </select>
+                            <% } %>
+                        </div>
+                    </li>
+            </ul>
+            <% }); %>
+    </ul>
+
+    <br>
+
+    <!-- List all the normal users -->
+    <ul id="normal-users" class="roles-list">
+        <% normalUsers.forEach(user=> { %>
+            <ul>
                 <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
                     <div class="break-list-item-name-user">
                         <span>
@@ -70,39 +98,11 @@
                                     <% } %>
                                         <option value="delete" class="delete-option">Delete</option>
                         </select>
-                        <% } %>
                     </div>
                 </li>
-        </ul>
-        <% }); %>
-</ul>
-
-<br>
-
-<!-- List all the normal users -->
-<ul id="normal-users" class="roles-list">
-    <% normalUsers.forEach(user=> { %>
-        <ul>
-            <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
-                <div class="break-list-item-name-user">
-                    <span>
-                        <%= user.username %>
-                    </span>
-                    <select class="item-button">
-                        <% if (user.roles==='admin' ) { %>
-                            <option value="admin" selected>Admin</option>
-                            <option value="user">User</option>
-                            <% } else { %>
-                                <option value="admin">Admin</option>
-                                <option value="user" selected>User</option>
-                                <% } %>
-                                    <option value="delete" class="delete-option">Delete</option>
-                    </select>
-                </div>
-            </li>
-        </ul>
-        <% }); %>
-</ul>
+            </ul>
+            <% }); %>
+    </ul>
 
 
 <!-- Add this script tag at the end of your users.ejs file, before the closing </body> tag -->

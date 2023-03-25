@@ -487,11 +487,14 @@ app.post("/", async function (req, res, next) {
   const user = req.user.username;
   const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
   const breakDuration = req.body.duration;
-
-  // Check if the user has enough remaining break time
   const currentUser = await User.findOne({ username: user });
   const breakDurationInSeconds = breakDuration * 60;
-  if (currentUser.remainingBreakTime < breakDurationInSeconds) {
+  
+  if (latestBreak && !latestBreak.endTime) {
+    req.session.message = 'Only 1 break at a time';
+    logger.info(req.session.message);
+    return res.redirect("/secret");
+  } else if (currentUser.remainingBreakTime < breakDurationInSeconds) {
     if (currentUser.remainingBreakTime === 0) {
       req.session.message = 'Break time over';
     } else {
@@ -499,16 +502,9 @@ app.post("/", async function (req, res, next) {
     }
     logger.info(req.session.message);
     return res.redirect("/secret");
-  }
-
-  if (latestBreak && !latestBreak.endTime) {
-    req.session.message = 'Only 1 break at a time';
-    logger.info(req.session.message);
-    return res.redirect("/secret");
   } else {
     req.session.message = 'Break submitted';
     // Update the user's remaining break time
-    currentUser.remainingBreakTime -= breakDurationInSeconds;
     await currentUser.save(); // Save the updated remaining break time
     logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s)`);
     io.emit('reload');
@@ -578,20 +574,27 @@ app.route("/edit/:id").get((req, res, next) => {
   });
 
 // START BUTTON FOR BREAKS
-app.post('/breaks/start/:id', isLoggedIn, (req, res, next) => {
+app.post('/breaks/start/:id', isLoggedIn, async (req, res, next) => {
   const breakId = req.params.id;
   const breakStartTimeStamp = new Date().toISOString(); // Get the current timestamp
-  BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, (err, breakEntry) => {
-    if (err) {
-      logger.error(err);
-      res.status(500).send("An error occurred while updating the break status.");
-    } else {
-      //io.emit('reload');
-      logger.info(`${kleur.magenta(req.user.username)} confirmed a break of ${breakEntry.duration} minute(s)`);
-      res.status(200).send("Break status updated successfully.");
-    }
-  });
+  const breakEntry = await BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, {new: true});
+  if (!breakEntry) {
+    logger.error(`Break entry with ID ${breakId} not found.`);
+    return res.status(404).send("Break entry not found.");
+  }
+  const user = await User.findOne({ username: req.user.username });
+  const breakDurationInSeconds = breakEntry.duration * 60;
+  if (user.remainingBreakTime < breakDurationInSeconds) {
+    logger.info(`${kleur.magenta(user.username)} tried to start a break without enough remaining break time.`);
+    return res.status(400).send("Not enough remaining break time.");
+  }
+  user.remainingBreakTime -= breakDurationInSeconds;
+  await user.save();
+  io.emit('reload');
+  logger.info(`${kleur.magenta(req.user.username)} started a break of ${breakEntry.duration} minute(s)`);
+  return res.status(200).send("Break status updated successfully.");
 });
+
 
 // REMOVE BREAKS
 app.get("/remove/:id", async (req, res, next) => {

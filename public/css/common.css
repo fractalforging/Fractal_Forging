@@ -127,11 +127,6 @@ input::placeholder {
   grid-row: 1;
 }
 
-
-
-
-
-
 /* ///// */
 
 li {
@@ -162,27 +157,6 @@ li {
   cursor: pointer;
 }
 
-.item-button {
-  font-family: "Share Tech Mono";
-  position: relative;
-  top: -1px;
-  margin: 0px;
-  width: 65px;
-  font-size: 14px;
-  border: 1px solid var(--credentials-border-color);
-  height: 22px;
-  color: var(--break-list-item-text-color);
-  background: url() 96% / 15% no-repeat var(--credentials-box-background-color);
-  text-align: center;
-  border-radius: 3px;
-  text-indent: -1px;
-  cursor: pointer;
-  transition: all var(--animation-duration-more) ease-in-out;
-}
-
-.item-button:hover {
-  background: url() 96% / 15% no-repeat var(--break-plus-button-symbol-color);
-}
 
 /* .number-selector:hover {
   background-color: #62728d;
@@ -203,11 +177,6 @@ li {
 
 option {
   border-radius: 5px;
-}
-
-agent {
-  font-weight: 650;
-  font-size: 17px;
 }
 
 navbar {
@@ -255,4 +224,18 @@ slots {
   height: 10px; /* increase the height value */
   overflow: hidden;
   transition: all var(--animation-duration-base) ease-in-out;
+}
+
+.roles-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 auto;
+  text-align: left;
+  width: fit-content;
+}
+
+.roles-list > ul {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
 }
