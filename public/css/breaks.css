@@ -244,6 +244,7 @@ nonstart {
   }
 }
 
+.item-button,
 .start-break {
 opacity: 0;
 font-family: "Share Tech Mono";
@@ -258,6 +259,7 @@ border-radius: 3px;
 text-indent: -1px;
 cursor: pointer;
 animation: fade-in 1s ease-in-out forwards 0s;
+transition: all var(--animation-duration-short) ease-in-out;
 }
 
 .remove-user,
