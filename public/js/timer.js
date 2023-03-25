@@ -59,6 +59,7 @@ function onTimerEnded(id) {
 ///////// - START BUTTON - //////////
 
 async function onStartButtonClick(event) {
+  socket.emit('reload');
   //console.log('Start button clicked');
   const breakId = event.target.dataset.id;
   try {
@@ -69,7 +70,7 @@ async function onStartButtonClick(event) {
       timerElement.style.display = 'inline';
       document.querySelector(`#remove_user_${breakId}`).style.display = 'none';
       myFingTimer(breakId, true);
-      socket.emit('reload');
+      
       //setTimeout(() => { location.reload(); }, 250);
     } else {
       console.error("Error starting the break.");
