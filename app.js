@@ -94,6 +94,7 @@ mongoose.connect(dbPath, {
   logger.error("MongoDB connection error:", err);
 });
 
+
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
