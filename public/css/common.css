@@ -97,6 +97,43 @@ input::placeholder {
 
 /* ///// */
 
+.grid-container-2 {
+  display: inline-grid;
+  width: 265px;
+  height: 50px;
+  gap: 5px;
+  background-color: #80808000;
+  padding: 5px;
+  grid-template-columns: 130px 130px;
+  grid-template-rows: 50px 50px;
+}
+
+.grid-item-2 {
+  background-color: #80008000;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.item1 {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.item2 {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+
+
+
+
+
+/* ///// */
+
 li {
   list-style-type: none;
   display: inline-block;

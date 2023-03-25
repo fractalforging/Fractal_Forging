@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
   //logger.warn('A user connected');
   socket.on('reload', () => {
     //logger.warn('Reload event received');
-    io.emit('reload'); 
+    io.emit('reload');
   });
   socket.on('disconnect', () => {
     //logger.warn('A user disconnected');
@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
 //=====================
 // DATABASE
 //=====================
- 
+
 // SCHEMAS / MODELS
 const createAdminUser = require("./models/firstRun");
 const User = require('./models/user');
@@ -85,14 +85,14 @@ mongoose.connect(dbPath, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => {
-  logger.info("MongoDB connected successfully!");
-  createAdminUser();
-  server.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
-})
-.catch((err) => {
-  logger.error("MongoDB connection error:", err);
-});
+  .then(() => {
+    logger.info("MongoDB connected successfully!");
+    createAdminUser();
+    server.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
+  })
+  .catch((err) => {
+    logger.error("MongoDB connection error:", err);
+  });
 
 
 const UserSchema = new mongoose.Schema({
@@ -112,10 +112,6 @@ module.exports = User;
 //=====================
 // MIDDLEWARE
 //=====================
-
-
-
-//
 
 // Check if logged in
 function isLoggedIn(req, res, next) {
@@ -190,10 +186,12 @@ app.get("/login", function (req, res, next) {
 app.get("/secret", isLoggedIn, async function (req, res, next) {
   const breakTracker = await getBreakTrackerData();
   const breakSlots = await getBreakSlotsData();
+  const user = await User.findOne({ username: req.user.username });
+
   if (req.user.roles === "admin") {
-    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots, user: user });
   } else if (req.user.roles === "user") {
-    return res.render("secret", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots });
+    return res.render("secret", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots, user: user });
   }
 });
 
@@ -287,7 +285,7 @@ app.post('/login', async function (req, res, next) {
     });
   })(req, res, next);
 });
- 
+
 // HANDLING PASSWORD CHANGE
 app.post("/changepassword", isLoggedIn, function (req, res, next) {
   User.findOne({ username: req.user.username }, (err, user) => {
@@ -337,8 +335,8 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
               logger.error(err);
               return res.render("account", { error: "Error, please try again", currentUser: req.user });
             }
-            req.session.passChange = "Ok";
-            logger.error("Password change for " + `${kleur.magenta(user.username)}` + " was successfull");
+            req.session.passChange = "Changed";
+            logger.warn("Password change for " + `${kleur.magenta(user.username)}` + " was successfull");
             return res.redirect("/secret");
           });
         });
@@ -446,7 +444,7 @@ app.put('/users/:id', isAdmin, async (req, res, next) => {
     logger.error(`Error updating user ${kleur.magenta(userToUpdate.username)} role: ${err.message}`);
     logger.error(err);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
-  } 
+  }
 });
 
 // DELETE ACCOUNT
@@ -483,12 +481,25 @@ app.get("/", (req, res, next) => {
     });
   });
 });
- 
-// SUBMIT BREAKS 
+
+// SUBMIT BREAKS
 app.post("/", async function (req, res, next) {
   const user = req.user.username;
   const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
   const breakDuration = req.body.duration;
+
+  // Check if the user has enough remaining break time
+  const currentUser = await User.findOne({ username: user });
+  const breakDurationInSeconds = breakDuration * 60;
+  if (currentUser.remainingBreakTime < breakDurationInSeconds) {
+    if (currentUser.remainingBreakTime === 0) {
+      req.session.message = 'Break time over';
+    } else {
+      req.session.message = 'Not enough';
+    }
+    logger.info(req.session.message);
+    return res.redirect("/secret");
+  }
 
   if (latestBreak && !latestBreak.endTime) {
     req.session.message = 'Only 1 break at a time';
@@ -496,6 +507,9 @@ app.post("/", async function (req, res, next) {
     return res.redirect("/secret");
   } else {
     req.session.message = 'Break submitted';
+    // Update the user's remaining break time
+    currentUser.remainingBreakTime -= breakDurationInSeconds;
+    await currentUser.save(); // Save the updated remaining break time
     logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s)`);
     io.emit('reload');
     const breakTracker = new BreakTrack({
@@ -510,8 +524,25 @@ app.post("/", async function (req, res, next) {
     } catch (err) {
       return res.redirect("/secret");
     }
-  } (req, res, next);
+  }
 });
+
+// RESET BREAK MINUTES AFTER MIDNIGHT TO 35 MINUTES
+async function resetBreakTimes() {
+  const now = new Date();
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+  const resetBreakTimeInSeconds = 35 * 60;
+  if (now > midnight) {
+    await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
+  }
+}
+const resetTime = new Date();
+resetTime.setHours(23, 0, 0, 0);
+const millisecondsUntilReset = resetTime.getTime() - Date.now();
+setTimeout(() => {
+  resetBreakTimes();
+  setInterval(resetBreakTimes, 24 * 60 * 60 * 1000); // Set interval to run every 24 hours
+}, millisecondsUntilReset);
 
 // CATCH ERRORS
 app.use(function (err, req, res, next) {
@@ -609,8 +640,3 @@ app.post("/breaks/:id/end", async (req, res, next) => {
     res.sendStatus(500);
   }
 });
-
-
-
-
-

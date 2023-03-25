@@ -218,7 +218,9 @@ info {
 } 
 
 nonstart {
-  color: #da9500;
+  visibility: visible;
+  display: block;
+  opacity: 1;
   font-family: var(--break-list-item-timer-font-family);
   font-weight: 100;
 }
