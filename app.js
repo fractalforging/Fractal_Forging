@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
 //=====================
 // DATABASE
 //=====================
-
+ 
 // SCHEMAS / MODELS
 const createAdminUser = require("./models/firstRun");
 const User = require('./models/user');
@@ -81,22 +81,19 @@ if (!dbPath) {
   process.exit(1);
 }
 
-mongoose.connect(
-  dbPath,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  () => {
-    logger.info("MongoDB connected successfully!");
-    createAdminUser();
-    server.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
-  }
-);
-
-mongoose.connection.on("error", (err) => {
+mongoose.connect(dbPath, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => {
+  logger.info("MongoDB connected successfully!");
+  createAdminUser();
+  server.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
+})
+.catch((err) => {
   logger.error("MongoDB connection error:", err);
 });
+
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -449,7 +446,7 @@ app.put('/users/:id', isAdmin, async (req, res, next) => {
     logger.error(`Error updating user ${kleur.magenta(userToUpdate.username)} role: ${err.message}`);
     logger.error(err);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
-  }
+  } 
 });
 
 // DELETE ACCOUNT
@@ -486,7 +483,7 @@ app.get("/", (req, res, next) => {
     });
   });
 });
-
+ 
 // SUBMIT BREAKS 
 app.post("/", async function (req, res, next) {
   const user = req.user.username;

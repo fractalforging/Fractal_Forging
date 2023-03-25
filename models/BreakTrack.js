@@ -30,3 +30,4 @@ const breakTrackerSchema = new mongoose.Schema({
   }
 });
 module.exports = mongoose.model('BreakTrack', breakTrackerSchema);
+
