@@ -137,10 +137,12 @@
   transition: all var(--animation-duration-more) ease-in-out;
 }
 
-.arrow.rotated {
-  position: relative;
-  left: -6px;
+.arrow.open .material-symbols-outlined {
   transform: rotate(90deg);
+}
+
+.material-symbols-outlined {
+animation: fade-in 0.5s ease-in-out forwards;
 }
 
 .extra-info {
@@ -297,6 +299,7 @@ filer {
 nonstart,
 infotitle,
 info {
+  font-size: var(--break-list-item-font-size);
   position: relative;
   left: -8px;
   visibility: hidden;
