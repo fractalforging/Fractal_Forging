@@ -1,13 +1,13 @@
 /* ///////////// - IMPORT FONTS - /////////////// */
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat');
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono');
-/* @import url('https://fonts.googleapis.com/css2?family=Raleway');
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat');
+@import url('https://fonts.googleapis.com/css2?family=Raleway');
 @import url('https://fonts.googleapis.com/css2?family=Kanit');
 @import url('https://fonts.googleapis.com/css2?family=Quicksand');
 @import url('https://fonts.googleapis.com/css2?family=Urbanist');
-@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans');
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1'); */
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans'); */
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1'); 
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono');
 
 /* ////////////// - COMMON - //////////////// */
 :root {
@@ -17,7 +17,7 @@
   --animation-duration-more: calc(var(--animation-duration-base) * 1.428);
   --animation-duration-long: calc(var(--animation-duration-base) * 2.857);
   /*//// - FONTS - ////*/
-  --main-body-font-family: "Montserrat";
+  --main-body-font-family: "M PLUS 1";
   --break-list-item-timer-font-family: "Share Tech Mono";
 }
 
@@ -64,6 +64,7 @@
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #df2b2b;
+  --break-list-item-info-dots-color: #4f5c66c0;
   --break-list-item-font-size: 14px;
   --break-list-item-font-weight: 600;
   --break-list-item-remove-size: 12px;
@@ -71,7 +72,6 @@
   --break-list-item-timer-font-weight: 400;
   /*//// - BREAKS LIST - ADMIN PAGE - ////*/
   --break-list-item-timer-font-size-admin: 17px;
-
   /*//// - TIMER LOADER - ////*/
   --canvas-loader-background-color: #00000000;
   --loader-background-color1: #004C7B;
@@ -154,6 +154,7 @@
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
   --break-list-item-cancel-color: #4a4a4a;
+  --break-list-item-info-dots-color: #32526bc0;
   --break-list-item-font-size: 14px;
   --break-list-item-font-weight: 600;
   --break-list-item-remove-size: 12px;
