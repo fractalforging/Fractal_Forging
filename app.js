@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
 //=====================
 // DATABASE
 //=====================
-
+ 
 // SCHEMAS / MODELS
 const createAdminUser = require("./models/firstRun");
 const User = require('./models/user');
@@ -482,7 +482,7 @@ app.get("/", (req, res, next) => {
     });
   });
 });
-
+ 
 // SUBMIT BREAKS 
 app.post("/", async function (req, res, next) {
   const user = req.user.username;
