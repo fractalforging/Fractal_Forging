@@ -170,7 +170,7 @@ app.post('/clear-message', function (req, res, next) {
   delete req.session.roleChange;
   delete req.session.slotsAvailable;
   return res.sendStatus(204);
-}); 
+});
 
 // INDEX > LOGIN
 app.get("/", function (req, res, next) {
@@ -195,14 +195,16 @@ app.get("/secret", isLoggedIn, async function (req, res, next) {
   }
 });
 
-// // ADMIN LANDING PAGE
-// app.get("/secret_edit/:id", isAdmin, async function (req, res, next) {
-//   const foundBreakTrack = await BreakTrack.findById(req.params.id);
-//   return res.render("secret_edit", {
-//     name: req.user.username,
-//     breakTracker: foundBreakTrack,
-//   });
-// });
+// ADMIN LANDING PAGE
+app.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
+  const breakSlots = await getBreakSlotsData();
+  const breakTracker = await getBreakTrackerData();
+  if (req.user.roles === "admin") {
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user });
+  } else {
+    return res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user });
+  }
+});
 
 // REGISTER FORM
 app.get("/register", isAdmin, function (req, res, next) {
@@ -293,7 +295,7 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
       req.session.passChange = "Error";
       logger.error(err || "User not found");
       return res.render("account", { error: "Error, please try again", currentUser: req.user });
-    } 
+    }
 
     // Check if current password is empty
     if (!req.body.currentpassword) {
@@ -365,17 +367,6 @@ app.get("/logout", function (req, res, next) {
 //HANDLING ACCOUNT
 app.get("/account", isLoggedIn, function (req, res, next) {
   return res.render("account", { error: 'no error', currentUser: req.user });
-});
-
-//HANDLING ADMINS
-app.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
-  const breakSlots = await getBreakSlotsData();
-  const breakTracker = await getBreakTrackerData();
-  if (req.user.roles === "admin") {
-    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user });
-  } else {
-    return res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user });
-  }
 });
 
 app.use(function (req, res, next) {
@@ -489,7 +480,7 @@ app.post("/", async function (req, res, next) {
   const breakDuration = req.body.duration;
   const currentUser = await User.findOne({ username: user });
   const breakDurationInSeconds = breakDuration * 60;
-  
+
   if (latestBreak && !latestBreak.endTime) {
     req.session.message = 'Only 1 break at a time';
     logger.info(req.session.message);
@@ -527,7 +518,7 @@ app.post("/", async function (req, res, next) {
 app.post('/breaks/start/:id', isLoggedIn, async (req, res, next) => {
   const breakId = req.params.id;
   const breakStartTimeStamp = new Date().toISOString(); // Get the current timestamp
-  const breakEntry = await BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, {new: true});
+  const breakEntry = await BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, { new: true });
   if (!breakEntry) {
     logger.error(`Break entry with ID ${breakId} not found.`);
     return res.status(404).send("Break entry not found.");
@@ -594,25 +585,25 @@ app.post("/breaks/:id/end", async (req, res, next) => {
   }
 });
 
-// RESET BREAK MINUTES AFTER MIDNIGHT TO 35 MINUTES
+// RESET BREAK MINUTES AFTER 23:00 TO 35 MINUTES
 async function resetBreakTimes() {
-  const now = new Date();
-  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+  const now = moment.tz(new Date(), 'Europe/' + location).toDate();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
   const resetBreakTimeInSeconds = 35 * 60;
-  if (now > midnight) {
+  if (now > startOfDay) {
     await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
   }
 }
-const resetTime = new Date();
+const resetTime = moment.tz(new Date(), 'Europe/' + location).toDate();
 resetTime.setHours(23, 0, 0, 0);
-const millisecondsUntilReset = resetTime.getTime() - Date.now();
+const millisecondsUntilReset = resetTime.getTime() - moment.tz(new Date(), 'Europe/' + location).toDate().getTime();
 setTimeout(() => {
   resetBreakTimes();
   io.emit('reload');
   setInterval(resetBreakTimes, 24 * 60 * 60 * 1000); // Set interval to run every 24 hours
 }, millisecondsUntilReset);
 
-  // CATCH ERRORS
+// CATCH ERRORS
 app.use(function (err, req, res, next) {
   logger.error(err.stack);
   return res.status(500).send('Something broke!');
