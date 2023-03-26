@@ -293,7 +293,7 @@ app.post("/changepassword", isLoggedIn, function (req, res, next) {
       req.session.passChange = "Error";
       logger.error(err || "User not found");
       return res.render("account", { error: "Error, please try again", currentUser: req.user });
-    }
+    } 
 
     // Check if current password is empty
     if (!req.body.currentpassword) {
