@@ -1,23 +1,23 @@
 const responseMap = {
   // LOGIN
-  "true": { status: 200, message: "Login successful!" },
-  "false": { status: 401, message: "Wrong credentials!" },
+  "true": { status: 200, message: "Login successful" },
+  "false": { status: 401, message: "Wrong credentials" },
   "error1": { status: 401, message: "Error1" },
-  "error2": { status: 401, message: "error2" },
-  "errorx": { status: 401, message: "errorx" },
+  "error2": { status: 401, message: "Error2" },
+  "errorx": { status: 401, message: "Errorx" },
   // USER REGISTRATION
   "Taken": { status: 401, message: "Username taken" },
   "Error": { status: 500, message: "Error! Try again" },
   "NoUser": { status: 500, message: "No username given" },
   "NoPass": { status: 500, message: "No password given" },
   "Mismatch": { status: 500, message: "Passwords don't match" },
-  "Ok": { status: 200, message: "Account registered!" },
+  "Ok": { status: 200, message: "Account registered" },
   // PASSWORD
-  "Wrong": { status: 401, message: "Old password wrong!" },
-  "Changed": { status: 200, message: "Password changed!" },
+  "Wrong": { status: 401, message: "Old password wrong" },
+  "Changed": { status: 200, message: "Password changed" },
   // ACCOUNT MANAGEMENT
   "Deleted": { status: 200, message: "Account deleted" },
-  "Role changed": { status: 200, message: "Role changed successfully" },
+  "Role changed": { status: 200, message: "Role was changed" },
   // BREAKS
   "Only 1 break at a time": { status: 401, message: "Only 1 break at a time" },
   "Break time over": { status: 401, message: "No minutes available" },
