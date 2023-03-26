@@ -1,4 +1,6 @@
 const User = require("./user");
+const logger = require('../serverjs/logger.js');
+const kleur = require('kleur');
 
 async function createAdminUser() {
     try {
@@ -10,15 +12,15 @@ async function createAdminUser() {
             const defaultAdmin = new User({ username: "admin", roles: "admin" });
 
             // Replace "yourAdminPassword" with the desired default admin password
-            const adminPassword = "123";
+            const adminPassword = process.env.ADMIN_PASS;
             await User.register(defaultAdmin, adminPassword);
 
-            console.log("1st Admin user created with > username: 'admin' and password: '" + adminPassword + "'");
+            logger.info("1st Admin user created with > username: " + kleur.magenta("admin") + " and password: " + kleur.grey("xxx") + "(hidden), check .env variable");
         } else {
             //console.log("1st Admin user already exists. Skipping creation.");
         }
     } catch (error) {
-        console.error("Error creating admin user:", error);
+        logger.error("Error creating admin user:", error);
     }
 }
 

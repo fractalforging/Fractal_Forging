@@ -1,56 +1,31 @@
-<!-- ////////////////// - 1ST IN DOM > PREVENT FLICKER - ////////////////// -->
+<!-- ////////////////// - HEADER SETUP - ////////////////// -->
 
-<script src="/js/theme_setup.js"></script>
-
-<!-- ////////////////// - LINED STYLES AND SCRIPTS - ////////////////// -->
-
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel="stylesheet" type="text/css" href="/css/themes.css">
-<link rel="stylesheet" type="text/css" href="/css/breaks.css">
-<link rel="stylesheet" type="text/css" href="/css/timer.css">
-<link rel="stylesheet" type="text/css" href="/css/modals.css">
-
-<script src="/js/timer.js"></script>
+<%- include('partials/header.ejs') %>
 
 <br>
 
-<!-- ////////////////// - DARK MODE - ////////////////// -->
+<!-- ////////////////// - THEME TOGGLE - ////////////////// -->
 
-<li style="display: block;" class="toggle-moon">
-    <icon href="#" id="toggle-mode-btn-moon" class="toggle-mode">
-        <span class="material-symbols-outlined">brightness_3</span>
-    </icon>
-</li>
+<%- include('partials/themes.ejs') %>
 
-<li style="display: block;" class="toggle-sun">
-    <icon href="#" id="toggle-mode-btn-sun" class="toggle-mode">
-        <span class="material-symbols-outlined">sunny</span>
-    </icon>
-</li>
+<!-- ////////////// - MODALS - ////////////////-->
+
+<%- include('partials/modals.ejs') %>
 
 <!-- ////////////////// - NAV - ////////////////// -->
 
-<navbar>
-    <li><a href="/secret">Breaks</a></li>
-    <section class="vertical-line"></section>
-    <li><a href="/account">Password</a></li>
-    <section class="vertical-line"></section>
-    <li><a href="/register">Register</a></li>
-    <section class="vertical-line"></section>
-    <li><a href="/users">Accounts</a></li>
-    <section class="vertical-line"></section>
-    <li><a href="/logout">Logout</a></li>
-</navbar>
+<%- include('partials/navigation.ejs') %>
+
 &nbsp;
 <br>
 
 <hr class="divider">
 
-<!-- users.ejs -->
+<!-- ////////////// - ACCOUNTS - ////////////////-->
 
 <greet>Accounts</greet><br><br>
 
-<!-- List all the admin users first -->
+<!-- ////////////// - ADMINS - //////////////// -->
     <ul id="admin-users" class="roles-list">
         <% adminUsers.forEach(user=> { %>
             <ul>
@@ -79,7 +54,7 @@
 
     <br>
 
-    <!-- List all the normal users -->
+<!-- ////////////// - USERS - //////////////// -->
     <ul id="normal-users" class="roles-list">
         <% normalUsers.forEach(user=> { %>
             <ul>
@@ -105,7 +80,7 @@
     </ul>
 
 
-<!-- Add this script tag at the end of your users.ejs file, before the closing </body> tag -->
+<!-- /////////////// - HELPER FUNCTIONS - //////////////// -->
 <script>
     // Helper function to send a PUT request to update user's role
     const updateUserRole = async (userId, newRole) => {
@@ -172,25 +147,6 @@
         });
     });
 </script>
-
-
-<!-- ////////////// MODALS ////////////////-->
-
-<div id="myModal-Neg" class="modal">
-    <div class="modal-content-neg">
-        <span class="exclamation material-symbols-outlined">exclamation</span>
-        <span id="message-neg" class="modal-text"></span>
-        <span class="close-neg material-symbols-outlined">close</span>
-    </div>
-</div>
-
-<div id="myModal-Pos" class="modal">
-    <div class="modal-content-pos">
-        <span class="check material-symbols-outlined">check</span>
-        <span id="message-pos" class="modal-text"></span>
-        <span class="close-pos material-symbols-outlined">close</span>
-    </div>
-</div>
 
 <!-- ////////////////// - FETCH JS FILES - ////////////////// -->
 

@@ -163,12 +163,12 @@ app.get('/api/messaging', apiMessages.myMessages);
 
 // CLEAR SESSION VARIABLES FOR MODAL MESSAGING
 app.post('/clear-message', function (req, res, next) {
-  req.session.loggedIn = undefined;
-  req.session.passChange = undefined;
-  req.session.newAccount = undefined;
-  req.session.message = undefined;
-  req.session.roleChange = undefined;
-  req.session.slotsAvailable = undefined;
+  delete req.session.loggedIn;
+  delete req.session.passChange;
+  delete req.session.newAccount;
+  delete req.session.message;
+  delete req.session.roleChange;
+  delete req.session.slotsAvailable;
   return res.sendStatus(204);
 });
 
@@ -189,24 +189,26 @@ app.get("/secret", isLoggedIn, async function (req, res, next) {
   const user = await User.findOne({ username: req.user.username });
 
   if (req.user.roles === "admin") {
-    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots, user: user });
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots, user: user, currentUser: req.user });
   } else if (req.user.roles === "user") {
-    return res.render("secret", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots, user: user });
+    return res.render("secret", { name: req.user.username, breakTracker: breakTracker, breakSlots: breakSlots, user: user, currentUser: req.user });
   }
 });
 
 // ADMIN LANDING PAGE
-app.get("/secret_edit/:id", isAdmin, async function (req, res, next) {
-  const foundBreakTrack = await BreakTrack.findById(req.params.id);
-  return res.render("secret_edit", {
-    name: req.user.username,
-    breakTracker: foundBreakTrack,
-  });
+app.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
+  const breakSlots = await getBreakSlotsData();
+  const breakTracker = await getBreakTrackerData();
+  if (req.user.roles === "admin") {
+    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user });
+  } else {
+    return res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user });
+  }
 });
 
 // REGISTER FORM
 app.get("/register", isAdmin, function (req, res, next) {
-  return res.render("register");
+  return res.render("register", { currentUser: req.user });
 });
 
 // HANDLING USER REGISTRATION
@@ -219,7 +221,7 @@ app.post("/register", isAdmin, async function (req, res, next) {
     if (req.body.password !== req.body.confirmpassword) {
       req.session.newAccount = "Mismatch";
       logger.error("Password and confirm password do not match");
-      return res.render("register", { error: "Password and confirm password do not match" });
+      return res.redirect("register");
     }
     User.register(
       { username: req.body.username, roles: "user", breakSlots: breakSlots },
@@ -229,16 +231,16 @@ app.post("/register", isAdmin, async function (req, res, next) {
           logger.error("Error:", err, typeof err);
           if (err.name === 'UserExistsError') {
             req.session.newAccount = "Taken";
-            return res.render("register", { error: 'Username taken' });
+            return res.redirect("register");
           } else if (err.name === 'MissingUsernameError') {
             req.session.newAccount = "NoUser";
-            return res.render("register", { error: 'No username given' });
+            return res.redirect("register");
           } else if (err.name === 'MissingPasswordError') {
             req.session.newAccount = "NoPass";
-            return res.render("register", { error: 'No password given' });
+            return res.redirect("register");
           } else {
             req.session.newAccount = "Error";
-            return res.render("register", { error: 'Error creating user' });
+            return res.redirect("register");
           }
         }
         logger.info(user);
@@ -367,17 +369,6 @@ app.get("/account", isLoggedIn, function (req, res, next) {
   return res.render("account", { error: 'no error', currentUser: req.user });
 });
 
-//HANDLING ADMINS
-app.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
-  const breakSlots = await getBreakSlotsData();
-  const breakTracker = await getBreakTrackerData();
-  if (req.user.roles === "admin") {
-    return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots });
-  } else {
-    return res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots });
-  }
-});
-
 app.use(function (req, res, next) {
   res.locals.user = req.user;
   return next();
@@ -489,7 +480,7 @@ app.post("/", async function (req, res, next) {
   const breakDuration = req.body.duration;
   const currentUser = await User.findOne({ username: user });
   const breakDurationInSeconds = breakDuration * 60;
-  
+
   if (latestBreak && !latestBreak.endTime) {
     req.session.message = 'Only 1 break at a time';
     logger.info(req.session.message);
@@ -523,61 +514,11 @@ app.post("/", async function (req, res, next) {
   }
 });
 
-// RESET BREAK MINUTES AFTER MIDNIGHT TO 35 MINUTES
-async function resetBreakTimes() {
-  const now = new Date();
-  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-  const resetBreakTimeInSeconds = 35 * 60;
-  if (now > midnight) {
-    await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
-  }
-}
-const resetTime = new Date();
-resetTime.setHours(23, 0, 0, 0);
-const millisecondsUntilReset = resetTime.getTime() - Date.now();
-setTimeout(() => {
-  resetBreakTimes();
-  io.emit('reload');
-  setInterval(resetBreakTimes, 24 * 60 * 60 * 1000); // Set interval to run every 24 hours
-}, millisecondsUntilReset);
-
-// CATCH ERRORS
-app.use(function (err, req, res, next) {
-  logger.error(err.stack);
-  return res.status(500).send('Something broke!');
-});
-
-//UPDATE
-app.route("/edit/:id").get((req, res, next) => {
-  const id = req.params.id;
-  BreakTrack.find({}, (err, breaks) => {
-    return res.render("secret_edit.ejs", {
-      breakTracker: breaks,
-      idBreak: id,
-      name: req.user.username
-    });
-  });
-})
-  .post((req, res, next) => {
-    const id = req.params.id;
-    io.emit('reload');
-    BreakTrack.findByIdAndUpdate(
-      id,
-      {
-        content: req.body.content,
-      },
-      (err) => {
-        if (err) return res.send(500, err);
-        return res.redirect("/secret");
-      }
-    );
-  });
-
 // START BUTTON FOR BREAKS
 app.post('/breaks/start/:id', isLoggedIn, async (req, res, next) => {
   const breakId = req.params.id;
   const breakStartTimeStamp = new Date().toISOString(); // Get the current timestamp
-  const breakEntry = await BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, {new: true});
+  const breakEntry = await BreakTrack.findOneAndUpdate({ _id: breakId }, { hasStarted: true, breakStartTimeStamp: breakStartTimeStamp }, { new: true });
   if (!breakEntry) {
     logger.error(`Break entry with ID ${breakId} not found.`);
     return res.status(404).send("Break entry not found.");
@@ -588,13 +529,13 @@ app.post('/breaks/start/:id', isLoggedIn, async (req, res, next) => {
     logger.info(`${kleur.magenta(user.username)} tried to start a break without enough remaining break time.`);
     return res.status(400).send("Not enough remaining break time.");
   }
+  req.session.message = 'Break started';
   user.remainingBreakTime -= breakDurationInSeconds;
   await user.save();
   io.emit('reload');
   logger.info(`${kleur.magenta(req.user.username)} started a break of ${breakEntry.duration} minute(s)`);
   return res.status(200).send("Break status updated successfully.");
 });
-
 
 // REMOVE BREAKS
 app.get("/remove/:id", async (req, res, next) => {
@@ -632,7 +573,6 @@ app.get("/remove/:id", async (req, res, next) => {
   }
 });
 
-
 // BREAK ENDED
 app.post("/breaks/:id/end", async (req, res, next) => {
   const id = req.params.id;
@@ -643,4 +583,28 @@ app.post("/breaks/:id/end", async (req, res, next) => {
     console.error("Error updating hasEnded field: ", err);
     res.sendStatus(500);
   }
+});
+
+// RESET BREAK MINUTES AFTER 23:00 TO 35 MINUTES
+async function resetBreakTimes() {
+  const now = moment.tz(new Date(), 'Europe/' + location).toDate();
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+  const resetBreakTimeInSeconds = 35 * 60;
+  if (now > startOfDay) {
+    await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
+  }
+}
+const resetTime = moment.tz(new Date(), 'Europe/' + location).toDate();
+resetTime.setHours(23, 0, 0, 0);
+const millisecondsUntilReset = resetTime.getTime() - moment.tz(new Date(), 'Europe/' + location).toDate().getTime();
+setTimeout(() => {
+  resetBreakTimes();
+  io.emit('reload');
+  setInterval(resetBreakTimes, 24 * 60 * 60 * 1000); // Set interval to run every 24 hours
+}, millisecondsUntilReset);
+
+// CATCH ERRORS
+app.use(function (err, req, res, next) {
+  logger.error(err.stack);
+  return res.status(500).send('Something broke!');
 });
