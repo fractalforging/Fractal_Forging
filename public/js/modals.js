@@ -16,23 +16,34 @@ document.querySelectorAll('.close-neg, .close-pos').forEach(btn => {
 
 ///////// - MAIN FUNCTION - /////////
 
-const makeApiCall = async apiEndpoint => {
-    const response = await fetch(apiEndpoint);
-    const { message } = await response.json();
-    if (response.status === 200) {
-        [myModal_Neg, myModal_Pos].forEach(modal => modal.style.display = 'none');
-        myModalText_Pos.innerHTML = message;
-        myModal_Pos.style.display = 'block';
-    } else if ([401, 500].includes(response.status)) {
-        [myModal_Pos, myModal_Neg].forEach(modal => modal.style.display = 'none');
-        myModalText_Neg.innerHTML = message;
-        myModal_Neg.style.display = 'block';
-    }
-    fetch('/clear-message', { method: 'POST' });
+const makeApiCall = async (apiEndpoint, delay = 0) => {
+    setTimeout(async () => {
+        const response = await fetch(apiEndpoint);
+        const { message } = await response.json();
+        if (response.status === 200) {
+            [myModal_Neg, myModal_Pos].forEach(modal => modal.style.display = 'none');
+            myModalText_Pos.innerHTML = message;
+            myModal_Pos.style.display = 'block';
+        } else if ([401, 500].includes(response.status)) {
+            [myModal_Pos, myModal_Neg].forEach(modal => modal.style.display = 'none');
+            myModalText_Neg.innerHTML = message;
+            myModal_Neg.style.display = 'block';
+        }
+        fetch('/clear-message', { method: 'POST' });
+    }, delay);
 }
 
 ///////// - GET APIS - /////////
 
-  Promise.all([
+const apiEndpoints = [
     "/api/messaging"
-  ].map(makeApiCall));
+];
+
+apiEndpoints.forEach((apiEndpoint, index) => {
+    makeApiCall(apiEndpoint, index * 500); // Apply a delay of 500ms between each API call
+});
+
+
+//   Promise.all([
+//     "/api/messaging"
+//   ].map(makeApiCall));

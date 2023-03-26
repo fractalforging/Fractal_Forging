@@ -1,0 +1,17 @@
+<!-- ////////////////// - FETCH JS FILES - ////////////////// -->
+
+<script src="/js/toggle.js"></script>
+<script src="/js/modals.js"></script>
+<script src="/thirdparty/sortable/Sortable.min.js"></script>
+<script src="/js/sort.js"></script>
+
+<!-- ////////////// SOCKET.IO - GLOBAL RELOAD ////////////////-->
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  socket.on('reload', () => {
+    console.log('Reload event received');
+    setTimeout(() => location.reload(), 500);
+  });
+</script>

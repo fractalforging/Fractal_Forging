@@ -1,32 +1,16 @@
-<!-- ////////////////// - 1ST IN DOM > PREVENT FLICKER - ////////////////// -->
+<!-- ////////////////// - HEADER SETUP - ////////////////// -->
 
-<script src="/js/theme_setup.js"></script>
-
-<!-- ////////////////// - LINED STYLES AND SCRIPTS - ////////////////// -->
-
-<link rel="stylesheet" type="text/css" href="/css/common.css">
-<link rel="stylesheet" type="text/css" href="/css/themes.css">
-<link rel="stylesheet" type="text/css" href="/css/breaks.css">
-<link rel="stylesheet" type="text/css" href="/css/timer.css">
-<link rel="stylesheet" type="text/css" href="/css/modals.css">
-
-<script src="/js/timer.js"></script>
+<%- include('partials/header.ejs') %>
 
 <br>
 
-<!-- ////////////////// - DARK MODE - ////////////////// -->
+<!-- ////////////////// - THEME TOGGLE - ////////////////// -->
 
-<li style="display: block;" class="toggle-moon">
-  <icon href="#" id="toggle-mode-btn-moon" class="toggle-mode">
-    <span class="material-symbols-outlined">brightness_3</span>
-  </icon>
-</li>
+<%- include('partials/themes.ejs') %>
 
-<li style="display: block;" class="toggle-sun">
-  <icon href="#" id="toggle-mode-btn-sun" class="toggle-mode">
-    <span class="material-symbols-outlined">sunny</span>
-  </icon>
-</li>
+<!-- ////////////// MODALS ////////////////-->
+
+<%- include('partials/modals.ejs') %>
 
 <!-- ////////////////// - FORM - ////////////////// -->
 
@@ -36,25 +20,6 @@
   <button id="login-submit-button" type="submit" class="form-button">Login</button>
 </form>
 
-<!-- ////////////// MODALS ////////////////-->
+<!-- ////////////////// - FETCH BASIC JS - ////////////////// -->
 
-<div id="myModal-Neg" class="modal">
-  <div class="modal-content-neg">
-    <span class="exclamation material-symbols-outlined">exclamation</span>
-    <span id="message-neg" class="modal-text"></span>
-    <span class="close-neg material-symbols-outlined">close</span>
-  </div>
-</div>
-
-<div id="myModal-Pos" class="modal">
-  <div class="modal-content-pos">
-    <span class="check material-symbols-outlined">check</span>
-    <span id="message-pos" class="modal-text"></span>
-    <span class="close-pos material-symbols-outlined">close</span>
-  </div>
-</div>
-
-<!-- ////////////////// - FETCH JS FILES - ////////////////// -->
-
-<script src="/js/toggle.js"></script>
-<script src="/js/modals.js"></script>
+<%- include('partials/basic_bottomjs.ejs') %>
