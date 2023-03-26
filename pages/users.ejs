@@ -1,0 +1,198 @@
+<!-- ////////////////// - 1ST IN DOM > PREVENT FLICKER - ////////////////// -->
+
+<script src="/js/theme_setup.js"></script>
+
+<!-- ////////////////// - LINED STYLES AND SCRIPTS - ////////////////// -->
+
+<link rel="stylesheet" type="text/css" href="/css/common.css">
+<link rel="stylesheet" type="text/css" href="/css/themes.css">
+<link rel="stylesheet" type="text/css" href="/css/breaks.css">
+<link rel="stylesheet" type="text/css" href="/css/timer.css">
+<link rel="stylesheet" type="text/css" href="/css/modals.css">
+
+<script src="/js/timer.js"></script>
+
+<br>
+
+<!-- ////////////////// - DARK MODE - ////////////////// -->
+
+<li style="display: block;" class="toggle-moon">
+    <icon href="#" id="toggle-mode-btn-moon" class="toggle-mode">
+        <span class="material-symbols-outlined">brightness_3</span>
+    </icon>
+</li>
+
+<li style="display: block;" class="toggle-sun">
+    <icon href="#" id="toggle-mode-btn-sun" class="toggle-mode">
+        <span class="material-symbols-outlined">sunny</span>
+    </icon>
+</li>
+
+<!-- ////////////////// - NAV - ////////////////// -->
+
+<navbar>
+    <li><a href="/secret">Breaks</a></li>
+    <section class="vertical-line"></section>
+    <li><a href="/account">Password</a></li>
+    <section class="vertical-line"></section>
+    <li><a href="/register">Register</a></li>
+    <section class="vertical-line"></section>
+    <li><a href="/users">Accounts</a></li>
+    <section class="vertical-line"></section>
+    <li><a href="/logout">Logout</a></li>
+</navbar>
+&nbsp;
+<br>
+
+<hr class="divider">
+
+<!-- users.ejs -->
+
+<greet>Accounts</greet><br><br>
+
+<!-- List all the admin users first -->
+    <ul id="admin-users" class="roles-list">
+        <% adminUsers.forEach(user=> { %>
+            <ul>
+                <% if (user.username !=='admin' ) { %>
+                    <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
+                        <div class="break-list-item-name-user">
+                            <span>
+                                <%= user.username %>
+                            </span>
+                            <select class="item-button">
+                                <% if (user.roles==='admin' ) { %>
+                                    <option value="admin" selected>Admin</option>
+                                    <option value="user">User</option>
+                                    <% } else { %>
+                                        <option value="admin">Admin</option>
+                                        <option value="user" selected>User</option>
+                                        <% } %>
+                                            <option value="delete" class="delete-option">Delete</option>
+                            </select>
+                            <% } %>
+                        </div>
+                    </li>
+            </ul>
+            <% }); %>
+    </ul>
+
+    <br>
+
+    <!-- List all the normal users -->
+    <ul id="normal-users" class="roles-list">
+        <% normalUsers.forEach(user=> { %>
+            <ul>
+                <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
+                    <div class="break-list-item-name-user">
+                        <span>
+                            <%= user.username %>
+                        </span>
+                        <select class="item-button">
+                            <% if (user.roles==='admin' ) { %>
+                                <option value="admin" selected>Admin</option>
+                                <option value="user">User</option>
+                                <% } else { %>
+                                    <option value="admin">Admin</option>
+                                    <option value="user" selected>User</option>
+                                    <% } %>
+                                        <option value="delete" class="delete-option">Delete</option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+            <% }); %>
+    </ul>
+
+
+<!-- Add this script tag at the end of your users.ejs file, before the closing </body> tag -->
+<script>
+    // Helper function to send a PUT request to update user's role
+    const updateUserRole = async (userId, newRole) => {
+        try {
+            const response = await fetch(`/users/${userId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ role: newRole }),
+            });
+
+            if (response.ok) {
+                console.log(`User ${userId} role updated to ${newRole}`);
+                location.reload();
+            } else {
+                console.error(`Error updating user ${userId} role`);
+            }
+        } catch (error) {
+            console.error(`Error updating user ${userId} role: ${error.message}`);
+        }
+    };
+
+    // Helper function to send a DELETE request to delete a user
+    const deleteUser = async (userId, username) => {
+        const confirmed = confirm(`Please confirm deletion of account: ${username}`);
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/accounts/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                console.log(`User ${userId} deleted`);
+                location.reload();
+            } else {
+                console.error(`Error deleting user ${userId}`);
+            }
+        } catch (error) {
+            console.error(`Error deleting user ${userId}: ${error.message}`);
+        }
+    };
+
+    // Add event listeners to all select elements
+    const selectElements = document.querySelectorAll('.item-button');
+    selectElements.forEach(selectElement => {
+        selectElement.addEventListener('change', event => {
+            const liElement = event.target.closest('li');
+            const userId = liElement.dataset.id;
+            const newRole = event.target[selectElement.selectedIndex].value;
+
+            if (newRole === 'delete') {
+                const username = liElement.querySelector('span').textContent;
+                deleteUser(userId, username);
+            } else {
+                updateUserRole(userId, newRole);
+            }
+        });
+    });
+</script>
+
+
+<!-- ////////////// MODALS ////////////////-->
+
+<div id="myModal-Neg" class="modal">
+    <div class="modal-content-neg">
+        <span class="exclamation material-symbols-outlined">exclamation</span>
+        <span id="message-neg" class="modal-text"></span>
+        <span class="close-neg material-symbols-outlined">close</span>
+    </div>
+</div>
+
+<div id="myModal-Pos" class="modal">
+    <div class="modal-content-pos">
+        <span class="check material-symbols-outlined">check</span>
+        <span id="message-pos" class="modal-text"></span>
+        <span class="close-pos material-symbols-outlined">close</span>
+    </div>
+</div>
+
+<!-- ////////////////// - FETCH JS FILES - ////////////////// -->
+
+<script src="/js/toggle.js"></script>
+<script src="/js/modals.js"></script>

@@ -28,19 +28,33 @@
   </icon>
 </li>
 
-<!-- ////////////////// - FORM - ////////////////// -->
+<!-- ////////////////// - NAV - ////////////////// -->
 
+<navbar>
+  <li><a href="/secret">Breaks</a></li>
+  <section class="vertical-line"></section>
+  <li><a href="/account">Password</a></li>
+  <section class="vertical-line"></section>
+  <li><a href="/register">Register</a></li>
+  <section class="vertical-line"></section>
+  <li><a href="/users">Accounts</a></li>
+  <section class="vertical-line"></section>
+  <li><a href="/logout">Logout</a></li>
+</navbar>
+&nbsp;
 <br>
+
+<hr class="divider">
+
+<!-- ////////////////// - FORM - ////////////////// -->
 
 <pagetitle>Register an account</pagetitle>
 
 <form action="/register" method="POST" class="credentials">
-    <input type="text" name="username" placeholder="username" autocomplete="off">
-    <input type="password" name="password" placeholder="password" autocomplete="off">
-    <button class="form-button">Submit</button>
-    <div class="buttons">
-        <li><a href="/secret">Back</a></li>
-    </div>
+  <input type="text" name="username" placeholder="username" autocomplete="off">
+  <input type="password" name="password" placeholder="password" autocomplete="off">
+  <input type="password" id="confirmpassword" name="confirmpassword" placeholder="confirmpassword" autocomplete="off">
+  <button class="form-button">Submit</button>
 </form>
 
 <!-- ////////////// MODALS ////////////////-->
@@ -62,6 +76,6 @@
 </div>
 
 <!-- ////////////////// - FETCH JS FILES - ////////////////// -->
- 
+
 <script src="/js/toggle.js"></script>
 <script src="/js/modals.js"></script>
