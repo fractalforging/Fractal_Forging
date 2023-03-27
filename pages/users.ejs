@@ -106,18 +106,21 @@
 
     // Helper function to send a DELETE request to delete a user
     const deleteUser = async (userId, username) => {
+        console.log(`Attempting to delete user ${userId}`);
         const confirmed = confirm(`Please confirm deletion of account: ${username}`);
         if (!confirmed) {
             return;
         }
 
         try {
-            const response = await fetch(`/accounts/${userId}`, {
+            const response = await fetch(`/delete/${userId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
+
+            console.log('DELETE request response:', response);
 
             if (response.ok) {
                 console.log(`User ${userId} deleted`);
