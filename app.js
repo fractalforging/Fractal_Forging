@@ -148,18 +148,6 @@ app.use("/users", usersRoutes);
 app.use('/delete', deleteRoutes);
 app.get('/api/messaging', apiMessages.myMessages);
 
-// CLEAR SESSION VARIABLES FOR MODAL MESSAGING
-app.post('/clear-message', function (req, res, next) {
-  delete req.session.loggedIn;
-  delete req.session.passChange;
-  delete req.session.newAccount;
-  delete req.session.message;
-  delete req.session.roleChange;
-  delete req.session.slotsAvailable;
-  return res.sendStatus(204);
-});
-
-
 //=====================
 // BREAK TRACKER ROUTES
 //=====================
@@ -178,4 +166,15 @@ app.use('/reset', resetBreakTimeRoutes(User, io, location));
 app.use(function (err, req, res, next) {
   logger.error(err.stack);
   return res.status(500).send('Something broke!');
+});
+
+// CLEAR SESSION VARIABLES FOR MODAL MESSAGING
+app.post('/clear-message', function (req, res, next) {
+  delete req.session.loggedIn;
+  delete req.session.passChange;
+  delete req.session.newAccount;
+  delete req.session.message;
+  delete req.session.roleChange;
+  delete req.session.slotsAvailable;
+  return res.sendStatus(204);
 });
