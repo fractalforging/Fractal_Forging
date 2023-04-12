@@ -1,72 +1,70 @@
 const express = require('express');
 const kleur = require('kleur');
 const router = express.Router();
-const User = require('../models/user.js');
-const logger = require('../serverjs/logger.js');
-const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
+const User = require('../models/user');
+const logger = require('../serverjs/logger');
+const { ensureAuthenticated } = require('../middleware/authentication');
 
-//HANDLING PASSWORD CHANGE
-router.post("/", isLoggedIn, function (req, res, next) {
-  User.findOne({ username: req.user.username }, (err, user) => {
-    if (err || !user) {
-      req.session.passChange = "Error";
-      logger.error(err || "User not found");
-      return res.render("account", { error: "Error, please try again", currentUser: req.user });
+router.post('/', ensureAuthenticated, async (req, res) => {
+  try {
+    const { currentpassword, newpassword, confirmpassword } = req.body;
+
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user) {
+      logger.error('User not found');
+      req.session.passChange = 'Error';
+      return renderError(res, 'User not found', 404, req.user);
     }
 
-    // Check if current password is empty
-    if (!req.body.currentpassword) {
-      req.session.passChange = "Wrong";
-      logger.error("Current password empty");
-      return res.render("account", { error: "Current password empty!", currentUser: req.user });
+    if (!currentpassword) {
+      logger.error('Current password empty');
+      req.session.passChange = 'Wrong';
+      return renderError(res, 'Current password empty!', 400, req.user);
     }
 
-    // Confirm new password
-    if (req.body.newpassword !== req.body.confirmpassword) {
-      req.session.passChange = "Mismatch";
-      logger.error("New password and confirm password do not match");
-      return res.render("account", { error: "New password and confirm password do not match", currentUser: req.user });
+    if (newpassword !== confirmpassword) {
+      logger.error('New password and confirm password do not match');
+      req.session.passChange = 'Mismatch';
+      return renderError(res, 'New password and confirm password do not match', 400, req.user);
     }
 
-    // Check if current password matches
-    user.authenticate(req.body.currentpassword, (err, valid) => {
-      if (err || !valid) {
-        req.session.passChange = "Wrong";
-        logger.error("Current password wrong 2");
-        return res.render("account", { error: "Current password incorrect!", currentUser: req.user });
+    const isValidPassword = await user.authenticate(currentpassword);
+
+    if (!isValidPassword) {
+      logger.error('Current password incorrect');
+      req.session.passChange = 'Wrong';
+      return renderError(res, 'Current password incorrect!', 401, req.user);
+    }
+
+    await user.setPassword(newpassword);
+    await user.save();
+
+    req.logIn(user, (err) => {
+      if (err) {
+        logger.error(err);
+        req.session.passChange = 'Error';
+        return renderError(res, 'Error, please try again', 500, req.user);
       }
-      // Update password
-      user.setPassword(req.body.newpassword, (err) => {
-        if (err) {
-          req.session.passChange = "Error";
-          logger.error(err);
-          return res.render("account", { error: "Error, please try again", currentUser: req.user });
-        }
-        user.save((err) => {
-          if (err) {
-            req.session.passChange = "Error";
-            logger.error(err);
-            return res.render("account", { error: "Error, please try again", currentUser: req.user });
-          }
-          req.logIn(user, (err) => {
-            if (err) {
-              req.session.passChange = "Error";
-              logger.error(err);
-              return res.render("account", { error: "Error, please try again", currentUser: req.user });
-            }
-            req.session.passChange = "Changed";
-            logger.warn("Password change for " + `${kleur.magenta(user.username)}` + " was successfull");
-            return res.redirect("/secret");
-          });
-        });
-      });
+
+      logger.warn(`Password change for ${kleur.magenta(user.username)} was successful`);
+      req.session.passChange = 'Changed';
+      return res.redirect('/secret');
     });
-  });
+  } catch (err) {
+    logger.error(err);
+    req.session.passChange = 'Error';
+    return renderError(res, 'Error, please try again', 500, req.user);
+  }
 });
 
-//HANDLING ACCOUNT
-router.get("/", isLoggedIn, function (req, res, next) {
-  return res.render("account", { error: 'no error', currentUser: req.user });
+router.get('/', ensureAuthenticated, (req, res) => {
+  return res.render('account', { error: req.session.passChange || 'no error', currentUser: req.user });
 });
+
+function renderError(res, errorMsg, statusCode, user) {
+  req.session.passChange = 'Error';
+  return res.status(statusCode).render('account', { error: errorMsg, currentUser: user });
+}
 
 module.exports = router;
