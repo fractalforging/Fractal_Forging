@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const logger = require('../serverjs/logger.js');
 const kleur = require('kleur');
+const { moveToNormalList } = require('./submitBreak');
 
 const removeBreak = (io, BreakTrack, User) => {
   router.get("/:id", async (req, res, next) => {
@@ -13,6 +14,7 @@ const removeBreak = (io, BreakTrack, User) => {
       const userToUpdate = await User.findOne({ username: breakToRemove.user });
       let actionUser = req.user;
       await BreakTrack.findByIdAndRemove(id);
+      await moveToNormalList(BreakTrack);
       let logMessage = '';
       if (isAdmin) {
         logMessage = `admin removed ${kleur.magenta(userToUpdate.username)}'s break `;

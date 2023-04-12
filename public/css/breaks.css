@@ -297,6 +297,7 @@ agent {
   display: block;
 }
 
+.queue-position,
 .timer-container {
   margin-left: 10px;
   text-align: right;

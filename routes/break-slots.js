@@ -5,7 +5,7 @@ const kleur = require('kleur');
 const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
 const BreakSlots = require("../models/BreakSlots.js");
 
-module.exports = function(io) {
+module.exports = function(io, BreakTrack) {
   router.post("/", isAdmin, async function (req, res, next) {
     try {
       const newSlotsValue = req.body.slotsavailable;

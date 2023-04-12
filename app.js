@@ -32,9 +32,7 @@ const location = process.env.LOCATION;
 // Models
 const createAdminUser = require("./models/firstRun");
 const User = require('./models/user');
-const BreakTrack = require("./models/BreakTrack");
-const BreakSlots = require('./models/BreakSlots');
-const BreakQueue = require('./models/BreakQueue');
+const BreakTrack = require("./models/BreakTrack.js");
 
 // Initialization
 if (!dbPath) {
@@ -110,7 +108,7 @@ io.on('connection', (socket) => {
 
 
 //=====================
-// MIDDLEWARE $ ROUTES
+// MIDDLEWARE & ROUTES
 //=====================
 
 const { isLoggedIn, isAdmin } = require('./middleware/authentication.js');
@@ -125,11 +123,18 @@ const breakSlotsRoutes = require('./routes/break-slots.js')(io);
 const usersRoutes = require("./routes/users.js");
 const deleteRoutes = require('./routes/delete.js');
 const apiMessages = require('./serverjs/apiMessages.js');
-const submitBreakRoutes = require('./bt-routes/submitBreak.js');
+
+
+//=====================
+// BT ROUTES
+//=====================
+
+const { submitBreaks: submitBreakRoutes } = require('./bt-routes/submitBreak.js');
 const startBreakRoutes = require('./bt-routes/startBreak.js');
 const removeBreakRoutes = require('./bt-routes/removeBreak.js');
 const endBreakRoutes = require('./bt-routes/endBreak.js');
 const resetBreakTimeRoutes = require('./bt-routes/resetBreakTime.js');
+const breakQueue = require("./bt-routes/breakQueueList.js")(User, io, location);
 
 //=====================
 // APPLY ROUTES
@@ -148,6 +153,18 @@ app.use("/users", usersRoutes);
 app.use('/delete', deleteRoutes);
 app.get('/api/messaging', apiMessages.myMessages);
 
+
+//=====================
+// APPLY BT ROUTES
+//=====================
+
+app.use('/submit', submitBreakRoutes(io, BreakTrack, User));
+app.use('/breaks/start', isLoggedIn, startBreakRoutes(io, BreakTrack, User));
+app.use('/remove', removeBreakRoutes(io, BreakTrack, User));
+app.use('/breaks', endBreakRoutes(BreakTrack));
+app.use('/reset', resetBreakTimeRoutes(User, io, location));
+app.use('/queue', breakQueue);
+
 // CLEAR SESSION VARIABLES FOR MODAL MESSAGING
 app.post('/clear-message', function (req, res, next) {
   delete req.session.loggedIn;
@@ -158,18 +175,6 @@ app.post('/clear-message', function (req, res, next) {
   delete req.session.slotsAvailable;
   return res.sendStatus(204);
 });
-
-
-//=====================
-// BREAK TRACKER ROUTES
-//=====================
-
-app.use('/submit', submitBreakRoutes(io, BreakTrack, User));
-app.use('/breaks/start', isLoggedIn, startBreakRoutes(io, BreakTrack, User));
-app.use('/remove', removeBreakRoutes(io, BreakTrack, User));
-app.use('/breaks', endBreakRoutes(BreakTrack));
-app.use('/reset', resetBreakTimeRoutes(User, io, location));
-
 
 //=====================
 // ERROR HANDLING
