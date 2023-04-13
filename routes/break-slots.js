@@ -4,6 +4,7 @@ const logger = require('../serverjs/logger.js');
 const kleur = require('kleur');
 const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
 const BreakSlots = require("../models/BreakSlots.js");
+const { moveQueuedBreaksToNormalList } = require("../bt-routes/submitBreak.js");
 
 module.exports = function(io, BreakTrack) {
   router.post("/", isAdmin, async function (req, res, next) {
@@ -16,6 +17,7 @@ module.exports = function(io, BreakTrack) {
           { $set: { slots: newSlotsValue } },
           { new: true, upsert: true }
         );
+        await moveQueuedBreaksToNormalList(BreakTrack, newSlotsValue);
         req.session.slotsAvailable = "Updated";
         io.emit('reload'); // use io object passed as a parameter
         logger.info(`${kleur.magenta(req.user.username)} updated the available slots to: ${newSlotsValue}`);
@@ -33,3 +35,4 @@ module.exports = function(io, BreakTrack) {
   });
   return router;
 }
+

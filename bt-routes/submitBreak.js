@@ -22,6 +22,23 @@ const moveToNormalList = async (BreakTrack) => {
   }
 };
 
+const moveQueuedBreaksToNormalList = async (BreakTrack, availableSlots) => {
+  const activeBreaks = await BreakTrack.countDocuments({ status: 'active' });
+  const remainingSlots = availableSlots - activeBreaks;
+
+  if (remainingSlots > 0) {
+    const queuedBreaks = await BreakTrack.find({ status: 'queued' })
+      .sort({ date: 1 })
+      .limit(remainingSlots);
+    
+    for (const queuedBreak of queuedBreaks) {
+      queuedBreak.status = 'active';
+      await queuedBreak.save();
+    }
+  }
+};
+
+
 const submitBreaks = (io, BreakTrack, User) => {
   router.post("/", async function (req, res, next) {
     const user = req.user.username;
@@ -60,10 +77,6 @@ const submitBreaks = (io, BreakTrack, User) => {
           req.session.message = 'Break submitted';
           logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s)`);
 
-          // Update the user's remaining break time
-          currentUser.remainingBreakTime -= breakDurationInSeconds;
-          await currentUser.save(); // Save the updated remaining break time
-
           await moveToNormalList(BreakTrack);
 
           io.emit('reload');
@@ -84,9 +97,9 @@ const submitBreaks = (io, BreakTrack, User) => {
           req.session.message = 'Break submitted and added to the queue';
           logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) and added to the queue`);
 
-          // Update the user's remaining break time
-          currentUser.remainingBreakTime -= breakDurationInSeconds;
-          await currentUser.save(); // Save the updated remaining break time
+          // // Update the user's remaining break time
+          // currentUser.remainingBreakTime -= breakDurationInSeconds;
+          // await currentUser.save(); // Save the updated remaining break time
 
           await moveToNormalList(BreakTrack);
 
@@ -101,5 +114,6 @@ const submitBreaks = (io, BreakTrack, User) => {
   return router;
 }
 
-module.exports = { submitBreaks, moveToNormalList };
+module.exports = { submitBreaks, moveToNormalList, moveQueuedBreaksToNormalList };
+
 
