@@ -18,18 +18,18 @@ module.exports = function(io, BreakTrack) {
           { new: true, upsert: true }
         );
         await moveQueuedBreaksToNormalList(BreakTrack, newSlotsValue);
-        req.session.slotsAvailable = "Updated";
+        req.session.message = "Updated";
         io.emit('reload'); // use io object passed as a parameter
         logger.info(`${kleur.magenta(req.user.username)} updated the available slots to: ${newSlotsValue}`);
         return res.redirect("secret_admin");
       } else if (newSlotsValue == currentSlots.slots) {
-        req.session.slotsAvailable = "Same value";
+        req.session.message = "Same value";
         logger.error("Slots were NOT updated, same value chosen");
         return res.redirect("secret_admin");
       }
     } catch (error) {
       logger.error(error);
-      req.session.slotsAvailable = "Error";
+      req.session.message = "Error";
       return res.redirect("secret_admin");
     }
   });

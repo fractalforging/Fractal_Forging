@@ -16,7 +16,7 @@ router.post('/', isAdmin, async function(req, res, next) {
 
     // check if passwords match
     if (req.body.password !== req.body.confirmpassword) {
-      req.session.newAccount = 'Mismatch';
+      req.session.message = 'Mismatch';
       logger.error('Password and confirm password do not match');
       return res.redirect('/register');
     }
@@ -24,18 +24,18 @@ router.post('/', isAdmin, async function(req, res, next) {
     const newUser = new User({ username: req.body.username, roles: 'user', breakSlots });
     await User.register(newUser, req.body.password);
     logger.info(`Registered new user: ${req.body.username}`);
-    req.session.newAccount = 'Ok';
+    req.session.message = 'Ok';
     res.redirect('/secret_admin');
   } catch (error) {
     logger.error(error);
     if (error.name === 'UserExistsError') {
-      req.session.newAccount = 'Taken';
+      req.session.message = 'Taken';
     } else if (error.name === 'MissingUsernameError') {
-      req.session.newAccount = 'NoUser';
+      req.session.message = 'NoUser';
     } else if (error.name === 'MissingPasswordError') {
-      req.session.newAccount = 'NoPass';
+      req.session.message = 'NoPass';
     } else {
-      req.session.newAccount = 'Error';
+      req.session.message = 'Error';
     }
     res.redirect('/register');
   }
