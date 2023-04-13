@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const breakTrackerSchema = new mongoose.Schema({
   user: {
     type: String,
@@ -24,10 +25,20 @@ const breakTrackerSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  breakStartTimeStamp: { 
+  breakStartTimeStamp: {
     type: String,
     default: null
+  },
+  active: {
+    type: Boolean,
+    default: false
+  },
+  status: {
+    type: String,
+    enum: ['active', 'queued'],
+    required: true,
+    default: 'queued'
   }
 });
-module.exports = mongoose.model('BreakTrack', breakTrackerSchema);
 
+module.exports = mongoose.model('BreakTrack', breakTrackerSchema);
