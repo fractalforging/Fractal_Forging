@@ -64,7 +64,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 //=====================
-// EXPRESS WEB SERVER CONFIG.
+// EXPRESS CONFIG.
 //=====================
 
 const app = express();
@@ -154,8 +154,9 @@ app.use("/users", usersRoutes);
 app.use('/delete', deleteRoutes);
 app.get('/api/messaging', apiMessages.myMessages);
 
+
 //=====================
-// BREAK TRACKER ROUTES
+// APPLY BT ROUTES
 //=====================
 
 app.use('/submit', submitBreakRoutes(io, BreakTrack, User));
@@ -176,11 +177,11 @@ app.use(function (err, req, res, next) {
 
 // CLEAR SESSION VARIABLES FOR MODAL MESSAGING
 app.post('/clear-message', function (req, res, next) {
-  delete req.session.loggedIn;
-  delete req.session.passChange;
-  delete req.session.newAccount;
+  // delete req.session.loggedIn;
+  // delete req.session.passChange;
+  // delete req.session.newAccount;
+  // delete req.session.roleChange;
+  // delete req.session.slotsAvailable;
   delete req.session.message;
-  delete req.session.roleChange;
-  delete req.session.slotsAvailable;
   return res.sendStatus(204);
 });

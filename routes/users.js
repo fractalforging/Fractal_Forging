@@ -26,11 +26,11 @@ router.put("/:id", isAdmin, async (req, res, next) => {
     actionUser = req.user; // Get the current logged-in user
     const newRole = req.body.role;
     await User.findByIdAndUpdate(userId, { roles: newRole });
-    req.session.roleChange = "Role changed";
+    req.session.message = "Role changed";
     logger.warn(`${kleur.magenta(actionUser.username)} updated ${kleur.magenta(userToUpdate.username)}'s role to ${kleur.grey(newRole)}`);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } catch (err) {
-    req.session.roleChange = "Error1";
+    req.session.message = "Error1";
     logger.error(`Error updating user ${kleur.magenta(userToUpdate.username)} role: ${err.message}`);
     logger.error(err);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });

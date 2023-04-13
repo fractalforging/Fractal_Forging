@@ -16,12 +16,12 @@ router.delete('/:id', isAdmin, async (req, res, next) => {
     userId = req.params.id;
     userToDelete = await User.findById(userId);
     await User.findByIdAndDelete(userId);
-    req.session.roleChange = "Deleted";
+    req.session.message = "Deleted";
     const adminUser = req.user; // get the admin user who deleted the account
     logger.warn(`User ${kleur.magenta(userToDelete.username)} deleted by ${kleur.magenta(adminUser.username)}`);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } catch (err) {
-    req.session.roleChange = "Error2";
+    req.session.message = "Error2";
     logger.error(`Error deleting user ${kleur.magenta(userToDelete.username)}: ${err.message}`);
     logger.error(err);
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
