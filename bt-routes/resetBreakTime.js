@@ -3,17 +3,17 @@ const express = require('express');
 const router = express.Router();
 
 const resetBreakTimeRoutes = (User, io, location) => {
+  const resetHour = 22;
   async function resetBreakTimes() {
     const now = moment.tz(new Date(), 'Europe/' + location).toDate();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-    const resetBreakTimeInSeconds = 35 * 60;
-    if (now > startOfDay) {
+    if (now.getHours() >= resetHour) {
+      const resetBreakTimeInSeconds = 35 * 60;
       await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
     }
   }
 
   const resetTime = moment.tz(new Date(), 'Europe/' + location).toDate();
-  resetTime.setHours(23, 0, 0, 0);
+  resetTime.setHours(resetHour, 0, 0, 0);
   const millisecondsUntilReset = resetTime.getTime() - moment.tz(new Date(), 'Europe/' + location).toDate().getTime();
   setTimeout(() => {
     resetBreakTimes();
