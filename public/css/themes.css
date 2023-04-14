@@ -1,14 +1,14 @@
 /* ///////////// - IMPORT FONTS - /////////////// */
 
-/* @import url('https://fonts.googleapis.com/css2?family=Montserrat');
-@import url('https://fonts.googleapis.com/css2?family=Raleway');
-@import url('https://fonts.googleapis.com/css2?family=Kanit');
-@import url('https://fonts.googleapis.com/css2?family=Quicksand');
-@import url('https://fonts.googleapis.com/css2?family=Urbanist');
-@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans'); */
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1'); 
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+/* @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons&display=swap');
 
 /* ////////////// - COMMON - //////////////// */
 :root {
@@ -20,6 +20,7 @@
   /*//// - FONTS - ////*/
   --main-body-font-family: "M PLUS 1";
   --break-list-item-timer-font-family: "Share Tech Mono";
+  font-display: swap;
 }
 
 /* ////////////// - THEMES - //////////////// */
