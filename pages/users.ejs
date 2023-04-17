@@ -2,166 +2,257 @@
 
 <%- include('partials/header.ejs') %>
 
-<br>
-
-<!-- ////////////////// - THEME TOGGLE - ////////////////// -->
-
-<%- include('partials/themes.ejs') %>
-
-<!-- ////////////// - MODALS - ////////////////-->
-
-<%- include('partials/modals.ejs') %>
-
-<!-- ////////////////// - NAV - ////////////////// -->
-
-<%- include('partials/navigation.ejs') %>
-
-&nbsp;
-<br>
-
-<hr class="divider">
-
-<!-- ////////////// - ACCOUNTS - ////////////////-->
-
-<greet>Accounts</greet><br><br>
-
-<!-- ////////////// - ADMINS - //////////////// -->
-
-<joke>SPCs</joke>
-
-<br><br>
-
-    <ul id="admin-users" class="roles-list">
-        <% adminUsers.forEach(user=> { %>
-            <ul>
-                <% if (user.username !=='admin' ) { %>
-                    <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
-                        <div class="break-list-item-name-user">
-                            <span>
-                                <%= user.username %>
-                            </span>
-                            <select class="item-button">
-                                <% if (user.roles==='admin' ) { %>
-                                    <option value="admin" selected>Admin</option>
-                                    <option value="user">User</option>
-                                    <% } else { %>
-                                        <option value="admin">Admin</option>
-                                        <option value="user" selected>User</option>
-                                        <% } %>
-                                            <option value="delete" class="delete-option">Delete</option>
-                            </select>
-                            <% } %>
-                        </div>
-                    </li>
-            </ul>
-            <% }); %>
-    </ul>
-
     <br>
 
-<!-- ////////////// - USERS - //////////////// -->
+    <!-- ////////////////// - THEME TOGGLE - ////////////////// -->
 
-<joke>Agents</joke>
+    <%- include('partials/themes.ejs') %>
 
-<br><br>
+        <!-- ////////////// - MODALS - ////////////////-->
 
-    <ul id="normal-users" class="roles-list">
-        <% normalUsers.forEach(user=> { %>
-            <ul>
-                <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
-                    <div class="break-list-item-name-user">
-                        <span>
-                            <%= user.username %>
-                        </span>
-                        <select class="item-button">
-                            <% if (user.roles==='admin' ) { %>
-                                <option value="admin" selected>Admin</option>
-                                <option value="user">User</option>
-                                <% } else { %>
-                                    <option value="admin">Admin</option>
-                                    <option value="user" selected>User</option>
-                                    <% } %>
-                                        <option value="delete" class="delete-option">Delete</option>
-                        </select>
+        <%- include('partials/modals.ejs') %>
+
+            <!-- ////////////////// - NAV - ////////////////// -->
+
+            <%- include('partials/navigation.ejs') %>
+
+                &nbsp;
+                <br>
+
+                <hr class="divider">
+
+                <!-- ////////////// - ACCOUNTS - ////////////////-->
+
+                <greet>Accounts</greet><br><br>
+
+                <!-- ////////////// - ADMINS - //////////////// -->
+
+                <joke>SPCs</joke>
+
+                <br><br>
+
+                <ul id="admin-users" class="roles-list">
+                    <% adminUsers.forEach(user=> { %>
+                        <ul>
+                            <% if (user.username !=='admin' ) { %>
+                                <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
+                                    class="break-list-item-user">
+                                    <div class="break-list-item-name-user">
+                                        <span>
+                                            <%= user.username %>
+                                        </span>
+                                        <button class="reset-password-button" data-user-id="<%= user._id %>">Reset</button>
+                                        <!-- HERE IS THE RESET BUTTON -->
+                                        <select class="item-button">
+                                            <% if (user.roles==='admin' ) { %>
+                                                <option value="admin" selected>Admin</option>
+                                                <option value="user">User</option>
+                                                <% } else { %>
+                                                    <option value="admin">Admin</option>
+                                                    <option value="user" selected>User</option>
+                                                    <% } %>
+                                                        <option value="delete" class="delete-option">Delete</option>
+                                        </select>
+                                        <% } %>
+                                    </div>
+                                </li>
+                        </ul>
+                        <% }); %>
+                </ul>
+
+                <br>
+
+                <!-- ////////////// - USERS - //////////////// -->
+
+                <joke>Agents</joke>
+
+                <br><br>
+
+                <ul id="normal-users" class="roles-list">
+                    <% normalUsers.forEach(user=> { %>
+                        <ul>
+                            <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
+                                <div class="break-list-item-name-user">
+                                    <span>
+                                        <%= user.username %>
+                                    </span>
+                                    <button class="reset-password-button" data-user-id="<%= user._id %>">Reset</button>
+                                    <!-- HERE IS THE RESET BUTTON -->
+                                    <select class="item-button">
+                                        <% if (user.roles==='admin' ) { %>
+                                            <option value="admin" selected>Admin</option>
+                                            <option value="user">User</option>
+                                            <% } else { %>
+                                                <option value="admin">Admin</option>
+                                                <option value="user" selected>User</option>
+                                                <% } %>
+                                                    <option value="delete" class="delete-option">Delete</option>
+                                    </select>
+                                </div>
+                            </li>
+                        </ul>
+                        <% }); %>
+                </ul>
+
+
+                <!-- /////////////// - HELPER FUNCTIONS - //////////////// -->
+                <script>
+                    // Helper function to send a PUT request to update user's role
+                    const updateUserRole = async (userId, newRole) => {
+                        try {
+                            const response = await fetch(`/users/${userId}`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ role: newRole }),
+                            });
+
+                            if (response.ok) {
+                                console.log(`User ${userId} role updated to ${newRole}`);
+                                location.reload();
+                            } else {
+                                console.error(`Error updating user ${userId} role`);
+                            }
+                        } catch (error) {
+                            console.error(`Error updating user ${userId} role: ${error.message}`);
+                        }
+                    };
+
+                    // Helper function to send a DELETE request to delete a user
+                    const deleteUser = async (userId, username) => {
+                        console.log(`Attempting to delete user ${userId}`);
+                        const confirmed = confirm(`Please confirm deletion of account: ${username}`);
+                        if (!confirmed) {
+                            return;
+                        }
+
+                        try {
+                            const response = await fetch(`/delete/${userId}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                            });
+
+                            console.log('DELETE request response:', response);
+
+                            if (response.ok) {
+                                console.log(`User ${userId} deleted`);
+                                location.reload();
+                            } else {
+                                console.error(`Error deleting user ${userId}`);
+                            }
+                        } catch (error) {
+                            console.error(`Error deleting user ${userId}: ${error.message}`);
+                        }
+                    };
+
+                    // Add event listeners to all select elements
+                    const selectElements = document.querySelectorAll('.item-button');
+                    selectElements.forEach(selectElement => {
+                        selectElement.addEventListener('change', event => {
+                            const liElement = event.target.closest('li');
+                            const userId = liElement.dataset.id;
+                            const newRole = event.target[selectElement.selectedIndex].value;
+
+                            if (newRole === 'delete') {
+                                const username = liElement.querySelector('span').textContent;
+                                deleteUser(userId, username);
+                            } else {
+                                updateUserRole(userId, newRole);
+                            }
+                        });
+                    });
+                </script>
+
+                <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
+
+
+                <script>
+
+                    document.addEventListener('DOMContentLoaded', () => {
+                        // Add this function to your client-side JavaScript code
+                        async function resetPassword(userId, newPassword, confirmPassword) {
+                            try {
+                                const response = await fetch(`/resetpassword/${userId}`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({ newPassword, confirmPassword }),
+                                });
+
+                                if (response.ok) {
+                                    console.log("Password reset successful");
+                                    location.reload();
+                                } else {
+                                    console.error("Error resetting password");
+                                }
+                            } catch (error) {
+                                console.error(`Error resetting password: ${error.message}`);
+                            }
+                        }
+
+                        // Replace the existing event listener code for the reset password button with this
+                        document.querySelectorAll(".reset-password-button").forEach((button) => {
+                            button.addEventListener("click", (e) => {
+                                e.preventDefault();
+                                const username = e.target.closest("li").querySelector(".break-list-item-name-user span").textContent.trim();
+                                const userId = e.target.closest("li").dataset.id;
+                                displayResetPasswordModal(userId);
+                            });
+                        });
+
+                        // Modify the displayResetPasswordModal function to handle form submission
+                        function displayResetPasswordModal(userId) {
+                            const modal = document.getElementById("reset-password-modal");
+                            const close = modal.querySelector(".reset-password-close");
+                            const form = modal.querySelector("#reset-password-form");
+
+                            modal.style.display = "block";
+
+                            // Add a hidden input field to the form to include the userId
+                            const userIdInput = document.createElement("input");
+                            userIdInput.type = "hidden";
+                            userIdInput.name = "userId";
+                            userIdInput.value = userId;
+                            form.appendChild(userIdInput);
+
+                            close.onclick = () => {
+                                modal.style.display = "none";
+                            };
+                        }
+
+                        function handleFormSubmit(e, userId) {
+                            e.preventDefault();
+                            const newPassword = e.currentTarget.querySelector('input[name="new-password"]').value;
+                            const confirmPassword = e.currentTarget.querySelector('input[name="confirm-new-password"]').value;
+                            resetPassword(userId, newPassword, confirmPassword);
+                        }
+
+                    });
+
+
+                </script>
+
+                <!-- ////////////// - PASSWORD RESET MODAL - ////////////////-->
+
+                <div id="reset-password-modal" class="reset-password-modal">
+                    <div class="reset-password-modal-content">
+                        <span class="reset-password-close">&times;</span>
+                        <h2>Reset Password</h2>
+                        <form action="/resetpassword" method="post" id="reset-password-form" class="credentials">
+                            <input type="password" id="newpassword" name="newPassword" placeholder="New Password">
+                            <input type="password" id="confirmpassword" name="confirmPassword"
+                                placeholder="Confirm New Password">
+                            <button type="submit" class="form-button">OK</button>
+                        </form>
+
                     </div>
-                </li>
-            </ul>
-            <% }); %>
-    </ul>
+                </div>
 
+                <!-- ////////////////// - FETCH JS FILES - ////////////////// -->
 
-<!-- /////////////// - HELPER FUNCTIONS - //////////////// -->
-<script>
-    // Helper function to send a PUT request to update user's role
-    const updateUserRole = async (userId, newRole) => {
-        try {
-            const response = await fetch(`/users/${userId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ role: newRole }),
-            });
-
-            if (response.ok) {
-                console.log(`User ${userId} role updated to ${newRole}`);
-                location.reload();
-            } else {
-                console.error(`Error updating user ${userId} role`);
-            }
-        } catch (error) {
-            console.error(`Error updating user ${userId} role: ${error.message}`);
-        }
-    };
-
-    // Helper function to send a DELETE request to delete a user
-    const deleteUser = async (userId, username) => {
-        console.log(`Attempting to delete user ${userId}`);
-        const confirmed = confirm(`Please confirm deletion of account: ${username}`);
-        if (!confirmed) {
-            return;
-        }
-
-        try {
-            const response = await fetch(`/delete/${userId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            console.log('DELETE request response:', response);
-
-            if (response.ok) {
-                console.log(`User ${userId} deleted`);
-                location.reload();
-            } else {
-                console.error(`Error deleting user ${userId}`);
-            }
-        } catch (error) {
-            console.error(`Error deleting user ${userId}: ${error.message}`);
-        }
-    };
-
-    // Add event listeners to all select elements
-    const selectElements = document.querySelectorAll('.item-button');
-    selectElements.forEach(selectElement => {
-        selectElement.addEventListener('change', event => {
-            const liElement = event.target.closest('li');
-            const userId = liElement.dataset.id;
-            const newRole = event.target[selectElement.selectedIndex].value;
-
-            if (newRole === 'delete') {
-                const username = liElement.querySelector('span').textContent;
-                deleteUser(userId, username);
-            } else {
-                updateUserRole(userId, newRole);
-            }
-        });
-    });
-</script>
-
-<!-- ////////////////// - FETCH JS FILES - ////////////////// -->
-
-<script src="/js/toggle.js"></script>
-<script src="/js/modals.js"></script>
+                <script src="/js/toggle.js"></script>
+                <script src="/js/modals.js"></script>

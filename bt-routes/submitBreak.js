@@ -97,10 +97,6 @@ const submitBreaks = (io, BreakTrack, User) => {
           req.session.message = 'Break submitted and added to the queue';
           logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) and added to the queue`);
 
-          // // Update the user's remaining break time
-          // currentUser.remainingBreakTime -= breakDurationInSeconds;
-          // await currentUser.save(); // Save the updated remaining break time
-
           await moveToNormalList(BreakTrack);
 
           io.emit('reload');

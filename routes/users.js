@@ -13,7 +13,7 @@ router.get("/", isAdmin, async (req, res, next) => {
   return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
 });
 
-router.put("/:id", isAdmin, async (req, res, next) => {
+router.put("/:userId", isAdmin, async (req, res, next) => {
   let userToUpdate;
   let actionUser;
   try {
@@ -21,7 +21,7 @@ router.put("/:id", isAdmin, async (req, res, next) => {
     const users = await User.find({});
     const adminUsers = users.filter(user => user.roles === "admin");
     const normalUsers = users.filter(user => user.roles === "user");
-    const userId = req.params.id;
+    const userId = req.params.userId;
     userToUpdate = await User.findById(userId);
     actionUser = req.user; // Get the current logged-in user
     const newRole = req.body.role;
