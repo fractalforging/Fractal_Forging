@@ -240,6 +240,7 @@ nonstart {
   }
 }
 
+.reset-password-button,
 .item-button,
 .start-break {
   opacity: 0;
@@ -256,6 +257,11 @@ nonstart {
   cursor: pointer;
   animation: fade-in 1s ease-in-out forwards 0s;
   transition: all var(--animation-duration-short) ease-in-out;
+}
+
+.reset-password-button {
+  margin-left: auto;
+  margin-right: 5px;
 }
 
 .remove-user,
@@ -299,6 +305,7 @@ filer {
   color: var(--break-list-item-filler-color);
 }
 
+.reset-password-button:hover,
 .item-button:hover {
   background: url() 96% / 15% no-repeat var(--break-plus-button-symbol-color);
 }
