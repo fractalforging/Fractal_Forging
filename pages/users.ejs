@@ -1,39 +1,48 @@
-<!-- ////////////////// - HEADER SETUP - ////////////////// -->
+<body class="scrollbar-page">
 
-<%- include('partials/header.ejs') %>
+    <!-- ////////////////// - HEADER SETUP - ////////////////// -->
 
-    <br>
+    <%- include('partials/header.ejs') %>
 
-    <!-- ////////////////// - THEME TOGGLE - ////////////////// -->
+        <br>
 
-    <%- include('partials/themes.ejs') %>
+        <!-- ////////////////// - THEME TOGGLE - ////////////////// -->
 
-        <!-- ////////////// - MODALS - ////////////////-->
+        <%- include('partials/themes.ejs') %>
 
-        <%- include('partials/modals.ejs') %>
+            <!-- ////////////// - MODALS - ////////////////-->
 
-            <!-- ////////////////// - NAV - ////////////////// -->
+            <%- include('partials/modals.ejs') %>
 
-            <%- include('partials/navigation.ejs') %>
+                <!-- ////////////////// - NAV - ////////////////// -->
 
-                &nbsp;
-                <br>
+                <%- include('partials/navigation.ejs') %>
 
-                <hr class="divider">
+                    &nbsp;
+                    <br>
 
-                <!-- ////////////// - ACCOUNTS - ////////////////-->
+                    <hr class="divider">
 
-                <greet>Accounts</greet><br><br>
+                    <!-- ////////////// - ACCOUNTS - ////////////////-->
 
-                <!-- ////////////// - ADMINS - //////////////// -->
+                    <greet>Accounts</greet><br><br>
 
-                <joke>SPCs</joke>
+                    <br>
 
-                <br><br>
+                    <!-- ////////////// - SEARCH - //////////////// -->
 
-                <ul id="admin-users" class="roles-list">
-                    <% adminUsers.forEach(user=> { %>
-                        <ul>
+                    <input type="text" id="search-bar" placeholder="Search users...">
+
+                    <br><br>
+
+                    <!-- ////////////// - ADMINS - //////////////// -->
+
+                    <joke>SPCs</joke>
+
+                    <br><br>
+
+                    <ul id="admin-users" class="roles-list">
+                        <% adminUsers.forEach(user=> { %>
                             <% if (user.username !=='admin' ) { %>
                                 <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
                                     class="break-list-item-user">
@@ -41,8 +50,8 @@
                                         <span>
                                             <%= user.username %>
                                         </span>
-                                        <button class="reset-password-button" data-user-id="<%= user._id %>">Reset</button>
-                                        <!-- HERE IS THE RESET BUTTON -->
+                                        <button class="reset-password-button"
+                                            data-user-id="<%= user._id %>">Reset</button>
                                         <select class="item-button">
                                             <% if (user.roles==='admin' ) { %>
                                                 <option value="admin" selected>Admin</option>
@@ -53,31 +62,28 @@
                                                     <% } %>
                                                         <option value="delete" class="delete-option">Delete</option>
                                         </select>
-                                        <% } %>
                                     </div>
                                 </li>
-                        </ul>
-                        <% }); %>
-                </ul>
+                                <% } %>
+                                    <% }); %>
+                    </ul>
 
-                <br>
+                    <br>
 
-                <!-- ////////////// - USERS - //////////////// -->
+                    <!-- ////////////// - USERS - //////////////// -->
 
-                <joke>Agents</joke>
+                    <joke>Agents</joke>
 
-                <br><br>
+                    <br><br>
 
-                <ul id="normal-users" class="roles-list">
-                    <% normalUsers.forEach(user=> { %>
-                        <ul>
+                    <ul id="normal-users" class="roles-list">
+                        <% normalUsers.forEach(user=> { %>
                             <li data-id="<%= user._id %>" data-role="<%= user.roles %>" class="break-list-item-user">
                                 <div class="break-list-item-name-user">
                                     <span>
                                         <%= user.username %>
                                     </span>
                                     <button class="reset-password-button" data-user-id="<%= user._id %>">Reset</button>
-                                    <!-- HERE IS THE RESET BUTTON -->
                                     <select class="item-button">
                                         <% if (user.roles==='admin' ) { %>
                                             <option value="admin" selected>Admin</option>
@@ -90,169 +96,217 @@
                                     </select>
                                 </div>
                             </li>
-                        </ul>
-                        <% }); %>
-                </ul>
+                            <% }); %>
+                    </ul>
 
+                    <br><br><br>
 
-                <!-- /////////////// - HELPER FUNCTIONS - //////////////// -->
-                <script>
-                    // Helper function to send a PUT request to update user's role
-                    const updateUserRole = async (userId, newRole) => {
-                        try {
-                            const response = await fetch(`/users/${userId}`, {
-                                method: 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ role: newRole }),
-                            });
+                    <!-- /////////////// - HELPER FUNCTIONS - //////////////// -->
 
-                            if (response.ok) {
-                                console.log(`User ${userId} role updated to ${newRole}`);
-                                location.reload();
-                            } else {
-                                console.error(`Error updating user ${userId} role`);
-                            }
-                        } catch (error) {
-                            console.error(`Error updating user ${userId} role: ${error.message}`);
-                        }
-                    };
-
-                    // Helper function to send a DELETE request to delete a user
-                    const deleteUser = async (userId, username) => {
-                        console.log(`Attempting to delete user ${userId}`);
-                        const confirmed = confirm(`Please confirm deletion of account: ${username}`);
-                        if (!confirmed) {
-                            return;
-                        }
-
-                        try {
-                            const response = await fetch(`/delete/${userId}`, {
-                                method: 'DELETE',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                            });
-
-                            console.log('DELETE request response:', response);
-
-                            if (response.ok) {
-                                console.log(`User ${userId} deleted`);
-                                location.reload();
-                            } else {
-                                console.error(`Error deleting user ${userId}`);
-                            }
-                        } catch (error) {
-                            console.error(`Error deleting user ${userId}: ${error.message}`);
-                        }
-                    };
-
-                    // Add event listeners to all select elements
-                    const selectElements = document.querySelectorAll('.item-button');
-                    selectElements.forEach(selectElement => {
-                        selectElement.addEventListener('change', event => {
-                            const liElement = event.target.closest('li');
-                            const userId = liElement.dataset.id;
-                            const newRole = event.target[selectElement.selectedIndex].value;
-
-                            if (newRole === 'delete') {
-                                const username = liElement.querySelector('span').textContent;
-                                deleteUser(userId, username);
-                            } else {
-                                updateUserRole(userId, newRole);
-                            }
-                        });
-                    });
-                </script>
-
-                <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
-
-
-                <script>
-
-                    document.addEventListener('DOMContentLoaded', () => {
-                        // Add this function to your client-side JavaScript code
-                        async function resetPassword(userId, newPassword, confirmPassword) {
+                    <script>
+                        const updateUserRole = async (userId, newRole) => {
                             try {
-                                const response = await fetch(`/resetpassword/${userId}`, {
-                                    method: "POST",
+                                const response = await fetch(`/users/${userId}`, {
+                                    method: 'PUT',
                                     headers: {
-                                        "Content-Type": "application/json",
+                                        'Content-Type': 'application/json',
                                     },
-                                    body: JSON.stringify({ newPassword, confirmPassword }),
+                                    body: JSON.stringify({ role: newRole }),
                                 });
-
                                 if (response.ok) {
-                                    console.log("Password reset successful");
+                                    console.log(`User ${userId} role updated to ${newRole}`);
                                     location.reload();
                                 } else {
-                                    console.error("Error resetting password");
+                                    console.error(`Error updating user ${userId} role`);
                                 }
                             } catch (error) {
-                                console.error(`Error resetting password: ${error.message}`);
+                                console.error(`Error updating user ${userId} role: ${error.message}`);
+                            }
+                        };
+
+                        const deleteUser = async (userId, username) => {
+                            console.log(`Attempting to delete user ${userId}`);
+                            const confirmed = confirm(`Please confirm deletion of account: ${username}`);
+                            if (!confirmed) {
+                                return;
+                            }
+                            try {
+                                const response = await fetch(`/delete/${userId}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                });
+                                console.log('DELETE request response:', response);
+                                if (response.ok) {
+                                    console.log(`User ${userId} deleted`);
+                                    location.reload();
+                                } else {
+                                    console.error(`Error deleting user ${userId}`);
+                                }
+                            } catch (error) {
+                                console.error(`Error deleting user ${userId}: ${error.message}`);
+                            }
+                        };
+                        const selectElements = document.querySelectorAll('.item-button');
+                        selectElements.forEach(selectElement => {
+                            selectElement.addEventListener('change', event => {
+                                const liElement = event.target.closest('li');
+                                const userId = liElement.dataset.id;
+                                const newRole = event.target[selectElement.selectedIndex].value;
+                                if (newRole === 'delete') {
+                                    const username = liElement.querySelector('span').textContent;
+                                    deleteUser(userId, username);
+                                } else {
+                                    updateUserRole(userId, newRole);
+                                }
+                            });
+                        });
+                    </script>
+
+                    <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            async function resetPassword(userId, newPassword, confirmPassword) {
+                                try {
+                                    const response = await fetch(`/resetpassword/${userId}`, {
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({ newPassword, confirmPassword }),
+                                    });
+                                    const data = await response.json();
+                                    if (response.ok) {
+                                        console.log("Password reset successful");
+                                        return { success: true };
+                                    } else {
+                                        console.error("Error resetting password");
+                                        return { success: false, error: data.error };
+                                    }
+                                } catch (error) {
+                                    console.error(`Error resetting password: ${error.message}`);
+                                    return { success: false, error: error.message };
+                                }
+                            }
+
+
+
+                            document.querySelectorAll(".reset-password-button").forEach((button) => {
+                                button.addEventListener("click", (e) => {
+                                    e.preventDefault();
+                                    const username = e.target.closest("li").querySelector(".break-list-item-name-user span").textContent.trim();
+                                    const userId = e.target.closest("li").dataset.id;
+                                    displayResetPasswordModal(userId);
+                                });
+                            });
+                            function displayResetPasswordModal(userId) {
+                                const modal = document.getElementById("reset-password-modal");
+                                const close = modal.querySelector(".reset-password-close");
+                                const form = modal.querySelector("#reset-password-form");
+                                modal.style.display = "block";
+                                const userIdInput = document.createElement("input");
+                                userIdInput.type = "hidden";
+                                userIdInput.name = "userId";
+                                userIdInput.value = userId;
+                                form.appendChild(userIdInput);
+                                close.onclick = () => {
+                                    modal.style.display = "none";
+                                };
+                            }
+                            async function handleFormSubmit(e, userId) {
+                                e.preventDefault();
+                                const newPassword = e.currentTarget.querySelector('input[name="new-password"]').value;
+                                const confirmPassword = e.currentTarget.querySelector('input[name="confirm-new-password"]').value;
+                                const success = await resetPassword(userId, newPassword, confirmPassword);
+                                if (success) {
+                                    location.reload();
+                                } else {
+                                    const errorMessage = document.createElement("p");
+                                    errorMessage.textContent = "New password and confirm password do not match";
+                                    errorMessage.style.color = "red";
+                                    e.currentTarget.appendChild(errorMessage);
+                                }
+                            }
+
+                        });
+                        function displayError(errorMessage) {
+                            const errorElement = document.querySelector('#reset-password-modal .error-message');
+                            if (!errorElement) {
+                                const modalContent = document.querySelector('#reset-password-modal .reset-password-modal-content');
+                                const errorDiv = document.createElement('div');
+                                errorDiv.classList.add('error-message');
+                                errorDiv.style.color = 'red';
+                                errorDiv.textContent = errorMessage;
+                                modalContent.insertBefore(errorDiv, modalContent.firstChild);
+                            } else {
+                                errorElement.textContent = errorMessage;
                             }
                         }
 
-                        // Replace the existing event listener code for the reset password button with this
-                        document.querySelectorAll(".reset-password-button").forEach((button) => {
-                            button.addEventListener("click", (e) => {
-                                e.preventDefault();
-                                const username = e.target.closest("li").querySelector(".break-list-item-name-user span").textContent.trim();
-                                const userId = e.target.closest("li").dataset.id;
-                                displayResetPasswordModal(userId);
+                    </script>
+
+                    <!-- ////////////// - SEARCH FUNCTIONALITY - ////////////////-->
+
+                    <script>
+                        const searchInput = document.getElementById('search-bar');
+                        searchInput.addEventListener('input', () => {
+                            const searchValue = searchInput.value.toLowerCase();
+                            const adminUsers = document.querySelectorAll('#admin-users .break-list-item-user');
+                            const normalUsers = document.querySelectorAll('#normal-users .break-list-item-user');
+                            filterUsers(adminUsers, searchValue);
+                            filterUsers(normalUsers, searchValue);
+                        });
+                        function filterUsers(users, searchValue) {
+                            users.forEach(user => {
+                                const username = user.querySelector('.break-list-item-name-user span').textContent.toLowerCase();
+                                if (username.includes(searchValue)) {
+                                    user.style.display = 'list-item';
+                                } else {
+                                    user.style.display = 'none';
+                                }
                             });
+                        }
+                        // Add event listener to the form submit button
+                        document.getElementById("reset-password-form").addEventListener("submit", function (event) {
+                            event.preventDefault();
+                            var newPassword = document.getElementById("newpassword");
+                            var confirmPassword = document.getElementById("confirmpassword");
+                            var errorMessage = document.getElementById("error-message");
+
+                            if (newPassword.value !== confirmPassword.value) {
+                                errorMessage.style.display = "block";
+                                errorMessage.textContent = "New password and password confirmation do not match";
+                            } else {
+                                errorMessage.style.display = "none";
+                                document.getElementById("reset-password-form").submit();
+                            }
                         });
 
-                        // Modify the displayResetPasswordModal function to handle form submission
-                        function displayResetPasswordModal(userId) {
-                            const modal = document.getElementById("reset-password-modal");
-                            const close = modal.querySelector(".reset-password-close");
-                            const form = modal.querySelector("#reset-password-form");
 
-                            modal.style.display = "block";
+                    </script>
 
-                            // Add a hidden input field to the form to include the userId
-                            const userIdInput = document.createElement("input");
-                            userIdInput.type = "hidden";
-                            userIdInput.name = "userId";
-                            userIdInput.value = userId;
-                            form.appendChild(userIdInput);
+                    <!-- ////////////// - PASSWORD RESET MODAL - ////////////////-->
 
-                            close.onclick = () => {
-                                modal.style.display = "none";
-                            };
-                        }
-
-                        function handleFormSubmit(e, userId) {
-                            e.preventDefault();
-                            const newPassword = e.currentTarget.querySelector('input[name="new-password"]').value;
-                            const confirmPassword = e.currentTarget.querySelector('input[name="confirm-new-password"]').value;
-                            resetPassword(userId, newPassword, confirmPassword);
-                        }
-
-                    });
-
-
-                </script>
-
-                <!-- ////////////// - PASSWORD RESET MODAL - ////////////////-->
-
-                <div id="reset-password-modal" class="reset-password-modal">
-                    <div class="reset-password-modal-content">
-                        <span class="reset-password-close">&times;</span>
-                        <h2>Reset Password</h2>
-                        <form action="/resetpassword" method="post" id="reset-password-form" class="credentials">
-                            <input type="password" id="newpassword" name="newPassword" placeholder="New Password">
-                            <input type="password" id="confirmpassword" name="confirmPassword"
-                                placeholder="Confirm New Password">
-                            <button type="submit" class="form-button">OK</button>
-                        </form>
-
+                    <div id="reset-password-modal" class="reset-password-modal">
+                        <div class="reset-password-modal-content">
+                            <span class="reset-password-close">&times;</span>
+                            <greet class="reset-pass-title">Reset Password</greet>
+                            <form action="/resetpassword" method="post" id="reset-password-form" class="credentials">
+                                <input type="password" id="newpassword" name="newPassword" placeholder="New Password">
+                                <p id="error-message" style="display:none; color: red;"></p>
+                                <input type="password" id="confirmpassword" name="confirmPassword"
+                                    placeholder="Confirm New Password">
+                                <button type="submit" class="form-button">OK</button>
+                            </form>
+                        </div>
                     </div>
-                </div>
 
-                <!-- ////////////////// - FETCH JS FILES - ////////////////// -->
+                        <!-- ////////////////// - FETCH JS FILES - ////////////////// -->
 
-                <script src="/js/toggle.js"></script>
-                <script src="/js/modals.js"></script>
+                        <script src="/js/toggle.js"></script>
+                        <script src="/js/modals.js"></script>
+
+
+</body>

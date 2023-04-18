@@ -11,6 +11,7 @@ const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
 const logger = require('./serverjs/logger.js');
 const dotenv = require("dotenv");
+const kleur = require('kleur');
 const http = require('http');
 const { Server } = require('socket.io');
 
@@ -30,7 +31,7 @@ const location = process.env.LOCATION;
 //=====================
 
 // Models
-const createAdminUser = require("./models/firstRun");
+const firstRun = require("./models/firstRun");
 const User = require('./models/user');
 const BreakTrack = require("./models/BreakTrack.js");
 
@@ -49,8 +50,8 @@ async function connectMongoDB() {
       useUnifiedTopology: true,
     });
     logger.info("MongoDB connected successfully!");
-    await createAdminUser();
-    server.listen(port, () => logger.info(`Server Up and running on port: ${port}`));
+    await firstRun();
+    server.listen(port, () => logger.info(`Server Up and running on port: ${kleur.grey(port)}`));
   } catch (err) {
     logger.error("MongoDB connection error:", err);
   }
@@ -123,7 +124,7 @@ const breakSlotsRoutes = require('./routes/break-slots.js')(io, BreakTrack);
 const usersRoutes = require("./routes/users.js");
 const deleteRoutes = require('./routes/delete.js');
 const apiMessages = require('./serverjs/apiMessages.js');
-const resetPasswordRoute = require('./routes/resetPassword.js');
+const resetPasswordRoute = require('./routes/resetPassword.js')
 
 
 //=====================

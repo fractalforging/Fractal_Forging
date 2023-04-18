@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const { isLoggedIn, isAdmin } = require('../middleware/authentication');
-const logger = require('../serverjs/logger');
 const BreakSlots = require('../models/BreakSlots');
+const logger = require('../serverjs/logger');
+const kleur = require('kleur');
 
 router.get('/', function(req, res, next) {
   res.render('register', { currentUser: req.user });
@@ -23,7 +24,7 @@ router.post('/', isAdmin, async function(req, res, next) {
 
     const newUser = new User({ username: req.body.username, roles: 'user', breakSlots });
     await User.register(newUser, req.body.password);
-    logger.info(`Registered new user: ${req.body.username}`);
+    logger.info(`Registered new user:  ${kleur.magenta(req.body.username)}`);
     req.session.message = 'Ok';
     res.redirect('/secret_admin');
   } catch (error) {

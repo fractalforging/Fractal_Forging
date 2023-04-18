@@ -19,6 +19,38 @@ body {
   background-attachment: fixed;
 }
 
+/*/////// - CUSTOM SCROLL BAR * ///////*/
+
+/* For WebKit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #0000001a;
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #20202066;
+  border-radius: 4px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #00000066 #0000001a;
+}
+
+body.scrollbar-page {
+  padding-right: calc(84.55vw - 84.55%);
+}
+
+/*///////////*/
+
 a {
   color: var(--links-color);
   font-weight: var(--links-font-weight);
@@ -162,17 +194,6 @@ li {
   cursor: pointer;
 }
 
-
-/* .number-selector:hover {
-  background-color: #62728d;
-  transition: all var(--animation-duration-short) ease-in-out;
-} */
-
-/* .number-selector:focus {
-  background-color: #62728d;
-  transition: all var(--animation-duration-short) ease-in-out;
-} */
-
 .number-selector option {
   background: url() 96% / 15% no-repeat var(--select-menu-background-color);
   border-radius: 15px;
@@ -253,4 +274,24 @@ slots {
   padding: 0;
   margin: 0;
   list-style-type: none;
+}
+
+/* ////// - SEARCH - ////// */
+
+#search-bar {
+  width: 100%;
+  max-width: 295px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 1px solid #4d6d8bc0;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+/* ////// - RESET PASS ERROR MISMATCH - ////// */
+
+.error-message {
+  margin-bottom: 10px;
+  font-weight: bold;
 }
