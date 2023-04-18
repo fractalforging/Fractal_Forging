@@ -24,6 +24,7 @@ const responseMap = {
   "Not enough": { status: 401, message: "Not enough minutes available" },
   "Break submitted": { status: 200, message: "Break submitted" },
   "Break started": { status: 200, message: "Break started. Enjoy!" },
+  "Added to queue": { status: 200, message: "Break added to queue" },
   // SLOTS AVAILABLE
   "Same value": { status: 401, message: "Same value!" },
   "Updated": { status: 200, message: "Slots updated" }

@@ -94,7 +94,7 @@ const submitBreaks = (io, BreakTrack, User) => {
         });
         try {
           await breakTracker.save();
-          req.session.message = 'Break submitted and added to the queue';
+          req.session.message = 'Added to queue';
           logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) and added to the queue`);
 
           await moveToNormalList(BreakTrack);

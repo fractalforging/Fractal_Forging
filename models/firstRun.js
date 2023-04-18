@@ -1,4 +1,5 @@
 const User = require("./user");
+const BreakSlots = require('./BreakSlots');
 const logger = require('../serverjs/logger.js');
 const kleur = require('kleur');
 
@@ -24,4 +25,28 @@ async function createAdminUser() {
     }
 }
 
-module.exports = createAdminUser;
+async function createDefaultBreakSlots() {
+    try {
+        // Check if a BreakSlots document already exists
+        const existingBreakSlots = await BreakSlots.findOne();
+
+        // If there is no existing BreakSlots document, create a new one
+        if (!existingBreakSlots) {
+            const defaultBreakSlots = new BreakSlots({ slots: 2 });
+            await defaultBreakSlots.save();
+
+            logger.info("Default BreakSlots document created with slots: " + kleur.magenta("2"));
+        } else {
+            //console.log("Default BreakSlots document already exists. Skipping creation.");
+        }
+    } catch (error) {
+        logger.error("Error creating default BreakSlots document:", error);
+    }
+}
+
+async function firstRun() {
+    await createAdminUser();
+    await createDefaultBreakSlots();
+}
+
+module.exports = firstRun;
