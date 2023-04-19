@@ -167,84 +167,68 @@
                     <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
 
                     <script>
-                        document.addEventListener('DOMContentLoaded', () => {
-                            async function resetPassword(userId, newPassword, confirmPassword) {
-                                try {
-                                    const response = await fetch(`/resetpassword/${userId}`, {
-                                        method: "POST",
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                        },
-                                        body: JSON.stringify({ newPassword, confirmPassword }),
-                                    });
-                                    const data = await response.json();
-                                    if (response.ok) {
-                                        console.log("Password reset successful");
-                                        return { success: true };
-                                    } else {
-                                        console.error("Error resetting password");
-                                        return { success: false, error: data.error };
-                                    }
-                                } catch (error) {
-                                    console.error(`Error resetting password: ${error.message}`);
-                                    return { success: false, error: error.message };
-                                }
-                            }
-
-
-
-                            document.querySelectorAll(".reset-password-button").forEach((button) => {
-                                button.addEventListener("click", (e) => {
-                                    e.preventDefault();
-                                    const username = e.target.closest("li").querySelector(".break-list-item-name-user span").textContent.trim();
-                                    const userId = e.target.closest("li").dataset.id;
-                                    displayResetPasswordModal(userId);
+                        const resetPassword = async (userId, newPassword, confirmPassword) => {
+                            try {
+                                const response = await fetch(`/resetpassword`, {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ userId, newPassword, confirmPassword }),
                                 });
-                            });
-                            function displayResetPasswordModal(userId) {
-                                const modal = document.getElementById("reset-password-modal");
-                                const close = modal.querySelector(".reset-password-close");
-                                const form = modal.querySelector("#reset-password-form");
-                                modal.style.display = "block";
-                                const userIdInput = document.createElement("input");
-                                userIdInput.type = "hidden";
-                                userIdInput.name = "userId";
-                                userIdInput.value = userId;
-                                form.appendChild(userIdInput);
-                                close.onclick = () => {
-                                    modal.style.display = "none";
-                                };
-                            }
-                            async function handleFormSubmit(e, userId) {
-                                e.preventDefault();
-                                const newPassword = e.currentTarget.querySelector('input[name="new-password"]').value;
-                                const confirmPassword = e.currentTarget.querySelector('input[name="confirm-new-password"]').value;
-                                const success = await resetPassword(userId, newPassword, confirmPassword);
-                                if (success) {
-                                    location.reload();
-                                } else {
-                                    const errorMessage = document.createElement("p");
-                                    errorMessage.textContent = "New password and confirm password do not match";
-                                    errorMessage.style.color = "red";
-                                    e.currentTarget.appendChild(errorMessage);
+
+                                if (!response.ok) {
+                                    const error = await response.json();
+                                    throw new Error(error.error);
                                 }
-                            }
 
+                                return await response.json();
+                            } catch (error) {
+                                return { success: false, error: error.message };
+                            }
+                        };
+
+
+                        const displayResetPasswordModal = (userId) => {
+                            const modal = document.getElementById("reset-password-modal");
+                            const close = modal.querySelector(".reset-password-close");
+                            const form = modal.querySelector("#reset-password-form");
+                            modal.style.display = "block";
+                            const userIdInput = document.createElement("input");
+                            userIdInput.type = "hidden";
+                            userIdInput.name = "userId";
+                            userIdInput.value = userId;
+                            form.appendChild(userIdInput);
+                            close.onclick = () => { modal.style.display = "none"; };
+
+                            form.addEventListener("submit", async (e) => {
+                                e.preventDefault();
+                                const newPassword = document.getElementById("newpassword").value;
+                                const confirmPassword = document.getElementById("confirmpassword").value;
+                                const errorMessage = document.getElementById("error-message");
+
+                                const result = await resetPassword(userId, newPassword, confirmPassword);
+
+                                if (!result.success) {
+                                    errorMessage.textContent = result.error;
+                                    errorMessage.style.display = "block";
+                                } else {
+                                    errorMessage.style.display = "none";
+                                    modal.style.display = "none";
+                                    location.reload();
+                                }
+                            });
+                        };
+
+                        document.addEventListener('DOMContentLoaded', () => {
+                            document.querySelectorAll(".reset-password-button").forEach(button =>
+                                button.addEventListener("click", e => {
+                                    e.preventDefault();
+                                    const li = e.target.closest("li");
+                                    const username = li.querySelector(".break-list-item-name-user span").textContent.trim();
+                                    const userId = li.dataset.id;
+                                    displayResetPasswordModal(userId);
+                                })
+                            );
                         });
-                        function displayError(errorMessage) {
-                            const errorElement = document.querySelector('#reset-password-modal .error-message');
-                            if (!errorElement) {
-                                const modalContent = document.querySelector('#reset-password-modal .reset-password-modal-content');
-                                const errorDiv = document.createElement('div');
-                                errorDiv.classList.add('error-message');
-                                errorDiv.style.color = 'red';
-                                errorDiv.textContent = errorMessage;
-                                modalContent.insertBefore(errorDiv, modalContent.firstChild);
-                            } else {
-                                errorElement.textContent = errorMessage;
-                            }
-                        }
-
                     </script>
 
                     <!-- ////////////// - SEARCH FUNCTIONALITY - ////////////////-->
@@ -268,23 +252,6 @@
                                 }
                             });
                         }
-                        // Add event listener to the form submit button
-                        document.getElementById("reset-password-form").addEventListener("submit", function (event) {
-                            event.preventDefault();
-                            var newPassword = document.getElementById("newpassword");
-                            var confirmPassword = document.getElementById("confirmpassword");
-                            var errorMessage = document.getElementById("error-message");
-
-                            if (newPassword.value !== confirmPassword.value) {
-                                errorMessage.style.display = "block";
-                                errorMessage.textContent = "New password and password confirmation do not match";
-                            } else {
-                                errorMessage.style.display = "none";
-                                document.getElementById("reset-password-form").submit();
-                            }
-                        });
-
-
                     </script>
 
                     <!-- ////////////// - PASSWORD RESET MODAL - ////////////////-->
@@ -294,8 +261,8 @@
                             <span class="reset-password-close">&times;</span>
                             <greet class="reset-pass-title">Reset Password</greet>
                             <form action="/resetpassword" method="post" id="reset-password-form" class="credentials">
-                                <input type="password" id="newpassword" name="newPassword" placeholder="New Password">
                                 <p id="error-message" style="display:none; color: red;"></p>
+                                <input type="password" id="newpassword" name="newPassword" placeholder="New Password">
                                 <input type="password" id="confirmpassword" name="confirmPassword"
                                     placeholder="Confirm New Password">
                                 <button type="submit" class="form-button">OK</button>
@@ -303,10 +270,8 @@
                         </div>
                     </div>
 
-                        <!-- ////////////////// - FETCH JS FILES - ////////////////// -->
+                    <!-- ////////////////// - FETCH BOTTOM PARTIAL - ////////////////// -->
 
-                        <script src="/js/toggle.js"></script>
-                        <script src="/js/modals.js"></script>
-
+                    <%- include('partials/bottomjs.ejs') %>
 
 </body>

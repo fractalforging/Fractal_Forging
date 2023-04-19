@@ -12,6 +12,6 @@
   const socket = io();
   socket.on('reload', () => {
     console.log('Reload event received');
-    setTimeout(() => location.reload(), 500);
+    setTimeout(() => location.reload(), 5000);
   });
 </script>
