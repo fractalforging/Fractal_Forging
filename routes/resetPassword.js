@@ -1,3 +1,4 @@
+// resetPassword.js
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user.js');
@@ -9,40 +10,32 @@ router.post("/", isLoggedIn, isAdmin, async (req, res) => {
   try {
     const userId = req.body.userId;
     const user = await User.findById(userId);
-
     if (!req.body.newPassword) {
-      req.session.message = "Wrong";
       logger.error("New password empty");
-      //return res.render("account", { error: "Current password empty!", currentUser: req.user });
+      return res.status(400).json({ error: "New password cannot be empty." });
     } else if (req.body.newPassword !== req.body.confirmPassword) {
-      req.session.message = "Mismatch";
       logger.error("Passwords do not match");
-      io.emit('reload');
-      //return res.status(400).json({ error: "New password and confirm password do not match" });
+      return res.status(400).json({ error: "Passwords do not match." });
     } else {
       user.setPassword(req.body.newPassword, (err) => {
         if (err) {
-          req.session.message = "Error";
           logger.error(err);
-          //return res.render("users", { error: "Error, please try again" });
+          return res.status(500).json({ error: "Error setting new password." });
         }
         user.save((err) => {
           if (err) {
-            req.session.message = "Error";
             logger.error(err);
-            //return res.render("users", { error: "Error, please try again" });
+            return res.status(500).json({ error: "Error saving new password." });
           }
           req.session.message = "Changed";
           logger.warn("Password change for " + `${kleur.magenta(user.username)}` + " was successful");
-          return res.redirect("/users");
-        });
+          return res.status(200).json({ success: true, message: "Password changed successfully." });
+        });        
       });
     }
-
   } catch (error) {
-    //res.status(500).json({ message: "Error resetting password: " + error.message });
+    //res.status(500).json({ error: "Error resetting password: " + error.message });
   }
 });
-
 
 module.exports = router;

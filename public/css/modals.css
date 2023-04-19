@@ -191,6 +191,10 @@ top: 185px;
 left: 7px;
 }
 
+#error-message {
+  font-size: 14px;
+}
+
 /*///////// - RESET PASS MODAL TRANSITION * /////////////*/
 
 @keyframes fadeInReset {

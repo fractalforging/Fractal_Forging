@@ -51,6 +51,7 @@ async function connectMongoDB() {
     });
     logger.info("MongoDB connected successfully!");
     await firstRun();
+    const server = socket.init(app);
     server.listen(port, () => logger.info(`Server Up and running on port: ${kleur.grey(port)}`));
   } catch (err) {
     logger.error("MongoDB connection error:", err);
@@ -104,7 +105,7 @@ io.on('connection', (socket) => {
   socket.on('reload', () => {
     io.emit('reload');
   });
-  socket.on('disconnect', () => {});
+  socket.on('disconnect', () => { });
 });
 
 
@@ -124,7 +125,8 @@ const breakSlotsRoutes = require('./routes/break-slots.js')(io, BreakTrack);
 const usersRoutes = require("./routes/users.js");
 const deleteRoutes = require('./routes/delete.js');
 const apiMessages = require('./serverjs/apiMessages.js');
-const resetPasswordRoute = require('./routes/resetPassword.js')
+const resetPasswordRoute = require('./routes/resetPassword.js');
+const socket = require('./routes/socket.js');
 
 
 //=====================
