@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const logger = require('../serverjs/logger.js');
 const kleur = require('kleur');
-
-// Import the BreakTrack model
 const BreakTrack = require('../models/BreakTrack.js');
 const BreakSlots = require('../models/BreakSlots.js');
 
@@ -14,31 +12,25 @@ const moveToNormalList = async (BreakTrack) => {
 
   if (activeBreaks < availableSlots) {
     const nextInQueue = await BreakTrack.findOne({ status: 'queued' }).sort({ date: 1 });
-
     if (nextInQueue) {
       nextInQueue.status = 'active';
       await nextInQueue.save();
     }
   }
 };
-
 const moveQueuedBreaksToNormalList = async (BreakTrack, availableSlots) => {
   const activeBreaks = await BreakTrack.countDocuments({ status: 'active' });
   const remainingSlots = availableSlots - activeBreaks;
-
   if (remainingSlots > 0) {
     const queuedBreaks = await BreakTrack.find({ status: 'queued' })
       .sort({ date: 1 })
       .limit(remainingSlots);
-    
     for (const queuedBreak of queuedBreaks) {
       queuedBreak.status = 'active';
       await queuedBreak.save();
     }
   }
 };
-
-
 const submitBreaks = (io, BreakTrack, User) => {
   router.post("/", async function (req, res, next) {
     const user = req.user.username;
@@ -46,7 +38,6 @@ const submitBreaks = (io, BreakTrack, User) => {
     const breakDuration = req.body.duration;
     const currentUser = await User.findOne({ username: user });
     const breakDurationInSeconds = breakDuration * 60;
-
     if (latestBreak && !latestBreak.endTime) {
       req.session.message = 'Only 1 break at a time';
       logger.info(req.session.message);
@@ -60,10 +51,8 @@ const submitBreaks = (io, BreakTrack, User) => {
       logger.info(req.session.message);
       return res.redirect("/secret");
     } else {
-      // Check if there are available slots
       const availableSlots = (await BreakSlots.findOne()).slots;
       const activeBreaks = await BreakTrack.countDocuments({ status: 'active' });
-
       if (activeBreaks < availableSlots) {
         const breakTracker = new BreakTrack({
           user,
@@ -76,9 +65,7 @@ const submitBreaks = (io, BreakTrack, User) => {
           await breakTracker.save();
           req.session.message = 'Break submitted';
           logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s)`);
-
           await moveToNormalList(BreakTrack);
-
           io.emit('reload');
           return res.redirect("/secret");
         } catch (err) {
@@ -96,10 +83,9 @@ const submitBreaks = (io, BreakTrack, User) => {
           await breakTracker.save();
           req.session.message = 'Added to queue';
           logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) and added to the queue`);
-
           await moveToNormalList(BreakTrack);
-
           io.emit('reload');
+          console.log('Server emitted reload event (submitBreaks)');
           return res.redirect("/secret");
         } catch (err) {
           return res.redirect("/secret");

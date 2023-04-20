@@ -27,7 +27,9 @@ const responseMap = {
   "Added to queue": { status: 200, message: "Break added to queue" },
   // SLOTS AVAILABLE
   "Same value": { status: 401, message: "Same value!" },
-  "Updated": { status: 200, message: "Slots updated" }
+  "Updated": { status: 200, message: "Slots updated" },
+  // GENERAL ERROR
+  "Something broke" : { status: 401, message: "Something broke!" }
 };
 
 async function myMessages(req, res, next) {

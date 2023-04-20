@@ -6,7 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Urbanist&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&display=swap'); */
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons&display=swap');
 
@@ -109,8 +109,9 @@
   --modal-pos-border-color: #3f6100;
   --modal-pos-close-icon-color: #3f6100;
   --modal-pos-text-color: #3f6100;
-
-
+  /*//// - SCROLL BAR - ////*/
+  --scroll-bar-background-color: #ffffff;
+  --scroll-bar-handle-color: #a0a0a0;
 }
 
 :root[data-theme="dark"] {
@@ -162,7 +163,7 @@
   --break-list-item-remove-size: 12px;
   --break-list-item-timer-font-size: 17px;
   --break-list-item-timer-font-weight: 400;
-    /*//// - BREAKS LIST - ADMIN PAGE - ////*/
+  /*//// - BREAKS LIST - ADMIN PAGE - ////*/
   --break-list-item-timer-font-size-admin: 17px;
   /*//// - TIMER LOADER - ////*/
   --loader-canvas-background-color: #00000000;
@@ -199,6 +200,9 @@
   --modal-pos-border-color: #3f6100;
   --modal-pos-close-icon-color: #82a83a;
   --modal-pos-text-color: #d1e4ad;
+  /*//// - SCROLL BAR - ////*/
+  --scroll-bar-background-color: #1a1a1a;
+  --scroll-bar-handle-color: #363636;
 
 }
 

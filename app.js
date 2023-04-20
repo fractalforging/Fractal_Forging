@@ -34,6 +34,8 @@ const location = process.env.LOCATION;
 const firstRun = require("./models/firstRun");
 const User = require('./models/user');
 const BreakTrack = require("./models/BreakTrack.js");
+const LastResetTimestamp = require('./models/LastResetTimestamp');
+
 
 // Initialization
 if (!dbPath) {
@@ -51,7 +53,6 @@ async function connectMongoDB() {
     });
     logger.info("MongoDB connected successfully!");
     await firstRun();
-    const server = socket.init(app);
     server.listen(port, () => logger.info(`Server Up and running on port: ${kleur.grey(port)}`));
   } catch (err) {
     logger.error("MongoDB connection error:", err);
@@ -177,7 +178,9 @@ app.use('/reset', resetBreakTimeRoutes(User, io, location));
 
 app.use(function (err, req, res, next) {
   logger.error(err.stack);
-  return res.status(500).send('Something broke!');
+  //return res.status(500).send('Something broke!');
+  req.session.message = "Something broke"
+  return res.redirect("/");
 });
 
 // CLEAR SESSION VARIABLES FOR MODAL MESSAGING

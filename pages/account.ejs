@@ -1,42 +1,30 @@
-<!-- ////////////////// - HEADER SETUP - ////////////////// -->
+<!-- ////////////////// - PARTIALS - ////////////////// -->
 
 <%- include('partials/header.ejs') %>
+  <%- include('partials/themes.ejs') %>
+    <%- include('partials/modals.ejs') %>
+      <%- include('partials/navigation.ejs') %>
+        <%- include('partials/modals.ejs') %>
 
-<br>
+          &nbsp;
+          <br>
 
-<!-- ////////////////// - THEME TOGGLE - ////////////////// -->
+          <hr class="divider">
 
-<%- include('partials/themes.ejs') %>
+          <!-- ////////////////// - FORM - ////////////////// -->
 
-<!-- ////////////// MODALS ////////////////-->
+          <pagetitle>Change your password</pagetitle>
 
-<%- include('partials/modals.ejs') %>
-
-<!-- ////////////////// - NAV - ////////////////// -->
-
-<%- include('partials/navigation.ejs') %>
-
-&nbsp;
-<br>
-
-<hr class="divider">
-
-<!-- ////////////////// - FORM - ////////////////// -->
-
-<pagetitle>Change your password</pagetitle>
-
-<form action="/changepassword" method="post" class="credentials">
-  <input type="password" id="currentpassword" name="currentpassword" placeholder="currentpassword" autocomplete="off">
-  <input type="password" id="newpassword" name="newpassword" placeholder="newpassword" autocomplete="off">
-  <input type="password" id="confirmpassword" name="confirmpassword" placeholder="confirmpassword" autocomplete="off">
-  <button class="form-button">Submit</button>
-</form>
+          <form action="/changepassword" method="post" class="credentials">
+            <input type="password" id="currentpassword" name="currentpassword" placeholder="currentpassword"
+              autocomplete="off">
+            <input type="password" id="newpassword" name="newpassword" placeholder="newpassword" autocomplete="off">
+            <input type="password" id="confirmpassword" name="confirmpassword" placeholder="confirmpassword"
+              autocomplete="off">
+            <button class="form-button">Submit</button>
+          </form>
 
 
-<!-- ////////////// MODALS ////////////////-->
+          <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 
-<%- include('partials/modals.ejs') %>
-
-<!-- ////////////////// - FETCH BASIC JS - ////////////////// -->
-
-<%- include('partials/basic_bottomjs.ejs') %>
+          <%- include('partials/basic_bottomjs.ejs') %>

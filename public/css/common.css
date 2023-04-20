@@ -4,7 +4,7 @@ html {
 }
 
 body {
-  padding-top: 80px;
+  padding-top: 90px;
   user-select: none;
   display: table-cell;
   vertical-align: middle;
@@ -19,34 +19,13 @@ body {
   background-attachment: fixed;
 }
 
-/*/////// - CUSTOM SCROLL BAR * ///////*/
-
-/* For WebKit browsers (Chrome, Safari) */
 ::-webkit-scrollbar {
-  width: 12px;
-  transition: all 0.3s ease-in-out;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  background-color: #0000001a;
-  border-radius: 4px;
-  transition: all 0.3s ease-in-out;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: #20202066;
-  border-radius: 4px;
-  transition: all 0.3s ease-in-out;
-}
-
-/* For Firefox */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: #00000066 #0000001a;
-}
-
-body.scrollbar-page {
-  padding-right: calc(84.55vw - 84.55%);
+.element::-moz-scrollbar {
+  width: 0;
+  background-color: transparent;
 }
 
 /*///////////*/
@@ -78,6 +57,10 @@ hr.divider-spc-nav {
   height: 1px;
   width: 280px;
   background-color: var(--hr-divider-color);
+}
+
+#reset-password-form {
+  position: relative;
 }
 
 .credentials {
@@ -262,20 +245,6 @@ slots {
   height: 50px;
 }
 
-.roles-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0 auto;
-  text-align: left;
-  width: fit-content;
-}
-
-.roles-list > ul {
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-}
-
 /* ////// - SEARCH - ////// */
 
 #search-bar {
@@ -291,7 +260,10 @@ slots {
 
 /* ////// - RESET PASS ERROR MISMATCH - ////// */
 
-.error-message {
-  margin-bottom: 10px;
-  font-weight: bold;
+#error-message {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  text-align: center; 
 }
