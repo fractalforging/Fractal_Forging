@@ -38,6 +38,7 @@ const resetBreakTimeRoutes = (User, io, location) => {
       lastResetTimestampObj.timestamp = now;
       await lastResetTimestampObj.save();
       logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
+      io.emit('reload');
     }
   }
 
@@ -46,11 +47,9 @@ const resetBreakTimeRoutes = (User, io, location) => {
     if (millisecondsUntilReset > 24 * 60 * 60 * 1000) {
       // If more than 24 hours until the next reset, it means we missed the last reset
       await resetBreakTimes();
-      io.emit('reload');
     }
     setTimeout(() => {
       resetBreakTimes();
-      io.emit('reload');
       setInterval(resetBreakTimes, 24 * 60 * 60 * 1000); // Set interval to run every 24 hours
     }, millisecondsUntilReset);
   })();  
