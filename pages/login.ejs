@@ -1,25 +1,19 @@
+<br><br>
+
 <!-- ////////////////// - HEADER SETUP - ////////////////// -->
 
 <%- include('partials/header.ejs') %>
+  <%- include('partials/themes.ejs') %>
+    <%- include('partials/modals.ejs') %>
 
-<br>
+      <!-- ////////////////// - FORM - ////////////////// -->
 
-<!-- ////////////////// - THEME TOGGLE - ////////////////// -->
+      <form action="/login" method="POST" class="credentials">
+        <input type="text" name="username" placeholder="username" autocomplete="off">
+        <input type="password" name="password" placeholder="password" autocomplete="off">
+        <button id="login-submit-button" type="submit" class="form-button">Login</button>
+      </form>
 
-<%- include('partials/themes.ejs') %>
+      <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 
-<!-- ////////////// MODALS ////////////////-->
-
-<%- include('partials/modals.ejs') %>
-
-<!-- ////////////////// - FORM - ////////////////// -->
-
-<form action="/login" method="POST" class="credentials">
-  <input type="text" name="username" placeholder="username" autocomplete="off">
-  <input type="password" name="password" placeholder="password" autocomplete="off">
-  <button id="login-submit-button" type="submit" class="form-button">Login</button>
-</form>
-
-<!-- ////////////////// - FETCH BASIC JS - ////////////////// -->
-
-<%- include('partials/basic_bottomjs.ejs') %>
+      <%- include('partials/basic_bottomjs.ejs') %>

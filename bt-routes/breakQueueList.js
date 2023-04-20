@@ -7,7 +7,7 @@ module.exports = (User, io, location) => {
 
   async function processBreakQueue(req, res, next) {
     const availableSlots = (await BreakSlots.findOne()).slots;
-    const activeBreaks = await BreakTrack.countDocuments({ hasStarted: true, hasEnded: false });
+    const activeBreaks = await BreakTrack.countDocuments({ hasStarted: true, /*hasEnded: false*/ });
 
     if (activeBreaks < availableSlots) {
       const nextInQueue = await BreakTrack.findOne({ waitingInQueue: true }).sort({ startTime: 1 });

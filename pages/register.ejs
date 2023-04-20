@@ -1,37 +1,27 @@
-<!-- ////////////////// - HEADER SETUP - ////////////////// -->
+<!-- ////////////////// - PARTIALS - ////////////////// -->
 
 <%- include('partials/header.ejs') %>
+  <%- include('partials/themes.ejs') %>
+    <%- include('partials/modals.ejs') %>
+      <%- include('partials/navigation.ejs') %>
 
-<br>
+        &nbsp;
+        <br>
 
-<!-- ////////////////// - THEME TOGGLE - ////////////////// -->
+        <hr class="divider">
 
-<%- include('partials/themes.ejs') %>
+        <!-- ////////////////// - FORM - ////////////////// -->
 
-<!-- ////////////// MODALS ////////////////-->
+        <pagetitle>Register an account</pagetitle>
 
-<%- include('partials/modals.ejs') %>
+        <form action="/register" method="POST" class="credentials">
+          <input type="text" name="username" placeholder="username" autocomplete="off">
+          <input type="password" name="password" placeholder="password" autocomplete="off">
+          <input type="password" id="confirmpassword" name="confirmpassword" placeholder="confirmpassword"
+            autocomplete="off">
+          <button class="form-button">Submit</button>
+        </form>
 
-<!-- ////////////////// - NAV - ////////////////// -->
+        <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 
-<%- include('partials/navigation.ejs') %>
-
-&nbsp;
-<br>
-
-<hr class="divider">
-
-<!-- ////////////////// - FORM - ////////////////// -->
-
-<pagetitle>Register an account</pagetitle>
-
-<form action="/register" method="POST" class="credentials">
-  <input type="text" name="username" placeholder="username" autocomplete="off">
-  <input type="password" name="password" placeholder="password" autocomplete="off">
-  <input type="password" id="confirmpassword" name="confirmpassword" placeholder="confirmpassword" autocomplete="off">
-  <button class="form-button">Submit</button>
-</form>
-
-<!-- ////////////////// - FETCH BASIC JS - ////////////////// -->
-
-<%- include('partials/basic_bottomjs.ejs') %>
+        <%- include('partials/basic_bottomjs.ejs') %>
