@@ -12,24 +12,24 @@ router.post("/", isLoggedIn, isAdmin, async (req, res) => {
     const user = await User.findById(userId);
     if (!req.body.newPassword) {
       logger.error("New password empty");
-      return res.status(400).json({ error: "New password cannot be empty." });
+      return res.status(400).json({ error: "New password cannot be empty" });
     } else if (req.body.newPassword !== req.body.confirmPassword) {
       logger.error("Passwords do not match");
-      return res.status(400).json({ error: "Passwords do not match." });
+      return res.status(400).json({ error: "Passwords do not match" });
     } else {
       user.setPassword(req.body.newPassword, (err) => {
         if (err) {
           logger.error(err);
-          return res.status(500).json({ error: "Error setting new password." });
+          return res.status(500).json({ error: "Error setting new password" });
         }
         user.save((err) => {
           if (err) {
             logger.error(err);
-            return res.status(500).json({ error: "Error saving new password." });
+            return res.status(500).json({ error: "Error saving new password" });
           }
           req.session.message = "Changed";
           logger.warn("Password change for " + `${kleur.magenta(user.username)}` + " was successful");
-          return res.status(200).json({ success: true, message: "Password changed successfully." });
+          return res.status(200).json({ success: true, message: "Password changed successfully" });
         });        
       });
     }
