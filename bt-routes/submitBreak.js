@@ -85,7 +85,7 @@ const submitBreaks = (io, BreakTrack, User) => {
           logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) and added to the queue`);
           await moveToNormalList(BreakTrack);
           io.emit('reload');
-          console.log('Server emitted reload event (submitBreaks)');
+          //.log('Server emitted reload event (submitBreaks)');
           return res.redirect("/secret");
         } catch (err) {
           return res.redirect("/secret");

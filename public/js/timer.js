@@ -45,11 +45,11 @@ function onTimerEnded(id) {
   // send a request to the server to update hasEnded field
   fetch(`/breaks/${id}/end`, { method: 'POST' })
     .then(response => {
-      if (response.ok) {
-        console.info(`Break ${id} has ended`);
-      } else {
-        console.error(`Failed to update the hasEnded field for break ${id}`);
-      }
+      // if (response.ok) {
+      //   console.info(`Break ${id} has ended`);
+      // } else {
+      //   console.error(`Failed to update the hasEnded field for break ${id}`);
+      // }
     })
     .catch(error => {
       console.error(`Error updating the hasEnded field for break ${id}: `, error);
