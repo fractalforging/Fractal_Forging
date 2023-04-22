@@ -125,8 +125,8 @@ const changepasswordRoutes = require('./routes/changepassword.js');
 const breakSlotsRoutes = require('./routes/break-slots.js')(io, BreakTrack);
 const usersRoutes = require("./routes/users.js");
 const deleteRoutes = require('./routes/delete.js');
-const apiMessages = require('./serverjs/apiMessages.js');
 const resetPasswordRoute = require('./routes/resetPassword.js');
+const apiMessages = require('./routes/apiMessages.js');
 const socket = require('./routes/socket.js');
 
 
@@ -157,8 +157,8 @@ app.use("/changepassword", changepasswordRoutes);
 app.use("/break-slots", breakSlotsRoutes);
 app.use("/users", usersRoutes);
 app.use('/delete', deleteRoutes);
-app.get('/api/messaging', apiMessages.myMessages);
 app.use('/resetpassword', resetPasswordRoute);
+app.get('/api/messaging', apiMessages.myMessages);
 
 
 //=====================
