@@ -109,9 +109,9 @@ io.on('connection', (socket) => {
     io.emit('reload');
   });
 
-  const reloadInterval = setInterval(() => {
-    io.emit('reload');
-  }, 900000); // 900000ms = 15 minutes
+  // const reloadInterval = setInterval(() => {
+  //   io.emit('reload');
+  // }, 900000); // 900000ms = 15 minutes
 
   socket.on('disconnect', () => { 
     logger.warn("SOCKET.IO - Disconnected");
