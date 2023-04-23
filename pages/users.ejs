@@ -16,13 +16,13 @@
 
                     <greet>Accounts</greet><br>
 
-                    <br><br>
+                    <br>
 
                     <!-- ////////////// - SEARCH - //////////////// -->
 
                     <input type="text" id="search-bar" class="search-bar">
                     <span class="search-users">&nbsp;Search user&nbsp;</span>
-                    <br><br>
+                    <br>
 
                     <!-- ////////////// - USERS - //////////////// -->
 
@@ -340,6 +340,24 @@
                             </form>
                         </div>
                     </div>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const inputFields = document.querySelectorAll('.inputfield');
+                            inputFields.forEach(input => {
+                                input.addEventListener('input', handleInput);
+                                handleInput.call(input);
+                            });
+
+                            function handleInput() {
+                                if (this.value) {
+                                    this.parentElement.classList.add('has-text');
+                                } else {
+                                    this.parentElement.classList.remove('has-text');
+                                }
+                            }
+                        });
+                    </script>
 
                     <!-- ////////////////// - FETCH BOTTOM PARTIAL - ////////////////// -->
 

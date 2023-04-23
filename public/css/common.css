@@ -252,7 +252,8 @@ slots {
 .search-bar {
   outline: 0;
   width: 100%;
-  max-width: 295px;
+  max-width: 280px;
+  height: 40px;
   padding: 12px 20px;
   margin: 8px 0;
   border: 1px solid #4d6d8b00;
@@ -349,9 +350,9 @@ slots {
   transition: all var(--animation-duration-min) ease-in-out;
 }
 
-.inputfield:not(:focus) { 
+/* .inputfield:not(:focus) { 
   color: #a5a5a500;
-}
+} */
 
 .inputfield:focus {
   outline: 0;
@@ -373,4 +374,13 @@ slots {
 .input-container {
   position: relative;
   margin-bottom: -20px;
+}
+
+.input-container.has-text .placeholder1 {
+  background-color: var(--input-box-placeholder-background-color);
+  width: fit-content;
+  height: fit-content;
+  color: var(--input-box-placeholder-focused-color);
+  top: -63px;
+  right: -8px;
 }

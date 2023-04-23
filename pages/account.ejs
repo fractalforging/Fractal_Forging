@@ -30,6 +30,24 @@
           <button class="form-button">Submit</button>
         </form>
 
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const inputFields = document.querySelectorAll('.inputfield');
+            inputFields.forEach(input => {
+              input.addEventListener('input', handleInput);
+              handleInput.call(input);
+            });
+        
+            function handleInput() {
+              if (this.value) {
+                this.parentElement.classList.add('has-text');
+              } else {
+                this.parentElement.classList.remove('has-text');
+              }
+            }
+          });
+        </script>
+
         <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 
         <%- include('partials/bottomjs.ejs') %>
