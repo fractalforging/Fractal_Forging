@@ -1,7 +1,6 @@
 <!-- ////////////////// - PARTIALS - ////////////////// -->
 
 <%- include('partials/header.ejs') %>
-  <%- include('partials/themes.ejs') %>
     <%- include('partials/modals.ejs') %>
       <%- include('partials/navigation.ejs') %>
 
@@ -15,12 +14,29 @@
         <pagetitle>Register an account</pagetitle>
 
         <form action="/register" method="POST" class="credentials">
+          <div class="input-container">
+            <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength="" value="" >
+            <span class="placeholder1 username">&nbsp;Username&nbsp;</span>
+          </div>
+          <div class="input-container">
+            <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength="" value="" >
+            <span class="placeholder1 password">&nbsp;Password&nbsp;</span>
+          </div>
+          <div class="input-container">
+            <input type="password" id="confirmpassword" name="confirmpassword" autocomplete="off" class="inputfield" maxlength="" value="" >
+            <span class="placeholder1">&nbsp;Confirm Password&nbsp;</span>
+          </div>
+          <button class="form-button">Submit</button>
+        </form>
+
+
+        <!-- <form action="/register" method="POST" class="credentials">
           <input type="text" name="username" placeholder="username" autocomplete="off">
           <input type="password" name="password" placeholder="password" autocomplete="off">
           <input type="password" id="confirmpassword" name="confirmpassword" placeholder="confirmpassword"
             autocomplete="off">
           <button class="form-button">Submit</button>
-        </form>
+        </form> -->
 
         <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 

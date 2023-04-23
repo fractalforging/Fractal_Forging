@@ -48,7 +48,7 @@ function loadCssFiles(cssFiles, callback) {
   }
 }
 
-loadCssFiles(cssFiles, function () {
+loadCssFiles(cssFiles, async function () {
   var icons = document.getElementsByClassName('material-symbols-outlined');
   for (var i = 0; i < icons.length; i++) {
     icons[i].style.display = 'inline-block';

@@ -249,15 +249,55 @@ slots {
 
 /* ////// - SEARCH - ////// */
 
-#search-bar {
+.search-bar {
+  outline: 0;
   width: 100%;
   max-width: 295px;
   padding: 12px 20px;
   margin: 8px 0;
-  border: 1px solid #4d6d8bc0;
+  border: 1px solid #4d6d8b00;
   border-radius: 5px;
   box-sizing: border-box;
   font-size: 16px;
+  transition: all var(--animation-duration-min) ease-in-out;
+}
+
+.search-bar:focus {
+  outline: 0;
+  -webkit-box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
+  box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
+  border: 1px solid var(--input-box-outline-color);
+}
+
+.search-bar:focus~.search-users {
+  background-color: var(--input-box-placeholder-background-color);
+  width: fit-content;
+  height: fit-content;
+  color: var(--input-box-placeholder-focused-color);
+  top: -63px;
+  right: -8px;
+}
+
+.search-users {
+  position: relative;
+  pointer-events: none;
+  white-space: nowrap;
+  width: fit-content;
+  height: fit-content;
+  padding: 0px 0px;
+  width: 0px;
+  top: -40px;
+  left: -90px;
+  text-align: left;
+  justify-items: left;
+  font-family: var(--main-body-font-family);
+  font-size: 14px;
+  font-weight: normal;
+  padding: 0px 0px;
+  color: var(--input-box-placeholder-color);
+  pointer-events: none;
+  white-space: nowrap;
+  transition: all var(--animation-duration-min) ease-in-out;
 }
 
 /* ////// - RESET PASS ERROR MISMATCH - ////// */
@@ -268,4 +308,69 @@ slots {
   left: 0;
   width: 100%;
   text-align: center; 
+}
+
+/* /////// - FORMS - /////// */
+
+.placeholder1 { /* visible on non-focus */
+  position: relative;
+  pointer-events: none;
+  white-space: nowrap;
+  width: fit-content;
+  height: fit-content;
+  padding: 0px 0px;
+  width: 0px;
+  top: -40px;
+  left: -40px;
+  text-align: left;
+  justify-items: left;
+  font-family: var(--main-body-font-family);
+  font-size: 14px;
+  font-weight: normal;
+  padding: 0px 0px;
+  color: var(--input-box-placeholder-color);
+  pointer-events: none;
+  white-space: nowrap;
+  transition: all var(--animation-duration-min) ease-in-out;
+}
+
+.username,
+.password {
+  position: relative;
+  left: -68px;
+}
+
+.newpassword {
+  position: relative;
+  left: -50px;
+}
+
+.inputfield {
+  transition: all var(--animation-duration-min) ease-in-out;
+}
+
+.inputfield:not(:focus) { 
+  color: #a5a5a500;
+}
+
+.inputfield:focus {
+  outline: 0;
+  font-size: 14px;
+  -webkit-box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
+  box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
+  border: 1px solid var(--input-box-outline-color);
+}
+
+.inputfield:focus~.placeholder1 {
+  background-color: var(--input-box-placeholder-background-color);
+  width: fit-content;
+  height: fit-content;
+  color: var(--input-box-placeholder-focused-color);
+  top: -63px;
+  right: -8px;
+}
+
+.input-container {
+  position: relative;
+  margin-bottom: -20px;
 }

@@ -136,6 +136,7 @@ const breakSlotsRoutes = require('./routes/break-slots.js')(io, BreakTrack);
 const usersRoutes = require("./routes/users.js");
 const deleteRoutes = require('./routes/delete.js');
 const resetPasswordRoute = require('./routes/resetPassword.js');
+const settingsRoutes = require('./routes/settings.js');
 const apiMessages = require('./routes/apiMessages.js');
 const socket = require('./routes/socket.js');
 
@@ -168,6 +169,7 @@ app.use("/break-slots", breakSlotsRoutes);
 app.use("/users", usersRoutes);
 app.use('/delete', deleteRoutes);
 app.use('/resetpassword', resetPasswordRoute);
+app.use('/settings', settingsRoutes);
 app.get('/api/messaging', apiMessages.myMessages);
 
 

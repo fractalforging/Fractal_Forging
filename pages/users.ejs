@@ -3,43 +3,42 @@
     <!-- ////////////////// - PARTIALS - ////////////////// -->
 
     <%- include('partials/header.ejs') %>
-        <%- include('partials/themes.ejs') %>
-            <%- include('partials/modals.ejs') %>
-                <%- include('partials/navigation.ejs') %>
-                    <%- include('partials/scrollbar.ejs') %>
+        <%- include('partials/modals.ejs') %>
+            <%- include('partials/navigation.ejs') %>
+                <%- include('partials/scrollbar.ejs') %>
 
-                        &nbsp;
-                        <br>
+                    &nbsp;
+                    <br>
 
-                        <hr class="divider">
+                    <hr class="divider">
 
-                        <!-- ////////////// - ACCOUNTS - ////////////////-->
+                    <!-- ////////////// - ACCOUNTS - ////////////////-->
 
-                        <greet>Accounts</greet><br>
+                    <greet>Accounts</greet><br>
 
-                        <br><br>
+                    <br><br>
 
-                        <!-- ////////////// - SEARCH - //////////////// -->
+                    <!-- ////////////// - SEARCH - //////////////// -->
 
-                        <input type="text" id="search-bar" placeholder="Search users...">
+                    <input type="text" id="search-bar" class="search-bar">
+                    <span class="search-users">&nbsp;Search user&nbsp;</span>
+                    <br><br>
 
-                        <br><br>
+                    <!-- ////////////// - USERS - //////////////// -->
 
-                        <!-- ////////////// - USERS - //////////////// -->
+                    <joke>Agents</joke>
 
-                        <joke>Agents</joke>
-
-                        <br><br>
-                        <ul id="normal-users" class="roles-list">
-                            <div id="agents" class="main">
-                                <% normalUsers.sort((a, b) => {
-                                    const aBreakTime = Math.floor(a.remainingBreakTime / 60);
-                                    const bBreakTime = Math.floor(b.remainingBreakTime / 60);
-                                    if (aBreakTime === bBreakTime) {
-                                      return a.username.localeCompare(b.username);
-                                    }
-                                    return aBreakTime - bBreakTime;
-                                  }).forEach(user => { %>                              
+                    <br><br>
+                    <ul id="normal-users" class="roles-list">
+                        <div id="agents" class="main">
+                            <% normalUsers.sort((a, b)=> {
+                                const aBreakTime = Math.floor(a.remainingBreakTime / 60);
+                                const bBreakTime = Math.floor(b.remainingBreakTime / 60);
+                                if (aBreakTime === bBreakTime) {
+                                return a.username.localeCompare(b.username);
+                                }
+                                return aBreakTime - bBreakTime;
+                                }).forEach(user => { %>
                                 <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
                                     data-username="<%= user.username %>" class="break-list-item-admin">
                                     <div class="break-list-item-name-admin" onclick="toggleExtraInfo(event)">
@@ -92,252 +91,258 @@
                                     }
                                 </script>
                                 <% }); %>
-                            </div>
-                        </ul>
-
-                        <br><br>
-
-                        <!-- ////////////// - ADMINS - //////////////// -->
-
-                        <joke>Supporting functions</joke>
-
-                        <br><br>
-
-                        <ul id="admin-users" class="roles-list">
-                            <div id="sFunctions" class="main">
-                                <% adminUsers.sort((a, b) => a.username.localeCompare(b.username)).forEach(user => { %>
-                                    <% if (user.username !=='admin' ) { %>
-                                        <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
-                                            data-username="<%= user.username %>" class="break-list-item-admin">
-                                            <div class="break-list-item-name-admin" onclick="toggleExtraInfo(event)">
-                                                <arrow-icon class="arrow">
-                                                    <span class="material-symbols-outlined">keyboard_arrow_right</span>
-                                                </arrow-icon>
-                                                <span class="user-name-admin-accounts">
-                                                    <username class="user-name-top">
-                                                        <%= user.username %>
-                                                    </username>
-                                                </span>
-                                            </div>
-                                            <div class="extra-info" style="display:none;">
-                                                <button class="reset-password-button"
-                                                    data-user-id="<%= user._id %>">Password</button>
-                                                <select class="item-button">
-                                                    <% if (user.roles==='admin' ) { %>
-                                                        <option value="admin" selected>Admin</option>
-                                                        <option value="user">User</option>
-                                                        <% } else { %>
-                                                            <option value="admin">Admin</option>
-                                                            <option value="user" selected>User</option>
-                                                            <% } %>
-                                                                <option value="delete" class="delete-option">Delete
-                                                                </option>
-                                                </select>
-                                            </div>
-                                        </li>
-                                        <script>
-                                            function toggleExtraInfo(event) {
-                                                const listItem = event.target.closest('.break-list-item-admin');
-                                                const removeButton = event.target.closest('.remove-admin');
-                                                if (!removeButton) {
-                                                    try {
-                                                        const arrow = listItem.querySelector('.arrow');
-                                                        const extraInfo = listItem.querySelector('.extra-info');
-                                                        arrow.classList.toggle('open');
-                                                        extraInfo.style.display = extraInfo.style.display === 'none' ? 'block' : 'none';
-                                                        listItem.classList.toggle('expanded_accounts');
-                                                        const arrowIcon = arrow.querySelector('.material-icons-outlined');
-                                                        if (arrow.classList.contains('open')) {
-                                                            arrowIcon.style.transform = 'rotate(90deg)';
-                                                        } else {
-                                                            arrowIcon.style.transform = 'rotate(0deg)';
-                                                        }
-                                                    } catch (err) { /*console.log(err)*/ }
-                                                }
-                                            }
-                                        </script>
-                                        <% } %>
-                                            <% }); %>
-                            </div>
-                        </ul>
-
-
-                        <br>
-
-                        <!-- /////////////// - HELPER FUNCTIONS - //////////////// -->
-
-                        <script>
-                            const updateUserRole = async (userId, newRole) => {
-                                try {
-                                    const response = await fetch(`/users/${userId}`, {
-                                        method: 'PUT',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify({ role: newRole }),
-                                    });
-                                    if (response.ok) {
-                                        console.log(`User ${userId} role updated to ${newRole}`);
-                                        location.reload();
-                                    } else {
-                                        console.error(`Error updating user ${userId} role`);
-                                    }
-                                } catch (error) {
-                                    console.error(`Error updating user ${userId} role: ${error.message}`);
-                                }
-                            };
-
-                            const deleteUser = async (userId, username) => {
-                                console.log(`Attempting to delete user ${userId}`);
-                                const confirmed = confirm(`Please confirm deletion of account: ${username}`);
-                                if (!confirmed) {
-                                    return;
-                                }
-                                try {
-                                    const response = await fetch(`/delete/${userId}`, {
-                                        method: 'DELETE',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                    });
-                                    console.log('DELETE request response:', response);
-                                    if (response.ok) {
-                                        console.log(`User ${userId} deleted`);
-                                        location.reload();
-                                    } else {
-                                        console.error(`Error deleting user ${userId}`);
-                                    }
-                                } catch (error) {
-                                    console.error(`Error deleting user ${userId}: ${error.message}`);
-                                }
-                            };
-                            const selectElements = document.querySelectorAll('.item-button');
-                            selectElements.forEach(selectElement => {
-                                selectElement.addEventListener('change', event => {
-                                    const liElement = event.target.closest('li');
-                                    const userId = liElement.dataset.id;
-                                    const newRole = event.target[selectElement.selectedIndex].value;
-                                    if (newRole === 'delete') {
-                                        const username = liElement.dataset.username;
-                                        deleteUser(userId, username);
-                                    } else {
-                                        updateUserRole(userId, newRole);
-                                    }
-                                });
-                            });
-                        </script>
-
-                        <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
-
-                        <script>
-                            const resetPassword = async (userId, newPassword, confirmPassword) => {
-                                try {
-                                    const response = await fetch(`/resetpassword`, {
-                                        method: "POST",
-                                        headers: { "Content-Type": "application/json" },
-                                        body: JSON.stringify({ userId, newPassword, confirmPassword }),
-                                    });
-
-                                    if (!response.ok) {
-                                        const error = await response.json();
-                                        throw new Error(error.error);
-                                    }
-
-                                    return await response.json();
-                                } catch (error) {
-                                    return { success: false, error: error.message };
-                                }
-                            };
-
-
-                            const displayResetPasswordModal = (userId) => {
-                                const modal = document.getElementById("reset-password-modal");
-                                const close = modal.querySelector(".reset-password-close");
-                                const form = modal.querySelector("#reset-password-form");
-                                modal.style.display = "block";
-                                const userIdInput = document.createElement("input");
-                                userIdInput.type = "hidden";
-                                userIdInput.name = "userId";
-                                userIdInput.value = userId;
-                                form.appendChild(userIdInput);
-                                close.onclick = () => { modal.style.display = "none"; };
-
-                                form.addEventListener("submit", async (e) => {
-                                    e.preventDefault();
-                                    const newPassword = document.getElementById("newpassword").value;
-                                    const confirmPassword = document.getElementById("confirmpassword").value;
-                                    const errorMessage = document.getElementById("error-message");
-
-                                    const result = await resetPassword(userId, newPassword, confirmPassword);
-
-                                    if (!result.success) {
-                                        errorMessage.textContent = result.error;
-                                        errorMessage.style.display = "block";
-                                    } else {
-                                        errorMessage.style.display = "none";
-                                        modal.style.display = "none";
-                                        location.reload();
-                                    }
-                                });
-                            };
-
-                            document.addEventListener('DOMContentLoaded', () => {
-                                document.querySelectorAll(".reset-password-button").forEach(button =>
-                                    button.addEventListener("click", e => {
-                                        e.preventDefault();
-                                        const li = e.target.closest("li");
-                                        const usernameSpan = li.querySelector(".break-list-item-name-user span, .break-list-item-name-admin span");
-                                        const username = usernameSpan.textContent.trim();
-                                        const userId = li.dataset.id;
-                                        displayResetPasswordModal(userId);
-                                    })
-                                );
-                            });
-                        </script>
-
-                        <!-- ////////////// - SEARCH FUNCTIONALITY - ////////////////-->
-
-                        <script>
-                            const searchInput = document.getElementById('search-bar');
-                            searchInput.addEventListener('input', () => {
-                                const searchValue = searchInput.value.toLowerCase();
-                                const adminUsers = document.querySelectorAll('#admin-users .break-list-item-admin');
-                                const normalUsers = document.querySelectorAll('#normal-users .break-list-item-admin');
-                                filterUsers(adminUsers, searchValue);
-                                filterUsers(normalUsers, searchValue);
-                            });
-                            function filterUsers(users, searchValue) {
-                                users.forEach(user => {
-                                    const username = user.querySelector('username').textContent.toLowerCase();
-                                    if (username.includes(searchValue)) {
-                                        user.style.display = 'list-item';
-                                    } else {
-                                        user.style.display = 'none';
-                                    }
-                                });
-                            }
-                        </script>
-
-                        <!-- ////////////// - PASSWORD RESET MODAL - ////////////////-->
-
-                        <div id="reset-password-modal" class="reset-password-modal">
-                            <div class="reset-password-modal-content">
-                                
-                                <greet class="reset-pass-title">Reset Password</greet><span class="reset-password-close">&times;</span>
-                                <form action="/resetpassword" method="post" id="reset-password-form"
-                                    class="credentials">
-                                    <input type="password" id="newpassword" name="newPassword"
-                                        placeholder="New Password">
-                                    <input type="password" id="confirmpassword" name="confirmPassword"
-                                        placeholder="Confirm New Password">
-                                    <button type="submit" class="form-button">OK</button>
-                                    <p id="error-message" style="display:none; color: red;"></p>
-                                </form>
-                            </div>
                         </div>
+                    </ul>
 
-                        <!-- ////////////////// - FETCH BOTTOM PARTIAL - ////////////////// -->
+                    <br><br>
 
-                        <%- include('partials/bottomjs.ejs') %>
+                    <!-- ////////////// - ADMINS - //////////////// -->
+
+                    <joke>Supporting functions</joke>
+
+                    <br><br>
+
+                    <ul id="admin-users" class="roles-list">
+                        <div id="sFunctions" class="main">
+                            <% adminUsers.sort((a, b)=> a.username.localeCompare(b.username)).forEach(user => { %>
+                                <% if (user.username !=='admin' ) { %>
+                                    <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
+                                        data-username="<%= user.username %>" class="break-list-item-admin">
+                                        <div class="break-list-item-name-admin" onclick="toggleExtraInfo(event)">
+                                            <arrow-icon class="arrow">
+                                                <span class="material-symbols-outlined">keyboard_arrow_right</span>
+                                            </arrow-icon>
+                                            <span class="user-name-admin-accounts">
+                                                <username class="user-name-top">
+                                                    <%= user.username %>
+                                                </username>
+                                            </span>
+                                        </div>
+                                        <div class="extra-info" style="display:none;">
+                                            <button class="reset-password-button"
+                                                data-user-id="<%= user._id %>">Password</button>
+                                            <select class="item-button">
+                                                <% if (user.roles==='admin' ) { %>
+                                                    <option value="admin" selected>Admin</option>
+                                                    <option value="user">User</option>
+                                                    <% } else { %>
+                                                        <option value="admin">Admin</option>
+                                                        <option value="user" selected>User</option>
+                                                        <% } %>
+                                                            <option value="delete" class="delete-option">Delete
+                                                            </option>
+                                            </select>
+                                        </div>
+                                    </li>
+                                    <script>
+                                        function toggleExtraInfo(event) {
+                                            const listItem = event.target.closest('.break-list-item-admin');
+                                            const removeButton = event.target.closest('.remove-admin');
+                                            if (!removeButton) {
+                                                try {
+                                                    const arrow = listItem.querySelector('.arrow');
+                                                    const extraInfo = listItem.querySelector('.extra-info');
+                                                    arrow.classList.toggle('open');
+                                                    extraInfo.style.display = extraInfo.style.display === 'none' ? 'block' : 'none';
+                                                    listItem.classList.toggle('expanded_accounts');
+                                                    const arrowIcon = arrow.querySelector('.material-icons-outlined');
+                                                    if (arrow.classList.contains('open')) {
+                                                        arrowIcon.style.transform = 'rotate(90deg)';
+                                                    } else {
+                                                        arrowIcon.style.transform = 'rotate(0deg)';
+                                                    }
+                                                } catch (err) { /*console.log(err)*/ }
+                                            }
+                                        }
+                                    </script>
+                                    <% } %>
+                                        <% }); %>
+                        </div>
+                    </ul>
+
+
+                    <br>
+
+                    <!-- /////////////// - HELPER FUNCTIONS - //////////////// -->
+
+                    <script>
+                        const updateUserRole = async (userId, newRole) => {
+                            try {
+                                const response = await fetch(`/users/${userId}`, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({ role: newRole }),
+                                });
+                                if (response.ok) {
+                                    console.log(`User ${userId} role updated to ${newRole}`);
+                                    location.reload();
+                                } else {
+                                    console.error(`Error updating user ${userId} role`);
+                                }
+                            } catch (error) {
+                                console.error(`Error updating user ${userId} role: ${error.message}`);
+                            }
+                        };
+
+                        const deleteUser = async (userId, username) => {
+                            console.log(`Attempting to delete user ${userId}`);
+                            const confirmed = confirm(`Please confirm deletion of account: ${username}`);
+                            if (!confirmed) {
+                                return;
+                            }
+                            try {
+                                const response = await fetch(`/delete/${userId}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                });
+                                console.log('DELETE request response:', response);
+                                if (response.ok) {
+                                    console.log(`User ${userId} deleted`);
+                                    location.reload();
+                                } else {
+                                    console.error(`Error deleting user ${userId}`);
+                                }
+                            } catch (error) {
+                                console.error(`Error deleting user ${userId}: ${error.message}`);
+                            }
+                        };
+                        const selectElements = document.querySelectorAll('.item-button');
+                        selectElements.forEach(selectElement => {
+                            selectElement.addEventListener('change', event => {
+                                const liElement = event.target.closest('li');
+                                const userId = liElement.dataset.id;
+                                const newRole = event.target[selectElement.selectedIndex].value;
+                                if (newRole === 'delete') {
+                                    const username = liElement.dataset.username;
+                                    deleteUser(userId, username);
+                                } else {
+                                    updateUserRole(userId, newRole);
+                                }
+                            });
+                        });
+                    </script>
+
+                    <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
+
+                    <script>
+                        const resetPassword = async (userId, newPassword, confirmPassword) => {
+                            try {
+                                const response = await fetch(`/resetpassword`, {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ userId, newPassword, confirmPassword }),
+                                });
+
+                                if (!response.ok) {
+                                    const error = await response.json();
+                                    throw new Error(error.error);
+                                }
+
+                                return await response.json();
+                            } catch (error) {
+                                return { success: false, error: error.message };
+                            }
+                        };
+
+
+                        const displayResetPasswordModal = (userId) => {
+                            const modal = document.getElementById("reset-password-modal");
+                            const close = modal.querySelector(".reset-password-close");
+                            const form = modal.querySelector("#reset-password-form");
+                            modal.style.display = "block";
+                            const userIdInput = document.createElement("input");
+                            userIdInput.type = "hidden";
+                            userIdInput.name = "userId";
+                            userIdInput.value = userId;
+                            form.appendChild(userIdInput);
+                            close.onclick = () => { modal.style.display = "none"; };
+
+                            form.addEventListener("submit", async (e) => {
+                                e.preventDefault();
+                                const newPassword = document.getElementById("newpassword").value;
+                                const confirmPassword = document.getElementById("confirmpassword").value;
+                                const errorMessage = document.getElementById("error-message");
+
+                                const result = await resetPassword(userId, newPassword, confirmPassword);
+
+                                if (!result.success) {
+                                    errorMessage.textContent = result.error;
+                                    errorMessage.style.display = "block";
+                                } else {
+                                    errorMessage.style.display = "none";
+                                    modal.style.display = "none";
+                                    location.reload();
+                                }
+                            });
+                        };
+
+                        document.addEventListener('DOMContentLoaded', () => {
+                            document.querySelectorAll(".reset-password-button").forEach(button =>
+                                button.addEventListener("click", e => {
+                                    e.preventDefault();
+                                    const li = e.target.closest("li");
+                                    const usernameSpan = li.querySelector(".break-list-item-name-user span, .break-list-item-name-admin span");
+                                    const username = usernameSpan.textContent.trim();
+                                    const userId = li.dataset.id;
+                                    displayResetPasswordModal(userId);
+                                })
+                            );
+                        });
+                    </script>
+
+                    <!-- ////////////// - SEARCH FUNCTIONALITY - ////////////////-->
+
+                    <script>
+                        const searchInput = document.getElementById('search-bar');
+                        searchInput.addEventListener('input', () => {
+                            const searchValue = searchInput.value.toLowerCase();
+                            const adminUsers = document.querySelectorAll('#admin-users .break-list-item-admin');
+                            const normalUsers = document.querySelectorAll('#normal-users .break-list-item-admin');
+                            filterUsers(adminUsers, searchValue);
+                            filterUsers(normalUsers, searchValue);
+                        });
+                        function filterUsers(users, searchValue) {
+                            users.forEach(user => {
+                                const username = user.querySelector('username').textContent.toLowerCase();
+                                if (username.includes(searchValue)) {
+                                    user.style.display = 'list-item';
+                                } else {
+                                    user.style.display = 'none';
+                                }
+                            });
+                        }
+                    </script>
+
+                    <!-- ////////////// - PASSWORD RESET MODAL - ////////////////-->
+
+                    <div id="reset-password-modal" class="reset-password-modal">
+                        <div class="reset-password-modal-content">
+
+                            <greet class="reset-pass-title">Reset Password</greet><span
+                                class="reset-password-close">&times;</span>
+                            <form action="/resetpassword" method="post" id="reset-password-form" class="credentials">
+                                <div class="input-container">
+                                    <input type="password" id="newpassword" name="newpassword" autocomplete="off"
+                                        class="inputfield" maxlength="" value="">
+                                    <span class="placeholder1 newpassword">&nbsp;New Password&nbsp;</span>
+                                </div>
+                                <div class="input-container">
+                                    <input type="password" id="confirmpassword" name="confirmpassword"
+                                        autocomplete="off" class="inputfield" maxlength="" value="">
+                                    <span class="placeholder1">&nbsp;Confirm Password&nbsp;</span>
+                                </div>
+                                <button type="submit" class="form-button">OK</button>
+                                <p id="error-message" style="display:none; color: red;"></p>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- ////////////////// - FETCH BOTTOM PARTIAL - ////////////////// -->
+
+                    <%- include('partials/bottomjs.ejs') %>
 
 </body>

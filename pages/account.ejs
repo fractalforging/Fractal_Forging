@@ -1,30 +1,35 @@
 <!-- ////////////////// - PARTIALS - ////////////////// -->
 
 <%- include('partials/header.ejs') %>
-  <%- include('partials/themes.ejs') %>
-    <%- include('partials/modals.ejs') %>
-      <%- include('partials/navigation.ejs') %>
-        <%- include('partials/modals.ejs') %>
+  <%- include('partials/modals.ejs') %>
+    <%- include('partials/navigation.ejs') %>
+      <%- include('partials/modals.ejs') %>
 
-          &nbsp;
-          <br>
+        &nbsp;
+        <br>
 
-          <hr class="divider">
+        <hr class="divider">
 
-          <!-- ////////////////// - FORM - ////////////////// -->
+        <!-- ////////////////// - FORM - ////////////////// -->
 
-          <pagetitle>Change your password</pagetitle>
+        <pagetitle>Change your password</pagetitle>
 
-          <form action="/changepassword" method="post" class="credentials">
-            <input type="password" id="currentpassword" name="currentpassword" placeholder="currentpassword"
-              autocomplete="off">
-            <input type="password" id="newpassword" name="newpassword" placeholder="newpassword" autocomplete="off">
-            <input type="password" id="confirmpassword" name="confirmpassword" placeholder="confirmpassword"
-              autocomplete="off">
-            <button class="form-button">Submit</button>
-          </form>
+        <form action="/changepassword" method="post" class="credentials">
+          <div class="input-container">
+            <input type="password" id="currentpassword" name="currentpassword" autocomplete="off" class="inputfield" maxlength="" value="" >
+            <span class="placeholder1">&nbsp;Current Password&nbsp;</span>
+          </div>
+          <div class="input-container">
+            <input type="password" id="newpassword" name="newpassword" autocomplete="off" class="inputfield" maxlength="" value="" >
+            <span class="placeholder1 newpassword">&nbsp;New Password&nbsp;</span>
+          </div>
+          <div class="input-container">
+            <input type="password" id="confirmpassword" name="confirmpassword" autocomplete="off" class="inputfield" maxlength="" value="" >
+            <span class="placeholder1">&nbsp;Confirm Password&nbsp;</span>
+          </div>
+          <button class="form-button">Submit</button>
+        </form>
 
+        <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 
-          <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
-
-          <%- include('partials/bottomjs.ejs') %>
+        <%- include('partials/bottomjs.ejs') %>
