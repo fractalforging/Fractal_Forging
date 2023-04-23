@@ -8,8 +8,14 @@
       <!-- ////////////////// - FORM - ////////////////// -->
 
       <form action="/login" method="POST" class="credentials">
-        <input type="text" name="username" placeholder="username" autocomplete="off">
-        <input type="password" name="password" placeholder="password" autocomplete="off">
+        <div class="input-container">
+          <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength="" value="" >
+          <span class="placeholder1 username">&nbsp;Username&nbsp;</span>
+        </div>
+        <div class="input-container">
+          <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength="" value="" >
+          <span class="placeholder1 password">&nbsp;Password&nbsp;</span>
+        </div>
         <button id="login-submit-button" type="submit" class="form-button">Login</button>
       </form>
 
