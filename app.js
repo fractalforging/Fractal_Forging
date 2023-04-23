@@ -139,7 +139,7 @@ const resetPasswordRoute = require('./routes/resetPassword.js');
 const settingsRoutes = require('./routes/settings.js');
 const apiMessages = require('./routes/apiMessages.js');
 const socket = require('./routes/socket.js');
-
+ 
 
 //=====================
 // BT ROUTES
