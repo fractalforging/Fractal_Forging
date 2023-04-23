@@ -70,8 +70,9 @@
 
 .break-list-item-user,
 .break-list-item-admin {
-  min-height: 20px;
-  max-height: 20px;
+  /* min-height: 20px; */
+  /* max-height: 20px; */
+  height: 20px;
   padding: 10px;
   margin-top: 10px;
   text-align: left;
@@ -83,22 +84,31 @@
   overflow: hidden;
   transition: background-color var(--animation-duration-more) ease-in-out,
     color var(--animation-duration-more) ease-in-out,
-    border var(--animation-duration-more) ease-in-out,
-    min-height var(--animation-duration-more) ease-in-out,
-    max-height var(--animation-duration-more) ease-in-out;
+    border var(--animation-duration-more) ease-in-out;
+    /* min-height var(--animation-duration-more) ease-in-out,
+     max-height var(--animation-duration-more) ease-in-out, */
+    /* height var(--animation-duration-short) ease-in-out; */
 }
 
 .break-list-item-user {
-  width: 275px;
+  width: 270px;
 }
 
 .break-list-item-admin {
-  width: 300px;
+  width: 270;
   flex-direction: column;
 }
 
 .break-list-item-admin.expanded {
-  max-height: none;
+  /* max-height: 1000px; */
+   height: 83px; 
+   transition: height var(--animation-duration-short) ease-in-out;
+}
+
+.break-list-item-admin.expanded_accounts {
+  /* max-height: 1000px; */
+   height: 48px; 
+   transition: height var(--animation-duration-short) ease-in-out;
 }
 
 .break-list-item-name-user,
@@ -147,6 +157,7 @@
 
 .arrow.open .material-symbols-outlined {
   transform: rotate(90deg);
+  /* transition: all var(--animation-duration-short) ease-in-out; */
 }
 
 .material-symbols-outlined {

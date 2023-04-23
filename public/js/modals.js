@@ -16,8 +16,7 @@ document.querySelectorAll('.close-neg, .close-pos').forEach(btn => {
 
 ///////// - MAIN FUNCTION - /////////
 
-const makeApiCall = async (apiEndpoint, delay = 0) => {
-    setTimeout(async () => {
+const makeApiCall = async (apiEndpoint) => {
         const response = await fetch(apiEndpoint);
         const { message } = await response.json();
         if (response.status === 200) {
@@ -30,7 +29,6 @@ const makeApiCall = async (apiEndpoint, delay = 0) => {
             myModal_Neg.style.display = 'block';
         }
         fetch('/clear-message', { method: 'POST' });
-    }, delay);
 }
 
 ///////// - GET APIS - /////////
@@ -39,6 +37,6 @@ const apiEndpoints = [
     "/api/messaging"
 ];
 
-apiEndpoints.forEach((apiEndpoint, index) => {
-    makeApiCall(apiEndpoint, index * 500); // Apply a delay of 500ms between each API call
+apiEndpoints.forEach((apiEndpoint) => {
+    makeApiCall(apiEndpoint);
 });

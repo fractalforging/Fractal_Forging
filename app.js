@@ -103,10 +103,20 @@ app.get('/socket.io/socket.io.js', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+
   socket.on('reload', () => {
+    logger.warn("SOCKET.IO - Connected");
     io.emit('reload');
   });
-  socket.on('disconnect', () => { });
+
+  // const reloadInterval = setInterval(() => {
+  //   io.emit('reload');
+  // }, 900000); // 900000ms = 15 minutes
+
+  socket.on('disconnect', () => { 
+    //logger.warn("SOCKET.IO - Disconnected");
+  });
+
 });
 
 
@@ -125,10 +135,11 @@ const changepasswordRoutes = require('./routes/changepassword.js');
 const breakSlotsRoutes = require('./routes/break-slots.js')(io, BreakTrack);
 const usersRoutes = require("./routes/users.js");
 const deleteRoutes = require('./routes/delete.js');
-const apiMessages = require('./serverjs/apiMessages.js');
 const resetPasswordRoute = require('./routes/resetPassword.js');
+const settingsRoutes = require('./routes/settings.js');
+const apiMessages = require('./routes/apiMessages.js');
 const socket = require('./routes/socket.js');
-
+ 
 
 //=====================
 // BT ROUTES
@@ -157,8 +168,9 @@ app.use("/changepassword", changepasswordRoutes);
 app.use("/break-slots", breakSlotsRoutes);
 app.use("/users", usersRoutes);
 app.use('/delete', deleteRoutes);
-app.get('/api/messaging', apiMessages.myMessages);
 app.use('/resetpassword', resetPasswordRoute);
+app.use('/settings', settingsRoutes);
+app.get('/api/messaging', apiMessages.myMessages);
 
 
 //=====================
