@@ -384,3 +384,17 @@ slots {
   top: -63px;
   right: -8px;
 }
+
+/*///// - CLOCK - /////*/
+
+.clock-container {
+  position: relative;
+}
+
+.clock {
+  position: absolute;
+  top: 0px;
+  left: -40px;
+  font-size: 18px;
+  font-family: var(--break-list-item-timer-font-family);
+}
