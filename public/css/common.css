@@ -189,6 +189,8 @@ option {
 }
 
 navbar {
+  position: relative;
+  left: -25px;
   font-weight: 450;
   font-size: 14px;
 }

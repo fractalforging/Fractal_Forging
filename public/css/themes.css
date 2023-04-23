@@ -36,6 +36,9 @@
   --links-font-weight: 650;
   --links-font-size: 16px;
   --links-divider-color: #004C7B;
+  /*//// - NAVIGATION - ////*/
+  --navigation-hamburguer-color: #489acc;
+  --navigation-dropdown-background-color: #ffffffcc;
   /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color: #ffffff65;
   --credentials-box-shadow-color: #00060a44;
@@ -126,6 +129,9 @@
   --links-font-weight: 550;
   --links-font-size: 16px;
   --links-divider-color: #665f68;
+  /*//// - NAVIGATION - ////*/
+  --navigation-hamburguer-color: #dfd1f5;
+  --navigation-dropdown-background-color: #010213e1;
   /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color: #01041ddc;
   --credentials-box-shadow-color: #00050c;

@@ -1,15 +1,67 @@
 <!-- ////////////////// - NAV - ////////////////// -->
+<style>
+  .hamburger-menu {
+    display: inline-block;
+    margin-right: 25px;
+  }
+
+  .hamburger-menu:hover .dropdown-menu {
+    display: block;
+    max-height: 400px;
+    opacity: 1;
+    overflow: hidden;
+    transition: max-height var(--animation-duration-more) ease-in-out, opacity var(--animation-duration-base) ease-in-out;
+  }
+
+  .hamburger-icon {
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--navigation-hamburguer-color);
+    font-weight: var(--links-font-weight);
+    transition: all var(--animation-duration-short) ease-in-out;
+  }
+
+  .dropdown-menu {
+    display: block;
+    position: absolute;
+    background-color: var(--navigation-dropdown-background-color);
+    min-width: 130px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px 0px #00000033;
+    z-index: 1;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transition: max-height var(--animation-duration-base) ease-in-out, opacity var(--animation-duration-short) ease-in-out;
+  }
+
+  .dropdown-menu li {
+    display: block;
+    margin-top: 0;
+  }
+
+  .dropdown-menu li a {
+    display: block;
+    text-align: left;
+    padding: 12px 16px;
+  }
+</style>
+
 
 <navbar>
-    <li><a href="/secret">Breaks</a></li>
-    <section class="vertical-line"></section>
-    <li><a href="/account">Password</a></li>
-    <section class="vertical-line"></section>
-    <% if (currentUser.roles==='admin' ) { %>
-      <li><a href="/register">Register</a></li>
-      <section class="vertical-line"></section>
-      <li><a href="/users">Accounts</a></li>
-      <section class="vertical-line"></section>
-      <% } %>
-        <li><a href="/logout">Logout</a></li>
-  </navbar>
+  <div class="hamburger-menu">
+    <span class="hamburger-icon" onclick="toggleMenu()">&#9776;</span>
+    <div class="dropdown-menu" id="dropdown-menu">
+      <li><a href="/account">Password</a></li>
+      <% if (currentUser.roles==='admin' ) { %>
+        <li><a href="/register">Register</a></li>
+        <li><a href="/users">Accounts</a></li>
+        <% } %>
+          <!-- <li><a href="/settings">Settings</a></li> -->
+    </div>
+  </div>
+  <li><a href="/secret">Breaks</a></li>
+  <section class="vertical-line"></section>
+  <li><a href="/logout">Logout</a></li>
+</navbar>
