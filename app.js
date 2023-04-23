@@ -114,7 +114,7 @@ io.on('connection', (socket) => {
   // }, 900000); // 900000ms = 15 minutes
 
   socket.on('disconnect', () => { 
-    logger.warn("SOCKET.IO - Disconnected");
+    //logger.warn("SOCKET.IO - Disconnected");
   });
 
 });
