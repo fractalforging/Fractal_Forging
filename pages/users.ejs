@@ -32,9 +32,16 @@
                         <br><br>
                         <ul id="normal-users" class="roles-list">
                             <div id="agents" class="main">
-                            <% normalUsers.forEach(user=> { %>
+                                <% normalUsers.sort((a, b) => {
+                                    const aBreakTime = Math.floor(a.remainingBreakTime / 60);
+                                    const bBreakTime = Math.floor(b.remainingBreakTime / 60);
+                                    if (aBreakTime === bBreakTime) {
+                                      return a.username.localeCompare(b.username);
+                                    }
+                                    return aBreakTime - bBreakTime;
+                                  }).forEach(user => { %>                              
                                 <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
-                                    class="break-list-item-admin">
+                                    data-username="<%= user.username %>" class="break-list-item-admin">
                                     <div class="break-list-item-name-admin" onclick="toggleExtraInfo(event)">
                                         <arrow-icon class="arrow">
                                             <span class="material-symbols-outlined">keyboard_arrow_right</span>
@@ -98,10 +105,10 @@
 
                         <ul id="admin-users" class="roles-list">
                             <div id="sFunctions" class="main">
-                                <% adminUsers.forEach(user=> { %>
+                                <% adminUsers.sort((a, b) => a.username.localeCompare(b.username)).forEach(user => { %>
                                     <% if (user.username !=='admin' ) { %>
                                         <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
-                                            class="break-list-item-admin">
+                                            data-username="<%= user.username %>" class="break-list-item-admin">
                                             <div class="break-list-item-name-admin" onclick="toggleExtraInfo(event)">
                                                 <arrow-icon class="arrow">
                                                     <span class="material-symbols-outlined">keyboard_arrow_right</span>
@@ -211,7 +218,7 @@
                                     const userId = liElement.dataset.id;
                                     const newRole = event.target[selectElement.selectedIndex].value;
                                     if (newRole === 'delete') {
-                                        const username = liElement.querySelector('span').textContent;
+                                        const username = liElement.dataset.username;
                                         deleteUser(userId, username);
                                     } else {
                                         updateUserRole(userId, newRole);

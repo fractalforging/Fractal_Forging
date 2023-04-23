@@ -84,7 +84,7 @@
   overflow: hidden;
   transition: background-color var(--animation-duration-more) ease-in-out,
     color var(--animation-duration-more) ease-in-out,
-    border var(--animation-duration-more) ease-in-out,
+    border var(--animation-duration-more) ease-in-out;
     /* min-height var(--animation-duration-more) ease-in-out,
      max-height var(--animation-duration-more) ease-in-out, */
     /* height var(--animation-duration-short) ease-in-out; */
