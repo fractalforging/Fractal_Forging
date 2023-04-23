@@ -103,10 +103,20 @@ app.get('/socket.io/socket.io.js', (req, res) => {
 });
 
 io.on('connection', (socket) => {
+
   socket.on('reload', () => {
+    logger.warn("SOCKET.IO - Connected");
     io.emit('reload');
   });
-  socket.on('disconnect', () => { });
+
+  const reloadInterval = setInterval(() => {
+    io.emit('reload');
+  }, 900000); // 900000ms = 15 minutes
+
+  socket.on('disconnect', () => { 
+    logger.warn("SOCKET.IO - Disconnected");
+  });
+
 });
 
 
