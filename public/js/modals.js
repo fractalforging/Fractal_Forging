@@ -37,6 +37,6 @@ const apiEndpoints = [
     "/api/messaging"
 ];
 
-apiEndpoints.forEach((apiEndpoint, index) => {
-    makeApiCall(apiEndpoint, index * 500); // Apply a delay of 500ms between each API call
+apiEndpoints.forEach((apiEndpoint) => {
+    makeApiCall(apiEndpoint);
 });
