@@ -120,14 +120,18 @@
           ]);
         }
 
-        Promise.all([document.fonts.ready, loadFonts()]).then(() => {
+        function delay(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        Promise.all([document.fonts.ready, loadFonts(), delay(1000)]).then(() => {
           document.body.style.opacity = '1';
           document.querySelector('.loader').style.display = 'none';
         });
+
       </script>
 
       <%- include('partials/bottomjs.ejs') %>
-
 
 </body>
 
