@@ -1,0 +1,60 @@
+/*///////// - PREVENT HIGHLIGHT ON MOBILE * ////////////////*/
+
+button, a, input[type="button"], input[type="submit"] {
+    -webkit-tap-highlight-color: transparent; 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -moz-user-select: none; 
+    -ms-user-select: none; 
+    user-select: none;
+  }
+  
+  button:focus, a:focus, input[type="button"]:focus, input[type="submit"]:focus {
+    outline: none; 
+    box-shadow: none; 
+  }
+  
+  button:active, a:active, input[type="button"]:active, input[type="submit"]:active {
+    background-color: transparent; 
+  }
+
+  /*////////// - PREVENT HIGHLIGHT ON MOBILE OF ICONS - /////////////*/
+
+.hamburger-icon {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+  }
+  
+  .hamburger-icon:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .hamburger-icon:active {
+    background-color: transparent;
+  }
+  
+  .toggle-mode, .toggle-mode .material-symbols-outlined {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  .toggle-mode:focus, .toggle-mode .material-symbols-outlined:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
+  .toggle-mode:active, .toggle-mode .material-symbols-outlined:active {
+    background-color: transparent;
+  }
+  
+  
