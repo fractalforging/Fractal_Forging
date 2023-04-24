@@ -308,12 +308,13 @@ slots {
   bottom: -5px;
   left: 0;
   width: 100%;
-  text-align: center; 
+  text-align: center;
 }
 
 /* /////// - FORMS - /////// */
 
-.placeholder1 { /* visible on non-focus */
+.placeholder1 {
+  /* visible on non-focus */
   position: relative;
   pointer-events: none;
   white-space: nowrap;
@@ -338,6 +339,7 @@ slots {
 .username,
 .password {
   position: relative;
+  top: -43px;
   left: -68px;
 }
 
