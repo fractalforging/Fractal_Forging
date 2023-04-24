@@ -9,7 +9,7 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 const LocalStrategy = require("passport-local");
-const logger = require('./serverjs/logger.js');
+const logger = require('./routes/logger.js');
 const dotenv = require("dotenv");
 const kleur = require('kleur');
 const http = require('http');
@@ -126,7 +126,7 @@ io.on('connection', (socket) => {
 
 const { isLoggedIn, isAdmin } = require('./middleware/authentication.js');
 const indexRoutes = require('./routes/index.js');
-const { getBreakTrackerData, getBreakSlotsData } = require('./serverjs/helperFunctions.js');
+const { getBreakTrackerData, getBreakSlotsData } = require('./routes/helperFunctions.js');
 const loginRoutes = require('./routes/login.js');
 const logoutRoutes = require('./routes/logout.js');
 const secretRoutes = require('./routes/secret.js');

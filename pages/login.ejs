@@ -1,32 +1,33 @@
-<br><br>
+  <%- include('partials/header.ejs') %>
+  <%- include('partials/preload.ejs') %>
 
-<!-- ////////////////// - HEADER SETUP - ////////////////// -->
+    <div class="loader">
+      <div class="spinner"></div>
+    </div>
 
-<%- include('partials/header.ejs') %>
     <%- include('partials/modals.ejs') %>
-
-      <!-- ////////////////// - FORM - ////////////////// -->
 
       <form action="/login" method="POST" class="credentials">
         <div class="input-container">
-          <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength="" value="" >
+          <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength="" value="">
           <span class="placeholder1 username">&nbsp;Username&nbsp;</span>
         </div>
         <div class="input-container">
-          <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength="" value="" >
+          <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength=""
+            value="">
           <span class="placeholder1 password">&nbsp;Password&nbsp;</span>
         </div>
         <button id="login-submit-button" type="submit" class="form-button">Login</button>
       </form>
 
       <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
           const inputFields = document.querySelectorAll('.inputfield');
           inputFields.forEach(input => {
             input.addEventListener('input', handleInput);
             handleInput.call(input);
           });
-      
+
           function handleInput() {
             if (this.value) {
               this.parentElement.classList.add('has-text');
@@ -37,6 +38,6 @@
         });
       </script>
 
-      <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
-
       <%- include('partials/bottomjs.ejs') %>
+
+ 

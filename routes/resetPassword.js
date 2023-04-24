@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user.js');
-const logger = require('../serverjs/logger.js');
+const logger = require('./logger.js');
 const kleur = require('kleur');
 const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
 

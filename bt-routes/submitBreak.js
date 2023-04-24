@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const logger = require('../serverjs/logger.js');
+const logger = require('../routes/logger.js');
 const kleur = require('kleur');
 const BreakTrack = require('../models/BreakTrack.js');
 const BreakSlots = require('../models/BreakSlots.js');
@@ -63,7 +63,7 @@ const submitBreaks = (io, BreakTrack, User) => {
         });
         try {
           await breakTracker.save();
-          req.session.message = 'Break submitted';
+          //req.session.message = 'Break submitted';
           logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s)`);
           await moveToNormalList(BreakTrack);
           io.emit('reload');
