@@ -82,14 +82,53 @@
         });
       </script>
 
+      <script>
+
+        function loadFonts() {
+          const fetchMPlus1 = fetch('https://fonts.googleapis.com/css2?family=M+PLUS+1&display=swap')
+            .then((response) => response.text())
+            .then((css) => {
+              const style = document.createElement('style');
+              style.innerHTML = css;
+              document.head.appendChild(style);
+            });
+
+          const fontShareTechMono = new FontFace(
+            'Share Tech Mono',
+            "url('https://fonts.gstatic.com/s/sharetechmono/v15/J7aHnp1uDWRBEqV98dVQztYldFcLowEF.woff2')",
+            {
+              style: 'normal',
+              fontFamily: 'Share Tech Mono',
+              fontDisplay: 'swap',
+            }
+          );
+
+          const fontMaterialIcons = new FontFace(
+            'Material Icons',
+            "url('https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2')",
+            {
+              style: 'normal',
+              fontFamily: 'Material Icons',
+              fontDisplay: 'swap',
+            }
+          );
+
+          return Promise.all([
+            fetchMPlus1,
+            fontShareTechMono.load(),
+            fontMaterialIcons.load(),
+          ]);
+        }
+
+        Promise.all([document.fonts.ready, loadFonts()]).then(() => {
+          document.body.style.opacity = '1';
+          document.querySelector('.loader').style.display = 'none';
+        });
+      </script>
+
       <%- include('partials/bottomjs.ejs') %>
 
-        <script>
-          document.fonts.ready.then(() => {
-            document.body.style.opacity = '1';
-            document.querySelector('.loader').style.display = 'none';
-          });
-        </script>
+
 </body>
 
 </html>
