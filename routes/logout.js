@@ -1,6 +1,6 @@
 const express = require('express');
 const kleur = require('kleur');
-const logger = require('../serverjs/logger');
+const logger = require('./logger');
 const router = express.Router();
 
 //HANDLING USER LOGOUT

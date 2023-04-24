@@ -5,25 +5,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Kanit&amp;display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&amp;display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Urbanist&amp;display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&amp;display=swap'); */
-/* @import url('https://fonts.googleapis.com/css2?family=M+PLUS+1&amp;display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&amp;display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1&amp;display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons&amp;display=swap'); */
 
-@font-face {
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1&amp;display=swap');
+
+/* @font-face {
   font-family: 'M PLUS 1';
+  src: url('https://fonts.googleapis.com/css2?family=M+PLUS+1&amp;display=swap') format('woff2');
   font-display: swap;
-}
+} */
 
 @font-face {
   font-family: 'Share Tech Mono';
+  src: url('https://fonts.gstatic.com/s/sharetechmono/v15/J7aHnp1uDWRBEqV98dVQztYldFcLowEF.woff2') format('woff2');
   font-display: swap;
 }
 
 @font-face {
   font-family: 'Material Icons';
+  src: url('https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2') format('woff2');
   font-display: swap;
 }
+
+
 
 /* ////////////// - COMMON - //////////////// */
 :root {
@@ -34,7 +41,7 @@
   --animation-duration-more: calc(var(--animation-duration-base) * 1.428);
   --animation-duration-long: calc(var(--animation-duration-base) * 2.857);
   /*//// - FONTS - ////*/
-  --main-body-font-family: "M PLUS 1";
+  --main-body-font-family: 'M PLUS 1';
   --break-list-item-timer-font-family: "Share Tech Mono";
   font-display: swap;
 }

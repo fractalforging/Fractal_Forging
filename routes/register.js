@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const { isLoggedIn, isAdmin } = require('../middleware/authentication');
 const BreakSlots = require('../models/BreakSlots');
-const logger = require('../serverjs/logger');
+const logger = require('./logger');
 const kleur = require('kleur');
 
 router.get('/', function(req, res, next) {

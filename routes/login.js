@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const kleur = require('kleur');
 const passport = require('passport');
-const logger = require('../serverjs/logger.js');
+const logger = require('./logger.js');
 
 router.post('/', async function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {

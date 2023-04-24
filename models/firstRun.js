@@ -1,6 +1,6 @@
 const User = require("./user");
 const BreakSlots = require('./BreakSlots');
-const logger = require('../serverjs/logger.js');
+const logger = require('../routes/logger.js');
 const kleur = require('kleur');
 
 async function createAdminUser() {

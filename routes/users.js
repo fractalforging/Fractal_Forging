@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const { isAdmin } = require("../middleware/authentication.js");
 const User = require("../models/user");
-const logger = require('../serverjs/logger.js');
+const logger = require('./logger.js');
 const kleur = require('kleur');
 
 router.get("/", isAdmin, async (req, res, next) => {

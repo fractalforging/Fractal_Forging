@@ -2,7 +2,7 @@ const express = require('express');
 const kleur = require('kleur');
 const router = express.Router();
 const User = require('../models/user.js');
-const logger = require('../serverjs/logger.js');
+const logger = require('./logger.js');
 const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
 
 //HANDLING PASSWORD CHANGE

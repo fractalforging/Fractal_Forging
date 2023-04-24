@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
 const User = require('../models/user');
-const { getBreakTrackerData, getBreakSlotsData } = require('../serverjs/helperFunctions.js');
+const { getBreakTrackerData, getBreakSlotsData } = require('./helperFunctions.js');
 
 // USER LANDING PAGE
 router.get("/", isLoggedIn, async function (req, res, next) {

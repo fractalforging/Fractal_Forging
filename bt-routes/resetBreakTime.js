@@ -1,7 +1,7 @@
 const moment = require('moment-timezone');
 const express = require('express');
 const router = express.Router();
-const logger = require('../serverjs/logger.js');
+const logger = require('../routes/logger.js');
 const kleur = require('kleur');
 const LastResetTimestamp = require('../models/LastResetTimestamp');
 
