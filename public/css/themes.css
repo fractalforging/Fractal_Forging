@@ -6,9 +6,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&amp;display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Urbanist&amp;display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans&amp;display=swap'); */
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+1&amp;display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=M+PLUS+1&amp;display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;display=swap');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons&amp;display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons&amp;display=swap'); */
+
+@font-face {
+  font-family: 'M PLUS 1';
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Share Tech Mono';
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-display: swap;
+}
 
 /* ////////////// - COMMON - //////////////// */
 :root {
