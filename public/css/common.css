@@ -28,26 +28,6 @@ body {
   background-color: transparent;
 }
 
-/*///////// - PREVENT HIGHLIGHT ON MOBILE * ////////////////*/
-
-button, a, input[type="button"], input[type="submit"] {
-  -webkit-tap-highlight-color: transparent; /* For WebKit-based browsers (e.g., Chrome, Safari) */
-  -webkit-touch-callout: none; /* Disable callout on long-press for iOS */
-  -webkit-user-select: none; /* Disable text selection on WebKit-based browsers */
-  -moz-user-select: none; /* Disable text selection on Firefox */
-  -ms-user-select: none; /* Disable text selection on Internet Explorer/Edge */
-  user-select: none; /* Disable text selection for modern browsers */
-}
-
-button:focus, a:focus, input[type="button"]:focus, input[type="submit"]:focus {
-  outline: none; /* Remove outline on focus */
-  box-shadow: none; /* Remove any box-shadow on focus */
-}
-
-button:active, a:active, input[type="button"]:active, input[type="submit"]:active {
-  background-color: transparent; /* Remove background color on active state */
-}
-
 /*///////////*/
 
 a {
