@@ -5,6 +5,26 @@
 <script src="/thirdparty/sortable/Sortable.min.js"></script>
 <script src="/js/sort.js"></script>
 
+<!--//////// - PREVENT PLACEHOLDER ANIM WHEN TEXT - /////////-->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const inputFields = document.querySelectorAll('.inputfield, .search-bar');
+    inputFields.forEach(input => {
+      input.addEventListener('input', handleInput);
+      handleInput.call(input);
+    });
+
+    function handleInput() {
+      if (this.value) {
+        this.parentElement.classList.add('has-text');
+      } else {
+        this.parentElement.classList.remove('has-text');
+      }
+    }
+  });
+</script>
+
 <!-- ////////////// SOCKET.IO - GLOBAL RELOAD ////////////////-->
 
 <script src="/socket.io/socket.io.js"></script>
@@ -12,17 +32,15 @@
   const socket = io();
 
   socket.on('connect', () => {
-  console.log('SOCKET.IO - Connected to server');
-});
+    console.log('SOCKET.IO - Connected to server');
+  });
 
-socket.on('disconnect', () => {
-  console.log('SOCKET.IO - Disconnected from server');
-});
+  socket.on('disconnect', () => {
+    console.log('SOCKET.IO - Disconnected from server');
+  });
 
   socket.on('reload', () => {
     console.log('Reload event received');
     setTimeout(() => location.reload(), 100);
   });
 </script>
-
-

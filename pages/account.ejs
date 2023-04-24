@@ -16,37 +16,22 @@
 
         <form action="/changepassword" method="post" class="credentials">
           <div class="input-container">
-            <input type="password" id="currentpassword" name="currentpassword" autocomplete="off" class="inputfield" maxlength="" value="" >
+            <input type="password" id="currentpassword" name="currentpassword" autocomplete="off" class="inputfield"
+              maxlength="" value="">
             <span class="placeholder1">&nbsp;Current Password&nbsp;</span>
           </div>
           <div class="input-container">
-            <input type="password" id="newpassword" name="newpassword" autocomplete="off" class="inputfield" maxlength="" value="" >
+            <input type="password" id="newpassword" name="newpassword" autocomplete="off" class="inputfield"
+              maxlength="" value="">
             <span class="placeholder1 newpassword">&nbsp;New Password&nbsp;</span>
           </div>
           <div class="input-container">
-            <input type="password" id="confirmpassword" name="confirmpassword" autocomplete="off" class="inputfield" maxlength="" value="" >
+            <input type="password" id="confirmpassword" name="confirmpassword" autocomplete="off" class="inputfield"
+              maxlength="" value="">
             <span class="placeholder1">&nbsp;Confirm Password&nbsp;</span>
           </div>
           <button class="form-button">Submit</button>
         </form>
-
-        <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            const inputFields = document.querySelectorAll('.inputfield');
-            inputFields.forEach(input => {
-              input.addEventListener('input', handleInput);
-              handleInput.call(input);
-            });
-        
-            function handleInput() {
-              if (this.value) {
-                this.parentElement.classList.add('has-text');
-              } else {
-                this.parentElement.classList.remove('has-text');
-              }
-            }
-          });
-        </script>
 
         <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 
