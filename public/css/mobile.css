@@ -39,7 +39,7 @@ button, a, input[type="button"], input[type="submit"] {
     background-color: transparent;
   }
   
-  .toggle-mode {
+  .toggle-mode, .toggle-mode .material-symbols-outlined {
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -48,12 +48,13 @@ button, a, input[type="button"], input[type="submit"] {
     user-select: none;
   }
   
-  .toggle-mode:focus {
+  .toggle-mode:focus, .toggle-mode .material-symbols-outlined:focus {
     outline: none;
     box-shadow: none;
   }
   
-  .toggle-mode:active {
+  .toggle-mode:active, .toggle-mode .material-symbols-outlined:active {
     background-color: transparent;
   }
+  
   
