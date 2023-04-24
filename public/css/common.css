@@ -378,6 +378,7 @@ slots {
   margin-bottom: -20px;
 }
 
+.input-container.has-text .search-users,
 .input-container.has-text .placeholder1 {
   background-color: var(--input-box-placeholder-background-color);
   width: fit-content;
