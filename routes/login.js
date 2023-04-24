@@ -7,7 +7,7 @@ const logger = require('../serverjs/logger.js');
 router.post('/', async function (req, res, next) {
   passport.authenticate('local', function (err, user, info) {
     req.session.username = req.body.username;
-    req.session.message = "true";
+    //req.session.message = "true";
     if (err) {
       req.session.message = "error1";
       logger.error('An error1 occurred while logging in:', err);
@@ -29,7 +29,7 @@ router.post('/', async function (req, res, next) {
         return res.render("login", { message: "An error occurred while logging in" });
       }
       logger.warn('Login successful for user: ' + kleur.magenta(user.username));
-      req.session.message = "true";
+      //req.session.message = "true";
       return res.redirect("secret");
     });
   })(req, res, next);
