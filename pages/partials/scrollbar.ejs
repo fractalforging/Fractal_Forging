@@ -1,5 +1,4 @@
 <style>
-
     .scrollbar-container {
         position: fixed;
         top: 0;
@@ -22,24 +21,21 @@
 
     /*///// - FOR MOBILE - //////*/
 
-    body::-webkit-scrollbar {
-        display: none;
+    ::-webkit-scrollbar {
+        width: 0;
+        background: transparent;
     }
-    
+
     body {
         scrollbar-width: none;
     }
-
 </style>
-
 
 <div class="scrollbar-container">
     <div class="scrollbar"></div>
 </div>
 
-
 <script>
-
     const scrollbarContainer = document.querySelector('.scrollbar-container');
     const scrollbar = document.querySelector('.scrollbar');
 
@@ -70,7 +66,7 @@
             const scrollTop = (newTop / (viewportHeight - scrollbar.offsetHeight)) * maxScrollTop;
 
             document.documentElement.scrollTop = scrollTop;
-            document.body.scrollTop = scrollTop; 
+            document.body.scrollTop = scrollTop;
 
             updateScrollbar();
         }
@@ -89,5 +85,4 @@
     window.addEventListener('resize', updateScrollbar);
 
     updateScrollbar();
-
 </script>
