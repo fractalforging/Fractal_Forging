@@ -9,7 +9,7 @@
         transition: background-color var(--animation-duration-short) ease-in-out;
     }
 
-    .scrollbar {
+    .scrollbar-bt {
         position: absolute;
         top: 0;
         right: 0;
@@ -22,8 +22,11 @@
     /*///// - FOR MOBILE - //////*/
 
     ::-webkit-scrollbar {
+        -webkit-appearance: none;
+        display: none;
         width: 0;
         background: transparent;
+        overflow: hidden;
     }
 
     body {
@@ -32,12 +35,12 @@
 </style>
 
 <div class="scrollbar-container">
-    <div class="scrollbar"></div>
+    <div class="scrollbar-bt"></div>
 </div>
 
 <script>
     const scrollbarContainer = document.querySelector('.scrollbar-container');
-    const scrollbar = document.querySelector('.scrollbar');
+    const scrollbar = document.querySelector('.scrollbar-bt');
 
     function updateScrollbar() {
         const containerHeight = document.documentElement.scrollHeight;
