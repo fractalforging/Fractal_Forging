@@ -338,6 +338,7 @@ slots {
   left: -68px;
 }
 
+.newtime,
 .newpassword {
   position: relative;
   left: -50px;
@@ -351,10 +352,12 @@ slots {
   color: #a5a5a500;
 } */
 
+.time-input,
 .reset-input {
   transition: all var(--animation-duration-min) ease-in-out;
 }
 
+.time-input:focus,
 .reset-input:focus {
   outline: 0;
   font-size: 14px;
@@ -370,6 +373,7 @@ slots {
   border: 1px solid var(--input-box-outline-color);
 }
 
+.time-input:focus~.placeholder1,
 .reset-input:focus~.placeholder1,
 .inputfield:focus~.placeholder1 {
   background-color: var(--input-box-placeholder-background-color);

@@ -57,6 +57,8 @@
                                         </span>
                                     </div>
                                     <div class="extra-info" style="display:none;">
+                                        <button class="time-change-button"
+                                            data-user-id="<%= user._id %>">Time</button>
                                         <button class="reset-password-button"
                                             data-user-id="<%= user._id %>">Password</button>
                                         <select class="item-button">
@@ -121,6 +123,8 @@
                                             </span>
                                         </div>
                                         <div class="extra-info" style="display:none;">
+                                            <button class="time-change-button"
+                                            data-user-id="<%= user._id %>">Time</button>
                                             <button class="reset-password-button"
                                                 data-user-id="<%= user._id %>">Password</button>
                                             <select class="item-button">
@@ -228,73 +232,7 @@
                         });
                     </script>
 
-                    <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
-
-                    <script>
-                        const resetPassword = async (userId, newPassword, confirmPassword) => {
-                            try {
-                                const response = await fetch(`/resetpassword`, {
-                                    method: "POST",
-                                    headers: { "Content-Type": "application/json" },
-                                    body: JSON.stringify({ userId, newPassword, confirmPassword }),
-                                });
-
-                                if (!response.ok) {
-                                    const error = await response.json();
-                                    throw new Error(error.error);
-                                }
-
-                                return await response.json();
-                            } catch (error) {
-                                return { success: false, error: error.message };
-                            }
-                        };
-
-
-                        const displayResetPasswordModal = (userId) => {
-                            const modal = document.getElementById("reset-password-modal");
-                            const close = modal.querySelector(".reset-password-close");
-                            const form = modal.querySelector("#reset-password-form");
-                            modal.style.display = "block";
-                            const userIdInput = document.createElement("input");
-                            userIdInput.type = "hidden";
-                            userIdInput.name = "userId";
-                            userIdInput.value = userId;
-                            form.appendChild(userIdInput);
-                            close.onclick = () => { modal.style.display = "none"; };
-
-                            form.addEventListener("submit", async (e) => {
-                                e.preventDefault();
-                                const newPassword = document.getElementById("newpassword").value;
-                                const confirmPassword = document.getElementById("confirmpassword").value;
-                                const errorMessage = document.getElementById("error-message");
-
-                                const result = await resetPassword(userId, newPassword, confirmPassword);
-
-                                if (!result.success) {
-                                    errorMessage.textContent = result.error;
-                                    errorMessage.style.display = "block";
-                                } else {
-                                    errorMessage.style.display = "none";
-                                    modal.style.display = "none";
-                                    location.reload();
-                                }
-                            });
-                        };
-
-                        document.addEventListener('DOMContentLoaded', () => {
-                            document.querySelectorAll(".reset-password-button").forEach(button =>
-                                button.addEventListener("click", e => {
-                                    e.preventDefault();
-                                    const li = e.target.closest("li");
-                                    const usernameSpan = li.querySelector(".break-list-item-name-user span, .break-list-item-name-admin span");
-                                    const username = usernameSpan.textContent.trim();
-                                    const userId = li.dataset.id;
-                                    displayResetPasswordModal(userId);
-                                })
-                            );
-                        });
-                    </script>
+                   
 
                     <!-- ////////////// - SEARCH FUNCTIONALITY - ////////////////-->
 
@@ -321,45 +259,11 @@
 
                     <!-- ////////////// - PASSWORD RESET MODAL - ////////////////-->
 
-                    <div id="reset-password-modal" class="reset-password-modal">
-                        <div class="reset-password-modal-content">
+                    <%- include('partials/passResetModal.ejs') %>
 
-                            <greet class="reset-pass-title">Reset Password</greet><span
-                                class="reset-password-close">&times;</span>
-                            <form action="/resetpassword" method="post" id="reset-password-form" class="credentials">
-                                <div class="input-container">
-                                    <input type="password" id="newpassword" name="newpassword" autocomplete="off"
-                                        class="reset-input" maxlength="" value="">
-                                    <span class="placeholder1 newpassword">&nbsp;New Password&nbsp;</span>
-                                </div>
-                                <div class="input-container">
-                                    <input type="password" id="confirmpassword" name="confirmpassword"
-                                        autocomplete="off" class="reset-input" maxlength="" value="">
-                                    <span class="placeholder1">&nbsp;Confirm Password&nbsp;</span>
-                                </div>
-                                <button type="submit" class="form-button">OK</button>
-                                <p id="error-message" style="display:none; color: red;"></p>
-                            </form>
-                        </div>
-                    </div>
+                    <!-- ////////////// - TIME CHANGE MODAL - ////////////////-->
 
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function () {
-                            const inputFields = document.querySelectorAll('.reset-input');
-                            inputFields.forEach(input => {
-                                input.addEventListener('input', handleInput);
-                                handleInput.call(input);
-                            });
-
-                            function handleInput() {
-                                if (this.value) {
-                                    this.parentElement.classList.add('has-text');
-                                } else {
-                                    this.parentElement.classList.remove('has-text');
-                                }
-                            }
-                        });
-                    </script>
+                    <%- include('partials/timeChangeModal.ejs') %>
 
                     <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 

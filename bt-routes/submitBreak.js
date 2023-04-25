@@ -40,7 +40,7 @@ const submitBreaks = (io, BreakTrack, User) => {
     const breakDurationInSeconds = breakDuration * 60;
     if (latestBreak && !latestBreak.endTime) {
       req.session.message = 'Only 1 break at a time';
-      logger.info(req.session.message);
+      logger.error(req.session.message);
       return res.redirect("/secret");
     } else if (currentUser.remainingBreakTime < breakDurationInSeconds) {
       if (currentUser.remainingBreakTime === 0) {
