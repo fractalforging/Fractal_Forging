@@ -59,10 +59,6 @@ hr.divider-spc-nav {
   background-color: var(--hr-divider-color);
 }
 
-#reset-password-form {
-  position: relative;
-}
-
 .credentials {
   width: 230px;
   margin: 0 auto;
@@ -288,7 +284,7 @@ slots {
   padding: 0px 0px;
   width: 0px;
   top: -40px;
-  left: -90px;
+  left: -75px;
   text-align: left;
   justify-items: left;
   font-family: var(--main-body-font-family);
@@ -356,6 +352,17 @@ slots {
   color: #a5a5a500;
 } */
 
+.reset-input {
+  transition: all var(--animation-duration-min) ease-in-out;
+}
+
+.reset-input:focus {
+  outline: 0;
+  font-size: 14px;
+  -webkit-box-shadow: 0 0 0 1px var(--input-box-outline-color);
+  box-shadow: 0 0 0 1px var(--input-box-outline-color);
+}
+
 .inputfield:focus {
   outline: 0;
   font-size: 14px;
@@ -364,6 +371,7 @@ slots {
   border: 1px solid var(--input-box-outline-color);
 }
 
+.reset-input:focus~.placeholder1,
 .inputfield:focus~.placeholder1 {
   background-color: var(--input-box-placeholder-background-color);
   width: fit-content;
