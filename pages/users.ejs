@@ -329,12 +329,12 @@
                             <form action="/resetpassword" method="post" id="reset-password-form" class="credentials">
                                 <div class="input-container">
                                     <input type="password" id="newpassword" name="newpassword" autocomplete="off"
-                                        class="inputfield" maxlength="" value="">
+                                        class="reset-input" maxlength="" value="">
                                     <span class="placeholder1 newpassword">&nbsp;New Password&nbsp;</span>
                                 </div>
                                 <div class="input-container">
                                     <input type="password" id="confirmpassword" name="confirmpassword"
-                                        autocomplete="off" class="inputfield" maxlength="" value="">
+                                        autocomplete="off" class="reset-input" maxlength="" value="">
                                     <span class="placeholder1">&nbsp;Confirm Password&nbsp;</span>
                                 </div>
                                 <button type="submit" class="form-button">OK</button>
@@ -345,7 +345,7 @@
 
                     <script>
                         document.addEventListener('DOMContentLoaded', function () {
-                            const inputFields = document.querySelectorAll('.inputfield');
+                            const inputFields = document.querySelectorAll('.reset-input');
                             inputFields.forEach(input => {
                                 input.addEventListener('input', handleInput);
                                 handleInput.call(input);
