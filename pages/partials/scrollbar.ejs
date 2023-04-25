@@ -20,6 +20,16 @@
         transition: background-color var(--animation-duration-short) ease-in-out;
     }
 
+    /*///// - FOR MOBILE - //////*/
+
+    body::-webkit-scrollbar {
+        display: none;
+    }
+    
+    body {
+        scrollbar-width: none;
+    }
+
 </style>
 
 
@@ -33,7 +43,6 @@
     const scrollbarContainer = document.querySelector('.scrollbar-container');
     const scrollbar = document.querySelector('.scrollbar');
 
-    // Update the height and position of the scrollbar
     function updateScrollbar() {
         const containerHeight = document.documentElement.scrollHeight;
         const viewportHeight = window.innerHeight;
@@ -46,7 +55,6 @@
         scrollbar.style.top = scrollbarPosition + 'px';
     }
 
-    // Scroll the page when dragging the scrollbar
     function onScrollbarMouseDown(e) {
         e.preventDefault();
 
@@ -56,15 +64,13 @@
         function onMouseMove(e) {
             const deltaY = e.clientY - startY;
             const newTop = startTop + deltaY;
-
-            // Scroll the page
             const containerHeight = document.documentElement.scrollHeight;
             const viewportHeight = window.innerHeight;
             const maxScrollTop = containerHeight - viewportHeight;
             const scrollTop = (newTop / (viewportHeight - scrollbar.offsetHeight)) * maxScrollTop;
 
             document.documentElement.scrollTop = scrollTop;
-            document.body.scrollTop = scrollTop; // For Safari
+            document.body.scrollTop = scrollTop; 
 
             updateScrollbar();
         }

@@ -1,5 +1,4 @@
-// bt-routes/getBreaks.js
-const BreakTrack = require("../models/breakTrack");
+const BreakTrack = require("../models/BreakTrack.js");
 
 module.exports = function (app) {
   app.get("/", (req, res, next) => {

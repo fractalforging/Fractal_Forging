@@ -15,7 +15,6 @@ router.post('/', isAdmin, async function(req, res, next) {
     const breakSlots = await BreakSlots.findOne({});
     const { UserExistsError } = require('passport-local-mongoose');
 
-    // check if passwords match
     if (req.body.password !== req.body.confirmpassword) {
       req.session.message = 'Mismatch';
       logger.error('Password and confirm password do not match');

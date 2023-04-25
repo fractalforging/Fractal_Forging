@@ -21,7 +21,7 @@ const resetBreakTimeRoutes = (User, io, location) => {
     lastResetTime.set({hour: resetHour, minute: 0, second: 0, millisecond: 0});
 
     while (now.isAfter(lastResetTime)) {
-      lastResetTime.add(1, 'days'); // Add one day for the next reset
+      lastResetTime.add(1, 'days');
     }
 
     const millisecondsUntilReset = lastResetTime.diff(now);
@@ -33,7 +33,6 @@ const resetBreakTimeRoutes = (User, io, location) => {
     if (now.getHours() >= resetHour) {
       const resetBreakTimeInSeconds = 35 * 60;
       await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
-      // Save the new reset timestamp to the database
       const lastResetTimestampObj = await LastResetTimestamp.findOne();
       lastResetTimestampObj.timestamp = now;
       await lastResetTimestampObj.save();
@@ -45,12 +44,11 @@ const resetBreakTimeRoutes = (User, io, location) => {
   (async () => {
     const millisecondsUntilReset = await getMillisecondsUntilReset();
     if (millisecondsUntilReset > 24 * 60 * 60 * 1000) {
-      // If more than 24 hours until the next reset, it means we missed the last reset
       await resetBreakTimes();
     }
     setTimeout(() => {
       resetBreakTimes();
-      setInterval(resetBreakTimes, 24 * 60 * 60 * 1000); // Set interval to run every 24 hours
+      setInterval(resetBreakTimes, 24 * 60 * 60 * 1000); 
     }, millisecondsUntilReset);
   })();  
 

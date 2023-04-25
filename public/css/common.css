@@ -310,7 +310,6 @@ slots {
 /* /////// - FORMS - /////// */
 
 .placeholder1 {
-  /* visible on non-focus */
   position: relative;
   pointer-events: none;
   white-space: nowrap;
