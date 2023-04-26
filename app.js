@@ -112,6 +112,7 @@ io.on('connection', async (socket) => {
         user.isOnline = true;
         user.socketId = socket.id;
         await user.save();
+       
       }
     } catch (error) {
       console.error('Error updating user online status:', error);
