@@ -1,4 +1,3 @@
-// routes/users.js
 const express = require("express");
 const router = express.Router();
 const { isAdmin } = require("../middleware/authentication.js");
@@ -23,7 +22,7 @@ router.put("/:userId", isAdmin, async (req, res, next) => {
     const normalUsers = users.filter(user => user.roles === "user");
     const userId = req.params.userId;
     userToUpdate = await User.findById(userId);
-    actionUser = req.user; // Get the current logged-in user
+    actionUser = req.user; 
     const newRole = req.body.role;
     await User.findByIdAndUpdate(userId, { roles: newRole });
     req.session.message = "Role changed";

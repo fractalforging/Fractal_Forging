@@ -10,9 +10,8 @@ module.exports = {
         env: {
           NODE_ENV: "production",
         },
-        // Customize the number of restart attempts
-        restart_delay: 3000, // Delay between restart attempts (in milliseconds)
-        max_restarts: 10, // Maximum number of restart attempts
+        restart_delay: 3000, 
+        max_restarts: 10,
       },
     ],
   };

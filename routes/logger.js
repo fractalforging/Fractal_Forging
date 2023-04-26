@@ -21,7 +21,7 @@ const dailyRotateFileTransport = new transports.DailyRotateFile({
 });
 
 const logger = createLogger({
-  level: 'debug', // set log level to debug
+  level: 'debug',
   format: format.combine(
     format.timestamp({ format: timestampInTimeZone }),
     format.printf(({ timestamp, level, message }) => {
@@ -48,6 +48,6 @@ const logger = createLogger({
   transports: [dailyRotateFileTransport, new transports.Console()],
 });
 
-debug('Debug log message'); // output debug log message to console
+debug('Debug log message');
 
 module.exports = logger;

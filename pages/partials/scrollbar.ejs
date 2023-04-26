@@ -1,5 +1,4 @@
 <style>
-
     .scrollbar-container {
         position: fixed;
         top: 0;
@@ -10,7 +9,7 @@
         transition: background-color var(--animation-duration-short) ease-in-out;
     }
 
-    .scrollbar {
+    .scrollbar-bt {
         position: absolute;
         top: 0;
         right: 0;
@@ -20,20 +19,39 @@
         transition: background-color var(--animation-duration-short) ease-in-out;
     }
 
+    /*///// - FOR MOBILE - //////*/
+
+    ::-webkit-scrollbar {
+        -webkit-appearance: none;
+        display: none;
+        width: 0;
+        background: transparent;
+        overflow: hidden;
+    }
+
+    @media screen and (max-width: 375px) {
+        ::-webkit-scrollbar {
+            -webkit-appearance: none;
+            display: none;
+            width: 0;
+            background: transparent;
+            overflow: hidden;
+        }
+    }
+
+    body {
+        scrollbar-width: none;
+    }
 </style>
 
-
 <div class="scrollbar-container">
-    <div class="scrollbar"></div>
+    <div class="scrollbar-bt"></div>
 </div>
 
-
 <script>
-
     const scrollbarContainer = document.querySelector('.scrollbar-container');
-    const scrollbar = document.querySelector('.scrollbar');
+    const scrollbar = document.querySelector('.scrollbar-bt');
 
-    // Update the height and position of the scrollbar
     function updateScrollbar() {
         const containerHeight = document.documentElement.scrollHeight;
         const viewportHeight = window.innerHeight;
@@ -46,7 +64,6 @@
         scrollbar.style.top = scrollbarPosition + 'px';
     }
 
-    // Scroll the page when dragging the scrollbar
     function onScrollbarMouseDown(e) {
         e.preventDefault();
 
@@ -56,15 +73,13 @@
         function onMouseMove(e) {
             const deltaY = e.clientY - startY;
             const newTop = startTop + deltaY;
-
-            // Scroll the page
             const containerHeight = document.documentElement.scrollHeight;
             const viewportHeight = window.innerHeight;
             const maxScrollTop = containerHeight - viewportHeight;
             const scrollTop = (newTop / (viewportHeight - scrollbar.offsetHeight)) * maxScrollTop;
 
             document.documentElement.scrollTop = scrollTop;
-            document.body.scrollTop = scrollTop; // For Safari
+            document.body.scrollTop = scrollTop;
 
             updateScrollbar();
         }
@@ -83,5 +98,4 @@
     window.addEventListener('resize', updateScrollbar);
 
     updateScrollbar();
-
 </script>

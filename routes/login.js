@@ -5,7 +5,7 @@ const passport = require('passport');
 const logger = require('./logger.js');
 
 router.post('/', async function (req, res, next) {
-  passport.authenticate('local', function (err, user, info) {
+  passport.authenticate('local', async function (err, user, info) {
     req.session.username = req.body.username;
     //req.session.message = "true";
     if (err) {
@@ -22,12 +22,14 @@ router.post('/', async function (req, res, next) {
       req.session.message = "errorx";
       return;
     }
-    req.logIn(user, function (err) {
+    req.logIn(user, async function (err) {
       if (err) {
         req.session.message = "error2";
         logger.error('An error2 occurred while logging in:', err);
         return res.render("login", { message: "An error occurred while logging in" });
       }
+      user.isOnline = true;
+      await user.save();
       logger.warn('Login successful for user: ' + kleur.magenta(user.username));
       //req.session.message = "true";
       return res.redirect("secret");

@@ -19,7 +19,7 @@ module.exports = function(io, BreakTrack) {
         );
         await moveQueuedBreaksToNormalList(BreakTrack, newSlotsValue);
         req.session.message = "Updated";
-        io.emit('reload'); // use io object passed as a parameter
+        io.emit('reload'); 
         logger.info(`${kleur.magenta(req.user.username)} updated the available slots to: ${kleur.grey(newSlotsValue)}`);
         return res.redirect("secret_admin");
       } else if (newSlotsValue == currentSlots.slots) {

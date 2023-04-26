@@ -1,0 +1,97 @@
+<!-- ////////////// - TIME CHANGE MODAL - ////////////////-->
+
+<div id="time-change-modal" class="time-change-modal">
+    <div class="time-change-modal-content">
+        <greet class="time-change-title">Change Break Time</greet><span
+            class="time-change-close">&times;</span>
+        <form action="/timechange" method="post" id="time-change-form" class="passTimeForm timeFormTop">
+            <div class="input-container">
+                <input type="number" id="newtime" name="newtime" autocomplete="off"
+                    class="time-input" maxlength="" value="">
+                <span class="placeholder1 newtime">&nbsp;New Break Time&nbsp;</span>
+            </div>
+            <button type="submit" class="form-button">OK</button>
+            <p id="time-error-message" style="display:none; color: red;"></p>
+        </form>
+    </div>
+</div>
+
+<script>
+    const changeTime = async (userId, newTime) => {
+        try {
+            const response = await fetch(`/timechange`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, newTime }),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error);
+            }
+
+            return await response.json();
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    };
+
+    const displayTimeChangeModal = (userId) => {
+        const modal = document.getElementById("time-change-modal");
+        const close = modal.querySelector(".time-change-close");
+        const form = modal.querySelector("#time-change-form");
+        modal.style.display = "block";
+        const userIdInput = document.createElement("input");
+        userIdInput.type = "hidden";
+        userIdInput.name = "userId";
+        userIdInput.value = userId;
+        form.appendChild(userIdInput);
+        close.onclick = () => { modal.style.display = "none"; };
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const newTime = document.getElementById("newtime").value;
+            const errorMessage = document.getElementById("time-error-message");
+
+            const result = await changeTime(userId, newTime);
+
+            if (!result.success) {
+                errorMessage.textContent = result.error;
+                errorMessage.style.display = "block";
+            } else {
+                errorMessage.style.display = "none";
+                modal.style.display = "none";
+                location.reload();
+            }
+        });
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll(".time-change-button").forEach(button =>
+            button.addEventListener("click", e => {
+                e.preventDefault();
+                const li = e.target.closest("li");
+                const userId = li.dataset.id;
+                displayTimeChangeModal(userId);
+            })
+        );
+    });
+
+    <!-- ////////////// - PREVENT PLAHOLDER MOVEMENT WHEN TEXT - ////////////////-->
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputFields = document.querySelectorAll('.time-input');
+        inputFields.forEach(input => {
+            input.addEventListener('input', handleInput);
+            handleInput.call(input);
+        });
+
+        function handleInput() {
+            if (this.value) {
+                this.parentElement.classList.add('has-text');
+            } else {
+                this.parentElement.classList.remove('has-text');
+            }
+        }
+    });
+</script>

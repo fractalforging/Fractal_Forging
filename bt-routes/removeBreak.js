@@ -16,17 +16,13 @@ const removeBreak = (io, BreakTrack, User) => {
       await BreakTrack.findByIdAndRemove(id);
       await moveToNormalList(BreakTrack);
       
-      // Calculate the remaining break time and add it back to the user's remaining break time for the day
       if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
         const currentTime = new Date();
         const breakStartTime = new Date(breakToRemove.breakStartTimeStamp);
         const timeEnjoyed = currentTime - breakStartTime;
         const remainingBreakTime = (breakToRemove.duration * 60 * 1000) - timeEnjoyed;
-
-        // Convert remaining break time back to seconds
         const remainingBreakTimeInSeconds = remainingBreakTime / 1000;
         
-        // Round the remaining break time according to the specified rules
         let roundedRemainingBreakTime = 0;
         if (remainingBreakTimeInSeconds >= 0 && remainingBreakTimeInSeconds < 30) {
           roundedRemainingBreakTime = 0;

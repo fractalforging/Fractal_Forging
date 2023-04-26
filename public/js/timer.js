@@ -34,7 +34,6 @@ function onTimerEnded(id) {
       let removeButton = breakListItem.querySelector('.remove-user');
       if (removeButton) {
         removeButton.style.display = "inline";
-        // Add this line to update the onclick attribute of the remove button
         removeButton.setAttribute('onclick', `removeBreak('${id}', false)`);
       }
     }
@@ -42,7 +41,6 @@ function onTimerEnded(id) {
     console.log(error);
   }
 
-  // send a request to the server to update hasEnded field
   fetch(`/breaks/${id}/end`, { method: 'POST' })
     .then(response => {
       //

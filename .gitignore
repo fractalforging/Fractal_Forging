@@ -3,7 +3,6 @@ mongodb.env
 db.env
 README.md
 yarn-error.log
-package-lock.json
 .codesandbox
 .DS_Store
 .gitpod.yml

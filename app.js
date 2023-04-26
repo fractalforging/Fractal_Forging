@@ -98,26 +98,64 @@ const io = new Server(server, {
   serveClient: true
 });
 
-app.get('/socket.io/socket.io.js', (req, res) => {
+app.get('/socket.io/socket.io.js', async (req, res) => {
   res.sendFile(path.join(__dirname, 'node_modules', 'socket.io', 'client-dist', 'socket.io.js'));
 });
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
 
-  socket.on('reload', () => {
+  const { username } = socket.handshake.query;
+  if (username) {
+    try {
+      const user = await User.findOne({ username });
+      if (user) {
+        user.isOnline = true;
+        user.socketId = socket.id;
+        await user.save();
+       
+      }
+    } catch (error) {
+      console.error('Error updating user online status:', error);
+    }
+  }
+
+  await emitUserCountAndList();
+
+  socket.on('reload', async () => {
     logger.warn("SOCKET.IO - Connected");
     io.emit('reload');
   });
 
-  // const reloadInterval = setInterval(() => {
-  //   io.emit('reload');
-  // }, 900000); // 900000ms = 15 minutes
+  socket.on('disconnect', async () => {
+    try {
+      const user = await User.findOne({ socketId: socket.id });
+      if (user) {
+        user.isOnline = false;
+        user.socketId = null;
+        await user.save();
+      }
+    } catch (error) {
+      console.error('Error updating user offline status:', error);
+    }
 
-  socket.on('disconnect', () => { 
-    //logger.warn("SOCKET.IO - Disconnected");
+    await emitUserCountAndList();
   });
 
 });
+
+////////////// - USERS ONLINE INDICATOR - //////////////////
+
+async function emitUserCountAndList() {
+  try {
+    const onlineUsers = await User.find({ isOnline: true });
+    const userCount = onlineUsers.length;
+    const usernames = onlineUsers.map(user => user.username);
+    io.emit('userCount', userCount);
+    io.emit('userList', usernames);
+  } catch (error) {
+    console.error('Error fetching online users:', error);
+  }
+}
 
 
 //=====================
@@ -136,10 +174,11 @@ const breakSlotsRoutes = require('./routes/break-slots.js')(io, BreakTrack);
 const usersRoutes = require("./routes/users.js");
 const deleteRoutes = require('./routes/delete.js');
 const resetPasswordRoute = require('./routes/resetPassword.js');
+const changeTimeRouter = require('./routes/changeTime.js');
 const settingsRoutes = require('./routes/settings.js');
 const apiMessages = require('./routes/apiMessages.js');
 const socket = require('./routes/socket.js');
- 
+
 
 //=====================
 // BT ROUTES
@@ -169,6 +208,7 @@ app.use("/break-slots", breakSlotsRoutes);
 app.use("/users", usersRoutes);
 app.use('/delete', deleteRoutes);
 app.use('/resetpassword', resetPasswordRoute);
+app.use('/timechange', changeTimeRouter);
 app.use('/settings', settingsRoutes);
 app.get('/api/messaging', apiMessages.myMessages);
 
@@ -188,7 +228,7 @@ app.use('/reset', resetBreakTimeRoutes(User, io, location));
 // ERROR HANDLING
 //=====================
 
-app.use(function (err, req, res, next) {
+app.use(async function (err, req, res, next) {
   logger.error(err.stack);
   //return res.status(500).send('Something broke!');
   req.session.message = "Something broke"
@@ -196,7 +236,7 @@ app.use(function (err, req, res, next) {
 });
 
 // CLEAR SESSION VARIABLES FOR MODAL MESSAGING
-app.post('/clear-message', function (req, res, next) {
+app.post('/clear-message', async function (req, res, next) {
   delete req.session.message;
   return res.sendStatus(204);
 });
