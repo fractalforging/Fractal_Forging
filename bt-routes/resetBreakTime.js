@@ -27,7 +27,7 @@ const resetBreakTimeRoutes = (User, io, location) => {
     const millisecondsUntilReset = lastResetTime.diff(now);
     return millisecondsUntilReset;
   }
-
+ 
   async function resetBreakTimes() {
     const now = moment.tz(new Date(), 'Europe/' + location).toDate();
     if (now.getHours() >= resetHour) {
