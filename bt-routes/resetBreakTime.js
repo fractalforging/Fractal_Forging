@@ -29,18 +29,16 @@ const resetBreakTimeRoutes = (User, io, location) => {
   }
  
   async function resetBreakTimes() {
+    const resetBreakTimeInSeconds = 35 * 60;
+    await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
     const now = moment.tz(new Date(), 'Europe/' + location).toDate();
-    if (now.getHours() >= resetHour) {
-      const resetBreakTimeInSeconds = 35 * 60;
-      await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
-      const lastResetTimestampObj = await LastResetTimestamp.findOne();
-      lastResetTimestampObj.timestamp = now;
-      await lastResetTimestampObj.save();
-      logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
-      io.emit('reload');
-    }
+    const lastResetTimestampObj = await LastResetTimestamp.findOne();
+    lastResetTimestampObj.timestamp = now;
+    await lastResetTimestampObj.save();
+    logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
+    io.emit('reload');
   }
-
+  
   (async () => {
     const millisecondsUntilReset = await getMillisecondsUntilReset();
     setTimeout(() => {
