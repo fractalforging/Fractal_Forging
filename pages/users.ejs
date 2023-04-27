@@ -28,8 +28,9 @@
 
                     <!-- ////////////// - USERS - //////////////// -->
 
+                    <%- include('partials/breakResetConfirmatiion.ejs') %>
+                    <br>
                     <joke>Agents</joke>
-                    <button id="reset-break-time" class="reset-break-time-button">Reset Break Time</button>
 
                     <br><br>
                     <ul id="normal-users" class="roles-list">
@@ -253,36 +254,6 @@
                                     user.style.display = 'none';
                                 }
                             });
-                        }
-                    </script>
-
-                    <!-- ////////////// - EMERGENCY RESET BREAK TIME - ////////////////-->
-
-                    <script>
-
-                        document.getElementById('reset-break-time').addEventListener('click', function () {
-                            resetBreakTimeForAllUsers();
-                        });
-
-                        async function resetBreakTimeForAllUsers() {
-                            try {
-                                const response = await fetch('/resetBreakTime', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                });
-
-                                if (response.status === 200) {
-                                    alert('Break time has been reset for all users.');
-                                    location.reload();
-                                } else {
-                                    alert('Failed to reset break time. Please try again.');
-                                }
-                            } catch (error) {
-                                console.error('Error resetting break time:', error);
-                                alert('Failed to reset break time. Please try again.');
-                            }
                         }
                     </script>
 

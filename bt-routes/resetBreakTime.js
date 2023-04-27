@@ -49,7 +49,7 @@ const resetBreakTimeRoutes = (User, io, location) => {
 
   router.post("/", async (req, res, next) => {
     await resetBreakTimes();
-    io.emit('reload');
+    req.session.message = "Breaks reset";
     res.sendStatus(200);
   });
 

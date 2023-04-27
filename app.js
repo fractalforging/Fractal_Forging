@@ -239,8 +239,7 @@ app.use('/submit', submitBreakRoutes(io, BreakTrack, User));
 app.use('/breaks/start', isLoggedIn, startBreakRoutes(io, BreakTrack, User));
 app.use('/remove', removeBreakRoutes(io, BreakTrack, User));
 app.use('/breaks', endBreakRoutes(BreakTrack));
-app.use('/reset', resetBreakTimeRoutes(User, io, location));
-
+app.use('/resetbreaktime', resetBreakTimeRoutes(User, io, location));
 
 //=====================
 // ERROR HANDLING

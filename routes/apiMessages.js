@@ -25,6 +25,7 @@ const responseMap = {
   "Break submitted": { status: 200, message: "Break submitted" },
   "Break started": { status: 200, message: "Break started. Enjoy!" },
   "Added to queue": { status: 200, message: "Break added to queue" },
+  "Breaks reset" : { status: 200, message: "Break time for all agents" + `<br>` + "has been reset!" },
   // SLOTS AVAILABLE
   "Same value": { status: 401, message: "Same value!" },
   "Updated": { status: 200, message: "Slots updated" },
