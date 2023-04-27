@@ -24,23 +24,3 @@
     }
   });
 </script>
-
-<!-- ////////////// SOCKET.IO - GLOBAL RELOAD ////////////////-->
-
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  const socket = io();
-
-  socket.on('connect', () => {
-    console.log('SOCKET.IO - Connected to server');
-  });
-
-  socket.on('disconnect', () => {
-    console.log('SOCKET.IO - Disconnected from server');
-  });
-
-  socket.on('reload', () => {
-    console.log('Reload event received');
-    setTimeout(() => location.reload(), 100);
-  });
-</script>

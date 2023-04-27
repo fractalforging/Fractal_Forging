@@ -43,14 +43,11 @@ const resetBreakTimeRoutes = (User, io, location) => {
 
   (async () => {
     const millisecondsUntilReset = await getMillisecondsUntilReset();
-    if (millisecondsUntilReset > 24 * 60 * 60 * 1000) {
-      await resetBreakTimes();
-    }
     setTimeout(() => {
       resetBreakTimes();
-      setInterval(resetBreakTimes, 24 * 60 * 60 * 1000); 
+      setInterval(resetBreakTimes, 24 * 60 * 60 * 1000);
     }, millisecondsUntilReset);
-  })();  
+  })();
 
   router.post("/", async (req, res, next) => {
     await resetBreakTimes();

@@ -1,8 +1,10 @@
 <!-- ////////////////// - NAV - ////////////////// -->
 <style>
   .hamburger-menu {
+    position: relative;
     display: inline-block;
     margin-right: 25px;
+    top: 2px;
   }
 
   .hamburger-menu:hover .dropdown-menu {
@@ -63,5 +65,5 @@
   </div>
   <li><a href="/secret">Breaks</a></li>
   <section class="vertical-line"></section>
-  <li><a href="/logout">Logout</a></li>
+  <li><a href="/logout">Logout</a></li><%- include('usersIndicator.ejs') %>
 </navbar>

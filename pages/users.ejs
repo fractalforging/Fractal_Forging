@@ -32,7 +32,7 @@
 
                     <br><br>
                     <ul id="normal-users" class="roles-list">
-                        <div id="agents" class="main">
+                        <!-- <div id="agents" class="main"> -->
                             <% normalUsers.sort((a, b)=> {
                                 const aBreakTime = Math.floor(a.remainingBreakTime / 60);
                                 const bBreakTime = Math.floor(b.remainingBreakTime / 60);
@@ -95,7 +95,7 @@
                                     }
                                 </script>
                                 <% }); %>
-                        </div>
+                        <!-- </div> -->
                     </ul>
 
                     <br><br>
@@ -107,7 +107,7 @@
                     <br><br>
 
                     <ul id="admin-users" class="roles-list">
-                        <div id="sFunctions" class="main">
+                        <!-- <div id="sFunctions" class="main"> -->
                             <% adminUsers.sort((a, b)=> a.username.localeCompare(b.username)).forEach(user => { %>
                                 <% if (user.username !=='admin' ) { %>
                                     <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
@@ -163,7 +163,7 @@
                                     </script>
                                     <% } %>
                                         <% }); %>
-                        </div>
+                        <!-- </div> -->
                     </ul>
 
 
