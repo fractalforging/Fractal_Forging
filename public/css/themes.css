@@ -138,7 +138,7 @@
   /*//// - SCROLL BAR - ////*/
   --scroll-bar-background-color: #ffffff;
   --scroll-bar-handle-color: #a0a0a0;
-}
+} 
 
 :root[data-theme="dark"] {
   color-scheme: dark;
