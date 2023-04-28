@@ -46,6 +46,7 @@
   --backgroundGradientColor2: #40BEFF;
   /*//// - TEXT - ////*/
   --text-color: black;
+  --modals-title-text-color: #ccc;
   /*//// - LINKS - ////*/
   --links-color: #004C7B;
   --links-font-weight: 650;
@@ -146,6 +147,7 @@
   --backgroundGradientColor2: #00214e;
   /*//// - TEXT - ////*/
   --text-color: #ccc;
+  --modals-title-text-color: #ccc;
   /*//// - LINKS - ////*/
   --links-color: #A979F6;
   --links-font-weight: 550;

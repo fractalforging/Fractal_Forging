@@ -219,6 +219,7 @@
 .time-change-title,
 .reset-pass-title,
 #reset-password-form {
+  color: var(--modals-title-text-color);
   position: relative;
   top: 185px;
   left: 7px;
