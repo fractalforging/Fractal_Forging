@@ -242,6 +242,8 @@
   }
 }
 
+.confirmation-modal-content,
+.time-change-modal-content,
 .reset-password-modal-content {
   opacity: 0;
   animation: fadeInReset 0.2s ease-in-out forwards;
