@@ -145,8 +145,6 @@ io.on('connection', async (socket) => {
     await emitUserCountAndList();
   });
 
-
-
 });
 
 ////////////// - USERS ONLINE INDICATOR - //////////////////
