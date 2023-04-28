@@ -82,10 +82,14 @@
 
 </script>
 
+
 <span class="users-container">
+    <% if (currentUser.roles==='admin' ) { %>
     <button id="userCount" onclick="toggleUserList()">0</button>
     <ul id="userList"></ul>
+    <% } %>
 </span>
+
 
 <style>
     #userCount {
