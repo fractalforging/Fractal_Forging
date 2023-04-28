@@ -58,18 +58,18 @@ async function connectMongoDB() {
     logger.error("MongoDB connection error:", err);
   }
 }
-
+ 
 connectMongoDB();
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
+ 
 //=====================
 // EXPRESS CONFIG.
 //=====================
-
+ 
 const app = express();
 const server = http.createServer(app);
 app.set('views', 'pages');
@@ -144,8 +144,6 @@ io.on('connection', async (socket) => {
 
     await emitUserCountAndList();
   });
-
-
 
 });
 

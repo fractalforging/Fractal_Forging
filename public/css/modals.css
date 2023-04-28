@@ -219,6 +219,7 @@
 .time-change-title,
 .reset-pass-title,
 #reset-password-form {
+  color: var(--modals-title-text-color);
   position: relative;
   top: 185px;
   left: 7px;
@@ -238,9 +239,11 @@
 
   100% {
     opacity: 1;
-  }
+  } 
 }
 
+.confirmation-modal-content,
+.time-change-modal-content,
 .reset-password-modal-content {
   opacity: 0;
   animation: fadeInReset 0.2s ease-in-out forwards;

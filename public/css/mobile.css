@@ -46,8 +46,8 @@ button, a, input[type="button"], input[type="submit"] {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  }
-  
+  } 
+   
   .toggle-mode:focus, .toggle-mode .material-symbols-outlined:focus {
     outline: none;
     box-shadow: none;

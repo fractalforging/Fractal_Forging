@@ -8,7 +8,7 @@
             <div class="input-container">
                 <input type="number" id="newtime" name="newtime" autocomplete="off"
                     class="time-input" maxlength="" value="">
-                <span class="placeholder1 newtime">&nbsp;New Break Time&nbsp;</span>
+                <greet class="placeholder1 newtime">&nbsp;New Break Time&nbsp;</greet>
             </div>
             <button type="submit" class="form-button">OK</button>
             <p id="time-error-message" style="display:none; color: red;"></p>
@@ -47,7 +47,7 @@
         userIdInput.value = userId;
         form.appendChild(userIdInput);
         close.onclick = () => { modal.style.display = "none"; };
-
+ 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             const newTime = document.getElementById("newtime").value;

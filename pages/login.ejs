@@ -1,11 +1,8 @@
-<%- include('partials/header.ejs') %>
-  <%- include('partials/preload.ejs') %>
-
-    <div class="loader">
-      <div class="spinner"></div>
-    </div>
-
-    <%- include('partials/modals.ejs') %>
+<%- include('partials/preload.ejs') %>
+  <%- include('partials/header.ejs') %>
+  <%- include('partials/messageModals.ejs') %>
+  
+    <!-- ////////////// - LOGIN FORM - ////////////////-->
 
       <form action="/login" method="POST" class="credentials">
         <div class="input-container">
