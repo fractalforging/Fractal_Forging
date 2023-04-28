@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
     remainingBreakTime: { type: Number, default: 35 * 60 },
     isOnline: { type: Boolean, default: false },
     socketId: { type: String, default: null },
+    lastHeartbeat: { type: Date, default: null },
 });
 
 userSchema.plugin(passportLocalMongoose);

@@ -1,8 +1,10 @@
 <!-- ////////////////// - NAV - ////////////////// -->
 <style>
   .hamburger-menu {
+    position: relative;
     display: inline-block;
     margin-right: 25px;
+    top: 0px;
   }
 
   .hamburger-menu:hover .dropdown-menu {
@@ -48,10 +50,9 @@
   }
 </style>
 
-
 <navbar>
   <div class="hamburger-menu">
-    <span class="hamburger-icon" onclick="toggleMenu()">&#9776;</span>
+    <span class="hamburger-icon">&#9776;</span>
     <div class="dropdown-menu" id="dropdown-menu">
       <li><a href="/account">Password</a></li>
       <% if (currentUser.roles==='admin' ) { %>
@@ -64,4 +65,7 @@
   <li><a href="/secret">Breaks</a></li>
   <section class="vertical-line"></section>
   <li><a href="/logout">Logout</a></li>
+  <%- include('usersIndicator.ejs') %>
+  <% if (currentUser.roles==='admin' ) { %>
+      <% } %>
 </navbar>

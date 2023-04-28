@@ -242,6 +242,7 @@ nonstart {
   }
 }
 
+.reset-break-time-button,
 .time-change-button,
 .reset-password-button,
 .item-button,
@@ -264,12 +265,12 @@ nonstart {
   transition: all var(--animation-duration-short) ease-in-out;
 }
 
+.reset-break-time-button,
 .time-change-button,
 .reset-password-button {
   margin-left: auto;
   margin-right: 5px;
 }
-
 
 .remove-user,
 .remove-admin {
@@ -321,6 +322,7 @@ filer {
   color: var(--break-list-item-filler-color);
 }
 
+.reset-break-time-button:hover,
 .time-change-button:hover,
 .reset-password-button:hover,
 .item-button:hover {

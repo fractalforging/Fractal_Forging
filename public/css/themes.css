@@ -70,6 +70,7 @@
   --input-box-outline-shadow-color: #729bb1;
   /*//// - DIVIDER - ////*/
   --hr-divider-color: #004C7B;
+  --hr-divider-userslist-color: #004c7b5d;
   /*//// - BREAKS SELECTION - ////*/
   --grid-container-background-color: #80808000;
   --grid-item-background-color: #80008000;
@@ -170,6 +171,7 @@
   --input-box-outline-shadow-color: #4f1e9c;
   /*//// - DIVIDER - ////*/
   --hr-divider-color: #004C7B;
+  --hr-divider-userslist-color: #004c7b7c;
   /*//// - BREAKS SELECTION - ////*/
   --grid-container-background-color: #80808000;
   --grid-item-background-color: #80008000;

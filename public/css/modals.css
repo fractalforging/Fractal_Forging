@@ -117,6 +117,7 @@
 
 /* ////////////// - PASSWORD RESET+TIME CHANGE MODALs - ////////////// */
 
+.confirm-modal-form,
 .passTimeForm {
   width: 230px;
   margin: 0 auto;
@@ -132,6 +133,11 @@
   transition: all var(--animation-duration-more) ease-in-out;
 }
 
+.confirm-modal-form-top{
+  position: relative;
+  margin-top: 210px;
+}
+
 .passFormTop {
   position: relative;
   margin-top: 25px;
@@ -142,6 +148,7 @@
   margin-top: 210px;
 }
 
+.confirmation-modal,
 .time-change-modal,
 .reset-password-modal {
   display: none;
@@ -155,6 +162,7 @@
   background-color: #00000066;
 }
 
+.confirmation-modal-content,
 .time-change-modal-content,
 .reset-password-modal-content {
   background-color: #01060ec9;
@@ -165,6 +173,7 @@
   border-radius: 4px;
 }
 
+.confirmation-modal-close,
 .time-change-close,
 .reset-password-close {
   position: relative;
@@ -206,6 +215,7 @@
   cursor: pointer;
 }
 
+.confirmation-modal-title,
 .time-change-title,
 .reset-pass-title,
 #reset-password-form {

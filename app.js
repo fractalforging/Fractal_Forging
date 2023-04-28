@@ -121,6 +121,10 @@ io.on('connection', async (socket) => {
 
   await emitUserCountAndList();
 
+  socket.on('heartbeat', async () => {
+    await updateUserHeartbeat(socket.id);
+  });
+
   socket.on('reload', async () => {
     logger.warn("SOCKET.IO - Connected");
     io.emit('reload');
@@ -141,22 +145,36 @@ io.on('connection', async (socket) => {
     await emitUserCountAndList();
   });
 
+
+
 });
 
 ////////////// - USERS ONLINE INDICATOR - //////////////////
 
 async function emitUserCountAndList() {
   try {
-    const onlineUsers = await User.find({ isOnline: true });
-    const userCount = onlineUsers.length;
-    const usernames = onlineUsers.map(user => user.username);
-    io.emit('userCount', userCount);
+    const oneMinuteAgo = new Date(new Date().getTime() - 60 * 1000);
+    const users = await User.find({ isOnline: true, socketId: { $ne: null }, lastHeartbeat: { $gt: oneMinuteAgo } });
+    const usernames = users.map(user => user.username);
+    io.emit('userCount', users.length);
     io.emit('userList', usernames);
   } catch (error) {
-    console.error('Error fetching online users:', error);
+    console.error('Error emitting user count and list:', error);
   }
 }
 
+
+async function updateUserHeartbeat(socketId) {
+  try {
+    const user = await User.findOne({ socketId });
+    if (user) {
+      user.lastHeartbeat = new Date();
+      await user.save();
+    }
+  } catch (error) {
+    console.error('Error updating user heartbeat:', error);
+  }
+}
 
 //=====================
 // MIDDLEWARE & ROUTES
@@ -177,7 +195,7 @@ const resetPasswordRoute = require('./routes/resetPassword.js');
 const changeTimeRouter = require('./routes/changeTime.js');
 const settingsRoutes = require('./routes/settings.js');
 const apiMessages = require('./routes/apiMessages.js');
-const socket = require('./routes/socket.js');
+//const socket = require('./routes/socket.js');
 
 
 //=====================
@@ -221,8 +239,7 @@ app.use('/submit', submitBreakRoutes(io, BreakTrack, User));
 app.use('/breaks/start', isLoggedIn, startBreakRoutes(io, BreakTrack, User));
 app.use('/remove', removeBreakRoutes(io, BreakTrack, User));
 app.use('/breaks', endBreakRoutes(BreakTrack));
-app.use('/reset', resetBreakTimeRoutes(User, io, location));
-
+app.use('/resetbreaktime', resetBreakTimeRoutes(User, io, location));
 
 //=====================
 // ERROR HANDLING

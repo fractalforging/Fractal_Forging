@@ -13,6 +13,7 @@ router.get("/", isLoggedIn, function (req, res, next) {
     }
     if (req.user) { // Check if the req.user object is not null
       req.user.isOnline = false;
+      req.user.socketId = null; // Add this line
       await req.user.save();
     }
     logger.warn('Logout successful for user: ' + kleur.magenta(username));
@@ -24,5 +25,6 @@ router.get("/", isLoggedIn, function (req, res, next) {
     });
   });
 });
+
 
 module.exports = router;

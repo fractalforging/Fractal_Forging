@@ -28,19 +28,89 @@
 
                     <!-- ////////////// - USERS - //////////////// -->
 
+                    <%- include('partials/breakResetConfirmatiion.ejs') %>
+                    <br>
                     <joke>Agents</joke>
 
                     <br><br>
                     <ul id="normal-users" class="roles-list">
-                        <div id="agents" class="main">
-                            <% normalUsers.sort((a, b)=> {
-                                const aBreakTime = Math.floor(a.remainingBreakTime / 60);
-                                const bBreakTime = Math.floor(b.remainingBreakTime / 60);
-                                if (aBreakTime === bBreakTime) {
-                                return a.username.localeCompare(b.username);
+                        <!-- <div id="agents" class="main"> -->
+                        <% normalUsers.sort((a, b)=> {
+                            const aBreakTime = Math.floor(a.remainingBreakTime / 60);
+                            const bBreakTime = Math.floor(b.remainingBreakTime / 60);
+                            if (aBreakTime === bBreakTime) {
+                            return a.username.localeCompare(b.username);
+                            }
+                            return aBreakTime - bBreakTime;
+                            }).forEach(user => { %>
+                            <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
+                                data-username="<%= user.username %>" class="break-list-item-admin">
+                                <div class="break-list-item-name-admin" onclick="toggleExtraInfo(event)">
+                                    <arrow-icon class="arrow">
+                                        <span class="material-symbols-outlined">keyboard_arrow_right</span>
+                                    </arrow-icon>
+                                    <span class="user-name-admin-accounts">
+                                        <username class="user-name-top">
+                                            <%= user.username %>
+                                        </username>
+                                    </span>
+                                    <span class="remaining-break-time">
+                                        <%= Math.floor(user.remainingBreakTime / 60) %> mins
+                                    </span>
+                                </div>
+                                <div class="extra-info" style="display:none;">
+                                    <button class="time-change-button" data-user-id="<%= user._id %>">Time</button>
+                                    <button class="reset-password-button"
+                                        data-user-id="<%= user._id %>">Password</button>
+                                    <select class="item-button">
+                                        <% if (user.roles==='admin' ) { %>
+                                            <option value="admin" selected>Admin</option>
+                                            <option value="user">User</option>
+                                            <% } else { %>
+                                                <option value="admin">Admin</option>
+                                                <option value="user" selected>User</option>
+                                                <% } %>
+                                                    <option value="delete" class="delete-option">Delete</option>
+                                    </select>
+                                </div>
+                            </li>
+                            <script>
+                                function toggleExtraInfo(event) {
+                                    const listItem = event.target.closest('.break-list-item-admin');
+                                    const removeButton = event.target.closest('.remove-admin');
+                                    if (!removeButton) {
+                                        try {
+                                            const arrow = listItem.querySelector('.arrow');
+                                            const extraInfo = listItem.querySelector('.extra-info');
+                                            arrow.classList.toggle('open');
+                                            extraInfo.style.display = extraInfo.style.display === 'none' ? 'block' : 'none';
+                                            listItem.classList.toggle('expanded_accounts');
+                                            const arrowIcon = arrow.querySelector('.material-icons-outlined');
+                                            if (arrow.classList.contains('open')) {
+                                                arrowIcon.style.transform = 'rotate(90deg)';
+                                            } else {
+                                                arrowIcon.style.transform = 'rotate(0deg)';
+                                            }
+                                        } catch (err) { /*console.log(err)*/ }
+                                    }
                                 }
-                                return aBreakTime - bBreakTime;
-                                }).forEach(user => { %>
+                            </script>
+                            <% }); %>
+                                <!-- </div> -->
+                    </ul>
+
+                    <br><br>
+
+                    <!-- ////////////// - ADMINS - //////////////// -->
+
+                    <joke>Supporting functions</joke>
+
+                    <br><br>
+
+                    <ul id="admin-users" class="roles-list">
+                        <!-- <div id="sFunctions" class="main"> -->
+                        <% adminUsers.sort((a, b)=> a.username.localeCompare(b.username)).forEach(user => { %>
+                            <% if (user.username !=='admin' ) { %>
                                 <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
                                     data-username="<%= user.username %>" class="break-list-item-admin">
                                     <div class="break-list-item-name-admin" onclick="toggleExtraInfo(event)">
@@ -52,13 +122,9 @@
                                                 <%= user.username %>
                                             </username>
                                         </span>
-                                        <span class="remaining-break-time">
-                                            <%= Math.floor(user.remainingBreakTime / 60) %> mins
-                                        </span>
                                     </div>
                                     <div class="extra-info" style="display:none;">
-                                        <button class="time-change-button"
-                                            data-user-id="<%= user._id %>">Time</button>
+                                        <button class="time-change-button" data-user-id="<%= user._id %>">Time</button>
                                         <button class="reset-password-button"
                                             data-user-id="<%= user._id %>">Password</button>
                                         <select class="item-button">
@@ -69,7 +135,8 @@
                                                     <option value="admin">Admin</option>
                                                     <option value="user" selected>User</option>
                                                     <% } %>
-                                                        <option value="delete" class="delete-option">Delete</option>
+                                                        <option value="delete" class="delete-option">Delete
+                                                        </option>
                                         </select>
                                     </div>
                                 </li>
@@ -94,76 +161,9 @@
                                         }
                                     }
                                 </script>
-                                <% }); %>
-                        </div>
-                    </ul>
-
-                    <br><br>
-
-                    <!-- ////////////// - ADMINS - //////////////// -->
-
-                    <joke>Supporting functions</joke>
-
-                    <br><br>
-
-                    <ul id="admin-users" class="roles-list">
-                        <div id="sFunctions" class="main">
-                            <% adminUsers.sort((a, b)=> a.username.localeCompare(b.username)).forEach(user => { %>
-                                <% if (user.username !=='admin' ) { %>
-                                    <li data-id="<%= user._id %>" data-role="<%= user.roles %>"
-                                        data-username="<%= user.username %>" class="break-list-item-admin">
-                                        <div class="break-list-item-name-admin" onclick="toggleExtraInfo(event)">
-                                            <arrow-icon class="arrow">
-                                                <span class="material-symbols-outlined">keyboard_arrow_right</span>
-                                            </arrow-icon>
-                                            <span class="user-name-admin-accounts">
-                                                <username class="user-name-top">
-                                                    <%= user.username %>
-                                                </username>
-                                            </span>
-                                        </div>
-                                        <div class="extra-info" style="display:none;">
-                                            <button class="time-change-button"
-                                            data-user-id="<%= user._id %>">Time</button>
-                                            <button class="reset-password-button"
-                                                data-user-id="<%= user._id %>">Password</button>
-                                            <select class="item-button">
-                                                <% if (user.roles==='admin' ) { %>
-                                                    <option value="admin" selected>Admin</option>
-                                                    <option value="user">User</option>
-                                                    <% } else { %>
-                                                        <option value="admin">Admin</option>
-                                                        <option value="user" selected>User</option>
-                                                        <% } %>
-                                                            <option value="delete" class="delete-option">Delete
-                                                            </option>
-                                            </select>
-                                        </div>
-                                    </li>
-                                    <script>
-                                        function toggleExtraInfo(event) {
-                                            const listItem = event.target.closest('.break-list-item-admin');
-                                            const removeButton = event.target.closest('.remove-admin');
-                                            if (!removeButton) {
-                                                try {
-                                                    const arrow = listItem.querySelector('.arrow');
-                                                    const extraInfo = listItem.querySelector('.extra-info');
-                                                    arrow.classList.toggle('open');
-                                                    extraInfo.style.display = extraInfo.style.display === 'none' ? 'block' : 'none';
-                                                    listItem.classList.toggle('expanded_accounts');
-                                                    const arrowIcon = arrow.querySelector('.material-icons-outlined');
-                                                    if (arrow.classList.contains('open')) {
-                                                        arrowIcon.style.transform = 'rotate(90deg)';
-                                                    } else {
-                                                        arrowIcon.style.transform = 'rotate(0deg)';
-                                                    }
-                                                } catch (err) { /*console.log(err)*/ }
-                                            }
-                                        }
-                                    </script>
-                                    <% } %>
-                                        <% }); %>
-                        </div>
+                                <% } %>
+                                    <% }); %>
+                                        <!-- </div> -->
                     </ul>
 
 
@@ -232,7 +232,7 @@
                         });
                     </script>
 
-                   
+
 
                     <!-- ////////////// - SEARCH FUNCTIONALITY - ////////////////-->
 
@@ -261,12 +261,12 @@
 
                     <%- include('partials/passResetModal.ejs') %>
 
-                    <!-- ////////////// - TIME CHANGE MODAL - ////////////////-->
+                        <!-- ////////////// - TIME CHANGE MODAL - ////////////////-->
 
-                    <%- include('partials/timeChangeModal.ejs') %>
+                        <%- include('partials/timeChangeModal.ejs') %>
 
-                    <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+                            <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 
-                    <%- include('partials/bottomjs.ejs') %>
+                            <%- include('partials/bottomjs.ejs') %>
 
 </body>
