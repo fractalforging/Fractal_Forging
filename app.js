@@ -230,8 +230,7 @@ app.use('/resetbreaktime', resetBreakTimeRoutes(User, io, location));
 
 app.use(async function (err, req, res, next) {
   logger.error(err.stack);
-  //return res.status(500).send('Something broke!');
-  req.session.message = "Something broke"
+  req.session.message = "Something broke";
   return res.redirect("/");
 });
 
