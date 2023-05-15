@@ -250,7 +250,7 @@ app.use(async function (err, req, res, next) {
   return res.redirect("/");
 });
 
-// CLEAR SESSION VARIABLES FOR MODAL MESSAGING
+// CLEAR SESSION VARIABLES FOR MODAL MESSAGING-
 app.post('/clear-message', async function (req, res, next) {
   delete req.session.message;
   return res.sendStatus(204);
