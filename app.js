@@ -69,7 +69,7 @@ passport.deserializeUser(User.deserializeUser());
 //=====================
 // EXPRESS CONFIG.
 //=====================
- 
+const MongoStore = require('connect-mongo');
 const app = express();
 const server = http.createServer(app);
 app.set('views', 'pages');
@@ -81,6 +81,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
   require("express-session")({
     secret: "Rusty is a dog",
+    store: MongoStore.create({ mongoUrl: dbPath }),
     resave: false,
     saveUninitialized: false,
   })
