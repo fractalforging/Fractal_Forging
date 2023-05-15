@@ -2,6 +2,7 @@
 // IMPORTS
 //=====================
 
+'use strict';
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -24,7 +25,7 @@ dotenv.config({ path: "variables.env" });
 const dbPath = process.env.DB_PATH;
 const port = process.env.PORT;
 const location = process.env.LOCATION;
-
+const secret = process.env.SECRET;
 
 //=====================
 // MONGODB DATABASE
@@ -36,8 +37,11 @@ const User = require('./models/user');
 const BreakTrack = require("./models/BreakTrack.js");
 const LastResetTimestamp = require('./models/LastResetTimestamp');
 
-
 // Initialization
+const database = require('./config/database');
+database.connectMongoDB(dbPath);
+database.initialize();
+
 if (!dbPath) {
   logger.error(
     "Error: No database path found in environment variables. Make sure to set the DB_PATH variable in your .env file."
@@ -45,30 +49,11 @@ if (!dbPath) {
   process.exit(1);
 }
 
-async function connectMongoDB() {
-  try {
-    await mongoose.connect(dbPath, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    logger.info("MongoDB connected successfully!");
-    await firstRun();
-    server.listen(port, () => logger.info(`Server Up and running on port: ${kleur.grey(port)}`));
-  } catch (err) {
-    logger.error("MongoDB connection error:", err);
-  }
-}
- 
-connectMongoDB();
 
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+//=====================
+// EXPRESS CONFIG. 
+//=====================
 
- 
-//=====================
-// EXPRESS CONFIG.
-//=====================
 const MongoStore = require('connect-mongo');
 const app = express();
 const server = http.createServer(app);
@@ -80,7 +65,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   require("express-session")({
-    secret: "Rusty is a dog",
+    secret: secret,
     store: MongoStore.create({ mongoUrl: dbPath }),
     resave: false,
     saveUninitialized: false,
@@ -255,3 +240,10 @@ app.post('/clear-message', async function (req, res, next) {
   delete req.session.message;
   return res.sendStatus(204);
 }); 
+
+
+//=====================
+// START SERVER
+//=====================
+
+server.listen(port, () => logger.info(`Server Up and running on port: ${kleur.grey(port)}`));
