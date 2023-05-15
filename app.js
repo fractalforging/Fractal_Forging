@@ -194,7 +194,6 @@ const resetPasswordRoute = require('./routes/resetPassword.js');
 const changeTimeRouter = require('./routes/changeTime.js');
 const settingsRoutes = require('./routes/settings.js');
 const apiMessages = require('./routes/apiMessages.js');
-//const socket = require('./routes/socket.js');
 
 
 //=====================
