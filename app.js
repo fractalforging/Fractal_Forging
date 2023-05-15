@@ -254,4 +254,4 @@ app.use(async function (err, req, res, next) {
 app.post('/clear-message', async function (req, res, next) {
   delete req.session.message;
   return res.sendStatus(204);
-});
+}); 
