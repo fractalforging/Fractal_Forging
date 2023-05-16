@@ -65,7 +65,7 @@
   <li><a href="/secret">Breaks</a></li>
   <section class="vertical-line"></section>
   <li><a href="/logout">Logout</a></li>
-  <% if (currentUser.roles==='admin' ) { %>
     <%- include('usersIndicator.ejs') %>
+    <% if (currentUser.roles==='admin' ) { %>
       <% } %>
 </navbar>

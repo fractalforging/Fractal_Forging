@@ -23,7 +23,8 @@
         setTimeout(() => location.reload(), 100);
     });
 
-    <% if (currentUser.roles === 'admin') { %>
+    <% if (currentUser.roles==='admin' ) { %>
+    try {
         socket.on('userCount', (count) => {
             document.querySelector('#userCount').innerText = count;
         });
@@ -46,5 +47,7 @@
                 userList.appendChild(listItem);
             });
         });
+    } catch (error) {};
     <% } %>
+
 </script>
