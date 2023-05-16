@@ -1,15 +1,11 @@
 'use strict';
 
-import express from 'express';
 import { Router } from 'express';
 import User from '../models/user.js';
 import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
 import BreakSlots from '../models/BreakSlots.js';
 import logger from '../routes/logger.js';
 import kleur from 'kleur';
-import passportLocalMongoose from 'passport-local-mongoose';
-
-const { UserExistsError } = passportLocalMongoose;
 
 const router = Router();
 
@@ -17,7 +13,7 @@ router.get('/', function(req, res, next) {
   res.render('register', { currentUser: req.user });
 });
 
-router.post('/', isAdmin, async function(req, res, next) {
+router.post('/', isLoggedIn, isAdmin, async function(req, res, next) {
   try {
     const breakSlots = await BreakSlots.findOne({});
     if (req.body.password !== req.body.confirmpassword) {

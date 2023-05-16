@@ -19,11 +19,12 @@
     document.addEventListener('click', (event) => {
         const userList = document.querySelector('#userList');
         const userCountButton = document.querySelector('#userCount');
-
+        <% if (currentUser.roles === 'admin') { %>
         if (!userList.contains(event.target) && !userCountButton.contains(event.target)) {
             userList.style.display = 'none';
             userList.classList.remove('show');
         }
+        <% } %>
     });
 
     setInterval(() => {
@@ -127,3 +128,4 @@
         margin: 0px;
     }
 </style>
+

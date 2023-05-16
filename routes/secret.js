@@ -1,6 +1,5 @@
 'use strict';
 
-import express from 'express';
 import { Router } from 'express';
 import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
 import User from '../models/user.js';
@@ -27,9 +26,7 @@ router.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next)
   const breakTracker = await getBreakTrackerData();
   if (req.user.roles === "admin") {
     return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user});
-  } /*else {
-    return res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user });
-  }*/
+  } 
 });
 
 export default router;

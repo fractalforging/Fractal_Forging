@@ -1,6 +1,5 @@
 'use strict';
 
-import express from 'express';
 import { Router } from 'express';
 import User from '../models/user.js';
 import logger from './logger.js';
@@ -37,7 +36,6 @@ router.post("/", isLoggedIn, isAdmin, async (req, res) => {
       });
     }
   } catch (error) {
-    //res.status(500).json({ error: "Error resetting password: " + error.message });
   }
 });
 

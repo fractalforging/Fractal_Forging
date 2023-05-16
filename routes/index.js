@@ -15,7 +15,7 @@ router.get("/login", async function (req, res, next) {
 });
 
 // REGISTER FORM
-router.get("/register", isAdmin, async function (req, res, next) {
+router.get("/register", isLoggedIn, isAdmin, async function (req, res, next) {
   return res.render("register", { currentUser: req.user });
 });
 

@@ -1,6 +1,5 @@
 'use strict';
 
-import express from "express";
 import { Router } from "express";
 import { isAdmin } from "../middleware/authentication.js";
 import User from "../models/user.js";

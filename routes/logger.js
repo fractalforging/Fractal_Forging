@@ -5,7 +5,6 @@ import DailyRotateFile from 'winston-daily-rotate-file';
 import moment from 'moment-timezone';
 import kleur from 'kleur';
 import debug from 'debug';
-const debugLogger = debug('myapp:debug');
 
 // ENVIRONMENT VARIABLES
 import dotenv from "dotenv";

@@ -2,20 +2,16 @@
 // IMPORTS
 
 'use strict';
+
 import express from 'express';
-import path from "path";
-import mongoose from "mongoose";
-import passportLocalMongoose from "passport-local-mongoose";
-import bodyParser from "body-parser";
-import LocalStrategy from "passport-local";
-import http from 'http';
 import logger from './routes/logger.js';
 import dotenv from "dotenv";
 import kleur from 'kleur';
-import { Server } from 'socket.io';
+import http from 'http';
+import compression from 'compression';
 const app = express();
 const server = http.createServer(app);
-
+app.use(compression());
 
 //=====================
 // ENVIRONMENT VARIABLES
@@ -33,21 +29,17 @@ if (!dbPath) {
   process.exit(1);
 }
 
-
 //=====================
 // MONGODB CONFIG.
 
-// Models
-import firstRun from "./models/firstRun.js";
+// Import Models
 import User from './models/user.js';
 import BreakTrack from "./models/BreakTrack.js";
-import LastResetTimestamp from './models/LastResetTimestamp.js';
 
 // Initialization
 import database from './config/database.js';
 database.connectMongoDB(dbPath);
 database.initialize();
-
 
 //=====================
 // SESSION CONFIG. 
@@ -55,13 +47,11 @@ database.initialize();
 import { sessionConfig } from './config/session.js';
 sessionConfig(app, dbPath, secret);
 
-
 //=====================
 // MIDDLEWARE & ROUTES
 
 import { isLoggedIn, isAdmin } from './middleware/authentication.js';
 import indexRoutes from './routes/index.js';
-import { getBreakTrackerData, getBreakSlotsData } from './routes/helperFunctions.js';
 import loginRoutes from './routes/login.js';
 import logoutRoutes from './routes/logout.js';
 import secretRoutes from './routes/secret.js';
@@ -73,6 +63,7 @@ import resetPasswordRoute from './routes/resetPassword.js';
 import changeTimeRouter from './routes/changeTime.js';
 import settingsRoutes from './routes/settings.js';
 import myMessages from './routes/apiMessages.js';
+import healthCheck from './routes/healthCheck.js';
 
 // BT ROUTES
 import submitBreaks from './bt-routes/submitBreak.js';
@@ -81,8 +72,6 @@ import startBreak from './bt-routes/startBreak.js';
 import removeBreak from './bt-routes/removeBreak.js';
 import endBreak from './bt-routes/endBreak.js';
 import resetBreakTime from './bt-routes/resetBreakTime.js';
-import createBreakQueue from './bt-routes/breakQueueList.js';
-
 
 //=====================
 // APPLY ROUTES
@@ -101,23 +90,30 @@ app.use('/resetpassword', resetPasswordRoute);
 app.use('/timechange', changeTimeRouter);
 app.use('/settings', settingsRoutes);
 app.get('/api/messaging', myMessages);
-
+app.get('/health', healthCheck);
 
 //====================================
 // APPLY BT ROUTES + SOCKET.IO CONFIG.
 
 import setupSockets from './config/socket.js';
 let io;
-(async function () {
+(async () => {
   io = await setupSockets(server, app);
-  app.use("/break-slots", breakSlotsRoutes(io, BreakTrack, User));
-  app.use('/breaks/start', isLoggedIn, startBreak(io, BreakTrack, User));
-  app.use('/submit', submitBreaks(io, BreakTrack, User));
-  app.use('/remove', removeBreak(io, BreakTrack, User));
-  app.use('/breaks', endBreak(BreakTrack));
-  app.use('/resetbreaktime', resetBreakTime(io, User, location));
+  app.use("/break-slots", await breakSlotsRoutes(io, BreakTrack, User));
+  app.use('/breaks/start', await isLoggedIn, await startBreak(io, BreakTrack, User));
+  app.use('/submit', await submitBreaks(io, BreakTrack, User));
+  app.use('/remove', await removeBreak(io, BreakTrack, User));
+  app.use('/breaks', await endBreak(BreakTrack));
+  app.use('/resetbreaktime', await resetBreakTime(io, User, location));
 })();
 
+//=====================
+// CLEAR SESSION VARIABLES FOR MODAL MESSAGING
+
+app.post('/clear-message', async function (req, res, next) {
+  delete req.session.message;
+  return res.sendStatus(204);
+});
 
 //=====================
 // ERROR HANDLING
@@ -127,13 +123,6 @@ app.use(async function (err, req, res, next) {
   req.session.message = "Something broke";
   return res.redirect("/");
 });
-
-// CLEAR SESSION VARIABLES FOR MODAL MESSAGING-
-app.post('/clear-message', async function (req, res, next) {
-  delete req.session.message;
-  return res.sendStatus(204);
-});
-
 
 //=====================
 // START SERVER

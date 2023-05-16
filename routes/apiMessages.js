@@ -45,4 +45,5 @@ async function myMessages(req, res, next) {
     }
   }
 }
+
 export default myMessages;
