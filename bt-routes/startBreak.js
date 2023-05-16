@@ -1,7 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const logger = require('../routes/logger.js');
-const kleur = require('kleur');
+import express from 'express';
+import { Router } from 'express';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
+
+const router = Router();
 
 const startBreak = (io, BreakTrack, User) => {
   router.post('/:id', async (req, res, next) => {
@@ -29,4 +31,4 @@ const startBreak = (io, BreakTrack, User) => {
   return router;
 };
 
-module.exports = startBreak;
+export default startBreak;

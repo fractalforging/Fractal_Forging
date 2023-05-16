@@ -1,9 +1,11 @@
-const express = require('express');
-const kleur = require('kleur');
-const router = express.Router();
-const User = require('../models/user.js');
-const logger = require('./logger.js');
-const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
+import express from 'express';
+import kleur from 'kleur';
+import { Router } from 'express';
+import User from '../models/user.js';
+import logger from '../routes/logger.js';
+import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+
+const router = Router();
 
 //HANDLING PASSWORD CHANGE
 router.post("/", isLoggedIn, function (req, res, next) {
@@ -69,4 +71,4 @@ router.get("/", isLoggedIn, function (req, res, next) {
   return res.render("account", { error: 'no error', currentUser: req.user });
 });
 
-module.exports = router;
+export default router;

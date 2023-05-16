@@ -1,8 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
-const User = require('../models/user');
-const { getBreakTrackerData, getBreakSlotsData } = require('./helperFunctions.js');
+import express from 'express';
+import { Router } from 'express';
+import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+import User from '../models/user.js';
+import { getBreakTrackerData, getBreakSlotsData } from './helperFunctions.js';
+
+const router = Router();
 
 // USER LANDING PAGE
 router.get("/", isLoggedIn, async function (req, res, next) {
@@ -28,4 +30,4 @@ router.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next)
   }*/
 });
 
-module.exports = router;
+export default router;

@@ -1,7 +1,8 @@
-const express = require('express');
-const kleur = require('kleur');
-const logger = require('./logger');
-const { isLoggedIn } = require('../middleware/authentication.js');
+import express from 'express';
+import kleur from 'kleur';
+import logger from '../routes/logger.js';
+import { isLoggedIn } from '../middleware/authentication.js';
+
 const router = express.Router();
 
 // HANDLING USER LOGOUT
@@ -27,4 +28,4 @@ router.get("/", isLoggedIn, function (req, res, next) {
 });
 
 
-module.exports = router;
+export default router;

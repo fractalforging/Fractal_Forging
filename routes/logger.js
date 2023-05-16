@@ -1,11 +1,12 @@
-const { createLogger, format, transports } = require('winston');
-const DailyRotateFile = require('winston-daily-rotate-file');
-const moment = require('moment-timezone');
-const kleur = require('kleur');
-const debug = require('debug')('myapp:debug');
+import { createLogger, format, transports } from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
+import moment from 'moment-timezone';
+import kleur from 'kleur';
+import debug from 'debug';
+const debugLogger = debug('myapp:debug');
 
 // ENVIRONMENT VARIABLES
-const dotenv = require("dotenv")
+import dotenv from "dotenv";
 dotenv.config({ path: "variables.env" });
 const location = process.env.LOCATION
 
@@ -50,4 +51,4 @@ const logger = createLogger({
 
 debug('Debug log message');
 
-module.exports = logger;
+export default logger;

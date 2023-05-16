@@ -1,12 +1,32 @@
-const express = require("express");
-const router = express.Router();
-const logger = require('./logger.js');
-const kleur = require('kleur');
-const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
-const BreakSlots = require("../models/BreakSlots.js");
-const { moveQueuedBreaksToNormalList } = require("../bt-routes/submitBreak.js");
+import { Router } from "express";
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
+import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+import BreakSlots from "../models/BreakSlots.js";
+import BreakTrack from '../models/BreakTrack.js';
 
-module.exports = function(io, BreakTrack) {
+const router = Router();
+
+const moveQueuedBreaksToNormalList = async (availableSlots) => {
+  let activeBreaks;
+  try {
+    activeBreaks = await BreakTrack.countDocuments({ status: 'active' });
+  } catch (error) {
+    return;
+  }
+  const remainingSlots = availableSlots - activeBreaks;
+  if (remainingSlots > 0) {
+    const queuedBreaks = await BreakTrack.find({ status: 'queued' })
+      .sort({ date: 1 })
+      .limit(remainingSlots);
+    for (const queuedBreak of queuedBreaks) {
+      queuedBreak.status = 'active';
+      await queuedBreak.save();
+    }
+  }
+};
+
+const breakSlotsRoute = (io) => {
   router.post("/", isAdmin, async function (req, res, next) {
     try {
       const newSlotsValue = req.body.slotsavailable;
@@ -17,7 +37,7 @@ module.exports = function(io, BreakTrack) {
           { $set: { slots: newSlotsValue } },
           { new: true, upsert: true }
         );
-        await moveQueuedBreaksToNormalList(BreakTrack, newSlotsValue);
+        await moveQueuedBreaksToNormalList(newSlotsValue);
         req.session.message = "Updated";
         io.emit('reload'); 
         logger.info(`${kleur.magenta(req.user.username)} updated the available slots to: ${kleur.grey(newSlotsValue)}`);
@@ -36,3 +56,4 @@ module.exports = function(io, BreakTrack) {
   return router;
 }
 
+export default breakSlotsRoute;

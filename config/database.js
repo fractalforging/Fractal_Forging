@@ -1,19 +1,20 @@
-const mongoose = require("mongoose");
-const passport = require("passport");
-const LocalStrategy = require("passport-local");
-const User = require('../models/user');
-const express = require("express");
-const http = require('http');
+import mongoose from "mongoose";
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import User from '../models/user.js';
+import express from "express";
+import http from 'http';
+import firstRun from "../models/firstRun.js";
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
+
 const app = express();
 const server = http.createServer(app);
-const firstRun = require("../models/firstRun.js");
-const logger = require('../routes/logger.js');
-const kleur = require('kleur');
 
-module.exports = {
+const database = {
   connectMongoDB: async function (dbPath) {
     try {
-      mongoose.set('strictQuery', false); 
+      mongoose.set('strictQuery', false);
       await mongoose.connect(dbPath, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -30,3 +31,5 @@ module.exports = {
     passport.deserializeUser(User.deserializeUser());
   }
 }
+
+export default database;

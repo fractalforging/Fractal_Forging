@@ -1,11 +1,10 @@
-const moment = require('moment-timezone');
-const express = require('express');
-const router = express.Router();
-const logger = require('../routes/logger.js');
-const kleur = require('kleur');
-const LastResetTimestamp = require('../models/LastResetTimestamp');
+import moment from 'moment-timezone';
+import express from 'express';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
+import LastResetTimestamp from '../models/LastResetTimestamp.js';
 
-const resetBreakTimeRoutes = (User, io, location) => {
+const resetBreakTime = (io, User, location) => {
   const router = express.Router();
   const resetHour = 22;
 
@@ -18,7 +17,7 @@ const resetBreakTimeRoutes = (User, io, location) => {
     const lastResetTimestamp = lastResetTimestampObj.timestamp;
     const now = moment.tz(new Date(), 'Europe/' + location);
     const lastResetTime = moment.tz(new Date(lastResetTimestamp), 'Europe/' + location);
-    lastResetTime.set({hour: resetHour, minute: 0, second: 0, millisecond: 0});
+    lastResetTime.set({ hour: resetHour, minute: 0, second: 0, millisecond: 0 });
 
     while (now.isAfter(lastResetTime)) {
       lastResetTime.add(1, 'days');
@@ -27,7 +26,7 @@ const resetBreakTimeRoutes = (User, io, location) => {
     const millisecondsUntilReset = lastResetTime.diff(now);
     return millisecondsUntilReset;
   }
- 
+
   async function resetBreakTimes() {
     const resetBreakTimeInSeconds = 35 * 60;
     await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
@@ -38,12 +37,12 @@ const resetBreakTimeRoutes = (User, io, location) => {
     logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
     io.emit('reload');
   }
-  
+
   (async () => {
     const millisecondsUntilReset = await getMillisecondsUntilReset();
     setTimeout(() => {
       resetBreakTimes();
-      setInterval(resetBreakTimes, 24 * 60 * 60 * 1000);
+      setInterval(() => resetBreakTimes(), 24 * 60 * 60 * 1000); 
     }, millisecondsUntilReset);
   })();
 
@@ -56,4 +55,4 @@ const resetBreakTimeRoutes = (User, io, location) => {
   return router;
 };
 
-module.exports = resetBreakTimeRoutes;
+export default resetBreakTime;

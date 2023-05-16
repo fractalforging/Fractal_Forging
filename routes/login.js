@@ -1,8 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const kleur = require('kleur');
-const passport = require('passport');
-const logger = require('./logger.js');
+import express from 'express';
+import { Router } from 'express';
+import kleur from 'kleur';
+import passport from 'passport';
+import logger from './logger.js';
+
+const router = new Router();
 
 router.post('/', async function (req, res, next) {
   passport.authenticate('local', async function (err, user, info) {
@@ -37,4 +39,4 @@ router.post('/', async function (req, res, next) {
   })(req, res, next);
 });
 
-module.exports = router;
+export default router;

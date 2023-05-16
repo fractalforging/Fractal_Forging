@@ -106,6 +106,16 @@ input::placeholder {
   transition: all var(--animation-duration-base) ease-in-out;
 }
 
+
+#login-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 55vh;
+  margin: 0 auto;
+}
+
 /* ///// */
 
 .grid-container-2 {

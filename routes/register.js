@@ -1,10 +1,15 @@
-const express = require('express');
-const router = express.Router();
-const User = require('../models/user');
-const { isLoggedIn, isAdmin } = require('../middleware/authentication');
-const BreakSlots = require('../models/BreakSlots');
-const logger = require('./logger');
-const kleur = require('kleur');
+import express from 'express';
+import { Router } from 'express';
+import User from '../models/user.js';
+import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+import BreakSlots from '../models/BreakSlots.js';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
+import passportLocalMongoose from 'passport-local-mongoose';
+
+const { UserExistsError } = passportLocalMongoose;
+
+const router = Router();
 
 router.get('/', function(req, res, next) {
   res.render('register', { currentUser: req.user });
@@ -13,8 +18,6 @@ router.get('/', function(req, res, next) {
 router.post('/', isAdmin, async function(req, res, next) {
   try {
     const breakSlots = await BreakSlots.findOne({});
-    const { UserExistsError } = require('passport-local-mongoose');
-
     if (req.body.password !== req.body.confirmpassword) {
       req.session.message = 'Mismatch';
       logger.error('Password and confirm password do not match');
@@ -41,4 +44,4 @@ router.post('/', isAdmin, async function(req, res, next) {
   }
 });
 
-module.exports = router;
+export default router;

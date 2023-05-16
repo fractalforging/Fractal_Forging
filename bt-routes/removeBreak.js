@@ -1,8 +1,24 @@
-const express = require('express');
-const router = express.Router();
-const logger = require('../routes/logger.js');
-const kleur = require('kleur');
-const { moveToNormalList } = require('./submitBreak');
+import { Router } from 'express';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
+import BreakTrack from '../models/BreakTrack.js';
+import BreakSlots from '../models/BreakSlots.js';
+
+const router = Router();
+
+const moveToNormalList = async () => {
+  const availableSlotsData = await BreakSlots.findOne();
+  const availableSlots = availableSlotsData.slots;
+  const activeBreaks = await BreakTrack.countDocuments({ status: 'active' });
+
+  if (activeBreaks < availableSlots) {
+    const nextInQueue = await BreakTrack.findOne({ status: 'queued' }).sort({ date: 1 });
+    if (nextInQueue) {
+      nextInQueue.status = 'active';
+      await nextInQueue.save();
+    }
+  }
+};
 
 const removeBreak = (io, BreakTrack, User) => {
   router.get("/:id", async (req, res, next) => {
@@ -62,4 +78,4 @@ const removeBreak = (io, BreakTrack, User) => {
   return router;
 };
 
-module.exports = removeBreak;
+export default removeBreak;

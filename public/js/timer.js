@@ -89,7 +89,9 @@ async function removeBreak(breakId, beforeStart, isAdmin = false) {
     } else {
       console.error("Error removing the break.");
     }
-  } catch (error) { console.error("Error removing the break: ", error); }
+  } catch (error) { 
+    //console.error("Error removing the break: ", error); 
+  }
 }
 
 

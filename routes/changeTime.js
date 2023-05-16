@@ -1,9 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const User = require('../models/user.js');
-const logger = require('./logger.js');
-const kleur = require('kleur');
-const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
+import express from 'express';
+import { Router } from 'express';
+import User from '../models/user.js';
+import logger from './logger.js';
+import kleur from 'kleur';
+import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+
+const router = Router();
 
 router.post("/", isLoggedIn, isAdmin, async (req, res) => {
   try {
@@ -28,5 +30,8 @@ router.post("/", isLoggedIn, isAdmin, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;
+
+
+
 

@@ -1,22 +1,28 @@
 <%- include('partials/preload.ejs') %>
-  <%- include('partials/header.ejs') %>
-  <%- include('partials/messageModals.ejs') %>
-  
-    <!-- ////////////// - LOGIN FORM - ////////////////-->
 
-      <form action="/login" method="POST" class="credentials">
-        <div class="input-container">
-          <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength="" value="">
-          <span class="placeholder1 username">&nbsp;Username&nbsp;</span>
-        </div>
-        <div class="input-container">
-          <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength=""
-            value="">
-          <span class="placeholder1 password">&nbsp;Password&nbsp;</span>
-        </div>
-        <button id="login-submit-button" type="submit" class="form-button">Login</button>
-      </form>
+  <div id="login-form" style="opacity: 0;">
 
-      <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+    <%- include('partials/header.ejs') %>
+      <%- include('partials/messageModals.ejs') %>
 
-      <%- include('partials/bottomjs.ejs') %>
+        <!-- ////////////// - LOGIN FORM - ////////////////-->
+
+        <form action="/login" method="POST" class="credentials">
+          <div class="input-container">
+            <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength=""
+              value="">
+            <span class="placeholder1 username">&nbsp;Username&nbsp;</span>
+          </div>
+          <div class="input-container">
+            <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength=""
+              value="">
+            <span class="placeholder1 password">&nbsp;Password&nbsp;</span>
+          </div>
+          <button id="login-submit-button" type="submit" class="form-button">Login</button>
+        </form>
+
+  </div>
+
+  <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+
+  <%- include('partials/bottomjs.ejs') %>

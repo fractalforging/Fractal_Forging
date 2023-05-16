@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const breakSlotsSchema = new mongoose.Schema({
   slots: {
@@ -8,4 +8,6 @@ const breakSlotsSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('BreakSlots', breakSlotsSchema);
+const BreakSlots = mongoose.model('BreakSlots', breakSlotsSchema);
+
+export default BreakSlots;

@@ -43,4 +43,4 @@ async function myMessages(req, res, next) {
     }
   }
 }
-module.exports = { myMessages };
+export default myMessages;

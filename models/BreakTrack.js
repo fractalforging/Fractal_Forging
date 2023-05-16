@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const breakTrackerSchema = new mongoose.Schema({
   user: {
@@ -41,4 +41,6 @@ const breakTrackerSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('BreakTrack', breakTrackerSchema);
+const BreakTrack = mongoose.model('BreakTrack', breakTrackerSchema);
+
+export default BreakTrack;

@@ -1,7 +1,7 @@
-const User = require("./user");
-const BreakSlots = require('./BreakSlots');
-const logger = require('../routes/logger.js');
-const kleur = require('kleur');
+import User from './user.js';
+import BreakSlots from './BreakSlots.js';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
 
 async function createAdminUser() {
     try {
@@ -34,4 +34,5 @@ async function firstRun() {
     await createAdminUser();
     await createDefaultBreakSlots();
 }
-module.exports = firstRun;
+
+export default firstRun;

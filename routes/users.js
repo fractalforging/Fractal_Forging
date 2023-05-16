@@ -1,9 +1,11 @@
-const express = require("express");
-const router = express.Router();
-const { isAdmin } = require("../middleware/authentication.js");
-const User = require("../models/user");
-const logger = require('./logger.js');
-const kleur = require('kleur');
+import express from "express";
+import { Router } from "express";
+import { isAdmin } from "../middleware/authentication.js";
+import User from "../models/user.js";
+import logger from './logger.js';
+import kleur from 'kleur';
+
+const router = Router();
 
 router.get("/", isAdmin, async (req, res, next) => {
   const users = await User.find({});
@@ -36,4 +38,4 @@ router.put("/:userId", isAdmin, async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

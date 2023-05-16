@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { isLoggedIn, isAdmin } = require('../middleware/authentication');
+import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
 
 // INDEX > LOGIN
 router.get("/", async function (req, res, next) {
@@ -17,4 +17,5 @@ router.get("/register", isAdmin, async function (req, res, next) {
   return res.render("register", { currentUser: req.user });
 });
 
-module.exports = router;
+export default router;
+

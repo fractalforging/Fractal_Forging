@@ -1,9 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const User = require('../models/user.js');
-const { isAdmin } = require('../middleware/authentication.js');
-const logger = require('./logger.js');
-const kleur = require('kleur');
+import express from 'express';
+import { Router } from 'express';
+import User from '../models/user.js';
+import { isAdmin } from '../middleware/authentication.js';
+import logger from './logger.js';
+import kleur from 'kleur';
+
+const router = Router();
 
 router.delete('/:id', isAdmin, async (req, res, next) => {
   console.log("Delete route triggered");
@@ -28,4 +30,4 @@ router.delete('/:id', isAdmin, async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router;

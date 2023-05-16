@@ -1,13 +1,13 @@
-const express = require("express");
-const router = express.Router();
+import express from "express";
+import BreakTrack from "../models/BreakTrack.js";
+import BreakSlots from "../models/BreakSlots.js";
 
-module.exports = (User, io, location) => {
-  const BreakTrack = require("../models/BreakTrack.js");
-  const BreakSlots = require("../models/BreakSlots.js");
+const breakQueueList = (User, io, location) => {
+  const router = express.Router();
 
   async function processBreakQueue(req, res, next) {
     const availableSlots = (await BreakSlots.findOne()).slots;
-    const activeBreaks = await BreakTrack.countDocuments({ hasStarted: true, /*hasEnded: false*/ });
+    const activeBreaks = await BreakTrack.countDocuments({ hasStarted: true });
 
     if (activeBreaks < availableSlots) {
       const nextInQueue = await BreakTrack.findOne({ waitingInQueue: true }).sort({ startTime: 1 });
@@ -31,3 +31,5 @@ module.exports = (User, io, location) => {
 
   return router;
 };
+
+export default breakQueueList;
