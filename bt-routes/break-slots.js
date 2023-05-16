@@ -1,3 +1,5 @@
+'use strict';
+
 import { Router } from "express";
 import logger from '../routes/logger.js';
 import kleur from 'kleur';

@@ -1,3 +1,5 @@
+'use strict';
+
 import User from './user.js';
 import BreakSlots from './BreakSlots.js';
 import logger from '../routes/logger.js';

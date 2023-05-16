@@ -1,3 +1,5 @@
+'use strict';
+
 console.log("M O D A L S . J S   L O A D E D")
 
 ///////// - GET MODALS - /////////

@@ -1,3 +1,5 @@
+'use strict';
+
 import express from 'express';
 import kleur from 'kleur';
 import { Router } from 'express';

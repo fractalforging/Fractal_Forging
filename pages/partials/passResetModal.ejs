@@ -26,6 +26,8 @@
 
  <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
 
+ 'use strict';
+
     const resetPassword = async (userId, newPassword, confirmPassword) => {
         try {
             const response = await fetch(`/resetpassword`, {
@@ -44,7 +46,6 @@
             return { success: false, error: error.message };
         }
     };
-
 
     const displayResetPasswordModal = (userId) => {
         const modal = document.getElementById("reset-password-modal");

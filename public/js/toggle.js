@@ -1,3 +1,5 @@
+'use strict';
+
 console.log("T O G G L E . J S   L O A D E D");
 
 ///////////// - ON TOGGLE BUTTON CLICK - ///////////////

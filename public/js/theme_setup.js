@@ -1,3 +1,5 @@
+'use strict';
+
 console.log("T H E M E _ S E T U P . J S   L O A D E D");
 
 //////////////////// - SET UP THEME ON 1ST RUN - /////////////////////

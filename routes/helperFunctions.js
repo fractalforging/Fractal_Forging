@@ -1,3 +1,5 @@
+'use strict';
+
 import BreakTracker from '../models/BreakTrack.js';
 import BreakSlots from '../models/BreakSlots.js';
 

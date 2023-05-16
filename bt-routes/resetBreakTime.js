@@ -1,3 +1,5 @@
+'use strict';
+
 import moment from 'moment-timezone';
 import express from 'express';
 import logger from '../routes/logger.js';

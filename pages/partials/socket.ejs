@@ -3,6 +3,7 @@
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
+    'use strict';
     const socketOptions = {};
   <% if (typeof currentUser !== 'undefined') { %>
         socketOptions.query = { username: '<%= currentUser.username %>' };
@@ -22,26 +23,28 @@
         setTimeout(() => location.reload(), 100);
     });
 
-    socket.on('userCount', (count) => {
-        document.querySelector('#userCount').innerText = count;
-    });
+    <% if (currentUser.roles === 'admin') { %>
+        socket.on('userCount', (count) => {
+            document.querySelector('#userCount').innerText = count;
+        });
 
-    socket.on('userList', (users) => {
-    const userList = document.querySelector('#userList');
-    userList.innerHTML = '';
-    
-    const onlineItem = document.createElement('li');
-    onlineItem.innerText = 'Online:';
-    userList.appendChild(onlineItem);
+        socket.on('userList', (users) => {
+            const userList = document.querySelector('#userList');
+            userList.innerHTML = '';
 
-    const hrItem = document.createElement('li');
-    hrItem.innerHTML = '<hr>';
-    userList.appendChild(hrItem);
+            const onlineItem = document.createElement('li');
+            onlineItem.innerText = 'Online:';
+            userList.appendChild(onlineItem);
 
-    users.forEach((user) => {
-        const listItem = document.createElement('li');
-        listItem.innerText = user;
-        userList.appendChild(listItem);
-    });
-});
+            const hrItem = document.createElement('li');
+            hrItem.innerHTML = '<hr>';
+            userList.appendChild(hrItem);
+
+            users.forEach((user) => {
+                const listItem = document.createElement('li');
+                listItem.innerText = user;
+                userList.appendChild(listItem);
+            });
+        });
+    <% } %>
 </script>

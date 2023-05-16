@@ -1,6 +1,7 @@
 <!-- ////// - USERS ONLINE INDICATOR - ////////-->
 
 <script>
+    'use strict';
 
     function toggleUserList() {
         const userList = document.querySelector('#userList');
@@ -34,12 +35,12 @@
 
 <span class="users-container">
     <% if (currentUser.roles==='admin' ) { %>
-    <button id="userCount" onclick="toggleUserList()">0</button>
-    <ul id="userList"></ul>
-    <% } %>
+        <button id="userCount" onclick="toggleUserList()">0</button>
+        <ul id="userList"></ul>
+        <% } %>
 </span>
 
- 
+
 <style>
     #userCount {
         font-family: var(--break-list-item-timer-font-family);
@@ -91,10 +92,10 @@
     #userList:before {
         content: '';
         position: absolute;
-        top: -13px; 
+        top: -13px;
         left: 50%;
         transform: translateX(-50%);
-        border-width: 0 12px 12px; 
+        border-width: 0 12px 12px;
         border-style: solid;
         border-color: transparent transparent var(--navigation-dropdown-background-color);
     }
@@ -115,14 +116,14 @@
         font-weight: bold;
         cursor: default;
     }
-    
+
     #userList hr {
         position: relative;
         left: 9px;
         border: none;
         width: 70px;
         height: 1px;
-        background-color: var(--hr-divider-userslist-color); 
-        margin: 0px; 
+        background-color: var(--hr-divider-userslist-color);
+        margin: 0px;
     }
 </style>

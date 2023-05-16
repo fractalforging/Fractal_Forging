@@ -1,3 +1,5 @@
+'use strict';
+
 import { createLogger, format, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import moment from 'moment-timezone';

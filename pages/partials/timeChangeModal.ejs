@@ -2,12 +2,11 @@
 
 <div id="time-change-modal" class="time-change-modal">
     <div class="time-change-modal-content">
-        <greet class="time-change-title">Change Break Time</greet><span
-            class="time-change-close">&times;</span>
+        <greet class="time-change-title">Change Break Time</greet><span class="time-change-close">&times;</span>
         <form action="/timechange" method="post" id="time-change-form" class="passTimeForm timeFormTop">
             <div class="input-container">
-                <input type="number" id="newtime" name="newtime" autocomplete="off"
-                    class="time-input" maxlength="" value="">
+                <input type="number" id="newtime" name="newtime" autocomplete="off" class="time-input" maxlength=""
+                    value="">
                 <greet class="placeholder1 newtime">&nbsp;New Break Time&nbsp;</greet>
             </div>
             <button type="submit" class="form-button">OK</button>
@@ -17,6 +16,8 @@
 </div>
 
 <script>
+    'use strict';
+
     const changeTime = async (userId, newTime) => {
         try {
             const response = await fetch(`/timechange`, {
@@ -47,7 +48,7 @@
         userIdInput.value = userId;
         form.appendChild(userIdInput);
         close.onclick = () => { modal.style.display = "none"; };
- 
+
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             const newTime = document.getElementById("newtime").value;

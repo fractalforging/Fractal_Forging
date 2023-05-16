@@ -1,3 +1,5 @@
+'use strict';
+
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import MongoStore from 'connect-mongo';

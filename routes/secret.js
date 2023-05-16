@@ -1,3 +1,5 @@
+'use strict';
+
 import express from 'express';
 import { Router } from 'express';
 import { isLoggedIn, isAdmin } from '../middleware/authentication.js';

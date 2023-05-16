@@ -1,3 +1,5 @@
+'use strict';
+
 function updateLocalTimes() {
     const submittedTimes = document.querySelectorAll('.submitted-time');
     const startedTimes = document.querySelectorAll('.started-time');

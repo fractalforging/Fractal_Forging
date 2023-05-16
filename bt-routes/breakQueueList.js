@@ -1,3 +1,5 @@
+'use strict';
+
 import express from "express";
 import BreakTrack from "../models/BreakTrack.js";
 import BreakSlots from "../models/BreakSlots.js";

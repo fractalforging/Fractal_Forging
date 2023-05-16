@@ -1,3 +1,5 @@
+'use strict';
+
 const responseMap = {
   // LOGIN
   "true": { status: 200, message: "Login successful" },

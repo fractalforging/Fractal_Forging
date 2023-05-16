@@ -77,6 +77,8 @@
                                         </div>
                                     </li>
                                     <script>
+                                        'use strict';
+
                                         function toggleExtraInfo(event) {
                                             const listItem = event.target.closest('.break-list-item-admin');
                                             const removeButton = event.target.closest('.remove-admin');
@@ -144,6 +146,8 @@
                                             </div>
                                         </li>
                                         <script>
+                                            'use strict';
+
                                             function toggleExtraInfo(event) {
                                                 const listItem = event.target.closest('.break-list-item-admin');
                                                 const removeButton = event.target.closest('.remove-admin');
@@ -175,6 +179,8 @@
                             <!-- /////////////// - HELPER FUNCTIONS - //////////////// -->
 
                             <script>
+                                'use strict';
+
                                 const updateUserRole = async (userId, newRole) => {
                                     try {
                                         const response = await fetch(`/users/${userId}`, {
@@ -240,6 +246,8 @@
                             <!-- ////////////// - SEARCH FUNCTIONALITY - ////////////////-->
 
                             <script>
+                                'use strict';
+                                
                                 const searchInput = document.getElementById('search-bar');
                                 searchInput.addEventListener('input', () => {
                                     const searchValue = searchInput.value.toLowerCase();

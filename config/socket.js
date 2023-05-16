@@ -1,3 +1,5 @@
+'use strict';
+
 import { Server } from 'socket.io';
 import User from '../models/user.js';
 import path from 'path';
