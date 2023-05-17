@@ -34,8 +34,8 @@ const password = document.querySelector('#password');
 const submitButton = document.querySelector('#submit-button');
 const loader = document.querySelector('#loader');
 
-const [myModal_Neg, myModalText_Neg, myModal_Pos, myModalText_Pos] =
-  ["#myModal-Neg", "#message-neg", "#myModal-Pos", "#message-pos"].map(document.querySelector.bind(document))
+// const [myModal_Neg, myModalText_Neg, myModal_Pos, myModalText_Pos] =
+//   ["#myModal-Neg", "#message-neg", "#myModal-Pos", "#message-pos"].map(document.querySelector.bind(document))
 
 submitForm.addEventListener('submit', function (event) {
   event.preventDefault();
@@ -58,7 +58,6 @@ submitForm.addEventListener('submit', function (event) {
         myModalText_Pos.innerHTML = data.message;
         myModal_Pos.style.display = 'block';
         setTimeout(() => {
-          loader.style.display = 'none';
           window.location.href = data.redirectURL;
         }, 0);
       } else {
