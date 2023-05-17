@@ -7,13 +7,13 @@
     top: 0px;
   }
 
-  .hamburger-menu:hover .dropdown-menu {
+  /* .hamburger-menu:hover .dropdown-menu {
     display: block;
     max-height: 400px;
     opacity: 1;
     overflow: hidden;
     transition: max-height var(--animation-duration-more) ease-in-out, opacity var(--animation-duration-base) ease-in-out;
-  }
+  } */
 
   .hamburger-icon {
     font-size: 24px;
@@ -69,3 +69,31 @@
     <% if (currentUser.roles==='admin' ) { %>
       <% } %>
 </navbar>
+
+<script>
+  var hamburgerIcon = document.querySelector('.hamburger-icon');
+  var dropdownMenu = document.querySelector('.dropdown-menu');
+
+  hamburgerIcon.addEventListener('click', function (event) {
+    event.stopPropagation(); // This prevents the document click listener from firing
+    if (dropdownMenu.style.maxHeight === '400px') {
+      dropdownMenu.style.maxHeight = '0';
+      dropdownMenu.style.opacity = '0';
+    } else {
+      dropdownMenu.style.maxHeight = '400px';
+      dropdownMenu.style.opacity = '1';
+    }
+  });
+
+  // Add a click event listener to the dropdown menu to stop event propagation
+  dropdownMenu.addEventListener('click', function (event) {
+    event.stopPropagation();
+  });
+
+  document.addEventListener('click', function () {
+    dropdownMenu.style.maxHeight = '0';
+    dropdownMenu.style.opacity = '0';
+  });
+</script>
+
+
