@@ -35,7 +35,7 @@ const responseMap = {
   "Something broke" : { status: 401, message: "Something broke!" }
 };
 
-async function myMessages(req, res, next) {
+const myMessages = async (req, res, next) => {
   const sessionKeys = ["loggedIn", "newAccount", "passChange", "roleChange", "message", "slotsAvailable"];
   for (const key of sessionKeys) {
     const sessionValue = req.session[key];

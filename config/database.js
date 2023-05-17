@@ -8,7 +8,7 @@ import firstRun from "../models/firstRun.js";
 import logger from '../routes/logger.js';
 
 const database = {
-  connectMongoDB: async function (dbPath) {
+  connectMongoDB: async (dbPath) => {
     try {
       mongoose.set('strictQuery', false);
       await mongoose.connect(dbPath, {
@@ -21,7 +21,7 @@ const database = {
       logger.error("MongoDB connection error:", err);
     }
   },
-  initialize: function () {
+  initialize: () => {
     passport.use(new LocalStrategy(User.authenticate()));
     passport.serializeUser(User.serializeUser());
     passport.deserializeUser(User.deserializeUser());

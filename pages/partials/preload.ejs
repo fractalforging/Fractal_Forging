@@ -61,7 +61,7 @@
 <script>
     'use strict';
 
-    function loadFonts() {
+    const loadFonts = () => {
         const fetchMPlus1 = fetch('https://fonts.googleapis.com/css2?family=M+PLUS+1&display=swap')
             .then((response) => response.text())
             .then((css) => {
@@ -97,7 +97,7 @@
         ]);
     }
 
-    function delay(ms) {
+    const delay = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 

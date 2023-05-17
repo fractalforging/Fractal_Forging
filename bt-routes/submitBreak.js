@@ -5,9 +5,8 @@ import logger from '../routes/logger.js';
 import kleur from 'kleur';
 import BreakSlots from '../models/BreakSlots.js';
 
-const router = Router();
-
-const submitBreaks = (io, BreakTrack, User) => {
+const submitBreakRoute = (io, BreakTrack, User) => {
+  const router = Router();
   router.post("/", async function (req, res, next) {
     const user = req.user.username;
     const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
@@ -68,6 +67,6 @@ const submitBreaks = (io, BreakTrack, User) => {
   return router;
 }
 
-export default submitBreaks;
+export default submitBreakRoute;
 
 

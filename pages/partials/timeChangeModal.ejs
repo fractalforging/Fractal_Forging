@@ -78,21 +78,23 @@
         );
     });
 
-    <!-- ////////////// - PREVENT PLAHOLDER MOVEMENT WHEN TEXT - ////////////////-->
+    <!-- ////////////// - PREVENT PLACEHOLDER MOVEMENT WHEN TEXT - ////////////////-->
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const inputFields = document.querySelectorAll('.time-input');
-        inputFields.forEach(input => {
-            input.addEventListener('input', handleInput);
-            handleInput.call(input);
-        });
-
-        function handleInput() {
-            if (this.value) {
-                this.parentElement.classList.add('has-text');
+    document.addEventListener('DOMContentLoaded', () => {
+        const handleInput = input => {
+            if (input.value) {
+                input.parentElement.classList.add('has-text');
             } else {
-                this.parentElement.classList.remove('has-text');
+                input.parentElement.classList.remove('has-text');
             }
-        }
+        };
+
+        const inputFields = document.querySelectorAll('.inputfield, .search-bar');
+        inputFields.forEach(input => {
+            input.addEventListener('input', event => handleInput(event.target));
+            handleInput(input);
+        });
     });
+
+
 </script>

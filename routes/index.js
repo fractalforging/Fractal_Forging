@@ -1,23 +1,23 @@
 'use strict';
 
 import express from 'express';
-const router = express.Router();
 import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
 
+const indexRoute = express.Router();
+
 // INDEX > LOGIN
-router.get("/", async function (req, res, next) {
+indexRoute.get("/", (req, res) => {
   return res.render("login");
 });
 
 // LOGIN
-router.get("/login", async function (req, res, next) {
+indexRoute.get("/login", (req, res) => {
   return res.render("login");
 });
 
 // REGISTER FORM
-router.get("/register", isLoggedIn, isAdmin, async function (req, res, next) {
+indexRoute.get("/register", isLoggedIn, isAdmin, (req, res) => {
   return res.render("register", { currentUser: req.user });
 });
 
-export default router;
-
+export default indexRoute;

@@ -54,7 +54,7 @@
     const scrollbarContainer = document.querySelector('.scrollbar-container');
     const scrollbar = document.querySelector('.scrollbar-bt');
 
-    function updateScrollbar() {
+    const updateScrollbar = () => {
         const containerHeight = document.documentElement.scrollHeight;
         const viewportHeight = window.innerHeight;
         const scrollPosition = document.documentElement.scrollTop || document.body.scrollTop;
@@ -66,13 +66,13 @@
         scrollbar.style.top = scrollbarPosition + 'px';
     }
 
-    function onScrollbarMouseDown(e) {
+    const onScrollbarMouseDown = (e) => {
         e.preventDefault();
 
         const startY = e.clientY;
         const startTop = parseInt(scrollbar.style.top);
 
-        function onMouseMove(e) {
+        const onMouseMove = (e) => {
             const deltaY = e.clientY - startY;
             const newTop = startTop + deltaY;
             const containerHeight = document.documentElement.scrollHeight;
@@ -86,7 +86,7 @@
             updateScrollbar();
         }
 
-        function onMouseUp() {
+        const onMouseUp = () => {
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
         }

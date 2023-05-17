@@ -4,7 +4,7 @@ import { Server } from 'socket.io';
 import User from '../models/user.js';
 import path from 'path';
 
-async function emitUserCountAndList(io) {
+const emitUserCountAndList = async (io) => {
   try {
     const oneMinuteAgo = new Date(new Date().getTime() - 60 * 1000);
     const users = await User.find({ isOnline: true, socketId: { $ne: null }, lastHeartbeat: { $gt: oneMinuteAgo } });
@@ -16,7 +16,7 @@ async function emitUserCountAndList(io) {
   }
 }
 
-async function updateUserHeartbeat(socketId) {
+const updateUserHeartbeat = async (socketId) => {
   try {
     const user = await User.findOne({ socketId });
     if (user) {
@@ -79,7 +79,7 @@ const setupSockets = async (server, app) => {
     });
 
   });
-  return io; 
+  return io;
 }
 
 export default setupSockets;

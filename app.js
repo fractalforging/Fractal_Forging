@@ -50,47 +50,46 @@ sessionConfig(app, dbPath, secret);
 //=====================
 // MIDDLEWARE & ROUTES
 
-import { isLoggedIn, isAdmin } from './middleware/authentication.js';
-import indexRoutes from './routes/index.js';
-import loginRoutes from './routes/login.js';
-import logoutRoutes from './routes/logout.js';
-import secretRoutes from './routes/secret.js';
-import registerRoutes from './routes/register.js';
-import changepasswordRoutes from './routes/changepassword.js';
-import usersRoutes from './routes/users.js';
-import deleteRoutes from './routes/delete.js';
+import { isLoggedIn } from './middleware/authentication.js';
+import indexRoute from './routes/index.js';
+import loginRoute from './routes/login.js';
+import logoutRoute from './routes/logout.js';
+import secretRoute from './routes/secret.js';
+import registerRoute from './routes/register.js';
+import changepasswordRoute from './routes/changepassword.js';
+import usersRoute from './routes/users.js';
+import deleteRoute from './routes/delete.js';
 import resetPasswordRoute from './routes/resetPassword.js';
-import changeTimeRouter from './routes/changeTime.js';
-import settingsRoutes from './routes/settings.js';
-import myMessages from './routes/apiMessages.js';
-import healthCheck from './routes/healthCheck.js';
+import changeTimeRoute from './routes/changeTime.js';
+import settingsRoute from './routes/settings.js';
+import myMessagesRoute from './routes/apiMessages.js';
+import healthCheckRoute from './routes/healthCheck.js';
 
 // BT ROUTES
-import submitBreaks from './bt-routes/submitBreak.js';
-import breakSlotsRoutes from './bt-routes/break-slots.js';
-import startBreak from './bt-routes/startBreak.js';
-import removeBreak from './bt-routes/removeBreak.js';
-import endBreak from './bt-routes/endBreak.js';
-import resetBreakTime from './bt-routes/resetBreakTime.js';
+import submitBreakRoute from './bt-routes/submitBreak.js';
+import breakSlotsRoute from './bt-routes/break-slots.js';
+import startBreakRoute from './bt-routes/startBreak.js';
+import removeBreakRoute from './bt-routes/removeBreak.js';
+import endBreakRoute from './bt-routes/endBreak.js';
+import resetBreakTimeRoute from './bt-routes/resetBreakTime.js';
 
 //=====================
 // APPLY ROUTES
 
-app.use("/", indexRoutes);
-app.use("/login", loginRoutes);
-app.use("/logout", logoutRoutes);
-app.use("/secret", secretRoutes);
-app.use("/secret_admin", secretRoutes);
-app.use("/register", registerRoutes);
-app.use("/account", changepasswordRoutes);
-app.use("/changepassword", changepasswordRoutes);
-app.use("/users", usersRoutes);
-app.use('/delete', deleteRoutes);
+app.use("/", indexRoute);
+app.use("/login", loginRoute);
+app.use("/logout", logoutRoute);
+app.use("/secret", secretRoute);
+app.use("/secret_admin", secretRoute);
+app.use("/register", registerRoute);
+app.use("/changepassword", changepasswordRoute);
+app.use("/users", usersRoute);
+app.use('/delete', deleteRoute);
 app.use('/resetpassword', resetPasswordRoute);
-app.use('/timechange', changeTimeRouter);
-app.use('/settings', settingsRoutes);
-app.get('/api/messaging', myMessages);
-app.get('/health', healthCheck);
+app.use('/timechange', changeTimeRoute);
+app.use('/settings', settingsRoute);
+app.get('/api/messaging', myMessagesRoute);
+app.get('/health', healthCheckRoute);
 
 //====================================
 // APPLY BT ROUTES + SOCKET.IO CONFIG.
@@ -99,18 +98,18 @@ import setupSockets from './config/socket.js';
 let io;
 (async () => {
   io = await setupSockets(server, app);
-  app.use("/break-slots", await breakSlotsRoutes(io, BreakTrack, User));
-  app.use('/breaks/start', await isLoggedIn, await startBreak(io, BreakTrack, User));
-  app.use('/submit', await submitBreaks(io, BreakTrack, User));
-  app.use('/remove', await removeBreak(io, BreakTrack, User));
-  app.use('/breaks', await endBreak(BreakTrack));
-  app.use('/resetbreaktime', await resetBreakTime(io, User, location));
+  app.use("/break-slots", breakSlotsRoute(io, BreakTrack, User));
+  app.use('/submit', submitBreakRoute(io, BreakTrack, User));
+  app.use('/breaks/start', isLoggedIn, startBreakRoute(io, BreakTrack, User));
+  app.use('/remove', removeBreakRoute(io, BreakTrack, User));
+  app.use('/breaks', endBreakRoute(BreakTrack));
+  app.use('/resetbreaktime', resetBreakTimeRoute(io, User, location));
 })();
 
 //=====================
 // CLEAR SESSION VARIABLES FOR MODAL MESSAGING
 
-app.post('/clear-message', async function (req, res, next) {
+app.post('/clear-message', async (req, res, next) => {
   delete req.session.message;
   return res.sendStatus(204);
 });
@@ -118,7 +117,7 @@ app.post('/clear-message', async function (req, res, next) {
 //=====================
 // ERROR HANDLING
 
-app.use(async function (err, req, res, next) {
+app.use(async (err, req, res, next) => {
   logger.error(err.stack);
   req.session.message = "Something broke";
   return res.redirect("/");

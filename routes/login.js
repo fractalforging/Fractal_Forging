@@ -5,9 +5,9 @@ import kleur from 'kleur';
 import passport from 'passport';
 import logger from './logger.js';
 
-const router = new Router();
+const loginRoute = new Router();
 
-router.post('/', async function (req, res, next) {
+loginRoute.post('/', async function (req, res, next) {
   passport.authenticate('local', async function (err, user, info) {
     req.session.username = req.body.username;
     //req.session.message = "true";
@@ -40,4 +40,4 @@ router.post('/', async function (req, res, next) {
   })(req, res, next);
 });
 
-export default router;
+export default loginRoute;

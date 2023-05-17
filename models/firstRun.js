@@ -5,7 +5,7 @@ import BreakSlots from './BreakSlots.js';
 import logger from '../routes/logger.js';
 import kleur from 'kleur';
 
-async function createAdminUser() {
+const createAdminUser = async () => {
     try {
         const existingAdmin = await User.findOne({ roles: "admin" });
         if (!existingAdmin) {
@@ -19,7 +19,7 @@ async function createAdminUser() {
         logger.error("Error creating admin user:", error);
     }
 }
-async function createDefaultBreakSlots() {
+const createDefaultBreakSlots = async () => {
     try {
         const existingBreakSlots = await BreakSlots.findOne();
         if (!existingBreakSlots) {
@@ -32,7 +32,7 @@ async function createDefaultBreakSlots() {
         logger.error("Error creating default BreakSlots document:", error);
     }
 }
-async function firstRun() {
+const firstRun = async () => {
     await createAdminUser();
     await createDefaultBreakSlots();
 }

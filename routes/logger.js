@@ -1,28 +1,28 @@
 'use strict';
 
 import { createLogger, format, transports } from 'winston';
-import DailyRotateFile from 'winston-daily-rotate-file';
 import moment from 'moment-timezone';
 import kleur from 'kleur';
 import debug from 'debug';
+import DailyRotateFile from 'winston-daily-rotate-file';
 
 // ENVIRONMENT VARIABLES
 import dotenv from "dotenv";
 dotenv.config({ path: "variables.env" });
-const location = process.env.LOCATION
+const location = process.env.LOCATION;
 
 const timestampInTimeZone = () => {
   return kleur.cyan(moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss'));
 };
 
-const dailyRotateFileTransport = new transports.DailyRotateFile({
+const dailyRotateFileTransport = new DailyRotateFile({
   filename: '_logs/' + moment().format('MM-YYYY') + '/%DATE%.log',
   datePattern: 'DD-MM-YYYY',
   maxSize: '100m',
   maxFiles: '360d',
 });
 
-const logger = createLogger({
+const loggerRoute = createLogger({
   level: 'debug',
   format: format.combine(
     format.timestamp({ format: timestampInTimeZone }),
@@ -52,4 +52,4 @@ const logger = createLogger({
 
 debug('Debug log message');
 
-export default logger;
+export default loggerRoute;

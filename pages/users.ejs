@@ -76,29 +76,6 @@
                                             </select>
                                         </div>
                                     </li>
-                                    <script>
-                                        'use strict';
-
-                                        function toggleExtraInfo(event) {
-                                            const listItem = event.target.closest('.break-list-item-admin');
-                                            const removeButton = event.target.closest('.remove-admin');
-                                            if (!removeButton) {
-                                                try {
-                                                    const arrow = listItem.querySelector('.arrow');
-                                                    const extraInfo = listItem.querySelector('.extra-info');
-                                                    arrow.classList.toggle('open');
-                                                    extraInfo.style.display = extraInfo.style.display === 'none' ? 'block' : 'none';
-                                                    listItem.classList.toggle('expanded_accounts');
-                                                    const arrowIcon = arrow.querySelector('.material-icons-outlined');
-                                                    if (arrow.classList.contains('open')) {
-                                                        arrowIcon.style.transform = 'rotate(90deg)';
-                                                    } else {
-                                                        arrowIcon.style.transform = 'rotate(0deg)';
-                                                    }
-                                                } catch (err) { /*console.log(err)*/ }
-                                            }
-                                        }
-                                    </script>
                                     <% }); %>
                                         <!-- </div> -->
                             </ul>
@@ -145,29 +122,7 @@
                                                 </select>
                                             </div>
                                         </li>
-                                        <script>
-                                            'use strict';
 
-                                            function toggleExtraInfo(event) {
-                                                const listItem = event.target.closest('.break-list-item-admin');
-                                                const removeButton = event.target.closest('.remove-admin');
-                                                if (!removeButton) {
-                                                    try {
-                                                        const arrow = listItem.querySelector('.arrow');
-                                                        const extraInfo = listItem.querySelector('.extra-info');
-                                                        arrow.classList.toggle('open');
-                                                        extraInfo.style.display = extraInfo.style.display === 'none' ? 'block' : 'none';
-                                                        listItem.classList.toggle('expanded_accounts');
-                                                        const arrowIcon = arrow.querySelector('.material-icons-outlined');
-                                                        if (arrow.classList.contains('open')) {
-                                                            arrowIcon.style.transform = 'rotate(90deg)';
-                                                        } else {
-                                                            arrowIcon.style.transform = 'rotate(0deg)';
-                                                        }
-                                                    } catch (err) { /*console.log(err)*/ }
-                                                }
-                                            }
-                                        </script>
                                         <% } %>
                                             <% }); %>
                                                 <!-- </div> -->
@@ -241,13 +196,37 @@
                                 });
                             </script>
 
+                            <!-- ////////////// - TOGGLE EXTRA INFO - ////////////////-->
 
+                            <script>
+                                'use strict';
+
+                                const toggleExtraInfo = (event) => {
+                                    const listItem = event.target.closest('.break-list-item-admin');
+                                    const removeButton = event.target.closest('.remove-admin');
+                                    if (!removeButton) {
+                                        try {
+                                            const arrow = listItem.querySelector('.arrow');
+                                            const extraInfo = listItem.querySelector('.extra-info');
+                                            arrow.classList.toggle('open');
+                                            extraInfo.style.display = extraInfo.style.display === 'none' ? 'block' : 'none';
+                                            listItem.classList.toggle('expanded_accounts');
+                                            const arrowIcon = arrow.querySelector('.material-icons-outlined');
+                                            if (arrow.classList.contains('open')) {
+                                                arrowIcon.style.transform = 'rotate(90deg)';
+                                            } else {
+                                                arrowIcon.style.transform = 'rotate(0deg)';
+                                            }
+                                        } catch (err) { /*console.log(err)*/ }
+                                    }
+                                }
+                            </script>
 
                             <!-- ////////////// - SEARCH FUNCTIONALITY - ////////////////-->
 
                             <script>
                                 'use strict';
-                                
+
                                 const searchInput = document.getElementById('search-bar');
                                 searchInput.addEventListener('input', () => {
                                     const searchValue = searchInput.value.toLowerCase();
@@ -256,7 +235,7 @@
                                     filterUsers(adminUsers, searchValue);
                                     filterUsers(normalUsers, searchValue);
                                 });
-                                function filterUsers(users, searchValue) {
+                                const filterUsers = (users, searchValue) => {
                                     users.forEach(user => {
                                         const username = user.querySelector('username').textContent.toLowerCase();
                                         if (username.includes(searchValue)) {

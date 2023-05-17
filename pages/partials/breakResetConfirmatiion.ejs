@@ -17,27 +17,27 @@
 <script>
     'use strict';
 
-    window.addEventListener('DOMContentLoaded', function () {
+    window.addEventListener('DOMContentLoaded', () => {
         const modal = document.getElementById("confirmation-modal");
         const close = modal.querySelector(".confirmation-modal-close");
         close.onclick = () => { modal.style.display = "none"; };
         document.getElementById('reset-break-time').addEventListener('click', showConfirmationModal);
         document.getElementById('modal-ok').addEventListener('click', handleModalOk);
         const socket = io();
-        socket.on('reload', function () {
+        socket.on('reload', () => {
             window.location.reload();
         });
     });
-    function showConfirmationModal() {
+    const showConfirmationModal = () => {
         document.getElementById('confirmation-modal').style.display = 'block';
     }
 
-    function handleModalOk() {
+    const handleModalOk = () => {
         document.getElementById('confirmation-modal').style.display = 'none';
         resetBreakTimeForAllUsers();
     }
 
-    async function resetBreakTimeForAllUsers() {
+    const resetBreakTimeForAllUsers = async () => {
         try {
             const response = await fetch('/resetbreaktime', {
                 method: 'POST',

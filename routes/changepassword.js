@@ -4,16 +4,17 @@ import kleur from 'kleur';
 import { Router } from 'express';
 import User from '../models/user.js';
 import logger from '../routes/logger.js';
-import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+import { isLoggedIn } from '../middleware/authentication.js';
 
-const router = Router();
+const changepasswordRoute = Router();
 
 //HANDLING PASSWORD CHANGE
-router.post("/", isLoggedIn, function (req, res, next) {
-  User.findOne({ username: req.user.username }, (err, user) => {
-    if (err || !user) {
+changepasswordRoute.post("/", isLoggedIn, async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.user.username });
+    if (!user) {
       req.session.message = "Error";
-      logger.error(err || "User not found");
+      logger.error("User not found");
       return res.render("account", { error: "Error, please try again", currentUser: req.user });
     }
 
@@ -64,12 +65,16 @@ router.post("/", isLoggedIn, function (req, res, next) {
         });
       });
     });
-  });
+  } catch (err) {
+    req.session.message = "Error";
+    logger.error(err);
+    return res.render("account", { error: "Error, please try again", currentUser: req.user });
+  }
 });
 
 //HANDLING ACCOUNT
-router.get("/", isLoggedIn, function (req, res, next) {
+changepasswordRoute.get("/", isLoggedIn, (req, res) => {
   return res.render("account", { error: 'no error', currentUser: req.user });
 });
 
-export default router;
+export default changepasswordRoute;

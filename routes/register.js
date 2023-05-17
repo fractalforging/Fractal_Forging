@@ -7,13 +7,13 @@ import BreakSlots from '../models/BreakSlots.js';
 import logger from '../routes/logger.js';
 import kleur from 'kleur';
 
-const router = Router();
+const registerRoute = Router();
 
-router.get('/', function(req, res, next) {
+registerRoute.get('/', function(req, res, next) {
   res.render('register', { currentUser: req.user });
 });
 
-router.post('/', isLoggedIn, isAdmin, async function(req, res, next) {
+registerRoute.post('/', isLoggedIn, isAdmin, async function(req, res, next) {
   try {
     const breakSlots = await BreakSlots.findOne({});
     if (req.body.password !== req.body.confirmpassword) {
@@ -42,4 +42,4 @@ router.post('/', isLoggedIn, isAdmin, async function(req, res, next) {
   }
 });
 
-export default router;
+export default registerRoute;

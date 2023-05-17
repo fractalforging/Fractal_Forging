@@ -19,6 +19,8 @@ document.querySelectorAll('.close-neg, .close-pos').forEach(btn => {
 ///////// - MAIN FUNCTION - /////////
 
 const makeApiCall = async (apiEndpoint) => {
+
+    try {
         const response = await fetch(apiEndpoint);
         const { message } = await response.json();
         if (response.status === 200) {
@@ -31,6 +33,9 @@ const makeApiCall = async (apiEndpoint) => {
             myModal_Neg.style.display = 'block';
         }
         fetch('/clear-message', { method: 'POST' });
+    } catch (error) {
+        //console.error("An error occurred:", error);
+    }
 }
 
 ///////// - GET APIS - /////////

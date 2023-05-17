@@ -5,10 +5,10 @@ import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
 import User from '../models/user.js';
 import { getBreakTrackerData, getBreakSlotsData } from './helperFunctions.js';
 
-const router = Router();
+const secretRoute = Router();
 
 // USER LANDING PAGE
-router.get("/", isLoggedIn, async function (req, res, next) {
+secretRoute.get("/", isLoggedIn, async function (req, res, next) {
   const breakTracker = await getBreakTrackerData();
   const breakSlots = await getBreakSlotsData();
   const user = await User.findOne({ username: req.user.username});
@@ -21,7 +21,7 @@ router.get("/", isLoggedIn, async function (req, res, next) {
 });
 
 // ADMIN LANDING PAGE
-router.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
+secretRoute.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
   const breakSlots = await getBreakSlotsData();
   const breakTracker = await getBreakTrackerData();
   if (req.user.roles === "admin") {
@@ -29,4 +29,4 @@ router.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next)
   } 
 });
 
-export default router;
+export default secretRoute;

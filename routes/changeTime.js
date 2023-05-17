@@ -6,9 +6,9 @@ import logger from './logger.js';
 import kleur from 'kleur';
 import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
 
-const router = Router();
+const changeTimeRoute = Router();
 
-router.post("/", isLoggedIn, isAdmin, async (req, res) => {
+changeTimeRoute.post("/", isLoggedIn, isAdmin, async (req, res) => {
   try {
     const userId = req.body.userId;
     const newTime = parseInt(req.body.newTime);
@@ -31,8 +31,4 @@ router.post("/", isLoggedIn, isAdmin, async (req, res) => {
   }
 });
 
-export default router;
-
-
-
-
+export default changeTimeRoute;

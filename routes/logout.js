@@ -5,9 +5,9 @@ import kleur from 'kleur';
 import logger from '../routes/logger.js';
 import { isLoggedIn } from '../middleware/authentication.js';
 
-const router = express.Router();
+const logoutRoute = express.Router();
 
-router.get("/", isLoggedIn, function (req, res, next) {
+logoutRoute.get("/", isLoggedIn, function (req, res, next) {
   const username = req.user.username;
   req.logout(async function (err) {
     if (err) {
@@ -29,4 +29,4 @@ router.get("/", isLoggedIn, function (req, res, next) {
 });
 
 
-export default router;
+export default logoutRoute;

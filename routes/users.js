@@ -6,16 +6,16 @@ import User from "../models/user.js";
 import logger from './logger.js';
 import kleur from 'kleur';
 
-const router = Router();
+const usersRoute = Router();
 
-router.get("/", isAdmin, async (req, res, next) => {
+usersRoute.get("/", isAdmin, async (req, res, next) => {
   const users = await User.find({});
   const adminUsers = users.filter(user => user.roles === "admin");
   const normalUsers = users.filter(user => user.roles === "user");
   return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
 });
 
-router.put("/:userId", isAdmin, async (req, res, next) => {
+usersRoute.put("/:userId", isAdmin, async (req, res, next) => {
   let userToUpdate;
   let actionUser;
   try {
@@ -39,4 +39,4 @@ router.put("/:userId", isAdmin, async (req, res, next) => {
   }
 });
 
-export default router;
+export default usersRoute;

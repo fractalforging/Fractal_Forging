@@ -6,9 +6,9 @@ import { isAdmin } from '../middleware/authentication.js';
 import logger from './logger.js';
 import kleur from 'kleur';
 
-const router = Router();
+const deleteRoute = Router();
 
-router.delete('/:id', isAdmin, async (req, res, next) => {
+deleteRoute.delete('/:id', isAdmin, async (req, res, next) => {
   console.log("Delete route triggered");
   let userId;
   let userToDelete;
@@ -31,4 +31,4 @@ router.delete('/:id', isAdmin, async (req, res, next) => {
   }
 });
 
-export default router;
+export default deleteRoute;

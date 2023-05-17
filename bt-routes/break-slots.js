@@ -7,8 +7,6 @@ import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
 import BreakSlots from "../models/BreakSlots.js";
 import BreakTrack from '../models/BreakTrack.js';
 
-const router = Router();
-
 const moveQueuedBreaksToNormalList = async (availableSlots) => {
   let activeBreaks;
   try {
@@ -29,6 +27,7 @@ const moveQueuedBreaksToNormalList = async (availableSlots) => {
 };
 
 const breakSlotsRoute = (io) => {
+  const router = Router();
   router.post("/", isAdmin, async function (req, res, next) {
     try {
       const newSlotsValue = req.body.slotsavailable;
