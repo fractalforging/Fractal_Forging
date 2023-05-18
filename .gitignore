@@ -4,6 +4,7 @@ yarn-error.log
 .codesandbox
 .DS_Store
 .gitpod.yml
+.yarn
 node_modules
 myssh
 yarn-error-G02PLXN05925.log
