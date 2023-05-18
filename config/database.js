@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import passport from "passport";
 import LocalStrategy from "passport-local";
 import User from '../models/user.js';
-import firstRun from "../models/firstRun.js";
+import firstRun from "./firstRun.js";
 import logger from '../routes/logger.js';
 
 const database = {

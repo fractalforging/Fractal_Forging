@@ -1,7 +1,7 @@
 'use strict';
 
-import User from './user.js';
-import BreakSlots from './BreakSlots.js';
+import User from '../models/user.js';
+import BreakSlots from '../models/BreakSlots.js';
 import logger from '../routes/logger.js';
 import kleur from 'kleur';
 

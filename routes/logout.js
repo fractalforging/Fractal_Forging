@@ -1,9 +1,9 @@
 'use strict';
 
 import express from 'express';
-import kleur from 'kleur';
-import logger from '../routes/logger.js';
 import { isLoggedIn } from '../middleware/authentication.js';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
 
 const logoutRoute = express.Router();
 
