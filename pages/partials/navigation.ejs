@@ -1,19 +1,23 @@
 <!-- ////////////////// - NAV - ////////////////// -->
 <style>
+  navbar {
+    position: relative;
+    left: -68px;
+    font-weight: 450;
+    font-size: 14px;
+  }
+
+  .nav-breaks {
+    position: relative;
+    left: 40px;
+  }
+
   .hamburger-menu {
     position: relative;
     display: inline-block;
     margin-right: 25px;
     top: 0px;
   }
-
-  /* .hamburger-menu:hover .dropdown-menu {
-    display: block;
-    max-height: 400px;
-    opacity: 1;
-    overflow: hidden;
-    transition: max-height var(--animation-duration-more) ease-in-out, opacity var(--animation-duration-base) ease-in-out;
-  } */
 
   .hamburger-icon {
     font-size: 24px;
@@ -60,12 +64,13 @@
         <li><a href="/users">Accounts</a></li>
         <% } %>
           <li><a href="/settings">Settings</a></li>
+          <li><a href="/logout">Logout</a></li>
     </div>
   </div>
-  <li><a href="/secret">Breaks</a></li>
-  <section class="vertical-line"></section>
-  <li><a href="/logout">Logout</a></li>
-    <%- include('usersIndicator.ejs') %>
+  <li class="nav-breaks"><a href="/secret">Breaks</a></li>
+  <!-- <section class="vertical-line"></section>
+  <li><a href="/logout">Logout</a></li> -->
+  <%- include('usersIndicator.ejs') %>
     <% if (currentUser.roles==='admin' ) { %>
       <% } %>
 </navbar>
@@ -95,5 +100,3 @@
     dropdownMenu.style.opacity = '0';
   });
 </script>
-
-

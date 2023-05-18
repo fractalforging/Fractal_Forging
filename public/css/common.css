@@ -194,13 +194,6 @@ option {
   border-radius: 5px;
 }
 
-navbar {
-  position: relative;
-  left: -25px;
-  font-weight: 450;
-  font-size: 14px;
-}
-
 pagetitle {
   font-size: 24px;
   font-weight: 400;
