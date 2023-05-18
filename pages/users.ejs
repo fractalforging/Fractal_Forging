@@ -27,7 +27,7 @@
                         </div>
                         <br>
 
-                        <!-- ////////////// - USERS - //////////////// -->
+                        <!-- ////////////// - AGENTS - //////////////// -->
 
                         <%- include('partials/breakResetConfirmatiion.ejs') %>
                             <br>
@@ -64,6 +64,8 @@
                                                 data-user-id="<%= user._id %>">Time</button>
                                             <button class="reset-password-button"
                                                 data-user-id="<%= user._id %>">Password</button>
+                                            <button class="name-change-button"
+                                                data-user-id="<%= user._id %>">Name</button>
                                             <select class="item-button">
                                                 <% if (user.roles==='admin' ) { %>
                                                     <option value="admin" selected>Admin</option>
@@ -109,6 +111,8 @@
                                                     data-user-id="<%= user._id %>">Time</button>
                                                 <button class="reset-password-button"
                                                     data-user-id="<%= user._id %>">Password</button>
+                                                <button class="name-change-button"
+                                                    data-user-id="<%= user._id %>">Name</button>
                                                 <select class="item-button">
                                                     <% if (user.roles==='admin' ) { %>
                                                         <option value="admin" selected>Admin</option>
@@ -247,16 +251,20 @@
                                 }
                             </script>
 
-                            <!-- ////////////// - PASSWORD RESET MODAL - ////////////////-->
+                            <!-- ////////////// - TIME CHANGE MODAL - ////////////////-->
 
-                            <%- include('partials/passResetModal.ejs') %>
+                            <%- include('partials/timeChangeModal.ejs') %>
 
-                                <!-- ////////////// - TIME CHANGE MODAL - ////////////////-->
+                                <!-- ////////////// - PASSWORD RESET MODAL - ////////////////-->
 
-                                <%- include('partials/timeChangeModal.ejs') %>
+                                <%- include('partials/passResetModal.ejs') %>
 
-                                    <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+                                    <!-- ////////////// - NAME CHANGE MODAL - ////////////////-->
 
-                                    <%- include('partials/bottomjs.ejs') %>
+                                    <%- include('partials/nameChangeModal.ejs') %>
+
+                                        <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+
+                                        <%- include('partials/bottomjs.ejs') %>
 
 </body>

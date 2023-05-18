@@ -37,20 +37,22 @@ const resetBreakTime = (io, User, location) => {
     lastResetTimestampObj.timestamp = now;
     await lastResetTimestampObj.save();
     logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
-    io.emit('reload');
+    setTimeout(() => {
+      io.emit('reload');
+    }, 100);
   }
 
   (async () => {
     const millisecondsUntilReset = await getMillisecondsUntilReset();
     setTimeout(() => {
       resetBreakTimes();
-      setInterval(() => resetBreakTimes(), 24 * 60 * 60 * 1000); 
+      setInterval(() => resetBreakTimes(), 24 * 60 * 60 * 1000);
     }, millisecondsUntilReset);
   })();
 
   router.post("/", async (req, res, next) => {
-    await resetBreakTimes();
     req.session.message = "Breaks reset";
+    await resetBreakTimes();
     res.sendStatus(200);
   });
 

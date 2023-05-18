@@ -20,6 +20,8 @@ const responseMap = {
   // ACCOUNT MANAGEMENT
   "Deleted": { status: 200, message: "Account deleted" },
   "Role changed": { status: 200, message: "Role was changed" },
+  "Time changed": { status: 200, message: "Total break time changed" },
+  "Name changed": { status: 200, message: "Username changed" },
   // BREAKS
   "Only 1 break at a time": { status: 401, message: "Only 1 break at a time" },
   "Break time over": { status: 401, message: "No minutes available" },

@@ -383,6 +383,7 @@ slots {
   border: 1px solid var(--input-box-outline-color);
 }
 
+.name-input:focus~.placeholder1,
 .time-input:focus~.placeholder1,
 .reset-input:focus~.placeholder1,
 .inputfield:focus~.placeholder1 {

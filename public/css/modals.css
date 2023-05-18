@@ -117,6 +117,7 @@
 
 /* ////////////// - PASSWORD RESET+TIME CHANGE MODALs - ////////////// */
 
+.nameForm,
 .confirm-modal-form,
 .passTimeForm {
   width: 230px;
@@ -133,7 +134,7 @@
   transition: all var(--animation-duration-more) ease-in-out;
 }
 
-.confirm-modal-form-top{
+.confirm-modal-form-top {
   position: relative;
   margin-top: 210px;
 }
@@ -143,18 +144,19 @@
   margin-top: 25px;
 }
 
+.nameFormTop,
 .timeFormTop {
   position: relative;
   margin-top: 210px;
 }
 
+.name-change-modal,
 .confirmation-modal,
 .time-change-modal,
 .reset-password-modal {
   display: none;
   position: fixed;
   z-index: 1000;
-  left: -8px;
   top: -10px;
   width: 100%;
   height: 150%;
@@ -162,6 +164,20 @@
   background-color: #00000066;
 }
 
+/*/// - CHANGE LEFT FOR CENTERED - ///*/
+.name-change-modal,
+.confirmation-modal,
+.time-change-modal {
+  left: 0px;
+}
+
+.reset-password-modal {
+  left: -8px;
+}
+
+/* //// */
+
+.name-change-modal-content,
 .confirmation-modal-content,
 .time-change-modal-content,
 .reset-password-modal-content {
@@ -171,8 +187,11 @@
   width: 100%;
   height: 100%;
   border-radius: 4px;
+  opacity: 0;
+  animation: fadeInReset 0.2s ease-in-out forwards;
 }
 
+.name-change-close,
 .confirmation-modal-close,
 .time-change-close,
 .reset-password-close {
@@ -186,13 +205,20 @@
   transition: all 0.3s ease-in-out;
 }
 
+.name-change-close:hover,
+.name-change-close:focus,
+.confirmation-modal-close:hover,
+.confirmation-modal-close:focus,
+.time-change-close:hover,
+.time-change-close:focus,
 .reset-password-close:hover,
 .reset-password-close:focus {
   color: #ffffffad;
   text-decoration: none;
   cursor: pointer;
 }
- 
+
+#name-change-form input[type="password"],
 #time-change-form input[type="password"],
 #reset-password-form input[type="password"] {
   width: 100%;
@@ -203,6 +229,7 @@
   border-radius: 4px;
 }
 
+#name-change-form button[type="submit"],
 #time-change-form button[type="submit"],
 #reset-password-form button[type="submit"] {
   width: 100%;
@@ -215,6 +242,7 @@
   cursor: pointer;
 }
 
+.name-change-title,
 .confirmation-modal-title,
 .time-change-title,
 .reset-pass-title,
@@ -225,6 +253,7 @@
   left: 7px;
 }
 
+#name-error-message,
 #time-error-message,
 #error-message {
   font-size: 14px;
@@ -239,12 +268,5 @@
 
   100% {
     opacity: 1;
-  } 
-}
-
-.confirmation-modal-content,
-.time-change-modal-content,
-.reset-password-modal-content {
-  opacity: 0;
-  animation: fadeInReset 0.2s ease-in-out forwards;
+  }
 }

@@ -78,24 +78,5 @@
         );
     });
 
-    <!-- ////////////// - PREVENT PLACEHOLDER MOVEMENT WHEN TEXT - ////////////////-->
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const handleInput = input => {
-            if (input.value) {
-                input.parentElement.classList.add('has-text');
-            } else {
-                input.parentElement.classList.remove('has-text');
-            }
-        };
-
-        const inputFields = document.querySelectorAll('.time-input');
-        inputFields.forEach(input => {
-            input.addEventListener('input', event => handleInput(event.target));
-            handleInput(input);
-        });
-    });
-
-
 </script>
 

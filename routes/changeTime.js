@@ -17,7 +17,7 @@ changeTimeRoute.post("/", isLoggedIn, isAdmin, async (req, res) => {
       logger.error("Invalid break time value");
       return res.status(400).json({ error: "Invalid break time value" });
     }
-
+    req.session.message = "Time changed";
     const user = await User.findById(userId);
     user.remainingBreakTime = newTime * 60;
 

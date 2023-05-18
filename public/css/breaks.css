@@ -242,6 +242,7 @@ nonstart {
   }
 }
 
+.name-change-button,
 .reset-break-time-button,
 .time-change-button,
 .reset-password-button,
@@ -265,6 +266,7 @@ nonstart {
   transition: all var(--animation-duration-short) ease-in-out;
 }
 
+.name-change-button.
 .reset-break-time-button,
 .time-change-button,
 .reset-password-button {
@@ -322,6 +324,7 @@ filer {
   color: var(--break-list-item-filler-color);
 }
 
+.name-change-button:hover,
 .reset-break-time-button:hover,
 .time-change-button:hover,
 .reset-password-button:hover,
