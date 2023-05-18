@@ -1,6 +1,4 @@
 variables.env
-mongodb.env
-db.env
 README.md
 yarn-error.log
 .codesandbox
