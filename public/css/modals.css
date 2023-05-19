@@ -1,3 +1,5 @@
+/*///////// - NEG and POS MODAL MESSAGING - //////////*/
+
 .modal {
   display: none;
   position: fixed;
@@ -79,7 +81,6 @@
 .close-pos {
   right: -10px;
   transform: scale(0.8);
-  /* font-size: 20px; */
 }
 
 .close-neg:hover,
@@ -115,14 +116,46 @@
   animation: fadeIn 0.3s ease-in-out forwards;
 }
 
-/* ////////////// - PASSWORD RESET+TIME CHANGE MODALs - ////////////// */
+/* ////////////// - PASS, TIME, NAME, CONFIRM CHANGE MODALs - ////////////// */
 
-.time-change-form,
-.name-change-form,
+.name-input,
+.time-input,
+.reset-input {
+  transition: all var(--animation-duration-min) ease-in-out;
+}
+
+.name-input:focus,
+.time-input:focus {
+  outline: 0;
+  font-size: 14px;
+  -webkit-box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
+  box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
+  border: 1px solid var(--input-box-outline-color);
+}
+
+.reset-input:focus {
+  outline: 0;
+  border: 1px solid var(--input-box-outline-color);
+}
+
+.name-input:focus~.placeholder1,
+.time-input:focus~.placeholder1,
+.reset-input:focus~.placeholder1 {
+  background-color: var(--input-box-placeholder-background-color);
+  width: fit-content;
+  height: fit-content;
+  color: var(--input-box-placeholder-focused-color);
+  top: -63px;
+  right: -8px;
+}
+
 .confirm-modal-form,
-.reset-password-form {
+.time-change-form,
+.reset-password-form,
+.name-change-form {
   width: 230px;
   margin: 0 auto;
+  margin-top: 210px;
   background: linear-gradient(var(--break-list-item-background-color), var(--break-list-item-background-color)) padding-box,
     linear-gradient(to bottom, var(--credentials-box-background-color-1), var(--credentials-box-background-color-2)) border-box;
   border: 1px solid transparent;
@@ -136,26 +169,11 @@
   transition: all var(--animation-duration-more) ease-in-out;
 }
 
-.confirm-modal-form {
-  position: relative;
-  margin-top: 210px;
-}
-
-.reset-password-form {
-  position: relative;
-  margin-top: 25px;
-}
-
-.name-change-form,
-.time-change-form {
-  position: relative;
-  margin-top: 210px;
-}
-
-.name-change-modal,
 .confirmation-modal,
 .time-change-modal,
-.reset-password-modal {
+.reset-password-modal,
+.name-change-modal {
+  left: 0px;
   display: none;
   position: fixed;
   z-index: 1000;
@@ -166,23 +184,10 @@
   background-color: #00000066;
 }
 
-/*/// - CHANGE LEFT FOR CENTERED - ///*/
-.name-change-modal,
-.confirmation-modal,
-.time-change-modal {
-  left: 0px;
-}
-
-.reset-password-modal {
-  left: -8px;
-}
-
-/* //// */
-
-.name-change-modal-content,
 .confirmation-modal-content,
 .time-change-modal-content,
-.reset-password-modal-content {
+.reset-password-modal-content,
+.name-change-modal-content {
   background-color: #01060ec9;
   padding: 0px;
   border: 1px solid #00000000;
@@ -193,10 +198,10 @@
   animation: fadeInReset 0.2s ease-in-out forwards;
 }
 
-.name-change-close,
 .confirmation-modal-close,
 .time-change-close,
-.reset-password-close {
+.reset-password-close,
+.name-change-close {
   position: relative;
   left: 20px;
   top: 185px;
@@ -207,12 +212,12 @@
   transition: all 0.3s ease-in-out;
 }
 
-.name-change-close:hover,
-.name-change-close:focus,
 .confirmation-modal-close:hover,
 .confirmation-modal-close:focus,
 .time-change-close:hover,
 .time-change-close:focus,
+.name-change-close:hover,
+.name-change-close:focus,
 .reset-password-close:hover,
 .reset-password-close:focus {
   color: #ffffffad;
@@ -230,11 +235,10 @@
   border: 1px solid #00000000;
 }
 
-.name-change-title,
 .confirmation-modal-title,
+.name-change-title,
 .time-change-title,
-.reset-pass-title,
-#reset-password-form {
+.reset-pass-title {
   color: var(--modals-title-text-color);
   position: relative;
   top: 185px;

@@ -187,7 +187,6 @@ li {
   height: 34px;
   appearance: none;
   background: linear-gradient(var(--credentials-submit-button-background-1-color), var(--credentials-submit-button-background-2-color)) padding-box;
-    /* linear-gradient(to bottom, var(--break-list-item-sidegradient1-color), var(--break-list-item-sidegradient2-color)) border-box; */
   text-align: center;
   border-radius: 8px;
   text-indent: -1px;
@@ -199,8 +198,6 @@ li {
 .number-selector:hover {
   background: linear-gradient(var(--credentials-submit-button-background-1-color), var(--credentials-submit-button-background-2-color)) padding-box;
   outline: 0;
-  /* -webkit-box-shadow: inset 0px 0px 5px #00000000, 0px 0px 8px var(--input-box-outline-shadow-color);
-  box-shadow: inset 0px 0px 5px #00000000, 0px 0px 8px var(--input-box-outline-shadow-color); */
   border: 1px solid var(--input-box-outline-color);
 }
 
@@ -369,19 +366,6 @@ slots {
   transition: all var(--animation-duration-min) ease-in-out;
 }
 
-.time-input,
-.reset-input {
-  transition: all var(--animation-duration-min) ease-in-out;
-}
-
-.time-input:focus,
-.reset-input:focus {
-  outline: 0;
-  font-size: 14px;
-  -webkit-box-shadow: 0 0 0 1px var(--input-box-outline-color);
-  box-shadow: 0 0 0 1px var(--input-box-outline-color);
-}
-
 .inputfield:focus {
   outline: 0;
   font-size: 14px;
@@ -390,9 +374,6 @@ slots {
   border: 1px solid var(--input-box-outline-color);
 }
 
-.name-input:focus~.placeholder1,
-.time-input:focus~.placeholder1,
-.reset-input:focus~.placeholder1,
 .inputfield:focus~.placeholder1 {
   background-color: var(--input-box-placeholder-background-color);
   width: fit-content;
