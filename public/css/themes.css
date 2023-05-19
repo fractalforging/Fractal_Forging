@@ -42,8 +42,8 @@
 :root[data-theme="light"] {
   color-scheme: light;
   /*//// - BACKGROUND GRADIENT - ////*/
-  --backgroundGradientColor1: #A0DFFF;
-  --backgroundGradientColor2: #40BEFF;
+  --my-background-color-1: #A0DFFF;
+  --my-background-color-2: #40BEFF;
   /*//// - TEXT - ////*/
   --text-color: black;
   --modals-title-text-color: #ccc;
@@ -55,8 +55,12 @@
   /*//// - NAVIGATION - ////*/
   --navigation-hamburguer-color: #489acc;
   --navigation-dropdown-background-color: #ffffffcc;
+  /*//// - USER INDICATOR - ////*/
+  --indicator-icon-border-color: #004C7B;
+  --indicator-icon-background-color: #ffffff65;
   /*//// - CREDENTIALS BOX - ////*/
-  --credentials-box-background-color: #ffffff65;
+  --credentials-box-background-color-1: #ffffff;
+  --credentials-box-background-color-2: #0089ce41;
   --credentials-box-shadow-color: #00060a44;
   --credentials-border-color: #ffffff;
   --credentials-submit-button-background-1-color: #0077A7;
@@ -68,7 +72,7 @@
   --input-box-placeholder-focused-color: #ecf8ff;
   --input-box-placeholder-background-color: #689fc2;
   --input-box-text-color: #cccccc;
-  --input-box-outline-color: #6288a0;
+  --input-box-outline-color: #ffffff;
   --input-box-outline-shadow-color: #729bb1;
   /*//// - DIVIDER - ////*/
   --hr-divider-color: #004C7B;
@@ -140,13 +144,13 @@
   /*//// - SCROLL BAR - ////*/
   --scroll-bar-background-color: #ffffff;
   --scroll-bar-handle-color: #a0a0a0;
-} 
+}
 
 :root[data-theme="dark"] {
   color-scheme: dark;
   /*//// - BACKGROUND GRADIENT - ////*/
-  --backgroundGradientColor1: #01041d;
-  --backgroundGradientColor2: #00214e;
+  --my-background-color-1: #000216;
+  --my-background-color-2: #00214e;
   /*//// - TEXT - ////*/
   --text-color: #ccc;
   --modals-title-text-color: #ccc;
@@ -158,8 +162,12 @@
   /*//// - NAVIGATION - ////*/
   --navigation-hamburguer-color: #dfd1f5;
   --navigation-dropdown-background-color: #010213e1;
+  /*//// - USER INDICATOR - ////*/
+  --indicator-icon-border-color: #7641ca;
+  --indicator-icon-background-color: #1e00317e;
   /*//// - CREDENTIALS BOX - ////*/
-  --credentials-box-background-color: #01041ddc;
+  --credentials-box-background-color-1: #005a92;
+  --credentials-box-background-color-2: #00182794;
   --credentials-box-shadow-color: #00050c;
   --credentials-border-color: #004C7B;
   --credentials-submit-button-background-1-color: #7209B7;

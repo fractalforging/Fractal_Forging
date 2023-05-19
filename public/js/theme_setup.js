@@ -5,18 +5,22 @@ console.log("T H E M E _ S E T U P . J S   L O A D E D");
 ///////////// - SETTING CSS PROPERTY DYNAMICALLY FOR GRADIENT BACKGROUND TRANSITION - ///////////////
 
 const injectLightMode = () => {
+  document.documentElement.dataset.theme = "light";
+  const styles = getComputedStyle(document.documentElement);
+  const color1 = styles.getPropertyValue('--my-background-color-1').trim();
+  const color2 = styles.getPropertyValue('--my-background-color-2').trim();
   const myCSSLightProperties = document.createElement("style");
   myCSSLightProperties.id = "light-property";
   myCSSLightProperties.innerHTML = `
     @property --myBackgroundColor1 {
       syntax: '<color>';
-      initial-value: #A0DFFF;
+      initial-value: ${color1};
       inherits: false;
     }
     
     @property --myBackgroundColor2 {
       syntax: '<color>';
-      initial-value: #40BEFF;
+      initial-value: ${color2};
       inherits: false;
     } 
   `;
@@ -31,18 +35,22 @@ const injectLightMode = () => {
 };
 
 const injectDarkMode = () => {
+  document.documentElement.dataset.theme = "dark";
+  const styles = getComputedStyle(document.documentElement);
+  const color1 = styles.getPropertyValue('--my-background-color-1').trim();
+  const color2 = styles.getPropertyValue('--my-background-color-2').trim();
   const myCSSDarkProperties = document.createElement("style");
   myCSSDarkProperties.id = "dark-property";
   myCSSDarkProperties.innerHTML = `
     @property --myBackgroundColor1 {
       syntax: '<color>';
-      initial-value: #01041d;
+      initial-value: ${color1};
       inherits: false;
     }
     
     @property --myBackgroundColor2 {
       syntax: '<color>';
-      initial-value: #00214e;
+      initial-value: ${color2};
       inherits: false;
     } 
   `;
