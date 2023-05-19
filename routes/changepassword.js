@@ -8,7 +8,7 @@ import { isLoggedIn } from '../middleware/authentication.js';
 
 const changepasswordRoute = Router();
 
-//HANDLING PASSWORD CHANGE
+//HANDLING PASSWORD CHANGE-
 changepasswordRoute.post("/", isLoggedIn, async (req, res) => {
   try {
     const user = await User.findOne({ username: req.user.username });
