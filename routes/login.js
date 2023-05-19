@@ -19,7 +19,7 @@ loginRoute.post('/', ensureLoggedOut('/secret'), (req, res, next) => {
 
     if (!user) {
       logger.error('Incorrect username or password');
-      return res.status(401).json({ message: 'Incorrect email or password' });
+      return res.status(401).json({ message: 'Incorrect username or password' });
     }
 
     req.logIn(user, (err) => {

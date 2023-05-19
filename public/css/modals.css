@@ -246,6 +246,10 @@
 #time-error-message,
 #error-message {
   font-size: 14px;
+  position: absolute;
+  width: 100%; 
+  left: 0%;
+  bottom: 0; 
 }
 
 /*///////// - RESET PASS MODAL TRANSITION * /////////////*/
