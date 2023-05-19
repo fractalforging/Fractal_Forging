@@ -65,6 +65,7 @@ import changeNameRoute from './routes/changeName.js';
 import settingsRoute from './routes/settings.js';
 import myMessagesRoute from './routes/apiMessages.js';
 import healthCheckRoute from './routes/healthCheck.js';
+import logsRoute from './routes/logs.js';
 
 // BT ROUTES
 import submitBreakRoute from './bt-routes/submitBreak.js';
@@ -92,6 +93,7 @@ app.use('/namechange', changeNameRoute);
 app.use('/settings', settingsRoute);
 app.get('/api/messaging', myMessagesRoute);
 app.get('/health', healthCheckRoute);
+app.use('/logs', logsRoute);
 
 //====================================
 // APPLY BT ROUTES + SOCKET.IO CONFIG.
