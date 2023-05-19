@@ -59,7 +59,8 @@
   --credentials-box-background-color: #ffffff65;
   --credentials-box-shadow-color: #00060a44;
   --credentials-border-color: #ffffff;
-  --credentials-submit-button-background-color: #0077A7;
+  --credentials-submit-button-background-1-color: #0077A7;
+  --credentials-submit-button-background-2-color: #005679;
   --credentials-submit-button-text-color: #ffffff;
   --input-box-background-color: #ffffff;
   --input-box-border-color: #a1bdc7;
@@ -78,11 +79,12 @@
   --break-plus-button-background-color: #0077A7;
   --break-plus-button-symbol-color: #A0DFFF;
   --select-menu-background-color: #eeeeee;
-  --select-menu-border-color: #cccccc;
+  --select-menu-border-color: #00000073;
   /*//// - BREAKS LIST - ////*/
   --break-list-item-background-color: #ffffff65;
   --break-list-item-sidegradient1-color: #ffffff;
-  --break-list-item-sidegradient2-color: #A0DFFF;
+  --break-list-item-sidegradient2-color: #0089ce41;
+  --break-list-item-shadow-color: #00214e34;
   --break-list-item-text-color: #040F16;
   --break-list-item-edit-color: #8fe93a;
   --break-list-item-remove-color: #004C7B;
@@ -160,7 +162,8 @@
   --credentials-box-background-color: #01041ddc;
   --credentials-box-shadow-color: #00050c;
   --credentials-border-color: #004C7B;
-  --credentials-submit-button-background-color: #7209B7;
+  --credentials-submit-button-background-1-color: #7209B7;
+  --credentials-submit-button-background-2-color: #2e004d;
   --credentials-submit-button-text-color: #f5e7ff;
   --input-box-background-color: #333a46;
   --input-box-border-color: #000000;
@@ -184,7 +187,8 @@
   /*//// - BREAKS LIST - ////*/
   --break-list-item-background-color: #01041ddc;
   --break-list-item-sidegradient1-color: #004C7B;
-  --break-list-item-sidegradient2-color: #00000000;
+  --break-list-item-sidegradient2-color: #00263d80;
+  --break-list-item-shadow-color: #00060f91;
   --break-list-item-text-color: #cad4e4;
   --break-list-item-edit-color: #8fe93a;
   --break-list-item-remove-color: #6e8eb9;

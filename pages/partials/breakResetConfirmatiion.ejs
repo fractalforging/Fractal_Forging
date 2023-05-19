@@ -1,5 +1,5 @@
 <!-- ////////////// - EMERGENCY RESET BREAK TIME - ////////////////-->
-
+<% if (currentUser.username === "admin") { %>
 <button id="reset-break-time" class="reset-break-time-button">Reset Breaks</button>
 
 <div id="confirmation-modal" class="confirmation-modal">
@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<br>
+<br><br>
 
 <script>
     'use strict';
@@ -57,3 +57,4 @@
     }
 
 </script>
+<% } %>
