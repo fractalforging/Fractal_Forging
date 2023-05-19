@@ -57,6 +57,7 @@
   --navigation-dropdown-background-color: #ffffffcc;
   /*//// - USER INDICATOR - ////*/
   --indicator-icon-border-color: #004C7B;
+  --indicator-icon-border-hover-color: #0085d8;
   --indicator-icon-background-color: #ffffff65;
   /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color-1: #ffffff;
@@ -164,6 +165,7 @@
   --navigation-dropdown-background-color: #010213e1;
   /*//// - USER INDICATOR - ////*/
   --indicator-icon-border-color: #7641ca;
+  --indicator-icon-border-hover-color: #d1b8fa;
   --indicator-icon-background-color: #1e00317e;
   /*//// - CREDENTIALS BOX - ////*/
   --credentials-box-background-color-1: #005a92;

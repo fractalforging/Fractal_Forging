@@ -121,21 +121,18 @@
 .name-input,
 .time-input,
 .reset-input {
+  border: 1px solid transparent;
+  outline: 1px solid transparent;
   transition: all var(--animation-duration-min) ease-in-out;
 }
 
 .name-input:focus,
-.time-input:focus {
-  outline: 0;
+.time-input:focus,
+.reset-input:focus {
   font-size: 14px;
   -webkit-box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
   box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
-  border: 1px solid var(--input-box-outline-color);
-}
-
-.reset-input:focus {
-  outline: 0;
-  border: 1px solid var(--input-box-outline-color);
+  outline: 1px solid var(--input-box-outline-color);
 }
 
 .name-input:focus~.placeholder1,
