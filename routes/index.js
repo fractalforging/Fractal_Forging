@@ -7,11 +7,17 @@ const indexRoute = express.Router();
 
 // INDEX > LOGIN
 indexRoute.get("/", (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.redirect("/secret");
+  }
   return res.render("login");
 });
 
 // LOGIN
 indexRoute.get("/login", (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.redirect("/secret");
+  }
   return res.render("login");
 });
 
