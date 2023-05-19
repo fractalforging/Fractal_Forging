@@ -4,6 +4,7 @@
 
 <script>
     'use strict';
+    
     const socketOptions = {};
   <% if (typeof currentUser !== 'undefined') { %>
         socketOptions.query = { username: '<%= currentUser.username %>' };
@@ -33,17 +34,17 @@
             const userList = document.querySelector('#userList');
             userList.innerHTML = '';
 
-            const onlineItem = document.createElement('li');
-            onlineItem.innerText = 'Online:';
+            const onlineItem = document.createElement('span');
+            onlineItem.innerHTML = 'Online:';
             userList.appendChild(onlineItem);
 
-            const hrItem = document.createElement('li');
+            const hrItem = document.createElement('span');
             hrItem.innerHTML = '<hr>';
             userList.appendChild(hrItem);
 
             users.forEach((user) => {
-                const listItem = document.createElement('li');
-                listItem.innerText = user;
+                const listItem = document.createElement('span');
+                listItem.innerHTML = user + '<br>';
                 userList.appendChild(listItem);
             });
         });

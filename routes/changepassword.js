@@ -3,7 +3,7 @@
 import kleur from 'kleur';
 import { Router } from 'express';
 import User from '../models/user.js';
-import logger from '../routes/logger.js';
+import logger from './logger.js';
 import { isLoggedIn } from '../middleware/authentication.js';
 
 const changepasswordRoute = Router();

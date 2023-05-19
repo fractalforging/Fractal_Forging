@@ -38,25 +38,26 @@ const setupSockets = async (server, app) => {
   });
 
   io.on('connection', async (socket) => {
-
     const { username } = socket.handshake.query;
+
     if (username) {
       try {
         const user = await User.findOne({ username });
+
         if (user) {
           user.isOnline = true;
           user.socketId = socket.id;
           await user.save();
+          await emitUserCountAndList(io);
         }
       } catch (error) {
         console.error('Error updating user online status:', error);
       }
     }
 
-    await emitUserCountAndList(io);
-
     socket.on('heartbeat', async () => {
       await updateUserHeartbeat(socket.id);
+      await emitUserCountAndList(io);
     });
 
     socket.on('reload', async () => {
@@ -66,19 +67,19 @@ const setupSockets = async (server, app) => {
     socket.on('disconnect', async () => {
       try {
         const user = await User.findOne({ socketId: socket.id });
+
         if (user) {
           user.isOnline = false;
           user.socketId = null;
           await user.save();
+          await emitUserCountAndList(io);
         }
       } catch (error) {
         console.error('Error updating user offline status:', error);
       }
-
-      await emitUserCountAndList(io);
     });
-
   });
+
   return io;
 }
 

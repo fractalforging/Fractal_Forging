@@ -1,52 +1,12 @@
 <!-- ////// - USERS ONLINE INDICATOR - ////////-->
 
-<script>
-    'use strict';
-
-    const toggleUserList = () => {
-        const userList = document.querySelector('#userList');
-        if (userList.style.display === 'block') {
-            userList.style.display = 'none';
-            userList.classList.remove('show');
-        } else {
-            userList.style.display = 'block';
-            setTimeout(() => {
-                userList.classList.add('show');
-            }, 10);
-        }
-    }
-
-    document.addEventListener('click', (event) => {
-        const userList = document.querySelector('#userList');
-        const userCountButton = document.querySelector('#userCount');
-        <% if (currentUser.roles === 'admin') { %>
-        if (!userList.contains(event.target) && !userCountButton.contains(event.target)) {
-            userList.style.display = 'none';
-            userList.classList.remove('show');
-        }
-        <% } %>
-    });
-
-    setInterval(() => {
-        socket.emit('heartbeat');
-    }, 5 * 1000);
-
-</script>
-
-
-<span class="users-container">
-    <% if (currentUser.roles==='admin' ) { %>
-        <button id="userCount" onclick="toggleUserList()">0</button>
-        <ul id="userList"></ul>
-        <% } %>
-</span>
-
+<!-- /// - CSS - ///-->
 
 <style>
     #userCount {
         font-family: var(--break-list-item-timer-font-family);
         top: -7px;
-        left: 225px;
+        left: 226px;
         margin-right: -35px;
         background-color: var(--break-list-item-background-color);
         border: 2px solid var(--hr-divider-color);
@@ -68,11 +28,12 @@
 
     #userList {
         outline: var(--break-list-item-background-color);
-        display: none;
+        max-height: 0;
+        opacity: 0;
         position: absolute;
-        top: 35px;
+        top: 25px;
         left: 50%;
-        transform: translateX(89px);
+        transform: translateX(95px);
         background-color: var(--navigation-dropdown-background-color);
         min-width: 100px;
         max-width: 200px;
@@ -80,14 +41,25 @@
         list-style-type: none;
         margin: 0;
         padding: 0;
-        border-radius: 15px;
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
         z-index: 1;
+        transition: max-height var(--animation-duration-base) ease-in-out, opacity var(--animation-duration-short) ease-in-out;
+        overflow: hidden;
+        /* add this line */
+    }
+
+    #userList.hide {
+        max-height: 0;
         opacity: 0;
-        transition: all var(--animation-duration-short) ease;
+        visibility: hidden;
     }
 
     #userList.show {
+        max-height: 400px;
         opacity: 1;
+        visibility: visible;
     }
 
     #userList:before {
@@ -101,10 +73,10 @@
         border-color: transparent transparent var(--navigation-dropdown-background-color);
     }
 
-    #userList li {
-        padding-bottom: 10px;
-        padding-top: -8px;
-        margin: 5px;
+    #userList span {
+        padding-bottom: 8px;
+        padding-top: -3px;
+        margin: 0px;
         text-decoration: none;
         color: var(--text-color);
         display: block;
@@ -112,20 +84,61 @@
         border-radius: 5px;
     }
 
-    #userList li:first-child {
-        margin-top: 10px;
+    #userList span:first-child {
+        margin-top: 8px;
         font-weight: bold;
         cursor: default;
     }
 
     #userList hr {
         position: relative;
-        left: 9px;
+        left: 16px;
         border: none;
         width: 70px;
         height: 1px;
         background-color: var(--hr-divider-userslist-color);
-        margin: 0px;
+        margin: -2px;
     }
 </style>
 
+<!-- /// - HTML - ///-->
+
+<span class="users-container">
+    <% if (currentUser.roles==='admin' ) { %>
+        <button id="userCount" onclick="toggleUserList()">0</button>
+        <ul id="userList" class="hide"></ul>
+        <% } %>
+</span>
+
+<!-- /// - JS - ///-->
+
+<script>
+    'use strict';
+
+    const toggleUserList = () => {
+        const userList = document.querySelector('#userList');
+        if (userList.classList.contains('show')) {
+            userList.classList.remove('show');
+            userList.classList.add('hide');
+        } else {
+            userList.classList.remove('hide');
+            setTimeout(() => {
+                userList.classList.add('show');
+            }, 10);
+        }
+    }
+
+    document.addEventListener('click', (event) => {
+        const userList = document.querySelector('#userList');
+        const userCountButton = document.querySelector('#userCount');
+    <% if (currentUser.roles === 'admin') { %>
+    if (!userList.contains(event.target) && !userCountButton.contains(event.target)) {
+                userList.classList.remove('show');  // just remove the 'show' class
+            }
+    <% } %>
+});
+
+    setInterval(() => {
+        socket.emit('heartbeat');
+    }, 5 * 1000);
+</script>
