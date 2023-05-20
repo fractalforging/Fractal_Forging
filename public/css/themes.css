@@ -129,7 +129,7 @@
   /*//// - MODAL ////*/
   --canvas-modal-background-color: #00000000;
   --modal-border-thickness: 1px;
-  --modal-border-radius: 5px;
+  --modal-border-radius: 15px;
   --modal-text-font-size: 14px;
   --modal-font-weight: 600;
   /*//// - MODAL NEGATIVE ////*/
@@ -238,7 +238,7 @@
   /*//// - MODAL ////*/
   --canvas-modal-background-color: #00000000;
   --modal-border-thickness: 1px;
-  --modal-border-radius: 5px;
+  --modal-border-radius: 15px;
   --modal-text-font-size: 14px;
   --modal-font-weight: 600;
   /*//// - MODAL NEGATIVE - ////*/

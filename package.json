@@ -30,7 +30,6 @@
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
     "fullname": "^4.0.1",
-    "helmet": "^7.0.0",
     "http": "^0.0.1-security",
     "kleur": "^4.1.5",
     "luxon": "^3.2.1",
