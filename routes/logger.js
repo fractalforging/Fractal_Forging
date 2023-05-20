@@ -20,7 +20,7 @@ const dailyRotateFileTransport = new DailyRotateFile({
   datePattern: 'DD-MM-YYYY',
   maxSize: '100m',
   maxFiles: '360d',
-});
+}); 
 
 const loggerRoute = createLogger({
   level: 'debug',
