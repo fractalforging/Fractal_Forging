@@ -36,7 +36,7 @@ logsRoute.get('/', isLoggedIn, async (req, res) => {
     }
 });
 
-// Route to get the content of a specific log file
+// Route to get the content of a specific log file-
 logsRoute.get('/*', isLoggedIn, async (req, res) => {
     const logDirectory = '_logs/';
     const logFile = req.params[0];
