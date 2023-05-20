@@ -7,40 +7,16 @@
         text-align: left;
     }
 
-    .logFile {
-        cursor: pointer;
-        color: blue;
-        text-decoration: underline;
-    }
-
-    .log-level-red {
-        color: red;
-    }
-
-    .log-level-green {
-        color: green;
-    }
-
-    .log-level-yellow {
-        color: yellow;
-    }
-
-    .log-level-magenta {
-        color: magenta;
-    }
-
-    .log-level-default {
-        color: black;
-    }
-
     .logs-container {
         padding-left: 20px;
     }
 
+    .log-year,
     .log-month {
         margin-bottom: 10px;
     }
 
+    .log-year button,
     .log-month button {
         background: none;
         border: none;
@@ -50,36 +26,41 @@
         margin: 0;
     }
 
+    .log-year .logs-container,
     .log-month .logs-container {
         display: none;
     }
 
+    .log-year .logs-container.open,
     .log-month .logs-container.open {
         display: block;
     }
 
     .log-day {
-        margin-left: 20px;
+        margin-left: 0px;
     }
 </style>
 
 <h1>Logs</h1>
 <div class="logs-container">
-    <% logs.forEach(logYear => { %>
+    <% logs.forEach(logYear=> { %>
         <div class="log-year">
             <button onclick="toggleLogsContainer(this)">
-                <span class="arrow">▶</span> <%= logYear.year %>
+                <span class="arrow">▶</span>
+                <%= logYear.year %>
             </button>
             <div class="logs-container">
-                <% logYear.months.forEach(logMonth => { %>
+                <% logYear.months.forEach(logMonth=> { %>
                     <div class="log-month">
                         <button onclick="toggleLogsContainer(this)">
-                            <span class="arrow">▶</span> <%= logMonth.month %>
+                            <span class="arrow">▶</span>
+                            <%= logMonth.month %>
                         </button>
                         <div class="logs-container">
-                            <% logMonth.logs.forEach(logFile => { %>
+                            <% logMonth.logs.forEach(logFile=> { %>
                                 <div class="log-day">
-                                    <button class="log-button" onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                    <button class="log-button"
+                                        onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                         <%= logFile %>
                                     </button>
                                 </div>
@@ -101,6 +82,20 @@
         logsContainer.classList.toggle('open');
         arrow.textContent = logsContainer.classList.contains('open') ? '▼' : '▶';
     }
+
+    const collapseLogs = () => {
+        const logsContainers = document.querySelectorAll('.log-year .logs-container, .log-month .logs-container');
+        logsContainers.forEach(container => {
+            container.classList.remove('open');
+        });
+        
+        const arrows = document.querySelectorAll('.log-year .arrow, .log-month .arrow');
+        arrows.forEach(arrow => {
+            arrow.textContent = '▶';
+        });
+    };
+
+    window.addEventListener('DOMContentLoaded', collapseLogs);
 
     const fetchLogContent = async (year, month, day) => {
         try {
