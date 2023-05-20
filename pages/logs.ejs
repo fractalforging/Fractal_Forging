@@ -16,12 +16,12 @@
                     .log-button {
                         background: none;
                         border: none;
-                        color: #007bff;
+                        color: var(--links-color);
                         cursor: pointer;
                         padding: 0;
                         margin: 0;
                         transition: color 0.5s ease;
-                        font-size: 1.2em;
+                        font-size: 18px;
                         text-align: left;
                         transition: all 0.3s ease;
                     }
@@ -29,14 +29,18 @@
                     .log-year button:hover,
                     .log-month button:hover,
                     .log-button:hover {
-                        color: #00b0ff;
-                        transition: all 0.3s ease;
+                        text-decoration: underline;
                     }
 
                     .logs-container {
                         margin-left: 30px;
                         text-align: left;
                         transition: all 0.3s ease;
+                    }
+
+                    .log-year,
+                    .log-month {
+                        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
                     }
 
                     .log-year .logs-container,
@@ -69,7 +73,6 @@
                     .log-button {
                         transition: all 0.3s ease-in-out;
                     }
-
                 </style>
 
                 <greet>Logs</greet>
@@ -77,16 +80,16 @@
                 <br><br><br>
 
                 <div class="logs-container">
-                    <% logs.forEach(logYear=> { %>
-                        <div class="log-year">
-                            <button onclick="toggleLogsContainer(this)">
+                    <% logs.forEach((logYear, yearIndex)=> { %>
+                        <div class="log-year" id="year<%= yearIndex %>">
+                            <button onclick="toggleLogsContainer(this, 'year<%= yearIndex %>')">
                                 <span class="arrow">▶</span>
                                 <%= logYear.year %>
                             </button>
                             <div class="logs-container">
-                                <% logYear.months.forEach(logMonth=> { %>
-                                    <div class="log-month">
-                                        <button onclick="toggleLogsContainer(this)">
+                                <% logYear.months.forEach((logMonth, monthIndex)=> { %>
+                                    <div class="log-month" id="month<%= monthIndex %>">
+                                        <button onclick="toggleLogsContainer(this, 'month<%= monthIndex %>')">
                                             <span class="arrow">▶</span>
                                             <%= logMonth.month %>
                                         </button>
@@ -108,37 +111,42 @@
                 </div>
 
                 <script>
-                    const toggleLogsContainer = (button) => {
+                    const toggleLogsContainer = (button, id) => {
                         const logsContainer = button.nextElementSibling;
                         const arrow = button.querySelector('.arrow');
                         logsContainer.classList.toggle('open');
                         arrow.classList.toggle('rotate');
+                        localStorage.setItem(id, logsContainer.classList.contains('open'));
                     }
 
-                    const collapseLogs = () => {
-                        const logsContainers = document.querySelectorAll('.log-year .logs-container, .log-month .logs-container');
-                        logsContainers.forEach(container => {
-                            container.classList.remove('open');
+                    window.addEventListener('DOMContentLoaded', () => {
+                        const logYears = document.querySelectorAll('.log-year');
+                        const logMonths = document.querySelectorAll('.log-month');
+                        logYears.forEach(year => {
+                            const savedState = localStorage.getItem(year.id);
+                            if (savedState === 'true') {
+                                year.querySelector('.logs-container').classList.add('open');
+                                year.querySelector('.arrow').classList.add('rotate');
+                            }
                         });
 
-                        const arrows = document.querySelectorAll('.log-year .arrow, .log-month .arrow');
-                        arrows.forEach(arrow => {
-                            arrow.textContent = '▶';
+                        logMonths.forEach(month => {
+                            const savedState = localStorage.getItem(month.id);
+                            if (savedState === 'true') {
+                                month.querySelector('.logs-container').classList.add('open');
+                                month.querySelector('.arrow').classList.add('rotate');
+                            }
                         });
-                    };
-
-                    window.addEventListener('DOMContentLoaded', collapseLogs);
+                    });
 
                     const fetchLogContent = async (year, month, day) => {
                         try {
                             const response = await fetch(`/logs/${year}/${month}/${day}`);
                             const data = await response.json();
 
-                            // Create a new window
                             let params = 'toolbar=no, popup=yes, directories=no, titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=no, resizable=no,width=750,height=450,left=100,top=100';
                             let logWindow = window.open('', '', params);
 
-                            // Generate the HTML for the new window
                             logWindow.document.write(`
                                 <!DOCTYPE html>
                                 <html>
@@ -150,15 +158,21 @@
                                             color: white;
                                         }
                                         pre {
-                                            white-space: pre-wrap;       /* Since CSS 2.1 */
-                                            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-                                            white-space: -pre-wrap;      /* Opera 4-6 */
-                                            white-space: -o-pre-wrap;    /* Opera 7 */
-                                            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+                                            white-space: pre-wrap; 
+                                            white-space: -moz-pre-wrap; 
+                                            white-space: -pre-wrap; 
+                                            white-space: -o-pre-wrap;
+                                            word-wrap: break-word; 
+                                        }
+
+                                        span {
+                                            font-family:'Courier New', Courier, monospace;
+                                            font-size: 14px;
                                         }
                                     </style>
                                 </head>
                                 <body>
+                                    <span>File > ${day}<br></span>
                                     <pre>${data.data}</pre>
                                 </body>
                                 </html>
