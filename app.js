@@ -32,11 +32,8 @@ if (!dbPath) {
 //=====================
 // MONGODB CONFIG.
 
-// Import Models
 import User from './models/user.js';
 import BreakTrack from "./models/BreakTrack.js";
-
-// Initialization
 import database from './config/database.js';
 database.connectMongoDB(dbPath);
 database.initialize();
@@ -113,7 +110,7 @@ let io;
 //=====================
 // CLEAR SESSION VARIABLES FOR MODAL MESSAGING
 
-app.post('/clear-message', async (req, res, next) => {
+app.post('/clear-message', async (req, res) => {
   delete req.session.message;
   return res.sendStatus(204);
 });
@@ -121,7 +118,7 @@ app.post('/clear-message', async (req, res, next) => {
 //=====================
 // ERROR HANDLING
 
-app.use(async (err, req, res, next) => {
+app.use(async (err, req, res) => {
   logger.error(err.stack);
   req.session.message = "Something broke";
   return res.redirect("/");
