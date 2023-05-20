@@ -10,7 +10,6 @@ const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
 const converter = new AnsiToHtml();
 
-// Route to get a list of all log files
 logsRoute.get('/', isLoggedIn, async (req, res) => {
     const logDirectory = '_logs/';
 
@@ -36,7 +35,6 @@ logsRoute.get('/', isLoggedIn, async (req, res) => {
     }
 });
 
-// Route to get the content of a specific log file-
 logsRoute.get('/*', isLoggedIn, async (req, res) => {
     const logDirectory = '_logs/';
     const logFile = req.params[0];
