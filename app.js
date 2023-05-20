@@ -116,15 +116,6 @@ app.post('/clear-message', async (req, res) => {
 });
 
 //=====================
-// ERROR HANDLING
-
-app.use(async (err, req, res) => {
-  logger.error(err.stack);
-  req.session.message = "Something broke";
-  return res.redirect("/");
-});
-
-//=====================
 // START SERVER
 
 server.listen(port, () => logger.info(`Server Up and running on port: ${kleur.grey(port)}`));
