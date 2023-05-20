@@ -1,65 +1,144 @@
-<style>
-    .logFile {
-        cursor: pointer;
-        color: blue;
-        text-decoration: underline;
-    }
-</style>
+<%- include('partials/header.ejs') %>
 
-<h1>Logs</h1>
-<div id="logList">
-    <% logs.forEach(logFile=> { %>
-        <div class="logFile" onclick="fetchLogContent('<%= logFile %>')">
-            <%= logFile %>
-        </div>
-        <% }); %>
-</div>
-<h2>Log content</h2>
-<pre id="logContent"></pre>
+    <style>
+        body {
+            background-color: black;
+            padding: 20px;
+            text-align: left;
+        }
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Fetch list of log files
-        fetch('/logs')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                const logList = document.getElementById('logList');
+        .logFile {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
 
-                data.logs.forEach(logFile => {
-                    const div = document.createElement('div');
-                    div.className = 'logFile';
-                    div.textContent = logFile;
+        .log-level-red {
+            color: red;
+        }
 
-                    // Fetch log content when clicked
-                    div.addEventListener('click', function () {
-                        fetchLogContent(logFile);
+        .log-level-green {
+            color: green;
+        }
+
+        .log-level-yellow {
+            color: yellow;
+        }
+
+        .log-level-magenta {
+            color: magenta;
+        }
+
+        .log-level-default {
+            color: black;
+        }
+
+        .logs-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .log-button {
+            background-color: #007bff;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            transition-duration: 0.4s;
+        }
+
+        .log-button:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+    </style>
+
+    <h1>Logs</h1>
+    <div id="logList" class="logs-container">
+        <% logs.forEach(logFile=> { %>
+            <button class="log-button" onclick="fetchLogContent('<%= logFile %>')">
+                <%= logFile %>
+            </button>
+            <% }); %>
+    </div>
+    <h2>Log content</h2>
+    <pre id="logContent"></pre>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fetch list of log files
+            try {
+                fetch('/logs', { headers: { 'Accept': 'application/json' } })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const logList = document.getElementById('logList');
+
+                        data.logs.forEach(logFile => {
+                            const div = document.createElement('div');
+                            div.className = 'logFile';
+                            div.textContent = logFile;
+
+                            div.addEventListener('click', function () {
+                                fetchLogContent(logFile);
+                            });
+
+                            logList.appendChild(div);
+                        });
+                    }).catch(e => {
+                        console.error("Error fetching log files:", e);
                     });
+            } catch (error) { console.log(error) };
 
-                    logList.appendChild(div);
+        });
+
+        function processLogLine(line) {
+            const logLevelMatch = line.match(/^\[(.+)] ({[^}]+}): (.+)/);
+
+            if (logLevelMatch) {
+                const timestamp = logLevelMatch[1];
+                const logLevel = JSON.parse(logLevelMatch[2]);
+                const message = logLevelMatch[3];
+
+                return (
+                    '<span class="log-level-' +
+                    logLevel.color +
+                    '">[' +
+                    timestamp +
+                    "] " +
+                    logLevel.text +
+                    ":</span> " +
+                    message
+                );
+            } else {
+                return line;
+            }
+        }
+
+        function fetchLogContent(logFile) {
+            fetch(`/logs/${logFile}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById("logContent").innerHTML = data.data.replace(/\n/g, "<br>");
+                })
+                .catch(error => {
+                    console.error("Error fetching log content:", error);
                 });
-            }).catch(e => {
-                console.error("Error fetching log files:", e);
-            });
-    });
+        }
 
-    function fetchLogContent(logFile) {
-        fetch(`/logs/${logFile}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                document.getElementById('logContent').textContent = data.data;
-            })
-            .catch(error => {
-                console.error('Error fetching log content:', error);
-            });
-    }
-</script>
+    </script>
