@@ -1,109 +1,178 @@
-<%- include('partials/header.ejs') %>
+<!-- ////////////////// - PARTIALS - ////////////////// -->
 
-<style>
-    body {
-        background-color: black;
-        padding: 20px;
-        text-align: left;
-    }
+<%- include('partials/socket.ejs') %>
+    <%- include('partials/header.ejs') %>
+        <%- include('partials/messageModals.ejs') %>
+            <%- include('partials/navigation.ejs') %>
 
-    .logs-container {
-        padding-left: 20px;
-    }
+                &nbsp;
+                <br>
 
-    .log-year,
-    .log-month {
-        margin-bottom: 10px;
-    }
+                <hr class="divider">
 
-    .log-year button,
-    .log-month button {
-        background: none;
-        border: none;
-        color: #007bff;
-        cursor: pointer;
-        padding: 0;
-        margin: 0;
-    }
+                <style>
+                    .log-year button,
+                    .log-month button,
+                    .log-button {
+                        background: none;
+                        border: none;
+                        color: #007bff;
+                        cursor: pointer;
+                        padding: 0;
+                        margin: 0;
+                        transition: color 0.5s ease;
+                        font-size: 1.2em;
+                        text-align: left;
+                        transition: all 0.3s ease;
+                    }
 
-    .log-year .logs-container,
-    .log-month .logs-container {
-        display: none;
-    }
+                    .log-year button:hover,
+                    .log-month button:hover,
+                    .log-button:hover {
+                        color: #00b0ff;
+                        transition: all 0.3s ease;
+                    }
 
-    .log-year .logs-container.open,
-    .log-month .logs-container.open {
-        display: block;
-    }
+                    .logs-container {
+                        margin-left: 30px;
+                        text-align: left;
+                        transition: all 0.3s ease;
+                    }
 
-    .log-day {
-        margin-left: 0px;
-    }
-</style>
+                    .log-year .logs-container,
+                    .log-month .logs-container {
+                        max-height: 0;
+                        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+                        opacity: 0;
+                    }
 
-<h1>Logs</h1>
-<div class="logs-container">
-    <% logs.forEach(logYear=> { %>
-        <div class="log-year">
-            <button onclick="toggleLogsContainer(this)">
-                <span class="arrow">▶</span>
-                <%= logYear.year %>
-            </button>
-            <div class="logs-container">
-                <% logYear.months.forEach(logMonth=> { %>
-                    <div class="log-month">
-                        <button onclick="toggleLogsContainer(this)">
-                            <span class="arrow">▶</span>
-                            <%= logMonth.month %>
-                        </button>
-                        <div class="logs-container">
-                            <% logMonth.logs.forEach(logFile=> { %>
-                                <div class="log-day">
-                                    <button class="log-button"
-                                        onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                        <%= logFile %>
-                                    </button>
-                                </div>
-                            <% }); %>
+                    .log-year .logs-container.open,
+                    .log-month .logs-container.open {
+                        max-height: 800px;
+                        transition: all 1s ease-in-out;
+                        opacity: 1;
+                    }
+
+                    .arrow {
+                        transition: transform 0.3s ease-in-out;
+                        display: inline-block;
+                        transform-origin: center;
+                        font-size: 0.8em;
+                        /* Adjust this value as needed */
+                        vertical-align: middle;
+                    }
+
+                    .rotate {
+                        transform: rotate(90deg);
+                    }
+
+                    .log-button {
+                        transition: all 0.3s ease-in-out;
+                    }
+
+                </style>
+
+                <greet>Logs</greet>
+
+                <br><br><br>
+
+                <div class="logs-container">
+                    <% logs.forEach(logYear=> { %>
+                        <div class="log-year">
+                            <button onclick="toggleLogsContainer(this)">
+                                <span class="arrow">▶</span>
+                                <%= logYear.year %>
+                            </button>
+                            <div class="logs-container">
+                                <% logYear.months.forEach(logMonth=> { %>
+                                    <div class="log-month">
+                                        <button onclick="toggleLogsContainer(this)">
+                                            <span class="arrow">▶</span>
+                                            <%= logMonth.month %>
+                                        </button>
+                                        <div class="logs-container">
+                                            <% logMonth.logs.forEach(logFile=> { %>
+                                                <div class="log-day">
+                                                    <button class="log-button"
+                                                        onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                        <%= logFile %>
+                                                    </button>
+                                                </div>
+                                                <% }); %>
+                                        </div>
+                                    </div>
+                                    <% }); %>
+                            </div>
                         </div>
-                    </div>
-                <% }); %>
-            </div>
-        </div>
-    <% }); %>
-</div>
-<h2>Log content</h2>
-<pre id="logContent"></pre>
+                        <% }); %>
+                </div>
 
-<script>
-    const toggleLogsContainer = (button) => {
-        const logsContainer = button.nextElementSibling;
-        const arrow = button.querySelector('.arrow');
-        logsContainer.classList.toggle('open');
-        arrow.textContent = logsContainer.classList.contains('open') ? '▼' : '▶';
-    }
+                <script>
+                    const toggleLogsContainer = (button) => {
+                        const logsContainer = button.nextElementSibling;
+                        const arrow = button.querySelector('.arrow');
+                        logsContainer.classList.toggle('open');
+                        arrow.classList.toggle('rotate');
+                    }
 
-    const collapseLogs = () => {
-        const logsContainers = document.querySelectorAll('.log-year .logs-container, .log-month .logs-container');
-        logsContainers.forEach(container => {
-            container.classList.remove('open');
-        });
-        
-        const arrows = document.querySelectorAll('.log-year .arrow, .log-month .arrow');
-        arrows.forEach(arrow => {
-            arrow.textContent = '▶';
-        });
-    };
+                    const collapseLogs = () => {
+                        const logsContainers = document.querySelectorAll('.log-year .logs-container, .log-month .logs-container');
+                        logsContainers.forEach(container => {
+                            container.classList.remove('open');
+                        });
 
-    window.addEventListener('DOMContentLoaded', collapseLogs);
+                        const arrows = document.querySelectorAll('.log-year .arrow, .log-month .arrow');
+                        arrows.forEach(arrow => {
+                            arrow.textContent = '▶';
+                        });
+                    };
 
-    const fetchLogContent = async (year, month, day) => {
-        try {
-            const response = await fetch(`/logs/${year}/${month}/${day}`);
-            const data = await response.json();
-            document.getElementById("logContent").innerHTML = data.data.replace(/\n/g, "<br>");
-        } catch (error) {
-            console.error("Error fetching log content:", error);
-        }
-    }
-</script>
+                    window.addEventListener('DOMContentLoaded', collapseLogs);
+
+                    const fetchLogContent = async (year, month, day) => {
+                        try {
+                            const response = await fetch(`/logs/${year}/${month}/${day}`);
+                            const data = await response.json();
+
+                            // Create a new window
+                            let params = 'toolbar=no, popup=yes, directories=no, titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=no, resizable=no,width=750,height=450,left=100,top=100';
+                            let logWindow = window.open('', '', params);
+
+                            // Generate the HTML for the new window
+                            logWindow.document.write(`
+                                <!DOCTYPE html>
+                                <html>
+                                <head>
+                                    <title>Log: ${year}/${month}/${day}</title>
+                                    <style>
+                                        body {
+                                            background-color: black;
+                                            color: white;
+                                        }
+                                        pre {
+                                            white-space: pre-wrap;       /* Since CSS 2.1 */
+                                            white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+                                            white-space: -pre-wrap;      /* Opera 4-6 */
+                                            white-space: -o-pre-wrap;    /* Opera 7 */
+                                            word-wrap: break-word;       /* Internet Explorer 5.5+ */
+                                        }
+                                    </style>
+                                </head>
+                                <body>
+                                    <pre>${data.data}</pre>
+                                </body>
+                                </html>
+                            `);
+
+                            logWindow.document.close();
+                        } catch (error) {
+                            console.error("Error fetching log content:", error);
+                        }
+                    }
+
+
+                </script>
+
+                <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+
+                <%- include('partials/bottomjs.ejs') %>

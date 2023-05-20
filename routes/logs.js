@@ -12,6 +12,7 @@ const converter = new AnsiToHtml();
 
 logsRoute.get('/', isLoggedIn, async (req, res) => {
     const logDirectory = '_logs/';
+    const currentUser = req.user;  // Accessing the user data set by the middleware
 
     try {
         const directories = await readdirAsync(logDirectory);
@@ -30,7 +31,7 @@ logsRoute.get('/', isLoggedIn, async (req, res) => {
             return { year: directory, months };
         });
 
-        res.render('logs', { logs });
+        res.render('logs', { logs, currentUser }); // passing currentUser to the view
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -63,5 +64,21 @@ logsRoute.get('/:year/:month/:day', isLoggedIn, async (req, res) => {
         res.status(500).json({ error: 'Error fetching log content' });
     }
 });
+
+logsRoute.get('/frame/:year/:month/:day', isLoggedIn, async (req, res) => {
+    const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
+    const logFile = `${req.params.day}`;
+    const logFilePath = path.join(logDirectory, logFile);
+
+    try {
+        const data = await readFileAsync(logFilePath, 'utf-8');
+        const htmlData = converter.toHtml(data);
+        res.send(`<pre>${htmlData}</pre>`);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error fetching log content');
+    }
+});
+
 
 export default logsRoute;
