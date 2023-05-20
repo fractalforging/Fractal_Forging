@@ -23,12 +23,12 @@ const responseMap = {
   "Time changed": { status: 200, message: "Total break time changed" },
   "Name changed": { status: 200, message: "Username changed" },
   // BREAKS
-  "Only 1 break at a time": { status: 401, message: "Only 1 break at a time" },
+  "Only 1 break at a time": { status: 401, message: "Only 1 break" + `<br>` + "at a time" },
   "Break time over": { status: 401, message: "No minutes available" },
   "Not enough": { status: 401, message: "Not enough minutes available" },
   "Break submitted": { status: 200, message: "Break submitted" },
   "Break started": { status: 200, message: "Break started. Enjoy!" },
-  "Added to queue": { status: 200, message: "Break added to queue" },
+  "Added to queue": { status: 200, message: "Break added" + `<br>` + "to queue" },
   "Breaks reset" : { status: 200, message: "Break time for all agents" + `<br>` + "has been reset!" },
   // SLOTS AVAILABLE
   "Same value": { status: 401, message: "Same value!" },

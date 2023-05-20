@@ -53,7 +53,7 @@
 .close-pos {
   position: relative;
   top: -1px;
-  flex-basis: 20%;
+  flex-basis: 25%;
   align-items: center;
   transition: color var(--animation-duration-short) ease-in-out;
 }
