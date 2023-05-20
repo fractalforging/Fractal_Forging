@@ -16,7 +16,7 @@ const timestampInTimeZone = () => {
 };
 
 const dailyRotateFileTransport = new DailyRotateFile({
-  filename: '_logs/' + moment().format('MM-YYYY') + '/%DATE%.log',
+  filename: '_logs/' + moment().format('YYYY') + moment().format('/MM') + '/%DATE%.log',
   datePattern: 'DD-MM-YYYY',
   maxSize: '100m',
   maxFiles: '360d',

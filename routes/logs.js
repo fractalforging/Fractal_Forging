@@ -16,17 +16,18 @@ logsRoute.get('/', isLoggedIn, async (req, res) => {
     try {
         const directories = await readdirAsync(logDirectory);
 
-        const logs = directories.flatMap(directory => {
-            const directoryPath = path.join(logDirectory, directory);
+        const logs = directories.map(directory => {
+            const yearDirectoryPath = path.join(logDirectory, directory);
+            const months = fs.readdirSync(yearDirectoryPath)
+                .filter(monthDirectory => fs.lstatSync(path.join(yearDirectoryPath, monthDirectory)).isDirectory())
+                .map(month => {
+                    const monthDirectoryPath = path.join(yearDirectoryPath, month);
+                    const logFiles = fs.readdirSync(monthDirectoryPath)
+                        .filter(file => path.extname(file) === '.log');
+                    return { month, logs: logFiles };
+                });
 
-            if (fs.lstatSync(directoryPath).isDirectory()) {
-                const files = fs.readdirSync(directoryPath);
-                const logFiles = files.filter(file => path.extname(file) === '.log');
-
-                return logFiles.map(logFile => path.join(directory, logFile));
-            }
-
-            return [];
+            return { year: directory, months };
         });
 
         res.render('logs', { logs });
@@ -35,9 +36,22 @@ logsRoute.get('/', isLoggedIn, async (req, res) => {
     }
 });
 
-logsRoute.get('/*', isLoggedIn, async (req, res) => {
-    const logDirectory = '_logs/';
-    const logFile = req.params[0];
+logsRoute.get('/:year/:month', isLoggedIn, async (req, res) => {
+    const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
+
+    try {
+        const files = await readdirAsync(logDirectory);
+        const logFiles = files.filter(file => path.extname(file) === '.log');
+
+        res.json({ logs: logFiles });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+logsRoute.get('/:year/:month/:day', isLoggedIn, async (req, res) => {
+    const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
+    const logFile = `${req.params.day}`;
     const logFilePath = path.join(logDirectory, logFile);
 
     try {
@@ -45,7 +59,8 @@ logsRoute.get('/*', isLoggedIn, async (req, res) => {
         const htmlData = converter.toHtml(data);
         res.json({ data: htmlData });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error(err);
+        res.status(500).json({ error: 'Error fetching log content' });
     }
 });
 

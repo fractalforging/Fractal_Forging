@@ -1,120 +1,114 @@
 <%- include('partials/header.ejs') %>
 
-    <style>
-        body {
-            background-color: black;
-            padding: 20px;
-            text-align: left;
-        }
+<style>
+    body {
+        background-color: black;
+        padding: 20px;
+        text-align: left;
+    }
 
-        .logFile {
-            cursor: pointer;
-            color: blue;
-            text-decoration: underline;
-        }
+    .logFile {
+        cursor: pointer;
+        color: blue;
+        text-decoration: underline;
+    }
 
-        .log-level-red {
-            color: red;
-        }
+    .log-level-red {
+        color: red;
+    }
 
-        .log-level-green {
-            color: green;
-        }
+    .log-level-green {
+        color: green;
+    }
 
-        .log-level-yellow {
-            color: yellow;
-        }
+    .log-level-yellow {
+        color: yellow;
+    }
 
-        .log-level-magenta {
-            color: magenta;
-        }
+    .log-level-magenta {
+        color: magenta;
+    }
 
-        .log-level-default {
-            color: black;
-        }
+    .log-level-default {
+        color: black;
+    }
 
-        .logs-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-        }
+    .logs-container {
+        padding-left: 20px;
+    }
 
-        .log-button {
-            background-color: #007bff;
-            border: none;
-            color: white;
-            cursor: pointer;
-            padding: 8px 16px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            transition-duration: 0.4s;
-        }
+    .log-month {
+        margin-bottom: 10px;
+    }
 
-        .log-button:hover {
-            background-color: #0056b3;
-            color: white;
-        }
-    </style>
+    .log-month button {
+        background: none;
+        border: none;
+        color: #007bff;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+    }
 
-    <h1>Logs</h1>
-    <div id="logList" class="logs-container">
-        <% logs.forEach(logFile=> { %>
-            <button class="log-button" onclick="fetchLogContent('<%= logFile %>')">
-                <%= logFile %>
+    .log-month .logs-container {
+        display: none;
+    }
+
+    .log-month .logs-container.open {
+        display: block;
+    }
+
+    .log-day {
+        margin-left: 20px;
+    }
+</style>
+
+<h1>Logs</h1>
+<div class="logs-container">
+    <% logs.forEach(logYear => { %>
+        <div class="log-year">
+            <button onclick="toggleLogsContainer(this)">
+                <span class="arrow">▶</span> <%= logYear.year %>
             </button>
-            <% }); %>
-    </div>
-    <h2>Log content</h2>
-    <pre id="logContent"></pre>
+            <div class="logs-container">
+                <% logYear.months.forEach(logMonth => { %>
+                    <div class="log-month">
+                        <button onclick="toggleLogsContainer(this)">
+                            <span class="arrow">▶</span> <%= logMonth.month %>
+                        </button>
+                        <div class="logs-container">
+                            <% logMonth.logs.forEach(logFile => { %>
+                                <div class="log-day">
+                                    <button class="log-button" onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                        <%= logFile %>
+                                    </button>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    <% }); %>
+</div>
+<h2>Log content</h2>
+<pre id="logContent"></pre>
 
-    <script>
+<script>
+    const toggleLogsContainer = (button) => {
+        const logsContainer = button.nextElementSibling;
+        const arrow = button.querySelector('.arrow');
+        logsContainer.classList.toggle('open');
+        arrow.textContent = logsContainer.classList.contains('open') ? '▼' : '▶';
+    }
 
-        const fetchLogContent = (logFile) => {
-            try {
-                fetch(`/logs/${logFile}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        document.getElementById("logContent").innerHTML = data.data.replace(/\n/g, "<br>");
-                    })
-                    .catch(error => {
-                        console.error("Error fetching log content:", error);
-                    });
-            } catch (error) { console.log(error) };
+    const fetchLogContent = async (year, month, day) => {
+        try {
+            const response = await fetch(`/logs/${year}/${month}/${day}`);
+            const data = await response.json();
+            document.getElementById("logContent").innerHTML = data.data.replace(/\n/g, "<br>");
+        } catch (error) {
+            console.error("Error fetching log content:", error);
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                fetch('/logs', { headers: { 'Accept': 'application/json' } })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        const logList = document.getElementById('logList');
-                        data.logs.forEach(logFile => {
-                            const div = document.createElement('div');
-                            div.className = 'logFile';
-                            div.textContent = logFile;
-                            div.addEventListener('click', function () {
-                                fetchLogContent(logFile);
-                            });
-                            logList.appendChild(div);
-                        });
-                    }).catch(e => {
-                        console.error("Error fetching log files:", e);
-                    });
-            } catch (error) { console.log(error) };
-        });
-
-
-
-    </script>
+    }
+</script>
