@@ -11,106 +11,130 @@
                 <hr class="divider">
 
                 <style>
+                    .log-year-container,
+                    .log-month-container,
+                    .log-day-container {
+                        position: relative;
+                        left: 3px;
+                        width: 260px;
+                        max-height: 9999px;
+                        padding: 3px;
+                        margin-top: 10px;
+                        text-align: left;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        box-shadow: 0px 3px 7px 0px var(--break-list-item-shadow-color);
+                        background: linear-gradient(var(--break-list-item-background-color), var(--break-list-item-background-color)) padding-box,
+                            linear-gradient(to bottom, var(--break-list-item-sidegradient1-color), var(--break-list-item-sidegradient2-color)) border-box;
+                        color: var(--break-list-item-text-color);
+                        border: 1px solid transparent;
+                        border-radius: 10px;
+                        overflow: hidden;
+                        vertical-align: middle;
+                        transition: all var(--animation-duration-more) ease-in-out;
+                    }
+
+                    .log-month-container,
+                    .log-day-container {
+                        display: none;
+                    }
+
+                    .open {
+                        display: block !important;
+                    }
+
+                    .log-year-container {
+                        width: 270px;
+                    }
+
+                    .log-month-container {
+                        width: 255px;
+                    }
+
+                    .log-day-container {
+                        width: 240px;
+                    }
+
                     .log-year button,
                     .log-month button,
-                    .log-button {
+                    .log-day button {
+                        font-family: 'M PLUS 1';
+                        top: 5px;
                         background: none;
                         border: none;
                         color: var(--links-color);
                         cursor: pointer;
-                        padding: 0;
-                        margin-left: 10px;
+                        margin-left: 0px;
                         transition: color 0.5s ease;
-                        font-size: 18px;
+                        font-size: 14px;
                         text-align: left;
+                        color: #ffffff;
+                        padding: 5px 10px;
+                        border-radius: 4px;
                         transition: all 0.3s ease;
+                    }
+
+                    .log-year {
+                        position: relative;
+                        top: 0px;
                     }
 
                     .log-year button:hover,
                     .log-month button:hover,
-                    .log-button:hover {
-                        text-decoration: underline;
+                    .log-day button:hover {
+                        font-family: 'M PLUS 1';
                     }
 
-                    .logs-container {
-                        margin-left: 30px;
-                        text-align: left;
+                    .log-year button .button-content:hover .arrow,
+                    .log-month button .button-content:hover .arrow,
+                    .log-day button .button-content:hover .arrow {
+                        color: var(--links-hover-color);
+                    }
+
+                    .arrow {
+                        color: var(--break-list-item-icons-color);
+                        position: relative;
+                        top: 0px;
+                        left: -8px;
+                        margin-right: -8px;
+                        display: inline-block;
+                        cursor: pointer;
+                        transform-origin: center center;
+                        transform: scale(0.8) translateX(0);
                         transition: all 0.3s ease;
                     }
 
-                    .log-year,
-                    .log-month {
-                        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+                    .dl-d-icons-container {
+                        position: relative;
+                        left: 120px;
                     }
 
-                    .log-year .logs-container,
-                    .log-month .logs-container {
-                        max-height: 0;
-                        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-                        opacity: 0;
-                        overflow: hidden;
-                    }
-
-                    .hidden {
-                        display: none;
-                        visibility: hidden;
-                    }
-
-
-                    .log-year .logs-container.open,
-                    .log-month .logs-container.open {
-                        max-height: 800px;
-                        transition: all 1s ease-in-out;
-                        opacity: 1;
-                    }
-
-                    .log-year-container,
-                    .log-month-container {
-                        max-height: 0;
-                        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
-                        opacity: 0;
-                        overflow: hidden;
-                    }
-
-                    .log-year-container.open,
-                    .log-month-container.open {
-                        max-height: 800px;
-                        transition: all 1s ease-in-out;
-                        opacity: 1;
-                    }
-
-
-                    .arrow {
-                        transition: transform 0.3s ease-in-out;
-                        display: inline-block;
-                        transform-origin: center;
-                        font-size: 0.8em;
-                        /* Adjust this value as needed */
+                    .dl-d-icons {
+                        font-size: 18px;
+                        position: relative;
+                        top: 0px;
+                        margin-right: -10px;
                         vertical-align: middle;
                     }
 
-                    .rotate {
-                        transform: rotate(90deg);
+                    .folder-buttons {
+                        position: relative;
+                        top: 1px;
                     }
 
                     .log-button {
-                        transition: all 0.3s ease-in-out;
+                        margin-left: auto;
+                    }
+
+                    .rotate {
+                        transform: rotate(90deg) scale(0.8) translateX(0);
                     }
 
                     .material-symbols-outlined {
+                        color: var(--break-list-item-icons-color);
                         vertical-align: middle;
                         font-family: 'Material Icons';
-                        font-weight: normal;
-                        font-style: normal;
-                        font-size: 20px;
-                        display: inline-block;
-                        line-height: 1;
-                        text-transform: none;
-                        letter-spacing: normal;
-                        word-wrap: normal;
-                        white-space: nowrap;
-                        direction: ltr;
-                        -webkit-font-smoothing: antialiased;
                         transition: all 0.3s ease-in-out;
                     }
 
@@ -123,56 +147,79 @@
 
                 <br><br><br>
 
-                <div class="logs-container">
-                    <% logs.forEach((logYear, yearIndex)=> { %>
+                <% logs.forEach((logYear, yearIndex)=> { %>
+                    <div class="log-year-container">
                         <div class="log-year" id="year<%= yearIndex %>">
-                            <button onclick="toggleLogsContainer(this, 'year<%= yearIndex %>')">
-                                <span class="arrow">▶</span>
-                                <%= logYear.year %>
+                            <button onclick="toggleLogsContainer(this)">
+                                <span class="button-content">
+                                    <span class="material-symbols-outlined arrow">keyboard_arrow_right</span>
+                                    <span class="folder-buttons">
+                                        <%= logYear.year %>
+                                    </span>
+                                </span>
                             </button>
                             <!-- Add Download Button for Year Folder -->
-                            <button class="log-button"
-                                onclick="downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
-                                <i class="material-symbols-outlined">get_app</i>
-                            </button>
-                            <!-- Add Delete Button for Year Folder -->
-                            <button class="log-button" onclick="deleteYearLogs('<%= logYear.year %>')">
-                                <i class="material-symbols-outlined">close</i>
-                            </button>
-                            <div class="log-year-container">
+                            <span class="dl-d-icons-container">
+                                <button class="log-button"
+                                    onclick="downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
+                                    <i class="material-symbols-outlined dl-d-icons"
+                                        style="display: inline-block;">get_app</i>
+                                </button>
+                                <!-- Add Delete Button for Year Folder -->
+                                <button class="log-button" onclick="deleteYearLogs('<%= logYear.year %>')">
+                                    <i class="material-symbols-outlined dl-d-icons"
+                                        style="display: inline-block;">close</i>
+                                </button>
+                            </span>
+                            <div class="log-month-container">
                                 <% logYear.months.forEach((logMonth, monthIndex)=> { %>
                                     <div class="log-month" id="month<%= monthIndex %>">
-                                        <button onclick="toggleLogsContainer(this, 'month<%= monthIndex %>')">
-                                            <span class="arrow">▶</span>
-                                            <%= logMonth.month %>
+                                        <button onclick="toggleLogsContainer(this)">
+                                            <span class="button-content">
+                                                <span
+                                                    class="material-symbols-outlined arrow">keyboard_arrow_right</span>
+                                                <span class="folder-buttons">
+                                                    <%= logMonth.month %>
+                                                </span>
+                                            </span>
                                         </button>
                                         <!-- Add Download Button for Month Folder -->
-                                        <button class="log-button"
-                                            onclick="downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
-                                            <i class="material-symbols-outlined">get_app</i>
-                                        </button>
-                                        <!-- Add Delete Button for Month Folder -->
-                                        <button class="log-button"
-                                            onclick="deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
-                                            <i class="material-symbols-outlined">close</i>
-                                        </button>
-                                        <div class="log-month-container">
+                                        <span class="dl-d-icons-container">
+                                            <button class="log-button"
+                                                onclick="downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
+                                                <i class="material-symbols-outlined dl-d-icons"
+                                                    style="display: inline-block;">get_app</i>
+                                            </button>
+                                            <!-- Add Delete Button for Month Folder -->
+                                            <button class="log-button"
+                                                onclick="deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
+                                                <i class="material-symbols-outlined dl-d-icons"
+                                                    style="display: inline-block;">close</i>
+                                            </button>
+                                        </span>
+                                        <div class="log-day-container">
                                             <% logMonth.logs.forEach(logFile=> { %>
                                                 <div class="log-day">
                                                     <button class="log-button"
                                                         onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                        <%= logFile %>
+                                                        <span class="folder-buttons">
+                                                            <%= logFile %>
+                                                        </span>
                                                     </button>
                                                     <!-- Add Download Button for Daily Logs -->
-                                                    <button class="log-button"
-                                                        onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                        <i class="material-symbols-outlined">get_app</i>
-                                                    </button>
-                                                    <!-- Add Delete Button for Daily Logs -->
-                                                    <button class="log-button"
-                                                        onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                        <i class="material-symbols-outlined">close</i>
-                                                    </button>
+                                                    <span class="dl-d-icons-container">
+                                                        <button class="log-button"
+                                                            onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                            <i class="material-symbols-outlined dl-d-icons"
+                                                                style="display: inline-block;">get_app</i>
+                                                        </button>
+                                                        <!-- Add Delete Button for Daily Logs -->
+                                                        <button class="log-button"
+                                                            onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                            <i class="material-symbols-outlined dl-d-icons"
+                                                                style="display: inline-block;">close</i>
+                                                        </button>
+                                                    </span>
                                                 </div>
                                                 <% }); %>
                                         </div>
@@ -180,59 +227,65 @@
                                     <% }); %>
                             </div>
                         </div>
-                        <% }); %>
-                </div>
+                    </div>
+                    <% }); %>
 
 
-                <script>
-                    const toggleLogsContainer = (button, id) => {
-                        const logsContainer = button.parentElement.querySelector('.log-year-container') || button.parentElement.querySelector('.log-month-container');
-                        const arrow = button.querySelector('.arrow');
-                        const isOpen = logsContainer.classList.toggle('open');
-                        arrow.classList.toggle('rotate');
-                        saveMenuState();
-                    }
+                        <script>
+                            const toggleLogsContainer = (button) => {
+                                const logsContainer = button.parentElement.querySelector('.log-year-container, .log-month-container, .log-day-container');
+                                const arrow = button.querySelector('.arrow');
+                                const isOpen = logsContainer.classList.toggle('open');
+                                arrow.classList.toggle('rotate');
+                                saveMenuState();
+                            }
 
-                    const saveMenuState = () => {
-                        const menuState = {};
-                        const logContainers = document.querySelectorAll('.log-year-container, .log-month-container');
-                        logContainers.forEach(container => {
-                            const id = container.parentElement.id;
-                            const isOpen = container.classList.contains('open');
-                            menuState[id] = isOpen;
-                        });
-                        localStorage.setItem('menuState', JSON.stringify(menuState));
-                    }
 
-                    const loadMenuState = () => {
-                        const menuState = JSON.parse(localStorage.getItem('menuState'));
-                        if (menuState) {
-                            for (const id in menuState) {
-                                const isOpen = menuState[id];
-                                const container = document.getElementById(id);
-                                if (isOpen) {
-                                    container.querySelector('.arrow').classList.add('rotate');
-                                    container.querySelector('.log-year-container, .log-month-container').classList.add('open');
+
+                            const saveMenuState = () => {
+                                const menuState = {};
+                                const logContainers = document.querySelectorAll('.log-year-container, .log-month-container, .log-day-container');
+                                logContainers.forEach(container => {
+                                    const id = container.parentElement.id;
+                                    const isOpen = container.classList.contains('open');
+                                    menuState[id] = isOpen;
+                                });
+                                localStorage.setItem('menuState', JSON.stringify(menuState));
+                            }
+
+                            const loadMenuState = () => {
+                                const menuState = JSON.parse(localStorage.getItem('menuState'));
+                                if (menuState) {
+                                    for (const id in menuState) {
+                                        const isOpen = menuState[id];
+                                        const container = document.getElementById(id);
+                                        if (isOpen && container) {
+                                            const logsContainer = container.querySelector('.log-year-container, .log-month-container, .log-day-container');
+                                            if (logsContainer) {
+                                                container.querySelector('.arrow').classList.add('rotate');
+                                                logsContainer.classList.add('open');
+                                            }
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
-
-                    window.addEventListener('DOMContentLoaded', () => {
-                        loadMenuState();
-                    });
 
 
+                            window.addEventListener('DOMContentLoaded', () => {
+                                loadMenuState();
+                            });
 
-                    const fetchLogContent = async (year, month, day) => {
-                        try {
-                            const response = await fetch(`/logs/${year}/${month}/${day}`);
-                            const data = await response.json();
 
-                            let params = 'toolbar=no, popup=yes, directories=no, titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=no, resizable=no,width=750,height=450,left=100,top=100';
-                            let logWindow = window.open('', '', params);
 
-                            logWindow.document.write(`
+                            const fetchLogContent = async (year, month, day) => {
+                                try {
+                                    const response = await fetch(`/logs/${year}/${month}/${day}`);
+                                    const data = await response.json();
+
+                                    let params = 'toolbar=no, popup=yes, directories=no, titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=no, resizable=no,width=750,height=450,left=100,top=100';
+                                    let logWindow = window.open('', '', params);
+
+                                    logWindow.document.write(`
                                 <!DOCTYPE html>
                                 <html>
                                 <head>
@@ -263,109 +316,109 @@
                                 </html>
                             `);
 
-                            logWindow.document.close();
-                        } catch (error) {
-                            console.error("Error fetching log content:", error);
-                        }
-                    }
-
-                    const downloadLogFile = (year, month, day) => {
-                        // Create a link and programmatically click it to initiate download
-                        const link = document.createElement('a');
-                        link.href = `/logs/${year}/${month}/${day}/download`;
-                        link.download = `${year}-${month}-${day}.log`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    }
-
-                    const deleteLogFile = async (year, month, day) => {
-                        try {
-                            const response = await fetch(`/logs/${year}/${month}/${day}`, { method: 'DELETE' });
-                            if (response.ok) {
-                                console.log('Log file successfully deleted');
-                                // Reload the page or remove the deleted item from DOM
-                                location.reload();
-                            }
-                        } catch (error) {
-                            console.error("Error deleting log file:", error);
-                        }
-                    }
-
-                    const downloadMonthLogs = async (year, month) => {
-                        try {
-                            // Send an AJAX request to initiate download
-                            const response = await fetch(`/logs/${year}/${month}/download`, { method: 'GET' });
-                            if (!response.ok) {
-                                throw new Error('Download failed');
+                                    logWindow.document.close();
+                                } catch (error) {
+                                    console.error("Error fetching log content:", error);
+                                }
                             }
 
-                            const blob = await response.blob();
-                            const url = window.URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.target = '_blank';
-                            a.download = `${year}-${month}-logs.zip`;
-                            document.body.appendChild(a);
-                            a.click();
-                            a.remove();
-                        } catch (error) {
-                            console.error('Error during download:', error);
-                            // Handle the error (e.g., display an error message to the user)
-                        }
-                    };
-
-                    const downloadYearLogs = async (year) => {
-                        try {
-                            // Send an AJAX request to initiate download
-                            const response = await fetch(`/logs/${year}/download`, { method: 'GET' });
-                            if (!response.ok) {
-                                throw new Error('Download failed');
+                            const downloadLogFile = (year, month, day) => {
+                                // Create a link and programmatically click it to initiate download
+                                const link = document.createElement('a');
+                                link.href = `/logs/${year}/${month}/${day}/download`;
+                                link.download = `${year}-${month}-${day}.log`;
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
                             }
 
-                            const blob = await response.blob();
-                            const url = window.URL.createObjectURL(blob);
-                            const a = document.createElement('a');
-                            a.href = url;
-                            a.target = '_blank';
-                            a.download = `${year}-logs.zip`;
-                            document.body.appendChild(a);
-                            a.click();
-                            a.remove();
-                        } catch (error) {
-                            console.error('Error during download:', error);
-                            // Handle the error (e.g., display an error message to the user)
-                        }
-                    };
-
-                    const deleteMonthLogs = async (year, month) => {
-                        try {
-                            const response = await fetch(`/logs/${year}/${month}`, { method: 'DELETE' });
-                            if (response.ok) {
-                                console.log('Logs for the month successfully deleted');
-                                // Reload the page or remove the deleted items from DOM
-                                location.reload();
+                            const deleteLogFile = async (year, month, day) => {
+                                try {
+                                    const response = await fetch(`/logs/${year}/${month}/${day}`, { method: 'DELETE' });
+                                    if (response.ok) {
+                                        console.log('Log file successfully deleted');
+                                        // Reload the page or remove the deleted item from DOM
+                                        location.reload();
+                                    }
+                                } catch (error) {
+                                    console.error("Error deleting log file:", error);
+                                }
                             }
-                        } catch (error) {
-                            console.error('Error deleting logs for the month:', error);
-                        }
-                    };
 
-                    const deleteYearLogs = async (year) => {
-                        try {
-                            const response = await fetch(`/logs/${year}`, { method: 'DELETE' });
-                            if (response.ok) {
-                                console.log('Logs for the year successfully deleted');
-                                // Reload the page or remove the deleted items from DOM
-                                location.reload();
-                            }
-                        } catch (error) {
-                            console.error('Error deleting logs for the year:', error);
-                        }
-                    };
+                            const downloadMonthLogs = async (year, month) => {
+                                try {
+                                    // Send an AJAX request to initiate download
+                                    const response = await fetch(`/logs/${year}/${month}/download`, { method: 'GET' });
+                                    if (!response.ok) {
+                                        throw new Error('Download failed');
+                                    }
 
-                </script>
+                                    const blob = await response.blob();
+                                    const url = window.URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.target = '_blank';
+                                    a.download = `${year}-${month}-logs.zip`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    a.remove();
+                                } catch (error) {
+                                    console.error('Error during download:', error);
+                                    // Handle the error (e.g., display an error message to the user)
+                                }
+                            };
 
-                <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+                            const downloadYearLogs = async (year) => {
+                                try {
+                                    // Send an AJAX request to initiate download
+                                    const response = await fetch(`/logs/${year}/download`, { method: 'GET' });
+                                    if (!response.ok) {
+                                        throw new Error('Download failed');
+                                    }
 
-                <%- include('partials/bottomjs.ejs') %>
+                                    const blob = await response.blob();
+                                    const url = window.URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.target = '_blank';
+                                    a.download = `${year}-logs.zip`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    a.remove();
+                                } catch (error) {
+                                    console.error('Error during download:', error);
+                                    // Handle the error (e.g., display an error message to the user)
+                                }
+                            };
+
+                            const deleteMonthLogs = async (year, month) => {
+                                try {
+                                    const response = await fetch(`/logs/${year}/${month}`, { method: 'DELETE' });
+                                    if (response.ok) {
+                                        console.log('Logs for the month successfully deleted');
+                                        // Reload the page or remove the deleted items from DOM
+                                        location.reload();
+                                    }
+                                } catch (error) {
+                                    console.error('Error deleting logs for the month:', error);
+                                }
+                            };
+
+                            const deleteYearLogs = async (year) => {
+                                try {
+                                    const response = await fetch(`/logs/${year}`, { method: 'DELETE' });
+                                    if (response.ok) {
+                                        console.log('Logs for the year successfully deleted');
+                                        // Reload the page or remove the deleted items from DOM
+                                        location.reload();
+                                    }
+                                } catch (error) {
+                                    console.error('Error deleting logs for the year:', error);
+                                }
+                            };
+
+                        </script>
+
+                        <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+
+                        <%- include('partials/bottomjs.ejs') %>

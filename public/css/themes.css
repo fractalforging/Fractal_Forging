@@ -93,7 +93,7 @@
   --break-list-item-shadow-color: #00214e34;
   --break-list-item-text-color: #040F16;
   --break-list-item-edit-color: #8fe93a;
-  --break-list-item-remove-color: #004C7B;
+  --break-list-item-icons-color: #004C7B;
   --break-list-item-time-over-color: red;
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;
@@ -203,7 +203,7 @@
   --break-list-item-shadow-color: #00060f91;
   --break-list-item-text-color: #cad4e4;
   --break-list-item-edit-color: #8fe93a;
-  --break-list-item-remove-color: #6e8eb9;
+  --break-list-item-icons-color: #8e6bc6;
   --break-list-item-time-over-color: #f36060;
   --break-list-item-filler-color: #00000000;
   --break-list-item-confirm-color: #2ed573;

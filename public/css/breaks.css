@@ -140,7 +140,7 @@
 }
 
 .arrow {
-  color: var(--break-list-item-remove-color);
+  color: var(--break-list-item-icons-color);
   position: relative;
   top: -2px;
   left: -8px;
@@ -149,7 +149,7 @@
   cursor: pointer;
   transform-origin: center center;
   transform: scale(0.8) translateX(0);
-  transition: all var(--animation-duration-more) ease-in-out;
+  transition: all var(--animation-duration-short) ease-in-out;
 }
 
 .arrow.open .material-symbols-outlined {
@@ -159,6 +159,11 @@
 
 .material-symbols-outlined {
   animation: fade-in 0.5s ease-in-out forwards;
+  transition: all var(--animation-duration-min) ease-in-out;
+}
+
+.material-symbols-outlined:hover {
+  color: var(--links-hover-color);
 }
 
 .extra-info {
@@ -293,7 +298,7 @@ nonstart {
 
 .remove-user,
 .remove-admin {
-  color: var(--break-list-item-remove-color);
+  color: var(--break-list-item-icons-color);
   margin-right: 5px;
   cursor: pointer;
   text-decoration: none;
