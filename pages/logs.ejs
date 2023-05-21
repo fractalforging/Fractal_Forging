@@ -73,6 +73,28 @@
                     .log-button {
                         transition: all 0.3s ease-in-out;
                     }
+
+                    .material-symbols-outlined {
+                        vertical-align: middle;
+                        font-family: 'Material Icons';
+                        font-weight: normal;
+                        font-style: normal;
+                        font-size: 20px;
+                        display: inline-block;
+                        line-height: 1;
+                        text-transform: none;
+                        letter-spacing: normal;
+                        word-wrap: normal;
+                        white-space: nowrap;
+                        direction: ltr;
+                        -webkit-font-feature-settings: 'liga';
+                        -webkit-font-smoothing: antialiased;
+                        transition: all 0.3s ease-in-out;
+                    }
+
+                    .material-symbols-outlined:hover {
+                        color: var(--links-hover-color);
+                    }
                 </style>
 
                 <greet>Logs</greet>
@@ -100,7 +122,22 @@
                                                         onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                         <%= logFile %>
                                                     </button>
+                                                    <!-- Add Download Button -->
+                                                    <button class="log-button"
+                                                        onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                        <i class="material-symbols-outlined">get_app</i>
+                                                        <!-- Replace with actual download icon name from Material Icons -->
+                                                    </button>
+                                                    <!-- Add Delete Button -->
+                                                    <button class="log-button"
+                                                        onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                        <i class="material-symbols-outlined">
+                                                            close
+                                                        </i>
+                                                        <!-- 'delete' is the actual icon name from Material Icons -->
+                                                    </button>
                                                 </div>
+
                                                 <% }); %>
                                         </div>
                                     </div>
@@ -183,6 +220,30 @@
                             console.error("Error fetching log content:", error);
                         }
                     }
+
+                    const downloadLogFile = (year, month, day) => {
+                        // Create a link and programmatically click it to initiate download
+                        const link = document.createElement('a');
+                        link.href = `/logs/${year}/${month}/${day}/download`;
+                        link.download = `${year}-${month}-${day}.log`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+
+                    const deleteLogFile = async (year, month, day) => {
+                        try {
+                            const response = await fetch(`/logs/${year}/${month}/${day}`, { method: 'DELETE' });
+                            if (response.ok) {
+                                console.log('Log file successfully deleted');
+                                // Reload the page or remove the deleted item from DOM
+                                location.reload();
+                            }
+                        } catch (error) {
+                            console.error("Error deleting log file:", error);
+                        }
+                    }
+
 
                 </script>
 

@@ -49,6 +49,7 @@
   --modals-title-text-color: #ccc;
   /*//// - LINKS - ////*/
   --links-color: #004C7B;
+  --links-hover-color: #0085d8;
   --links-font-weight: 650;
   --links-font-size: 16px;
   --links-divider-color: #004C7B;
@@ -157,6 +158,7 @@
   --modals-title-text-color: #ccc;
   /*//// - LINKS - ////*/
   --links-color: #A979F6;
+  --links-hover-color: #d1b8fa;
   --links-font-weight: 550;
   --links-font-size: 16px;
   --links-divider-color: #665f68;

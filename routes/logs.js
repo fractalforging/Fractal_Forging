@@ -4,6 +4,8 @@ import path from 'path';
 import { promisify } from 'util';
 import { isLoggedIn } from '../middleware/authentication.js';
 import AnsiToHtml from 'ansi-to-html';
+import { unlink } from 'fs/promises'; 
+import { createReadStream } from 'fs';
 
 const logsRoute = express.Router();
 const readdirAsync = promisify(fs.readdir);
@@ -77,6 +79,34 @@ logsRoute.get('/frame/:year/:month/:day', isLoggedIn, async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send('Error fetching log content');
+    }
+});
+
+// For downloading log files
+logsRoute.get('/:year/:month/:day/download', isLoggedIn, (req, res) => {
+    const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
+    const logFile = `${req.params.day}`;
+    const logFilePath = path.join(logDirectory, logFile);
+
+    res.setHeader('Content-disposition', 'attachment; filename=' + logFile);
+    res.setHeader('Content-type', 'text/plain');
+
+    const fileStream = createReadStream(logFilePath);
+    fileStream.pipe(res);
+});
+
+// For deleting log files
+logsRoute.delete('/:year/:month/:day', isLoggedIn, async (req, res) => {
+    const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
+    const logFile = `${req.params.day}`;
+    const logFilePath = path.join(logDirectory, logFile);
+
+    try {
+        await unlink(logFilePath);
+        res.json({ message: 'Log file successfully deleted' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error deleting log file' });
     }
 });
 
