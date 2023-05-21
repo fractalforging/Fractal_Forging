@@ -19,7 +19,7 @@
                         color: var(--links-color);
                         cursor: pointer;
                         padding: 0;
-                        margin: 0;
+                        margin-left: 10px;
                         transition: color 0.5s ease;
                         font-size: 18px;
                         text-align: left;
@@ -48,7 +48,14 @@
                         max-height: 0;
                         transition: all 0.5s cubic-bezier(0, 1, 0, 1);
                         opacity: 0;
+                        overflow: hidden;
                     }
+
+                    .hidden {
+                        display: none;
+                        visibility: hidden;
+                    }
+
 
                     .log-year .logs-container.open,
                     .log-month .logs-container.open {
@@ -56,6 +63,22 @@
                         transition: all 1s ease-in-out;
                         opacity: 1;
                     }
+
+                    .log-year-container,
+                    .log-month-container {
+                        max-height: 0;
+                        transition: all 0.5s cubic-bezier(0, 1, 0, 1);
+                        opacity: 0;
+                        overflow: hidden;
+                    }
+
+                    .log-year-container.open,
+                    .log-month-container.open {
+                        max-height: 800px;
+                        transition: all 1s ease-in-out;
+                        opacity: 1;
+                    }
+
 
                     .arrow {
                         transition: transform 0.3s ease-in-out;
@@ -87,7 +110,6 @@
                         word-wrap: normal;
                         white-space: nowrap;
                         direction: ltr;
-                        -webkit-font-feature-settings: 'liga';
                         -webkit-font-smoothing: antialiased;
                         transition: all 0.3s ease-in-out;
                     }
@@ -112,16 +134,12 @@
                             <button class="log-button"
                                 onclick="downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
                                 <i class="material-symbols-outlined">get_app</i>
-                                <!-- Replace with actual download icon name from Material Icons -->
                             </button>
                             <!-- Add Delete Button for Year Folder -->
                             <button class="log-button" onclick="deleteYearLogs('<%= logYear.year %>')">
-                                <i class="material-symbols-outlined">
-                                    close
-                                </i>
-                                <!-- 'delete' is the actual icon name from Material Icons -->
+                                <i class="material-symbols-outlined">close</i>
                             </button>
-                            <div class="logs-container">
+                            <div class="log-year-container">
                                 <% logYear.months.forEach((logMonth, monthIndex)=> { %>
                                     <div class="log-month" id="month<%= monthIndex %>">
                                         <button onclick="toggleLogsContainer(this, 'month<%= monthIndex %>')">
@@ -132,17 +150,13 @@
                                         <button class="log-button"
                                             onclick="downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
                                             <i class="material-symbols-outlined">get_app</i>
-                                            <!-- Replace with actual download icon name from Material Icons -->
                                         </button>
                                         <!-- Add Delete Button for Month Folder -->
                                         <button class="log-button"
                                             onclick="deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
-                                            <i class="material-symbols-outlined">
-                                                close
-                                            </i>
-                                            <!-- 'delete' is the actual icon name from Material Icons -->
+                                            <i class="material-symbols-outlined">close</i>
                                         </button>
-                                        <div class="logs-container">
+                                        <div class="log-month-container">
                                             <% logMonth.logs.forEach(logFile=> { %>
                                                 <div class="log-day">
                                                     <button class="log-button"
@@ -153,56 +167,62 @@
                                                     <button class="log-button"
                                                         onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                         <i class="material-symbols-outlined">get_app</i>
-                                                        <!-- Replace with actual download icon name from Material Icons -->
                                                     </button>
                                                     <!-- Add Delete Button for Daily Logs -->
                                                     <button class="log-button"
                                                         onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                        <i class="material-symbols-outlined">
-                                                            close
-                                                        </i>
-                                                        <!-- 'delete' is the actual icon name from Material Icons -->
+                                                        <i class="material-symbols-outlined">close</i>
                                                     </button>
                                                 </div>
                                                 <% }); %>
-
                                         </div>
                                     </div>
                                     <% }); %>
-
                             </div>
                         </div>
                         <% }); %>
                 </div>
 
+
                 <script>
                     const toggleLogsContainer = (button, id) => {
-                        const logsContainer = button.nextElementSibling;
+                        const logsContainer = button.parentElement.querySelector('.log-year-container') || button.parentElement.querySelector('.log-month-container');
                         const arrow = button.querySelector('.arrow');
-                        logsContainer.classList.toggle('open');
+                        const isOpen = logsContainer.classList.toggle('open');
                         arrow.classList.toggle('rotate');
-                        localStorage.setItem(id, logsContainer.classList.contains('open'));
+                        saveMenuState();
+                    }
+
+                    const saveMenuState = () => {
+                        const menuState = {};
+                        const logContainers = document.querySelectorAll('.log-year-container, .log-month-container');
+                        logContainers.forEach(container => {
+                            const id = container.parentElement.id;
+                            const isOpen = container.classList.contains('open');
+                            menuState[id] = isOpen;
+                        });
+                        localStorage.setItem('menuState', JSON.stringify(menuState));
+                    }
+
+                    const loadMenuState = () => {
+                        const menuState = JSON.parse(localStorage.getItem('menuState'));
+                        if (menuState) {
+                            for (const id in menuState) {
+                                const isOpen = menuState[id];
+                                const container = document.getElementById(id);
+                                if (isOpen) {
+                                    container.querySelector('.arrow').classList.add('rotate');
+                                    container.querySelector('.log-year-container, .log-month-container').classList.add('open');
+                                }
+                            }
+                        }
                     }
 
                     window.addEventListener('DOMContentLoaded', () => {
-                        const logYears = document.querySelectorAll('.log-year');
-                        const logMonths = document.querySelectorAll('.log-month');
-                        logYears.forEach(year => {
-                            const savedState = localStorage.getItem(year.id);
-                            if (savedState === 'true') {
-                                year.querySelector('.logs-container').classList.add('open');
-                                year.querySelector('.arrow').classList.add('rotate');
-                            }
-                        });
-
-                        logMonths.forEach(month => {
-                            const savedState = localStorage.getItem(month.id);
-                            if (savedState === 'true') {
-                                month.querySelector('.logs-container').classList.add('open');
-                                month.querySelector('.arrow').classList.add('rotate');
-                            }
-                        });
+                        loadMenuState();
                     });
+
+
 
                     const fetchLogContent = async (year, month, day) => {
                         try {
@@ -295,9 +315,6 @@
                         }
                     };
 
-
-
-
                     const downloadYearLogs = async (year) => {
                         try {
                             // Send an AJAX request to initiate download
@@ -320,8 +337,6 @@
                             // Handle the error (e.g., display an error message to the user)
                         }
                     };
-
-
 
                     const deleteMonthLogs = async (year, month) => {
                         try {
@@ -348,8 +363,6 @@
                             console.error('Error deleting logs for the year:', error);
                         }
                     };
-
-
 
                 </script>
 
