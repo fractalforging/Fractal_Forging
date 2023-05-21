@@ -4,13 +4,85 @@ import path from 'path';
 import { promisify } from 'util';
 import { isLoggedIn } from '../middleware/authentication.js';
 import AnsiToHtml from 'ansi-to-html';
-import { unlink } from 'fs/promises'; 
-import { createReadStream } from 'fs';
+import { unlink } from 'fs/promises';
+import { createReadStream, createWriteStream } from 'fs';
+import archiver from 'archiver';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
 
 const logsRoute = express.Router();
 const readdirAsync = promisify(fs.readdir);
 const readFileAsync = promisify(fs.readFile);
 const converter = new AnsiToHtml();
+
+// For downloading log files
+logsRoute.get('/:year/:month/:day/download', isLoggedIn, async (req, res) => {
+    const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
+    const logFile = `${req.params.day}`;
+    const logFilePath = path.join(logDirectory, logFile);
+
+    res.setHeader('Content-disposition', 'attachment; filename=' + logFile);
+    res.setHeader('Content-type', 'text/plain');
+
+    const fileStream = createReadStream(logFilePath);
+    fileStream.pipe(res);
+});
+
+logsRoute.get('/:year/:month/download', isLoggedIn, async (req, res) => {
+    const monthDirectory = path.join(process.cwd(), `_logs/${req.params.year}/${req.params.month}`);
+    const zipFilePath = path.join(process.cwd(), `_logs/${req.params.year}-${req.params.month}.zip`);
+
+    try {
+        if (fs.existsSync(monthDirectory)) {
+            const archive = archiver('zip', {
+                zlib: { level: 9 }
+            });
+
+            archive.on('error', (err) => {
+                console.error('Error creating zip archive:', err);
+                res.status(500).json({ error: 'Error creating zip archive' });
+            });
+
+            res.attachment(`${req.params.year}-${req.params.month}.zip`);
+            archive.pipe(res);
+            archive.directory(monthDirectory, false);
+            archive.finalize();
+        } else {
+            res.status(404).json({ error: 'Month directory not found' });
+        }
+    } catch (err) {
+        console.error('Error creating zip archive:', err);
+        res.status(500).json({ error: 'Error creating zip archive' });
+    }
+});
+
+logsRoute.get('/:year/download', isLoggedIn, (req, res) => {
+    const yearDirectory = path.join(process.cwd(), `_logs/${req.params.year}`);
+    const zipFilePath = path.join(process.cwd(), `_logs/${req.params.year}.zip`);
+
+    try {
+        if (fs.existsSync(yearDirectory)) {
+            const archive = archiver('zip', {
+                zlib: { level: 9 }
+            });
+
+            archive.on('error', (err) => {
+                console.error('Error creating zip archive:', err);
+                res.status(500).json({ error: 'Error creating zip archive' });
+            });
+
+            res.attachment(`${req.params.year}.zip`);
+            archive.pipe(res);
+            archive.directory(yearDirectory, false);
+            archive.finalize();
+        } else {
+            res.status(404).json({ error: 'Year directory not found' });
+        }
+    } catch (err) {
+        console.error('Error creating zip archive:', err);
+        res.status(500).json({ error: 'Error creating zip archive' });
+    }
+});
 
 logsRoute.get('/', isLoggedIn, async (req, res) => {
     const logDirectory = '_logs/';
@@ -82,20 +154,31 @@ logsRoute.get('/frame/:year/:month/:day', isLoggedIn, async (req, res) => {
     }
 });
 
-// For downloading log files
-logsRoute.get('/:year/:month/:day/download', isLoggedIn, (req, res) => {
-    const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
-    const logFile = `${req.params.day}`;
-    const logFilePath = path.join(logDirectory, logFile);
+// For deleting log files
+logsRoute.delete('/:year', isLoggedIn, async (req, res) => {
+    const logDirectory = `_logs/${req.params.year}`;
 
-    res.setHeader('Content-disposition', 'attachment; filename=' + logFile);
-    res.setHeader('Content-type', 'text/plain');
-
-    const fileStream = createReadStream(logFilePath);
-    fileStream.pipe(res);
+    try {
+        await fs.promises.rmdir(logDirectory, { recursive: true });
+        res.json({ message: 'Log folder successfully deleted' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error deleting log folder' });
+    }
 });
 
-// For deleting log files
+logsRoute.delete('/:year/:month', isLoggedIn, async (req, res) => {
+    const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
+
+    try {
+        await fs.promises.rmdir(logDirectory, { recursive: true });
+        res.json({ message: 'Log folder successfully deleted' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Error deleting log folder' });
+    }
+});
+
 logsRoute.delete('/:year/:month/:day', isLoggedIn, async (req, res) => {
     const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
     const logFile = `${req.params.day}`;
@@ -108,7 +191,8 @@ logsRoute.delete('/:year/:month/:day', isLoggedIn, async (req, res) => {
         console.error(err);
         res.status(500).json({ error: 'Error deleting log file' });
     }
-});
 
+
+});
 
 export default logsRoute;

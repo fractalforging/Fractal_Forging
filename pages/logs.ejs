@@ -108,12 +108,39 @@
                                 <span class="arrow">▶</span>
                                 <%= logYear.year %>
                             </button>
+                            <!-- Add Download Button for Year Folder -->
+                            <button class="log-button"
+                                onclick="downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
+                                <i class="material-symbols-outlined">get_app</i>
+                                <!-- Replace with actual download icon name from Material Icons -->
+                            </button>
+                            <!-- Add Delete Button for Year Folder -->
+                            <button class="log-button" onclick="deleteYearLogs('<%= logYear.year %>')">
+                                <i class="material-symbols-outlined">
+                                    close
+                                </i>
+                                <!-- 'delete' is the actual icon name from Material Icons -->
+                            </button>
                             <div class="logs-container">
                                 <% logYear.months.forEach((logMonth, monthIndex)=> { %>
                                     <div class="log-month" id="month<%= monthIndex %>">
                                         <button onclick="toggleLogsContainer(this, 'month<%= monthIndex %>')">
                                             <span class="arrow">▶</span>
                                             <%= logMonth.month %>
+                                        </button>
+                                        <!-- Add Download Button for Month Folder -->
+                                        <button class="log-button"
+                                            onclick="downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
+                                            <i class="material-symbols-outlined">get_app</i>
+                                            <!-- Replace with actual download icon name from Material Icons -->
+                                        </button>
+                                        <!-- Add Delete Button for Month Folder -->
+                                        <button class="log-button"
+                                            onclick="deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
+                                            <i class="material-symbols-outlined">
+                                                close
+                                            </i>
+                                            <!-- 'delete' is the actual icon name from Material Icons -->
                                         </button>
                                         <div class="logs-container">
                                             <% logMonth.logs.forEach(logFile=> { %>
@@ -122,13 +149,13 @@
                                                         onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                         <%= logFile %>
                                                     </button>
-                                                    <!-- Add Download Button -->
+                                                    <!-- Add Download Button for Daily Logs -->
                                                     <button class="log-button"
                                                         onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                         <i class="material-symbols-outlined">get_app</i>
                                                         <!-- Replace with actual download icon name from Material Icons -->
                                                     </button>
-                                                    <!-- Add Delete Button -->
+                                                    <!-- Add Delete Button for Daily Logs -->
                                                     <button class="log-button"
                                                         onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                         <i class="material-symbols-outlined">
@@ -137,11 +164,12 @@
                                                         <!-- 'delete' is the actual icon name from Material Icons -->
                                                     </button>
                                                 </div>
-
                                                 <% }); %>
+
                                         </div>
                                     </div>
                                     <% }); %>
+
                             </div>
                         </div>
                         <% }); %>
@@ -243,6 +271,84 @@
                             console.error("Error deleting log file:", error);
                         }
                     }
+
+                    const downloadMonthLogs = async (year, month) => {
+                        try {
+                            // Send an AJAX request to initiate download
+                            const response = await fetch(`/logs/${year}/${month}/download`, { method: 'GET' });
+                            if (!response.ok) {
+                                throw new Error('Download failed');
+                            }
+
+                            const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.target = '_blank';
+                            a.download = `${year}-${month}-logs.zip`;
+                            document.body.appendChild(a);
+                            a.click();
+                            a.remove();
+                        } catch (error) {
+                            console.error('Error during download:', error);
+                            // Handle the error (e.g., display an error message to the user)
+                        }
+                    };
+
+
+
+
+                    const downloadYearLogs = async (year) => {
+                        try {
+                            // Send an AJAX request to initiate download
+                            const response = await fetch(`/logs/${year}/download`, { method: 'GET' });
+                            if (!response.ok) {
+                                throw new Error('Download failed');
+                            }
+
+                            const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.target = '_blank';
+                            a.download = `${year}-logs.zip`;
+                            document.body.appendChild(a);
+                            a.click();
+                            a.remove();
+                        } catch (error) {
+                            console.error('Error during download:', error);
+                            // Handle the error (e.g., display an error message to the user)
+                        }
+                    };
+
+
+
+                    const deleteMonthLogs = async (year, month) => {
+                        try {
+                            const response = await fetch(`/logs/${year}/${month}`, { method: 'DELETE' });
+                            if (response.ok) {
+                                console.log('Logs for the month successfully deleted');
+                                // Reload the page or remove the deleted items from DOM
+                                location.reload();
+                            }
+                        } catch (error) {
+                            console.error('Error deleting logs for the month:', error);
+                        }
+                    };
+
+                    const deleteYearLogs = async (year) => {
+                        try {
+                            const response = await fetch(`/logs/${year}`, { method: 'DELETE' });
+                            if (response.ok) {
+                                console.log('Logs for the year successfully deleted');
+                                // Reload the page or remove the deleted items from DOM
+                                location.reload();
+                            }
+                        } catch (error) {
+                            console.error('Error deleting logs for the year:', error);
+                        }
+                    };
+
 
 
                 </script>
