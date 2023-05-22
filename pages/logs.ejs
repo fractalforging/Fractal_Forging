@@ -105,9 +105,19 @@
                         transition: all 0.3s ease;
                     }
 
-                    .dl-d-icons-container {
+                    .dl-d-icons-container-year {
                         position: relative;
                         left: 120px;
+                    }
+
+                    .dl-d-icons-container-month {
+                        position: relative;
+                        left: 123px;
+                    }
+
+                    .dl-d-icons-container-day {
+                        position: relative;
+                        left: 38px;
                     }
 
                     .dl-d-icons {
@@ -159,7 +169,7 @@
                                 </span>
                             </button>
                             <!-- Add Download Button for Year Folder -->
-                            <span class="dl-d-icons-container">
+                            <span class="dl-d-icons-container-year">
                                 <button class="log-button"
                                     onclick="downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
                                     <i class="material-symbols-outlined dl-d-icons"
@@ -184,7 +194,7 @@
                                             </span>
                                         </button>
                                         <!-- Add Download Button for Month Folder -->
-                                        <span class="dl-d-icons-container">
+                                        <span class="dl-d-icons-container-month">
                                             <button class="log-button"
                                                 onclick="downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
                                                 <i class="material-symbols-outlined dl-d-icons"
@@ -207,7 +217,7 @@
                                                         </span>
                                                     </button>
                                                     <!-- Add Download Button for Daily Logs -->
-                                                    <span class="dl-d-icons-container">
+                                                    <span class="dl-d-icons-container-day">
                                                         <button class="log-button"
                                                             onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                             <i class="material-symbols-outlined dl-d-icons"
