@@ -166,6 +166,14 @@
   color: var(--links-hover-color);
 }
 
+.icons-hover-remove:hover {
+  color: var(--links-hover-color);
+}
+
+.icons-hover-remove:hover .arrow {
+  color: var(--links-color);
+}
+
 .extra-info {
   flex: 2;
   display: none;
