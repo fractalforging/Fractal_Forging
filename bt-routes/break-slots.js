@@ -1,24 +1,19 @@
-'use strict';
-
 import { Router } from "express";
+import mongoose from 'mongoose';
 import logger from '../routes/logger.js';
 import kleur from 'kleur';
 import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
 import BreakSlots from "../models/BreakSlots.js";
 import BreakTrack from '../models/BreakTrack.js';
 
-const moveQueuedBreaksToNormalList = async (availableSlots) => {
-  let activeBreaks;
-  try {
-    activeBreaks = await BreakTrack.countDocuments({ status: 'active' });
-  } catch (error) {
-    return;
-  }
+const moveQueuedBreaksToNormalList = async (availableSlots, session) => {
+  const activeBreaks = await BreakTrack.countDocuments({ status: 'active' }).session(session);
   const remainingSlots = availableSlots - activeBreaks;
   if (remainingSlots > 0) {
     const queuedBreaks = await BreakTrack.find({ status: 'queued' })
       .sort({ date: 1 })
-      .limit(remainingSlots);
+      .limit(remainingSlots)
+      .session(session);
     for (const queuedBreak of queuedBreaks) {
       queuedBreak.status = 'active';
       await queuedBreak.save();
@@ -29,32 +24,39 @@ const moveQueuedBreaksToNormalList = async (availableSlots) => {
 const breakSlotsRoute = (io) => {
   const router = Router();
   router.post("/", isAdmin, async function (req, res, next) {
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
       const newSlotsValue = req.body.slotsavailable;
-      const currentSlots = await BreakSlots.findOne();
-      if (newSlotsValue != currentSlots.slots) {
-        const breakSlots = await BreakSlots.findOneAndUpdate(
+      const currentSlots = await BreakSlots.findOne().session(session);
+      if (newSlotsValue !== currentSlots.slots) {
+        await BreakSlots.findOneAndUpdate(
           {},
           { $set: { slots: newSlotsValue } },
-          { new: true, upsert: true }
+          { new: true, upsert: true, session }
         );
-        await moveQueuedBreaksToNormalList(newSlotsValue);
+        await moveQueuedBreaksToNormalList(newSlotsValue, session);
         req.session.message = "Updated";
-        io.emit('reload'); 
         logger.info(`${kleur.magenta(req.user.username)} updated the available slots to: ${kleur.grey(newSlotsValue)}`);
+        await session.commitTransaction();
+        io.emit('reload');
         return res.redirect("secret_admin");
-      } else if (newSlotsValue == currentSlots.slots) {
+      } else {
         req.session.message = "Same value";
         logger.error("Slots were NOT updated, same value chosen");
+        await session.commitTransaction();
         return res.redirect("secret_admin");
       }
     } catch (error) {
       logger.error(error);
+      await session.abortTransaction();
       req.session.message = "Error";
       return res.redirect("secret_admin");
+    } finally {
+      session.endSession();
     }
   });
   return router;
-}
+};
 
 export default breakSlotsRoute;
