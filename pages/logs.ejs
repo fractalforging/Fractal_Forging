@@ -86,13 +86,13 @@
                         font-family: 'M PLUS 1';
                     }
 
-                    .log-year button .button-content:hover .arrow,
-                    .log-month button .button-content:hover .arrow,
-                    .log-day button .button-content:hover .arrow {
+                    .log-year button .button-content:hover .arrow-logs,
+                    .log-month button .button-content:hover .arrow-logs,
+                    .log-day button .button-content:hover .arrow-logs {
                         color: var(--links-hover-color);
                     }
 
-                    .arrow {
+                    .arrow-logs {
                         color: var(--break-list-item-icons-color);
                         position: relative;
                         top: 0px;
@@ -101,8 +101,12 @@
                         display: inline-block;
                         cursor: pointer;
                         transform-origin: center center;
-                        transform: scale(0.9) translateX(0);
+                        transform: scale(0.8);
                         transition: all 0.3s ease;
+                    }
+
+                    .arrow-logs:hover {
+                        color: var(--links-hover-color);
                     }
 
                     .dl-d-icons-container-year {
@@ -126,7 +130,7 @@
                         top: 0px;
                         margin-right: -10px;
                         vertical-align: middle;
-                        transform: scale(0.9) translateX(0);
+                        transform: scale(0.9);
                     }
 
                     .dl-d-icons:hover {
@@ -143,13 +147,12 @@
                     }
 
                     .rotate {
-                        transform: rotate(90deg) scale(0.8) translateX(0);
+                        transform: rotate(90deg) scale(0.8);
                     }
 
                     .material-symbols-outlined {
                         color: var(--break-list-item-icons-color);
                         vertical-align: middle;
-                        font-family: 'Material Icons';
                         transition: all 0.3s ease-in-out;
                     }
                 </style>
@@ -163,7 +166,7 @@
                         <div class="log-year" id="year<%= yearIndex %>">
                             <button onclick="toggleLogsContainer(this)">
                                 <span class="button-content">
-                                    <span class="material-symbols-outlined arrow">keyboard_arrow_right</span>
+                                    <span class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
                                     <span class="folder-buttons">
                                         <%= logYear.year %>
                                     </span>
@@ -188,7 +191,7 @@
                                         <button onclick="toggleLogsContainer(this)">
                                             <span class="button-content">
                                                 <span
-                                                    class="material-symbols-outlined arrow">keyboard_arrow_right</span>
+                                                    class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
                                                 <span class="folder-buttons">
                                                     <%= logMonth.month %>
                                                 </span>
@@ -245,8 +248,8 @@
                         <script>
                             const toggleLogsContainer = (button) => {
                                 const logsContainer = button.parentElement.querySelector('.log-year-container, .log-month-container, .log-day-container');
-                                const arrow = button.querySelector('.arrow');
-                                const isOpen = logsContainer.classList.toggle('open');
+                                const arrow = button.querySelector('.arrow-logs');
+                                logsContainer.classList.toggle('open');
                                 arrow.classList.toggle('rotate');
                                 saveMenuState();
                             }
@@ -273,7 +276,7 @@
                                         if (isOpen && container) {
                                             const logsContainer = container.querySelector('.log-year-container, .log-month-container, .log-day-container');
                                             if (logsContainer) {
-                                                container.querySelector('.arrow').classList.add('rotate');
+                                                container.querySelector('.arrow-logs').classList.add('rotate');
                                                 logsContainer.classList.add('open');
                                             }
                                         }

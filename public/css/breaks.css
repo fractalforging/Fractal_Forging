@@ -82,9 +82,9 @@
   border: 1px solid transparent;
   border-radius: 10px;
   overflow: hidden;
-  transition: background-color var(--animation-duration-more) ease-in-out,
-    color var(--animation-duration-more) ease-in-out,
-    border var(--animation-duration-more) ease-in-out;
+  transition: background-color var(--animation-duration-short) ease-in-out,
+    color var(--animation-duration-short) ease-in-out,
+    border var(--animation-duration-short) ease-in-out;
 }
 
 .break-list-item-user {
@@ -97,15 +97,17 @@
 }
 
 .break-list-item-admin.expanded {
-  /* max-height: 1000px; */
   height: 83px;
   transition: height var(--animation-duration-short) ease-in-out;
 }
 
 .break-list-item-admin.expanded_accounts {
-  /* max-height: 1000px; */
   height: 48px;
   transition: height var(--animation-duration-short) ease-in-out;
+}
+
+.break-list-item-admin:hover .arrow {
+  color: var(--links-hover-color);
 }
 
 .break-list-item-name-user,
@@ -148,18 +150,16 @@
   display: inline-block;
   cursor: pointer;
   transform-origin: center center;
-  transform: scale(0.8) translateX(0);
-  transition: color var(--animation-duration-short) ease-in-out;
+  transform: scale(0.8);
 }
 
 .arrow.open .material-symbols-outlined {
   transform: rotate(90deg);
-  /* transition: all var(--animation-duration-short) ease-in-out; */
 }
 
 .material-symbols-outlined {
   animation: fade-in 0.5s ease-in-out forwards;
-  transition: all var(--animation-duration-short) ease-in-out;
+  transition: all var(--animation-duration-min) ease-in-out;
 }
 
 .icons-hover:hover {
@@ -355,8 +355,8 @@ info {
   position: relative;
   left: -8px;
   visibility: hidden;
-  transition: all 1s ease-in-out;
-  animation: fade-in 0.5s ease-in-out forwards;
+  transition: all var(--animation-duration-short) ease-in-out;
+  animation: fade-in var(--animation-duration-short) ease-in-out forwards;
 }
 
 .dotted {
@@ -367,15 +367,15 @@ info {
 
 .visible {
   visibility: visible;
-  transition-delay: 0.5s;
+  transition-delay: var(--animation-duration-short);
   transition: all 1s ease-in-out;
-  animation: fade-in 0.5s ease-in-out forwards;
+  animation: fade-in var(--animation-duration-short) ease-in-out forwards;
 }
 
 /* /////////// - FADES - //////////// */
 
 .fade-in {
-  animation: fade-in 0.5s ease-in-out forwards;
+  animation: fade-in var(--animation-duration-short) ease-in-out forwards;
 }
 
 @keyframes fade-in {
@@ -389,7 +389,7 @@ info {
 }
 
 .fade-out {
-  animation: fade-out 0.3s ease-in-out forwards;
+  animation: fade-out var(--animation-duration-short) ease-in-out forwards;
 }
 
 @keyframes fade-out {
