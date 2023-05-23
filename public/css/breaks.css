@@ -170,7 +170,7 @@
   color: var(--links-hover-color);
 }
 
-.icons-hover-remove:hover .arrow {
+.icons-hover-remove:hover ~ .break-list-item-name-admin .arrow {
   color: var(--links-color);
 }
 

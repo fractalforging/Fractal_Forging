@@ -154,6 +154,11 @@
                         vertical-align: middle;
                         transition: all 0.3s ease-in-out;
                     }
+
+                    .log-month-row {
+                        position: relative;
+                        width: 100%;
+                    }
                 </style>
 
                 <greet>Logs</greet>
@@ -186,58 +191,61 @@
                             </span>
                             <div class="log-month-container">
                                 <% logYear.months.forEach((logMonth, monthIndex)=> { %>
-                                    <div class="log-month" id="month<%= monthIndex %>">
-                                        <button onclick="toggleLogsContainer(this)">
-                                            <span class="button-content">
-                                                <span
-                                                    class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
-                                                <span class="folder-buttons">
-                                                    <%= logMonth.month %>
-                                                </span>
-                                            </span>
-                                        </button>
-                                        <!-- Download Button for Month Folder -->
-                                        <span class="dl-d-icons-container-month">
-                                            <button class="log-button"
-                                                onclick="downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
-                                                <i class="material-symbols-outlined dl-d-icons"
-                                                    style="display: inline-block;">get_app</i>
-                                            </button>
-                                            <!-- Delete Button for Month Folder -->
-                                            <button class="log-button"
-                                                onclick="deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
-                                                <i class="material-symbols-outlined dl-d-icons"
-                                                    style="display: inline-block;">close</i>
-                                            </button>
-                                        </span>
-                                        <div class="log-day-container">
-                                            <% logMonth.logs.forEach(logFile=> { %>
-                                                <div class="log-day">
-                                                    <button class="log-button"
-                                                        onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                        <span class="folder-buttons">
-                                                            <%= logFile %>
-                                                        </span>
-                                                    </button>
-                                                    <!-- Download Button for Daily Logs -->
-                                                    <span class="dl-d-icons-container-day">
-                                                        <button class="log-button"
-                                                            onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                            <i class="material-symbols-outlined dl-d-icons"
-                                                                style="display: inline-block;">get_app</i>
-                                                        </button>
-                                                        <!-- Delete Button for Daily Logs -->
-                                                        <button class="log-button"
-                                                            onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                            <i class="material-symbols-outlined dl-d-icons"
-                                                                style="display: inline-block;">close</i>
-                                                        </button>
+                                    <div class="log-month-row">
+                                        <div class="log-month" id="month<%= monthIndex %>">
+                                            <button onclick="toggleLogsContainer(this)">
+                                                <span class="button-content">
+                                                    <span
+                                                        class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
+                                                    <span class="folder-buttons">
+                                                        <%= logMonth.month %>
                                                     </span>
-                                                </div>
-                                                <% }); %>
+                                                </span>
+                                            </button>
+                                            <!-- Download Button for Month Folder -->
+                                            <span class="dl-d-icons-container-month">
+                                                <button class="log-button"
+                                                    onclick="downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
+                                                    <i class="material-symbols-outlined dl-d-icons"
+                                                        style="display: inline-block;">get_app</i>
+                                                </button>
+                                                <!-- Delete Button for Month Folder -->
+                                                <button class="log-button"
+                                                    onclick="deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
+                                                    <i class="material-symbols-outlined dl-d-icons"
+                                                        style="display: inline-block;">close</i>
+                                                </button>
+                                            </span>
+                                            <div class="log-day-container">
+                                                <% logMonth.logs.forEach(logFile=> { %>
+                                                    <div class="log-day">
+                                                        <button class="log-button"
+                                                            onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                            <span class="folder-buttons">
+                                                                <%= logFile %>
+                                                            </span>
+                                                        </button>
+                                                        <!-- Download Button for Daily Logs -->
+                                                        <span class="dl-d-icons-container-day">
+                                                            <button class="log-button"
+                                                                onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                                <i class="material-symbols-outlined dl-d-icons"
+                                                                    style="display: inline-block;">get_app</i>
+                                                            </button>
+                                                            <!-- Delete Button for Daily Logs -->
+                                                            <button class="log-button"
+                                                                onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                                <i class="material-symbols-outlined dl-d-icons"
+                                                                    style="display: inline-block;">close</i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                    <% }); %>
+                                            </div>
                                         </div>
                                     </div>
                                     <% }); %>
+
                             </div>
                         </div>
                     </div>
@@ -252,8 +260,6 @@
                                 arrow.classList.toggle('rotate');
                                 saveMenuState();
                             }
-
-
 
                             const saveMenuState = () => {
                                 const menuState = {};
@@ -421,6 +427,97 @@
                                     console.error('Error deleting logs for the year:', error);
                                 }
                             };
+
+                        </script>
+
+                        <!-- ////////////////// - ARROW HOVERING - ////////////////// -->
+
+                        <script>
+
+                            // get CSS variables
+                            let styles = getComputedStyle(document.documentElement);
+                            let linksColor = styles.getPropertyValue('--links-color').trim();
+                            let linksHoverColor = styles.getPropertyValue('--links-hover-color').trim();
+
+                            // add event listeners for year containers
+                            document.querySelectorAll('.log-year-container').forEach((container) => {
+                                let arrowIcon = container.querySelector('.log-year .arrow-logs');
+                                let closeButton = container.querySelector('.log-year .dl-d-icons-container-year .dl-d-icons');
+
+                                container.addEventListener('mouseover', function () {
+                                    if (arrowIcon) {
+                                        arrowIcon.style.color = linksHoverColor;
+                                    }
+                                });
+
+                                container.addEventListener('mouseout', function () {
+                                    if (arrowIcon) {
+                                        arrowIcon.style.color = linksColor;
+                                    }
+                                });
+
+                                if (closeButton) {
+                                    closeButton.addEventListener('mouseover', function () {
+                                        if (arrowIcon) {
+                                            arrowIcon.style.color = linksColor;
+                                        }
+                                    });
+
+                                    closeButton.addEventListener('mouseout', function () {
+                                        if (arrowIcon) {
+                                            arrowIcon.style.color = '';
+                                        }
+                                    });
+                                }
+
+                                container.addEventListener('click', function () {
+                                    let button = container.querySelector('.log-year button');
+                                    if (button) {
+                                        button.click();
+                                    }
+                                });
+
+                            });
+
+                            // add event listeners for month containers
+                            document.querySelectorAll('.log-month-row').forEach((row) => { // Change the selector
+                                let arrowIcon = row.querySelector('.log-month .arrow-logs');
+                                let closeButton = row.querySelector('.log-month .dl-d-icons-container-month .dl-d-icons');
+
+                                row.addEventListener('mouseover', function () { // Change the variable
+                                    if (arrowIcon) {
+                                        arrowIcon.style.color = linksHoverColor;
+                                    }
+                                });
+
+                                row.addEventListener('mouseout', function () { // Change the variable
+                                    if (arrowIcon) {
+                                        arrowIcon.style.color = linksColor;
+                                    }
+                                });
+
+                                if (closeButton) {
+                                    closeButton.addEventListener('mouseover', function () {
+                                        if (arrowIcon) {
+                                            arrowIcon.style.color = linksColor;
+                                        }
+                                    });
+
+                                    closeButton.addEventListener('mouseout', function () {
+                                        if (arrowIcon) {
+                                            arrowIcon.style.color = '';
+                                        }
+                                    });
+                                }
+
+                                row.addEventListener('click', function () {
+                                    let button = row.querySelector('.log-month button');
+                                    if (button) {
+                                        button.click();
+                                    }
+                                });
+                            });
+
 
                         </script>
 
