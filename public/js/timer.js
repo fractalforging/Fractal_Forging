@@ -55,7 +55,7 @@ const onTimerEnded = (id) => {
 ///////// - START BUTTON - //////////
 
 const onStartButtonClick = async (event) => {
-  socket.emit('reload');
+  //socket.emit('reload');
   //console.log('Start button clicked');
   const breakId = event.target.dataset.id;
   try {

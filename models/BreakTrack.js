@@ -1,6 +1,8 @@
 'use strict';
 
+
 import mongoose from 'mongoose';
+
 
 const breakTrackerSchema = new mongoose.Schema({
   user: {
@@ -40,9 +42,14 @@ const breakTrackerSchema = new mongoose.Schema({
     enum: ['active', 'queued'],
     required: true,
     default: 'queued'
+  },
+  lock: { 
+    type: Boolean, default: false 
   }
 });
 
+
 const BreakTrack = mongoose.model('BreakTrack', breakTrackerSchema);
+
 
 export default BreakTrack;
