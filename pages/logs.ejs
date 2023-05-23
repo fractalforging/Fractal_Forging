@@ -172,14 +172,14 @@
                                     </span>
                                 </span>
                             </button>
-                            <!-- Add Download Button for Year Folder -->
+                            <!-- Download Button for Year Folder -->
                             <span class="dl-d-icons-container-year">
                                 <button class="log-button"
                                     onclick="downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
                                     <i class="material-symbols-outlined dl-d-icons"
                                         style="display: inline-block;">get_app</i>
                                 </button>
-                                <!-- Add Delete Button for Year Folder -->
+                                <!-- Delete Button for Year Folder -->
                                 <button class="log-button" onclick="deleteYearLogs('<%= logYear.year %>')">
                                     <i class="material-symbols-outlined dl-d-icons"
                                         style="display: inline-block;">close</i>
@@ -197,14 +197,14 @@
                                                 </span>
                                             </span>
                                         </button>
-                                        <!-- Add Download Button for Month Folder -->
+                                        <!-- Download Button for Month Folder -->
                                         <span class="dl-d-icons-container-month">
                                             <button class="log-button"
                                                 onclick="downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
                                                 <i class="material-symbols-outlined dl-d-icons"
                                                     style="display: inline-block;">get_app</i>
                                             </button>
-                                            <!-- Add Delete Button for Month Folder -->
+                                            <!-- Delete Button for Month Folder -->
                                             <button class="log-button"
                                                 onclick="deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
                                                 <i class="material-symbols-outlined dl-d-icons"
@@ -220,14 +220,14 @@
                                                             <%= logFile %>
                                                         </span>
                                                     </button>
-                                                    <!-- Add Download Button for Daily Logs -->
+                                                    <!-- Download Button for Daily Logs -->
                                                     <span class="dl-d-icons-container-day">
                                                         <button class="log-button"
                                                             onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                             <i class="material-symbols-outlined dl-d-icons"
                                                                 style="display: inline-block;">get_app</i>
                                                         </button>
-                                                        <!-- Add Delete Button for Daily Logs -->
+                                                        <!-- Delete Button for Daily Logs -->
                                                         <button class="log-button"
                                                             onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                             <i class="material-symbols-outlined dl-d-icons"
@@ -337,7 +337,6 @@
                             }
 
                             const downloadLogFile = (year, month, day) => {
-                                // Create a link and programmatically click it to initiate download
                                 const link = document.createElement('a');
                                 link.href = `/logs/${year}/${month}/${day}/download`;
                                 link.download = `${year}-${month}-${day}.log`;
@@ -351,7 +350,6 @@
                                     const response = await fetch(`/logs/${year}/${month}/${day}`, { method: 'DELETE' });
                                     if (response.ok) {
                                         console.log('Log file successfully deleted');
-                                        // Reload the page or remove the deleted item from DOM
                                         location.reload();
                                     }
                                 } catch (error) {
@@ -361,7 +359,6 @@
 
                             const downloadMonthLogs = async (year, month) => {
                                 try {
-                                    // Send an AJAX request to initiate download
                                     const response = await fetch(`/logs/${year}/${month}/download`, { method: 'GET' });
                                     if (!response.ok) {
                                         throw new Error('Download failed');
@@ -378,13 +375,11 @@
                                     a.remove();
                                 } catch (error) {
                                     console.error('Error during download:', error);
-                                    // Handle the error (e.g., display an error message to the user)
                                 }
                             };
 
                             const downloadYearLogs = async (year) => {
                                 try {
-                                    // Send an AJAX request to initiate download
                                     const response = await fetch(`/logs/${year}/download`, { method: 'GET' });
                                     if (!response.ok) {
                                         throw new Error('Download failed');
@@ -401,7 +396,6 @@
                                     a.remove();
                                 } catch (error) {
                                     console.error('Error during download:', error);
-                                    // Handle the error (e.g., display an error message to the user)
                                 }
                             };
 
@@ -410,7 +404,6 @@
                                     const response = await fetch(`/logs/${year}/${month}`, { method: 'DELETE' });
                                     if (response.ok) {
                                         console.log('Logs for the month successfully deleted');
-                                        // Reload the page or remove the deleted items from DOM
                                         location.reload();
                                     }
                                 } catch (error) {
@@ -423,7 +416,6 @@
                                     const response = await fetch(`/logs/${year}`, { method: 'DELETE' });
                                     if (response.ok) {
                                         console.log('Logs for the year successfully deleted');
-                                        // Reload the page or remove the deleted items from DOM
                                         location.reload();
                                     }
                                 } catch (error) {

@@ -229,7 +229,7 @@
   --toggle-sun-top: 80px;
   --toggle-sun-left: 0px;
   --toggle-sun-opacity: 0;
-  --toggle-sun-color: #ff6600;
+  --toggle-sun-color: #fcf15c;
   /*//// - TOGGLE BUTTONS - MOON ////*/
   --toggle-moon-font-size: 36px;
   --toggle-moon-scale: 1.5;
@@ -271,7 +271,7 @@
   color: var(--toggle-sun-color);
   opacity: var(--toggle-sun-opacity);
   transform: scale(var(--toggle-sun-scale)) translateX(0%);
-  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
+  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.3s ease-in-out;
 }
 
 .toggle-moon {
@@ -284,7 +284,7 @@
   color: var(--toggle-moon-color);
   top: var(--toggle-moon-top);
   opacity: var(--toggle-moon-opacity);
-  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.1s ease-in-out;
+  transition: top 1.4s ease-in-out, opacity 0.8s ease-in-out, color 0.5s ease-in-out, font-size 1.1s ease-in-out, transform 1.3s ease-in-out;
 }
 
 .material-symbols-outlined {
