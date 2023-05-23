@@ -63,15 +63,15 @@
       <% if (currentUser.roles==='admin' ) { %>
         <li><a href="/register">Register</a></li>
         <li><a href="/users">Accounts</a></li>
-        <li><a href="/logs">Logs</a></li>
-        <% } %>
-          <li><a href="/settings">Settings</a></li>
-          <li><a href="/logout">Logout</a></li>
+        <% if (currentUser.username==='admin' ) { %>
+          <li><a href="/logs">Logs</a></li>
+          <% } %>
+            <% } %>
+              <li><a href="/settings">Settings</a></li>
+              <li><a href="/logout">Logout</a></li>
     </div>
   </div>
   <li class="nav-breaks"><a href="/secret">Breaks</a></li>
-  <!-- <section class="vertical-line"></section>
-  <li><a href="/logout">Logout</a></li> -->
   <%- include('usersIndicator.ejs') %>
     <% if (currentUser.roles==='admin' ) { %>
       <% } %>
@@ -82,7 +82,7 @@
   var dropdownMenu = document.querySelector('.dropdown-menu');
 
   hamburgerIcon.addEventListener('click', function (event) {
-    event.stopPropagation(); // This prevents the document click listener from firing
+    event.stopPropagation();
     if (dropdownMenu.style.maxHeight === '400px') {
       dropdownMenu.style.maxHeight = '0';
       dropdownMenu.style.opacity = '0';
@@ -92,7 +92,6 @@
     }
   });
 
-  // Add a click event listener to the dropdown menu to stop event propagation
   dropdownMenu.addEventListener('click', function (event) {
     event.stopPropagation();
   });
