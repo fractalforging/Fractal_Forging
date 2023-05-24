@@ -31,7 +31,6 @@
                         border-radius: 10px;
                         overflow: hidden;
                         vertical-align: middle;
-                        transition: all var(--animation-duration-more) ease-in-out;
                     }
 
                     .log-month-container,
@@ -101,7 +100,7 @@
                         cursor: pointer;
                         transform-origin: center center;
                         font-size: 20px;
-
+                        transition: all var(--animation-duration-min) ease-in-out;
                     }
 
                     .arrow-logs:hover {
@@ -157,7 +156,7 @@
                     .material-symbols-outlined {
                         color: var(--break-list-item-icons-color);
                         vertical-align: middle;
-                        transition: all 0.3s ease-in-out;
+                        transition: all var(--animation-duration-min) ease-in-out;
                     }
 
                     .log-month-row {
@@ -173,7 +172,7 @@
                 <% logs.forEach((logYear, yearIndex)=> { %>
                     <div class="log-year-container">
                         <div class="log-year" id="year<%= yearIndex %>">
-                            <button onclick="toggleLogsContainer(event, this)">
+                            <button onclick="toggleLogsContainer(this)">
                                 <span class="button-content">
                                     <span class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
                                     <span class="folder-buttons">
@@ -198,7 +197,7 @@
                                 <% logYear.months.forEach((logMonth, monthIndex)=> { %>
                                     <div class="log-month-row">
                                         <div class="log-month" id="month<%= monthIndex %>">
-                                            <button onclick="toggleLogsContainer(event,this)">
+                                            <button onclick="toggleLogsContainer(this)">
                                                 <span class="button-content">
                                                     <span
                                                         class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
@@ -223,9 +222,9 @@
                                             </span>
                                             <div class="log-day-container">
                                                 <% logMonth.logs.forEach(logFile=> { %>
-                                                    <div class="log-day">
+                                                    <div class="log-day" onclick="event.stopPropagation()">
                                                         <button class="log-button"
-                                                            onclick="fetchLogContent(event, '<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                            onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                             <span class="folder-buttons-logfile">
                                                                 <%= logFile %>
                                                             </span>
@@ -233,13 +232,13 @@
                                                         <!-- Download Button for Daily Logs -->
                                                         <span class="dl-d-icons-container-day">
                                                             <button class="log-button"
-                                                                onclick="downloadLogFile(event, '<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                                onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                                 <i class="material-symbols-outlined dl-d-icons"
                                                                     style="display: inline-block;">get_app</i>
                                                             </button>
                                                             <!-- Delete Button for Daily Logs -->
                                                             <button class="log-button"
-                                                                onclick="deleteLogFile(event, '<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                                onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                                 <i class="material-symbols-outlined dl-d-icons"
                                                                     style="display: inline-block;">close</i>
                                                             </button>
@@ -258,8 +257,7 @@
 
 
                         <script>
-                            const toggleLogsContainer = (event, button) => {
-                                event.stopPropagation();
+                            const toggleLogsContainer = (button) => {
                                 const logsContainer = button.parentElement.querySelector('.log-year-container, .log-month-container, .log-day-container');
                                 const arrow = button.querySelector('.arrow-logs');
                                 logsContainer.classList.toggle('open');
@@ -303,7 +301,6 @@
 
 
                             const fetchLogContent = async (year, month, day) => {
-                                event.stopPropagation();
                                 try {
                                     const response = await fetch(`/logs/${year}/${month}/${day}`);
                                     const data = await response.json();
@@ -348,8 +345,7 @@
                                 }
                             }
 
-                            const downloadLogFile = (year, month, day, logFile) => {
-                                event.stopPropagation();
+                            const downloadLogFile = (year, month, day) => {
                                 const link = document.createElement('a');
                                 link.href = `/logs/${year}/${month}/${day}/download`;
                                 link.download = `${year}-${month}-${day}.log`;
@@ -359,7 +355,6 @@
                             }
 
                             const deleteLogFile = async (year, month, day) => {
-                                event.stopPropagation();
                                 try {
                                     const response = await fetch(`/logs/${year}/${month}/${day}`, { method: 'DELETE' });
                                     if (response.ok) {
