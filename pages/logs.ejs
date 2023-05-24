@@ -101,6 +101,7 @@
                         transform-origin: center center;
                         font-size: 20px;
                         transition: all var(--animation-duration-min) ease-in-out;
+                        transition: transform var(--animation-duration-min) ease-in-out;
                     }
 
                     .arrow-logs:hover {
@@ -151,6 +152,7 @@
 
                     .rotate {
                         transform: rotate(90deg);
+                        transition: transform var(--animation-duration-min) ease-in-out;
                     }
 
                     .material-symbols-outlined {
@@ -258,11 +260,14 @@
 
                         <script>
                             const toggleLogsContainer = (button) => {
-                                const logsContainer = button.parentElement.querySelector('.log-year-container, .log-month-container, .log-day-container');
+                                const parentElement = button.parentElement;
+                                const logsContainer = parentElement.querySelector('.log-month-container, .log-day-container') || parentElement.querySelector('.log-year-container');
                                 const arrow = button.querySelector('.arrow-logs');
-                                logsContainer.classList.toggle('open');
-                                arrow.classList.toggle('rotate');
-                                saveMenuState();
+                                if (logsContainer && arrow) {
+                                    logsContainer.classList.toggle('open');
+                                    arrow.classList.toggle('rotate');
+                                    saveMenuState();
+                                }
                             }
 
                             const saveMenuState = () => {

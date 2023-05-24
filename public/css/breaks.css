@@ -274,8 +274,8 @@ nonstart {
   border-radius: 7px;
   text-indent: -1px;
   cursor: pointer;
-  animation: fade-in 1s ease-in-out forwards 0s;
-  transition: all var(--animation-duration-short) ease-in-out;
+  animation: fade-in var(--animation-duration-base) ease-in-out forwards 0s;
+  transition: all var(--animation-duration-min) ease-in-out;
 }
 
 .name-change-button:hover,
