@@ -141,6 +141,11 @@
                         top: 1px;
                     }
 
+                    .folder-buttons-logfile {
+                        position: relative;
+                        top: 1px;
+                    }
+
                     .log-button {
                         margin-left: auto;
                     }
@@ -221,7 +226,7 @@
                                                     <div class="log-day">
                                                         <button class="log-button"
                                                             onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                            <span class="folder-buttons">
+                                                            <span class="folder-buttons-logfile">
                                                                 <%= logFile %>
                                                             </span>
                                                         </button>
