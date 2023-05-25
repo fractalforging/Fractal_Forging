@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import kleur from 'kleur';
 import http from 'http';
 import compression from 'compression';
+import mongoose from 'mongoose';
 const app = express();
 const server = http.createServer(app);
 app.use(compression());
@@ -32,6 +33,7 @@ if (!dbPath) {
 //=====================
 // MONGODB CONFIG.
 
+mongoose.set('strictQuery', false);
 import User from './models/user.js';
 import BreakTrack from "./models/BreakTrack.js";
 import database from './config/database.js';
