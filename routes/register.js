@@ -25,8 +25,7 @@ registerRoute.post('/', isLoggedIn, isAdmin, async function(req, res, next) {
 
     const newUser = new User({ username: req.body.username, roles: 'user', breakSlots });
 
-    await newUser.save({ session });
-    await User.register(newUser, req.body.password);
+    await User.register(newUser, req.body.password); // Register user directly
 
     await session.commitTransaction();
     session.endSession();
@@ -51,5 +50,6 @@ registerRoute.post('/', isLoggedIn, isAdmin, async function(req, res, next) {
     res.redirect('/register');
   }
 });
+
 
 export default registerRoute;
