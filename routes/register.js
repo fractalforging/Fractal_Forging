@@ -1,5 +1,3 @@
-'use strict';
-
 import { Router } from 'express';
 import User from '../models/user.js';
 import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
@@ -14,8 +12,11 @@ registerRoute.get('/', function(req, res, next) {
 });
 
 registerRoute.post('/', isLoggedIn, isAdmin, async function(req, res, next) {
+  const session = await User.startSession();
+  session.startTransaction();
+
   try {
-    const breakSlots = await BreakSlots.findOne({});
+    const breakSlots = await BreakSlots.findOne({}).session(session);
     if (req.body.password !== req.body.confirmpassword) {
       req.session.message = 'Mismatch';
       logger.error('Password and confirm password do not match');
@@ -23,11 +24,20 @@ registerRoute.post('/', isLoggedIn, isAdmin, async function(req, res, next) {
     }
 
     const newUser = new User({ username: req.body.username, roles: 'user', breakSlots });
+
+    await newUser.save({ session });
     await User.register(newUser, req.body.password);
-    logger.info(`Registered new user:  ${kleur.magenta(req.body.username)}`);
+
+    await session.commitTransaction();
+    session.endSession();
+
+    logger.info(`Registered new user: ${kleur.magenta(req.body.username)}`);
     req.session.message = 'Ok';
     res.redirect('/secret_admin');
   } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+
     logger.error(error);
     if (error.name === 'UserExistsError') {
       req.session.message = 'Taken';

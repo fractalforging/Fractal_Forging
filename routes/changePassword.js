@@ -5,74 +5,76 @@ import { Router } from 'express';
 import User from '../models/user.js';
 import logger from './logger.js';
 import { isLoggedIn } from '../middleware/authentication.js';
+import mongoose from 'mongoose';
 
 const changepasswordRoute = Router();
 
-//HANDLING PASSWORD CHANGE-
+// Function to handle repetitive error checks
+const checkErrors = async (checks, req, res) => {
+  for (const check of checks) {
+    if (await check.condition()) {
+      req.session.message = check.message;
+      logger.error(check.error);
+      return res.render("changepassword", { error: check.errorMessage, currentUser: req.user });
+    }
+  }
+  return null;
+};
+
+// HANDLING PASSWORD CHANGE
 changepasswordRoute.post("/", isLoggedIn, async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
-    const user = await User.findOne({ username: req.user.username });
-    if (!user) {
-      req.session.message = "Error";
-      logger.error("User not found");
-      return res.render("changepassword", { error: "Error, please try again", currentUser: req.user });
-    }
+    session.startTransaction();
 
-    if (!req.body.currentpassword) {
+    const user = await User.findOne({ username: req.user.username }).session(session);
+
+    const errorCheck = await checkErrors([
+      { condition: async () => !user, message: "Error", error: "User not found", errorMessage: "Error, please try again" },
+      { condition: async () => !req.body.currentpassword, message: "Wrong", error: "Current password empty", errorMessage: "Current password empty!" },
+      { condition: async () => req.body.newpassword !== req.body.confirmpassword, message: "Mismatch", error: "New password and confirm password do not match", errorMessage: "New password and confirm password do not match" },
+    ], req, res);
+
+    if (errorCheck) return;
+
+    const valid = await user.authenticate(req.body.currentpassword);
+
+    if (!valid) {
       req.session.message = "Wrong";
-      logger.error("Current password empty");
-      return res.render("changepassword", { error: "Current password empty!", currentUser: req.user });
+      logger.error("Current password wrong 2");
+      return res.render("changepassword", { error: "Current password incorrect!", currentUser: req.user });
     }
 
-    if (req.body.newpassword !== req.body.confirmpassword) {
-      req.session.message = "Mismatch";
-      logger.error("New password and confirm password do not match");
-      return res.render("changepassword", { error: "New password and confirm password do not match", currentUser: req.user });
-    }
+    await user.setPassword(req.body.newpassword);
 
-    user.authenticate(req.body.currentpassword, (err, valid) => {
-      if (err || !valid) {
-        req.session.message = "Wrong";
-        logger.error("Current password wrong 2");
-        return res.render("changepassword", { error: "Current password incorrect!", currentUser: req.user });
+    await user.save({ session });
+
+    await session.commitTransaction();
+
+    req.logIn(user, (err) => {
+      if (err) {
+        req.session.message = "Error";
+        logger.error(err);
+        return res.render("changepassword", { error: "Error, please try again", currentUser: req.user });
       }
 
-      user.setPassword(req.body.newpassword, (err) => {
-        if (err) {
-          req.session.message = "Error";
-          logger.error(err);
-          return res.render("changepassword", { error: "Error, please try again", currentUser: req.user });
-        }
-
-        user.save((err) => {
-          if (err) {
-            req.session.message = "Error";
-            logger.error(err);
-            return res.render("changepassword", { error: "Error, please try again", currentUser: req.user });
-          }
-
-          req.logIn(user, (err) => {
-            if (err) {
-              req.session.message = "Error";
-              logger.error(err);
-              return res.render("changepassword", { error: "Error, please try again", currentUser: req.user });
-            }
-            
-            req.session.message = "Changed";
-            logger.warn("Password change for " + `${kleur.magenta(user.username)}` + " was successfull");
-            return res.redirect("/secret");
-          });
-        });
-      });
+      req.session.message = "Changed";
+      logger.warn("Password change for " + `${kleur.magenta(user.username)}` + " was successful");
+      return res.redirect("/secret");
     });
+
   } catch (err) {
+    await session.abortTransaction();
     req.session.message = "Error";
     logger.error(err);
     return res.render("changepassword", { error: "Error, please try again", currentUser: req.user });
+  } finally {
+    session.endSession();
   }
 });
 
-//HANDLING ACCOUNT
+// HANDLING ACCOUNT
 changepasswordRoute.get("/", isLoggedIn, (req, res) => {
   return res.render("changepassword", { error: 'no error', currentUser: req.user });
 });

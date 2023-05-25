@@ -5,6 +5,7 @@ import express from 'express';
 import logger from '../routes/logger.js';
 import kleur from 'kleur';
 import LastResetTimestamp from '../models/LastResetTimestamp.js';
+import mongoose from 'mongoose';
 
 const resetBreakTime = (io, User, location) => {
   const router = express.Router();
@@ -19,7 +20,7 @@ const resetBreakTime = (io, User, location) => {
     const lastResetTimestamp = lastResetTimestampObj.timestamp;
     const now = moment.tz(new Date(), 'Europe/' + location);
     const lastResetTime = moment.tz(new Date(lastResetTimestamp), 'Europe/' + location);
-    lastResetTime.set({ hour: resetHour, minute: 0, second: 0, millisecond: 0 });
+    lastResetTime.set({ hour: resetHour, minute: 20, second: 0, millisecond: 0 });
 
     while (now.isAfter(lastResetTime)) {
       lastResetTime.add(1, 'days');
@@ -30,16 +31,28 @@ const resetBreakTime = (io, User, location) => {
   }
 
   async function resetBreakTimes() {
-    const resetBreakTimeInSeconds = 35 * 60;
-    await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds });
-    const now = moment.tz(new Date(), 'Europe/' + location).toDate();
-    const lastResetTimestampObj = await LastResetTimestamp.findOne();
-    lastResetTimestampObj.timestamp = now;
-    await lastResetTimestampObj.save();
-    logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
-    setTimeout(() => {
-      io.emit('reload');
-    }, 100);
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+      const resetBreakTimeInSeconds = 35 * 60;
+      await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds }, { session });
+      const now = moment.tz(new Date(), 'Europe/' + location).toDate();
+      const lastResetTimestampObj = await LastResetTimestamp.findOne().session(session);
+      lastResetTimestampObj.timestamp = now;
+      await lastResetTimestampObj.save({ session });
+      logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
+      setTimeout(() => {
+        io.emit('reload');
+      }, 100);
+
+      await session.commitTransaction();
+    } catch (error) {
+      await session.abortTransaction();
+      logger.error('Error occurred while resetting break times:', error);
+    } finally {
+      session.endSession();
+    }
   }
 
   (async () => {

@@ -5,11 +5,16 @@ import User from '../models/user.js';
 import logger from './logger.js';
 import kleur from 'kleur';
 import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+import mongoose from 'mongoose';
 
 const changeNameRoute = Router();
 
 changeNameRoute.post("/", isLoggedIn, isAdmin, async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
+    session.startTransaction();
+
     const userId = req.body.userId;
     const newName = req.body.newName;
 
@@ -18,16 +23,22 @@ changeNameRoute.post("/", isLoggedIn, isAdmin, async (req, res) => {
       return res.status(400).json({ error: "Invalid username value" });
     }
     req.session.message = "Name changed";
-    const user = await User.findById(userId);
+
+    const user = await User.findById(userId).session(session);
     user.username = newName;
 
-    await user.save();
+    await user.save({ session });
+
+    await session.commitTransaction();
 
     logger.warn(`Username change for ${kleur.magenta(user.username)} was successful`);
     return res.status(200).json({ success: true, message: "Username changed successfully" });
   } catch (error) {
+    await session.abortTransaction();
     logger.error(error);
     return res.status(500).json({ error: "Username changing name: " + error.message });
+  } finally {
+    session.endSession();
   }
 });
 
