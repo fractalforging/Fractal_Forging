@@ -11,6 +11,9 @@
   "devDependencies": {
     "nodemon": "^2.0.20"
   },
+  "engines": {
+    "node": ">=14 <15"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -37,6 +40,7 @@
     "moment-timezone": "^0.5.41",
     "mongodb": "^4.13.0",
     "mongoose": "^7.2.1",
+    "node-version-alias": "^4.0.0",
     "nodemon": "^2.0.20",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
