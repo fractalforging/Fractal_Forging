@@ -29,7 +29,7 @@ const breakSlotsRoute = (io) => {
     try {
       const newSlotsValue = req.body.slotsavailable;
       const currentSlots = await BreakSlots.findOne().session(session);
-      if (newSlotsValue !== currentSlots.slots) {
+      if (newSlotsValue != currentSlots.slots) {
         await BreakSlots.findOneAndUpdate(
           {},
           { $set: { slots: newSlotsValue } },
@@ -43,7 +43,7 @@ const breakSlotsRoute = (io) => {
         return res.redirect("secret_admin");
       } else {
         req.session.message = "Same value";
-        logger.error("Slots were NOT updated, same value chosen");
+        logger.error(`Slots were NOT updated, same value chosen by ${kleur.magenta(req.user.username)}`);
         await session.commitTransaction();
         return res.redirect("secret_admin");
       }

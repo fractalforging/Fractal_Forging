@@ -33,7 +33,6 @@ const resetBreakTime = (io, User, location) => {
   async function resetBreakTimes() {
     const session = await mongoose.startSession();
     session.startTransaction();
-
     try {
       const resetBreakTimeInSeconds = 35 * 60;
       await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds }, { session });
@@ -44,8 +43,7 @@ const resetBreakTime = (io, User, location) => {
       logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
       setTimeout(() => {
         io.emit('reload');
-      }, 100);
-
+      }, 500);
       await session.commitTransaction();
     } catch (error) {
       await session.abortTransaction();

@@ -13,7 +13,7 @@ usersRoute.get("/", isAdmin, async (req, res, next) => {
     const normalUsers = users.filter(user => user.roles === "user");
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } catch (err) {
-    logger.error(err);
+    logger.error(err, { username: req.user.username });
     return res.status(500).json({ error: "Error retrieving users" });
   }
 });
@@ -35,12 +35,12 @@ usersRoute.put("/:userId", isAdmin, async (req, res, next) => {
     await session.commitTransaction();
     session.endSession();
     req.session.message = "Role changed";
-    logger.warn(`${kleur.magenta(actionUser.username)} updated ${kleur.magenta(userToUpdate.username)}'s role to ${kleur.grey(newRole)}`);
+    logger.warn(`${kleur.magenta(actionUser.username)} updated ${kleur.magenta(userToUpdate.username)}'s role to ${kleur.grey(newRole)}`, { username: req.user.username });
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } catch (err) {
     await session.abortTransaction();
     session.endSession();
-    logger.error(err);
+    logger.error(err , { username: req.user.username });
     return res.status(500).json({ error: "Error updating user role" });
   }
 });

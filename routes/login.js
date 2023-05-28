@@ -13,7 +13,7 @@ loginRoute.get('/', ensureLoggedOut('/secret'), (req, res) => {
 loginRoute.post('/', ensureLoggedOut('/secret'), (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
     if (err) {
-      logger.error(err);
+      logger.error(err, { username: req.user.username });
       return res.status(500).json({ message: 'An internal error occurred' });
     }
 
@@ -24,12 +24,12 @@ loginRoute.post('/', ensureLoggedOut('/secret'), (req, res, next) => {
 
     req.logIn(user, (err) => {
       if (err) {
-        logger.error(err);
+        logger.error(err, { username: req.user.username });
         return res.status(500).json({ message: 'An internal error occurred' });
       }
 
       const username = user.username || 'unknown'; // provide a fallback
-      logger.warn('Login successful for user: ' + kleur.magenta(username));
+      logger.warn(`Login successful for user: ${kleur.magenta(user.username)}`, { username: req.user.username });
       return res.status(200).json({ message: 'Login successful', redirectURL: '/secret' });
     });
   })(req, res, next);

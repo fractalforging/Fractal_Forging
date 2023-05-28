@@ -11,32 +11,26 @@ const changeNameRoute = Router();
 
 changeNameRoute.post("/", isLoggedIn, isAdmin, async (req, res) => {
   const session = await mongoose.startSession();
-
   try {
     session.startTransaction();
-
+    const actionUser = req.user;
     const userId = req.body.userId;
+    const user = await User.findById(userId).session(session);
     const newName = req.body.newName;
-
-    if (newName === null) {
-      logger.error("Invalid username value");
+    if (newName === null || newName === user.username || newName === '') {
+      logger.error(`Invalid username value ${kleur.magenta(user.username)} submited by ${kleur.magenta(actionUser.username)}`, { username: req.user.username });
       return res.status(400).json({ error: "Invalid username value" });
     }
     req.session.message = "Name changed";
-
-    const user = await User.findById(userId).session(session);
     user.username = newName;
-
     await user.save({ session });
-
     await session.commitTransaction();
-
-    logger.warn(`Username change for ${kleur.magenta(user.username)} was successful`);
+    logger.warn(`Username for ${kleur.magenta(user.username)} was changed successfully by ${kleur.magenta(actionUser.username)}`, { username: req.user.username });
     return res.status(200).json({ success: true, message: "Username changed successfully" });
   } catch (error) {
     await session.abortTransaction();
-    logger.error(error);
-    return res.status(500).json({ error: "Username changing name: " + error.message });
+    logger.error(error, { username: req.user.username });
+    return res.status(500).json({ error: "Username changing name: " + error.message});
   } finally {
     session.endSession();
   }

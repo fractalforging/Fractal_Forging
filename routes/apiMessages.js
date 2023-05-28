@@ -15,7 +15,10 @@ const responseMap = {
   "Mismatch": { status: 500, message: "Passwords don't match" },
   "Ok": { status: 200, message: "Account registered" },
   // PASSWORD
-  "Wrong": { status: 401, message: "Old password wrong" },
+  "Current password empty": { status: 401, message: "Current password empty" },
+  "Current password wrong": { status: 401, message: "Current password wrong" },
+  "New password empty": { status: 401, message: "New password empty" },
+  "Confirm password empty": { status: 401, message: "Confirm password empty" },
   "Changed": { status: 200, message: "Password changed" },
   // ACCOUNT MANAGEMENT
   "Deleted": { status: 200, message: "Account deleted" },

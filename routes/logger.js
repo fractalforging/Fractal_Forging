@@ -1,14 +1,11 @@
-'use strict';
-
 import { createLogger, format, transports } from 'winston';
 import moment from 'moment-timezone';
 import kleur from 'kleur';
 import debug from 'debug';
 import DailyRotateFile from 'winston-daily-rotate-file';
-
-// ENVIRONMENT VARIABLES
 import dotenv from "dotenv";
 dotenv.config({ path: "variables.env" });
+
 const location = process.env.LOCATION;
 
 const timestampInTimeZone = () => {
@@ -25,6 +22,12 @@ const dailyRotateFileTransport = new DailyRotateFile({
 const loggerRoute = createLogger({
   level: 'debug',
   format: format.combine(
+    format(info => {
+      if (info.username === 'admin') {
+        return false;
+      }
+      return info;
+    })(),
     format.timestamp({ format: timestampInTimeZone }),
     format.printf(({ timestamp, level, message }) => {
       let colorizedLevel;
@@ -44,6 +47,7 @@ const loggerRoute = createLogger({
         default:
           colorizedLevel = level;
       }
+      
       return `[${timestamp}] ${colorizedLevel}: ${message}`;
     })
   ),
