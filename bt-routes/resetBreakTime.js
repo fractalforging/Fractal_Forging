@@ -40,14 +40,14 @@ const resetBreakTime = (io, User, location) => {
       const lastResetTimestampObj = await LastResetTimestamp.findOne().session(session);
       lastResetTimestampObj.timestamp = now;
       await lastResetTimestampObj.save({ session });
-      logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`, { username: req.user.username });
-      setTimeout(() => {
-        io.emit('reload');
-      }, 500);
+      logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
+      // setTimeout(() => {
+      //   io.emit('reload');
+      // }, 500);
       await session.commitTransaction();
     } catch (error) {
       await session.abortTransaction();
-      logger.error('Error occurred while resetting break times:', error, { username: req.user.username });
+      logger.error('Error occurred while resetting break times:', error);
     } finally {
       session.endSession();
     }
@@ -62,8 +62,11 @@ const resetBreakTime = (io, User, location) => {
   })();
 
   router.post("/", async (req, res, next) => {
-    req.session.message = "Breaks reset";
     await resetBreakTimes();
+    setTimeout(() => {
+      io.emit('reload');
+    }, 0);
+    req.session.message = "Breaks reset";
     res.sendStatus(200);
   });
 
