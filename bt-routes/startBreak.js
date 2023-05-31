@@ -17,12 +17,12 @@ const startBreak = (io, BreakTrack, User) => {
       try {
         const breakEntry = await BreakTrack.findOne({ _id: breakId }).session(session);
         if (!breakEntry) {
-          logger.error(`Break entry with ID ${breakId} not found.`);
+          logger.error(`Break entry with ID ${breakId} not found.`, { username: req.user.username });
           await session.abortTransaction();
           return res.status(404).send("Break entry not found.");
         }
         if (breakEntry.lock) {
-          logger.error(`Break entry with ID ${breakId} is locked.`);
+          logger.error(`Break entry with ID ${breakId} is locked.`, { username: req.user.username });
           await session.abortTransaction();
           return res.status(409).send("Break entry is locked. Please try again.");
         }
@@ -35,7 +35,7 @@ const startBreak = (io, BreakTrack, User) => {
         const breakDurationInSeconds = breakEntry.duration * 60;
 
         if (user.remainingBreakTime < breakDurationInSeconds) {
-          logger.info(`${kleur.magenta(user.username)} tried to start a break without enough remaining break time.`);
+          logger.info(`${kleur.magenta(user.username)} tried to start a break without enough remaining break time.`, { username: req.user.username });
           await session.abortTransaction();
           return res.status(400).send("Not enough remaining break time.");
         }
@@ -49,7 +49,7 @@ const startBreak = (io, BreakTrack, User) => {
         // Emit the 'reload' event here after confirming the break has started successfully
         io.emit('reload');
         
-        logger.info(`${kleur.magenta(req.user.username)} started a break of ${breakEntry.duration} minute(s)`);
+        logger.info(`${kleur.magenta(req.user.username)} started a break of ${breakEntry.duration} minute(s)`, { username: req.user.username });
         
         return res.status(200).send("Break status updated successfully.");
       } catch (error) {
@@ -59,7 +59,7 @@ const startBreak = (io, BreakTrack, User) => {
           return await handleBreakStart(req, res, next, retryCount + 1);
         } else {
           await session.abortTransaction();
-          logger.error(`Error occurred while starting the break: ${error}`);
+          logger.error(`Error occurred while starting the break: ${error}`, { username: req.user.username });
           return res.status(500).send("An error occurred.");
         }
       } finally {

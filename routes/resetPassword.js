@@ -28,7 +28,7 @@ router.post("/", isLoggedIn, isAdmin, async (req, res) => {
           else resolve();
         });
       }).catch(err => {
-        logger.error(err);
+        logger.error(err, { username: req.user.username });
         throw new Error('Error setting new password');
       });
 
@@ -38,7 +38,7 @@ router.post("/", isLoggedIn, isAdmin, async (req, res) => {
           else resolve();
         });
       }).catch(err => {
-        logger.error(err);
+        logger.error(err, { username: req.user.username });
         throw new Error('Error saving new password');
       });
 
@@ -52,7 +52,7 @@ router.post("/", isLoggedIn, isAdmin, async (req, res) => {
   } catch (error) {
     session.abortTransaction();
     session.endSession();
-    logger.error(error);
+    logger.error(error, { username: req.user.username });
     return res.status(500).json({ error: "Error resetting password" });
   }
 });

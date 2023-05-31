@@ -37,18 +37,18 @@ const breakSlotsRoute = (io) => {
         );
         await moveQueuedBreaksToNormalList(newSlotsValue, session);
         req.session.message = "Updated";
-        logger.info(`${kleur.magenta(req.user.username)} updated the available slots to: ${kleur.grey(newSlotsValue)}`);
+        logger.info(`${kleur.magenta(req.user.username)} updated the available slots to: ${kleur.grey(newSlotsValue)}`, { username: req.user.username });
         await session.commitTransaction();
         io.emit('reload');
         return res.redirect("secret_admin");
       } else {
         req.session.message = "Same value";
-        logger.error(`Slots were NOT updated, same value chosen by ${kleur.magenta(req.user.username)}`);
+        logger.error(`Slots were NOT updated, same value chosen by ${kleur.magenta(req.user.username)}`, { username: req.user.username });
         await session.commitTransaction();
         return res.redirect("secret_admin");
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error, { username: req.user.username });
       await session.abortTransaction();
       req.session.message = "Error";
       return res.redirect("secret_admin");

@@ -40,14 +40,14 @@ const resetBreakTime = (io, User, location) => {
       const lastResetTimestampObj = await LastResetTimestamp.findOne().session(session);
       lastResetTimestampObj.timestamp = now;
       await lastResetTimestampObj.save({ session });
-      logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
+      logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`, { username: req.user.username });
       setTimeout(() => {
         io.emit('reload');
       }, 500);
       await session.commitTransaction();
     } catch (error) {
       await session.abortTransaction();
-      logger.error('Error occurred while resetting break times:', error);
+      logger.error('Error occurred while resetting break times:', error, { username: req.user.username });
     } finally {
       session.endSession();
     }

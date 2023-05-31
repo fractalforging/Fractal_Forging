@@ -26,14 +26,14 @@ deleteRoute.delete('/:id', isAdmin, async (req, res, next) => {
     await User.findByIdAndDelete(userId).session(session);
     req.session.message = "Deleted";
     const adminUser = req.user; 
-    logger.warn(`User ${kleur.magenta(userToDelete.username)} deleted by ${kleur.magenta(adminUser.username)}`);
+    logger.warn(`User ${kleur.magenta(userToDelete.username)} deleted by ${kleur.magenta(adminUser.username)}`, { username: req.user.username });
     await session.commitTransaction();
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } catch (err) {
     await session.abortTransaction();
     req.session.message = "Error2";
-    logger.error(`Error deleting user ${kleur.magenta(userToDelete.username)}: ${err.message}`);
-    logger.error(err);
+    logger.error(`Error deleting user ${kleur.magenta(userToDelete.username)}: ${err.message}`, { username: req.user.username });
+    logger.error(err, { username: req.user.username });
     return res.render("users", { adminUsers, normalUsers, currentUser: req.user });
   } finally {
     session.endSession();

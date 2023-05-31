@@ -68,18 +68,18 @@ const removeBreak = (io, BreakTrack, User) => {
       }
       if (beforeStart) {
         io.emit('reload');
-        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break before break start`);
+        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break before break start`, { username: req.user.username });
       } else if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
         io.emit('reload');
-        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break start`);
+        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break start`, { username: req.user.username });
       } else {
         io.emit('reload');
-        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break end`);
+        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break end`, { username: req.user.username });
       }
       return res.redirect("/secret");
     } catch (err) {
       await session.abortTransaction();
-      logger.error("Error removing the break: ", err);
+      logger.error("Error removing the break: ", err, { username: req.user.username });
       return res.status(500).send(err);
     } finally {
       session.endSession();

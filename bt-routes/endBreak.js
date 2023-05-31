@@ -14,7 +14,7 @@ const endBreak = (BreakTrack) => {
 
       res.sendStatus(200);
     } catch (err) {
-      logger.error("Error updating hasEnded field: ", err);
+      logger.error("Error updating hasEnded field: ", err, { username: req.user.username });
       res.sendStatus(500);
     }
   });

@@ -27,13 +27,13 @@ const submitBreakRoute = (io, BreakTrack, User) => {
 
       if (latestBreak && !latestBreak.endTime) {
         req.session.message = 'Only 1 break at a time';
-        logger.error(req.session.message);
+        logger.error(`${kleur.magenta(user)} tried submitting a second break unsuccessfully since only 1 break is allowed at a time.`, { username: req.user.username });
         return res.redirect("/secret");
       }
 
       if (currentUser.remainingBreakTime < breakDurationInSeconds) {
         req.session.message = currentUser.remainingBreakTime === 0 ? 'Break time over' : 'Not enough';
-        logger.info(req.session.message);
+        logger.info(`${kleur.magenta(user)} tried submitting a break unsuccessfully since not enough break time is available.`, { username: req.user.username });
         return res.redirect("/secret");
       }
 
@@ -48,14 +48,14 @@ const submitBreakRoute = (io, BreakTrack, User) => {
 
       await breakTracker.save({ session });
 
-      logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) ${breakTracker.status === 'queued' ? 'and added to the queue' : ''}`);
+      logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) ${breakTracker.status === 'queued' ? 'and added to the queue' : ''}`, { username: req.user.username });
       io.emit('reload');
 
       await session.commitTransaction();
 
       return res.redirect("/secret");
     } catch (error) {
-      logger.error(`Error occurred while submitting the break: ${error}`);
+      logger.error(`Error occurred while submitting the break: ${error}`, { username: req.user.username });
       return res.redirect("/secret");
     } finally {
       if (session) {
