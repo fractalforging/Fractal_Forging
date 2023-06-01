@@ -7,7 +7,13 @@ import path from 'path';
 const emitUserCountAndList = async (io) => {
   try {
     const oneMinuteAgo = new Date(new Date().getTime() - 60 * 1000);
-    const users = await User.find({ isOnline: true, socketId: { $ne: null }, lastHeartbeat: { $gt: oneMinuteAgo } });
+    // Exclude "admin" from the user count and list
+    const users = await User.find({
+      username: { $ne: 'admin' },
+      isOnline: true,
+      socketId: { $ne: null },
+      lastHeartbeat: { $gt: oneMinuteAgo },
+    });
     const usernames = users.map(user => user.username);
     io.emit('userCount', users.length);
     io.emit('userList', usernames);
