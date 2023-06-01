@@ -2,7 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { promisify } from 'util';
-import { isLoggedIn } from '../middleware/authentication.js';
+import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
 import AnsiToHtml from 'ansi-to-html';
 import { unlink } from 'fs/promises';
 import { createReadStream, createWriteStream } from 'fs';
@@ -28,7 +28,7 @@ logsRoute.get('/:year/:month/:day/download', isLoggedIn, async (req, res) => {
     fileStream.pipe(res);
 });
 
-logsRoute.get('/:year/:month/download', isLoggedIn, async (req, res) => {
+logsRoute.get('/:year/:month/download', isLoggedIn, isAdmin, async (req, res) => {
     const monthDirectory = path.join(process.cwd(), `_logs/${req.params.year}/${req.params.month}`);
     const zipFilePath = path.join(process.cwd(), `_logs/${req.params.year}-${req.params.month}.zip`);
 
