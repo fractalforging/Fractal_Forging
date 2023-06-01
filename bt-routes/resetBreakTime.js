@@ -20,7 +20,7 @@ const resetBreakTime = (io, User, location) => {
     const lastResetTimestamp = lastResetTimestampObj.timestamp;
     const now = moment.tz(new Date(), 'Europe/' + location);
     const lastResetTime = moment.tz(new Date(lastResetTimestamp), 'Europe/' + location);
-    lastResetTime.set({ hour: resetHour, minute: 20, second: 0, millisecond: 0 });
+    lastResetTime.set({ hour: resetHour, minute: 0, second: 0, millisecond: 0 });
 
     while (now.isAfter(lastResetTime)) {
       lastResetTime.add(1, 'days');
