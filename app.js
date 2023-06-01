@@ -1,5 +1,5 @@
-//=====================
-// IMPORTS 
+//==========================
+// IMPORTS & INITIAL CONFIG.
 
 'use strict';
 
@@ -14,7 +14,7 @@ const app = express();
 const server = http.createServer(app);
 app.use(compression());
 
-//======================
+//=======================
 // ENVIRONMENT VARIABLES 
 
 dotenv.config({ path: "variables.env" });
@@ -30,7 +30,7 @@ if (!dbPath) {
   process.exit(1);
 }
 
-//=====================
+//================
 // MONGODB CONFIG.
 
 mongoose.set('strictQuery', false);
@@ -40,13 +40,13 @@ import database from './config/database.js';
 database.connectMongoDB(dbPath);
 database.initialize();
 
-//=====================
+//================
 // SESSION CONFIG. 
 
 import { sessionConfig } from './config/session.js';
 sessionConfig(app, dbPath, secret);
 
-//=====================
+//====================
 // MIDDLEWARE & ROUTES
 
 import { isLoggedIn } from './middleware/authentication.js';
@@ -74,7 +74,7 @@ import removeBreakRoute from './bt-routes/removeBreak.js';
 import endBreakRoute from './bt-routes/endBreak.js';
 import resetBreakTimeRoute from './bt-routes/resetBreakTime.js';
 
-//=====================
+//=============
 // APPLY ROUTES
 
 app.use("/", indexRoute);
@@ -109,7 +109,7 @@ let io;
   app.use('/resetbreaktime', resetBreakTimeRoute(io, User, location));
 })();
 
-//=====================
+//============================================
 // CLEAR SESSION VARIABLES FOR MODAL MESSAGING
 
 app.post('/clear-message', async (req, res) => {
@@ -117,7 +117,7 @@ app.post('/clear-message', async (req, res) => {
   return res.sendStatus(204);
 });
 
-//=====================
+//=============
 // START SERVER
 
 server.listen(port, () => logger.info(`Server Up and running on port: ${kleur.grey(port)}`));
