@@ -24,9 +24,9 @@
         document.getElementById('reset-break-time').addEventListener('click', showConfirmationModal);
         document.getElementById('modal-ok').addEventListener('click', handleModalOk);
         const socket = io();
-        socket.on('reload', () => {
-            window.location.reload();
-        });
+        // socket.on('reload', () => {
+        //     window.location.reload();
+        // });
     });
     const showConfirmationModal = () => {
         document.getElementById('confirmation-modal').style.display = 'block';

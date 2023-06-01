@@ -41,9 +41,6 @@ const resetBreakTime = (io, User, location) => {
       lastResetTimestampObj.timestamp = now;
       await lastResetTimestampObj.save({ session });
       logger.info(`${kleur.blue("Total break time for all accounts has been reset")}`);
-      // setTimeout(() => {
-      //   io.emit('reload');
-      // }, 500);
       await session.commitTransaction();
     } catch (error) {
       await session.abortTransaction();
@@ -63,9 +60,7 @@ const resetBreakTime = (io, User, location) => {
 
   router.post("/", async (req, res, next) => {
     await resetBreakTimes();
-    setTimeout(() => {
-      io.emit('reload');
-    }, 0);
+    io.emit('reload');
     req.session.message = "Breaks reset";
     res.sendStatus(200);
   });

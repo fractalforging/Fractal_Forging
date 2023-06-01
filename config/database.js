@@ -14,6 +14,7 @@ const database = {
       await mongoose.connect(dbPath, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        retryWrites: true
       });
       logger.info("MongoDB connected successfully!");
       await firstRun();
