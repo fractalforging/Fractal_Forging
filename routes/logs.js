@@ -16,7 +16,7 @@ const readFileAsync = promisify(fs.readFile);
 const converter = new AnsiToHtml();
 
 // For downloading log files
-logsRoute.get('/:year/:month/:day/download', isLoggedIn, async (req, res) => {
+logsRoute.get('/:year/:month/:day/download', isLoggedIn, isAdmin, async (req, res) => {
     const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
     const logFile = `${req.params.day}`;
     const logFilePath = path.join(logDirectory, logFile);
@@ -56,7 +56,7 @@ logsRoute.get('/:year/:month/download', isLoggedIn, isAdmin, async (req, res) =>
     }
 });
 
-logsRoute.get('/:year/download', isLoggedIn, (req, res) => {
+logsRoute.get('/:year/download', isLoggedIn, isAdmin, (req, res) => {
     const yearDirectory = path.join(process.cwd(), `_logs/${req.params.year}`);
     const zipFilePath = path.join(process.cwd(), `_logs/${req.params.year}.zip`);
 
@@ -84,7 +84,7 @@ logsRoute.get('/:year/download', isLoggedIn, (req, res) => {
     }
 });
 
-logsRoute.get('/', isLoggedIn, async (req, res) => {
+logsRoute.get('/', isLoggedIn, isAdmin, async (req, res) => {
     const logDirectory = '_logs/';
     const currentUser = req.user;  // Accessing the user data set by the middleware
 
@@ -111,7 +111,7 @@ logsRoute.get('/', isLoggedIn, async (req, res) => {
     }
 });
 
-logsRoute.get('/:year/:month', isLoggedIn, async (req, res) => {
+logsRoute.get('/:year/:month', isLoggedIn, isAdmin, async (req, res) => {
     const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
 
     try {
@@ -124,7 +124,7 @@ logsRoute.get('/:year/:month', isLoggedIn, async (req, res) => {
     }
 });
 
-logsRoute.get('/:year/:month/:day', isLoggedIn, async (req, res) => {
+logsRoute.get('/:year/:month/:day', isLoggedIn, isAdmin, async (req, res) => {
     const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
     const logFile = `${req.params.day}`;
     const logFilePath = path.join(logDirectory, logFile);
@@ -139,7 +139,7 @@ logsRoute.get('/:year/:month/:day', isLoggedIn, async (req, res) => {
     }
 });
 
-logsRoute.get('/frame/:year/:month/:day', isLoggedIn, async (req, res) => {
+logsRoute.get('/frame/:year/:month/:day', isLoggedIn, isAdmin, async (req, res) => {
     const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
     const logFile = `${req.params.day}`;
     const logFilePath = path.join(logDirectory, logFile);
@@ -167,7 +167,7 @@ logsRoute.delete('/:year', isLoggedIn, async (req, res) => {
     }
 });
 
-logsRoute.delete('/:year/:month', isLoggedIn, async (req, res) => {
+logsRoute.delete('/:year/:month', isLoggedIn, isAdmin, async (req, res) => {
     const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
 
     try {
@@ -179,7 +179,7 @@ logsRoute.delete('/:year/:month', isLoggedIn, async (req, res) => {
     }
 });
 
-logsRoute.delete('/:year/:month/:day', isLoggedIn, async (req, res) => {
+logsRoute.delete('/:year/:month/:day', isLoggedIn, isAdmin, async (req, res) => {
     const logDirectory = `_logs/${req.params.year}/${req.params.month}`;
     const logFile = `${req.params.day}`;
     const logFilePath = path.join(logDirectory, logFile);
