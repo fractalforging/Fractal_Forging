@@ -2,12 +2,13 @@ import https from 'https';
 
 // Configuration section
 const config = {
-  startHour: 7,
-  endHour: 23,
+  startHour: 0,
+  endHour: 0,
   minInterval: 5,
   maxInterval: 15,
   hostname: 'break-tracker-askit-pr-21.onrender.com',
-  timeZone: 'Europe/Warsaw'
+  timeZone: 'Europe/Warsaw',
+  includeWeekends: true
 };
 
 console.log("Script has started");
@@ -52,29 +53,42 @@ const sendRequest = (interval) => {
 
 const scheduleNextRequest = () => {
   const interval = getRandomInterval(config.minInterval * 60 * 1000, config.maxInterval * 60 * 1000);
-  console.log(`[${formatter.format(new Date())}] Scheduling next request in ${(interval / (60 * 1000)).toFixed(2)} minutes.`);
+
   setTimeout(() => {
-    try {
-      const currentDate = new Date();
-      const localHour = currentDate.getHours();
-      const localDay = currentDate.getDate();
-      const localWeekday = currentDate.getDay();
+    const currentDate = new Date();
+    const localHour = currentDate.getUTCHours() + calculateTimezoneOffset(config.timeZone);
 
-      // Log the local time, local hour, and local weekday for debugging purposes
-      console.log(`[${formatter.format(new Date())}] Local Time: ${formatter.format(currentDate)}, Local Hour: ${localHour}, Local Weekday: ${localWeekday}`);
+    // Correct the hours if it's over 24
+    const correctedLocalHour = localHour >= 24 ? localHour - 24 : localHour;
 
-      // Check if it's a weekday (1 for Monday, 7 for Sunday) and within the desired hours
-      if (localWeekday >= 1 && localWeekday <= 5 && localHour >= config.startHour && localHour < config.endHour) {
-        sendRequest(interval);
-      } else {
-        console.log(`[${formatter.format(new Date())}] Skipping request because it's outside the desired schedule.`);
-      }
-    } catch (error) {
-      console.error(`[${formatter.format(new Date())}] An error occurred in the keep alive script:`, error);
+    if (shouldSendRequest(correctedLocalHour, currentDate)) {
+      sendRequest(interval);
     }
 
     scheduleNextRequest();
   }, interval);
+};
+
+const shouldSendRequest = (hour, currentDate) => {
+  const isWeekend = currentDate.getUTCDay() === 0 || currentDate.getUTCDay() === 6;
+
+  if (!config.includeWeekends && isWeekend) {
+    return false;
+  }
+
+  if (hour >= config.startHour && (hour < config.endHour || config.startHour === config.endHour)) {
+    return true;
+  }
+
+  return false;
+};
+
+const calculateTimezoneOffset = (timeZone) => {
+  const date = new Date();
+  const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+  const tzDate = new Date(date.toLocaleString('en-US', { timeZone: timeZone }));
+  const offset = (tzDate - utcDate) / 3600000;
+  return offset;
 };
 
 // Start the loop
