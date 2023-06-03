@@ -18,7 +18,7 @@ changeTimeRoute.post("/", isLoggedIn, isAdmin, async (req, res) => {
       logger.error(`Invalid new break time value for ${kleur.magenta(user.username)} submited by ${kleur.magenta(actionUser.username)}`, { username: req.user.username });
       return res.status(400).json({ error: "Invalid break time value" });
     }
-    req.session.message = "Time changed";
+    req.session.message = "Time changed"; 
     user.remainingBreakTime = newTime * 60;
     await user.save();
     logger.warn(`Break time for ${kleur.magenta(user.username)} was changed successfully by ${kleur.magenta(actionUser.username)}`, { username: req.user.username });
@@ -28,5 +28,21 @@ changeTimeRoute.post("/", isLoggedIn, isAdmin, async (req, res) => {
     return res.status(500).json({ error: "Error changing break time: " + error.message});
   }
 });
+
+changeTimeRoute.get("/:userId", isLoggedIn, isAdmin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    // Assuming breakTime is stored in minutes, adjust if necessary
+    const breakTime = user.remainingBreakTime / 60;
+    return res.status(200).json({ breakTime });
+  } catch (error) {
+    logger.error(error, { username: req.user.username });
+    return res.status(500).json({ error: "Error fetching break time: " + error.message});
+  }
+});
+
 
 export default changeTimeRoute;

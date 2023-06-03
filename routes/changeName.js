@@ -32,7 +32,7 @@ changeNameRoute.post("/", isLoggedIn, isAdmin, async (req, res) => {
     logger.error(error, { username: req.user.username });
     return res.status(500).json({ error: "Username changing name: " + error.message});
   } finally {
-    session.endSession();
+    session.endSession(); 
   }
 });
 

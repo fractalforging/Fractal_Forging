@@ -18,66 +18,77 @@
 <script>
     'use strict';
 
-    const changeTime = async (userId, newTime) => {
-        try {
-            const response = await fetch(`/timechange`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId, newTime }),
-            });
-
-            if (!response.ok) {
-                const error = await response.json();
-                throw new Error(error.error);
-            }
-
-            return await response.json();
-        } catch (error) {
-            return { success: false, error: error.message };
-        }
-    };
-
-    const displayTimeChangeModal = (userId) => {
-        const modal = document.getElementById("time-change-modal");
-        const close = modal.querySelector(".time-change-close");
-        const form = modal.querySelector("#time-change-form");
-        modal.style.display = "block";
-        const userIdInput = document.createElement("input");
-        userIdInput.type = "hidden";
-        userIdInput.name = "userId";
-        userIdInput.value = userId;
-        form.appendChild(userIdInput);
-        close.onclick = () => { modal.style.display = "none"; };
-
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const newTime = document.getElementById("newtime").value;
-            const errorMessage = document.getElementById("time-error-message");
-
-            const result = await changeTime(userId, newTime);
-
-            if (!result.success) {
-                errorMessage.textContent = result.error;
-                errorMessage.style.display = "block";
-            } else {
-                errorMessage.style.display = "none";
-                modal.style.display = "none";
-                location.reload();
-            }
+const changeTime = async (userId, newTime) => {
+    try {
+        const response = await fetch(`/timechange`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, newTime }),
         });
-        document.getElementById("newtime").focus();
-    };
- 
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll(".time-change-button").forEach(button =>
-            button.addEventListener("click", e => {
-                e.preventDefault();
-                const li = e.target.closest("li");
-                const userId = li.dataset.id;
-                displayTimeChangeModal(userId);
-            })
-        );
+
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error);
+        }
+
+        return await response.json();
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+};
+
+const displayTimeChangeModal = async (userId) => {
+    const modal = document.getElementById("time-change-modal");
+    const close = modal.querySelector(".time-change-close");
+    const form = modal.querySelector("#time-change-form");
+    const newTimeInput = document.getElementById("newtime");
+
+    // Fetch the current break time
+    const response = await fetch(`/timechange/${userId}`);
+    const user = await response.json();
+    newTimeInput.value = user.breakTime;  // Set the current break time
+
+    // Simulate user input to move placeholder up as in 'bottomjs.ejs'
+    newTimeInput.dispatchEvent(new Event('input'));
+
+    modal.style.display = "block";
+    const userIdInput = document.createElement("input");
+    userIdInput.type = "hidden";
+    userIdInput.name = "userId";
+    userIdInput.value = userId;
+    form.appendChild(userIdInput);
+    close.onclick = () => { modal.style.display = "none"; };
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const newTime = document.getElementById("newtime").value;
+        const errorMessage = document.getElementById("time-error-message");
+
+        const result = await changeTime(userId, newTime);
+
+        if (!result.success) {
+            errorMessage.textContent = result.error;
+            errorMessage.style.display = "block";
+        } else {
+            errorMessage.style.display = "none";
+            modal.style.display = "none";
+            location.reload();
+        }
     });
+    document.getElementById("newtime").focus();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll(".time-change-button").forEach(button =>
+        button.addEventListener("click", e => {
+            e.preventDefault();
+            const li = e.target.closest("li");
+            const userId = li.dataset.id;
+            displayTimeChangeModal(userId);
+        })
+    );
+});
+
 
 </script>
 
