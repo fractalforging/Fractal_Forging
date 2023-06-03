@@ -31,6 +31,12 @@
                         border-radius: 10px;
                         overflow: hidden;
                         vertical-align: middle;
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                    }
+
+                    .visible {
+                        opacity: 1;
                     }
 
                     .log-month-container,
@@ -136,12 +142,9 @@
                         color: var(--links-hover-color);
                     }
 
+                    .folder-buttons-logfile,
                     .folder-buttons {
-                        position: relative;
-                        top: 1px;
-                    }
-
-                    .folder-buttons-logfile {
+                        color: var(--break-list-item-text-color);
                         position: relative;
                         top: 1px;
                     }
@@ -266,44 +269,48 @@
                                 if (logsContainer && arrow) {
                                     logsContainer.classList.toggle('open');
                                     arrow.classList.toggle('rotate');
-                                    // saveMenuState();
+                                    saveMenuState();
                                 }
                             }
 
-                            // const saveMenuState = () => {
-                            //     const menuState = {};
-                            //     const logContainers = document.querySelectorAll('.log-year-container, .log-month-container, .log-day-container');
-                            //     logContainers.forEach(container => {
-                            //         const id = container.parentElement.id;
-                            //         const isOpen = container.classList.contains('open');
-                            //         menuState[id] = isOpen;
-                            //     });
-                            //     localStorage.setItem('menuState', JSON.stringify(menuState));
-                            // }
+                            const saveMenuState = () => {
+                                const menuState = {};
+                                const logContainers = document.querySelectorAll('.log-year-container, .log-month-container, .log-day-container');
+                                logContainers.forEach(container => {
+                                    const id = container.parentElement.id;
+                                    const isOpen = container.classList.contains('open');
+                                    menuState[id] = isOpen;
+                                });
+                                localStorage.setItem('menuState', JSON.stringify(menuState));
+                            }
 
-                            // const loadMenuState = () => {
-                            //     const menuState = JSON.parse(localStorage.getItem('menuState'));
-                            //     if (menuState) {
-                            //         for (const id in menuState) {
-                            //             const isOpen = menuState[id];
-                            //             const container = document.getElementById(id);
-                            //             if (isOpen && container) {
-                            //                 const logsContainer = container.querySelector('.log-year-container, .log-month-container, .log-day-container');
-                            //                 if (logsContainer) {
-                            //                     container.querySelector('.arrow-logs').classList.add('rotate');
-                            //                     logsContainer.classList.add('open');
-                            //                 }
-                            //             }
-                            //         }
-                            //     }
-                            // }
+                            const loadMenuState = () => {
+                                const menuState = JSON.parse(localStorage.getItem('menuState'));
+                                if (menuState) {
+                                    for (const id in menuState) {
+                                        const isOpen = menuState[id];
+                                        const container = document.getElementById(id);
+                                        if (isOpen && container) {
+                                            const logsContainer = container.querySelector('.log-year-container, .log-month-container, .log-day-container');
+                                            if (logsContainer) {
+                                                container.querySelector('.arrow-logs').classList.add('rotate');
+                                                logsContainer.classList.add('open');
+                                            }
+                                        }
+                                    }
+                                }
+                            }
 
 
                             window.addEventListener('DOMContentLoaded', () => {
+                                const logContainers = document.querySelectorAll('.log-year-container, .log-month-container, .log-day-container');
+                                logContainers.forEach((container, index) => {
+                                    setTimeout(() => {
+                                        container.classList.add('visible');
+                                    }, 200 * (index + 1)); // delay for the effect to start
+                                });
                                 loadMenuState();
                             });
-
-
 
                             const fetchLogContent = async (year, month, day) => {
                                 try {
