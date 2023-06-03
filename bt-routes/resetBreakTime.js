@@ -58,10 +58,12 @@ const resetBreakTime = (io, User, location) => {
     }, millisecondsUntilReset);
   })();
 
-  router.post("/", async (req, res, next) => {
+  router.post("/", async (req, res) => {
+    req.session.message = "Breaks reset";
     await resetBreakTimes();
     io.emit('reload');
-    req.session.message = "Breaks reset";
+    setTimeout(() => {
+    }, 25);
     res.sendStatus(200);
   });
 
