@@ -16,7 +16,7 @@
                     .log-day-container {
                         position: relative;
                         left: 3px;
-                        max-height: 9999px;
+                        max-height: 0px;
                         padding: 3px;
                         margin-top: 5px;
                         text-align: left;
@@ -29,14 +29,16 @@
                         color: var(--break-list-item-text-color);
                         border: 1px solid transparent;
                         border-radius: 10px;
-                        overflow: hidden;
                         vertical-align: middle;
                         opacity: 0;
-                        transition: opacity 0.3s ease;
+                        overflow: hidden;
+                        transition: all 10s ease;
                     }
 
                     .visible {
                         opacity: 1;
+                        max-height: 99999px;
+                        /* Set the desired expanded max-height */
                     }
 
                     .log-month-container,
@@ -45,7 +47,7 @@
                     }
 
                     .open {
-                        display: block !important;
+                        display: block;
                     }
 
                     .log-year-container {
@@ -269,9 +271,15 @@
                                 if (logsContainer && arrow) {
                                     logsContainer.classList.toggle('open');
                                     arrow.classList.toggle('rotate');
+                                    if (logsContainer.classList.contains('open')) {
+                                        logsContainer.style.maxHeight = (logsContainer.scrollHeight+10000) + 'px'; // Set the dynamic max-height
+                                    } else {
+                                        logsContainer.style.maxHeight = '0'; // Collapse the container by setting max-height to 0
+                                    }
                                     saveMenuState();
                                 }
-                            }
+                            };
+
 
                             const saveMenuState = () => {
                                 const menuState = {};
@@ -536,6 +544,8 @@
 
 
                         </script>
+
+                        <br><br><br>
 
                         <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 

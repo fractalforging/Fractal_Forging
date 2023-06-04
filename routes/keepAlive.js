@@ -36,9 +36,9 @@ const sendRequest = (interval) => {
   };
 
   const req = https.request(options, res => {
-    console.log(`[${formatter.format(new Date())}] statusCode: ${res.statusCode}`);
+    //console.log(`[${formatter.format(new Date())}] statusCode: ${res.statusCode}`);
     if (res.statusCode >= 200 && res.statusCode < 300) {
-      console.log(`[${formatter.format(new Date())}] Page touched successfully. Next touch in ${(interval / (60 * 1000)).toFixed(2)} minutes`);
+      console.log(`[${formatter.format(new Date())}] Page touched successfully. Next touch in ${(interval / (60 * 1000)).toFixed(2)} minutes.`);
     } else {
       console.error(`[${formatter.format(new Date())}] The server responded with a non-successful status code: ${res.statusCode}`);
     }

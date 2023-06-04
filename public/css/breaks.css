@@ -105,7 +105,7 @@
   height: 48px;
   transition: height var(--animation-duration-short) ease-in-out;
 }
-
+ 
 .break-list-item-admin:hover .arrow {
   color: var(--links-hover-color);
 }
