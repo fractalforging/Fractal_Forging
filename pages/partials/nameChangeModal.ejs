@@ -11,7 +11,7 @@
             </div>
             <button type="submit" class="form-button">OK</button>
             <p id="name-error-message" style="display:none; color: red;"></p>
-        </form> 
+        </form>
     </div>
 </div>
 
@@ -43,12 +43,10 @@
         const form = modal.querySelector("#name-change-form");
         const newNameInput = document.getElementById("newname");
 
-        // Fetch the current username
         const response = await fetch(`/namechange/${userId}`);
         const user = await response.json();
-        newNameInput.value = user.username;  // Set the current username
+        newNameInput.value = user.username;
 
-        // Simulate user input to move placeholder up as in 'bottomjs.ejs'
         newNameInput.dispatchEvent(new Event('input'));
 
         modal.style.display = "block";
@@ -57,9 +55,8 @@
         userIdInput.name = "userId";
         userIdInput.value = userId;
         form.appendChild(userIdInput);
-        close.onclick = () => { modal.style.display = "none"; };
 
-        form.addEventListener("submit", async (e) => {
+        const onSubmit = async (e) => {
             e.preventDefault();
             const newName = document.getElementById("newname").value;
             const errorMessage = document.getElementById("name-error-message");
@@ -74,7 +71,15 @@
                 modal.style.display = "none";
                 location.reload();
             }
-        });
+        };
+
+        form.addEventListener("submit", onSubmit);
+
+        close.onclick = () => {
+            modal.style.display = "none";
+            form.removeEventListener("submit", onSubmit);
+        };
+
         document.getElementById("newname").focus();
     };
 
@@ -88,6 +93,7 @@
             })
         );
     });
+
 
 
 </script>
