@@ -275,16 +275,12 @@
                                         const containerHeight = logsContainer.scrollHeight;
                                         logsContainer.style.maxHeight = containerHeight + 'px';
                                         logsContainer.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
-                                        setTimeout(() => {
-                                            logsContainer.style.opacity = '1';
-                                        }, 10);
+                                        logsContainer.style.opacity = '1';
                                     } else {
                                         logsContainer.style.maxHeight = '0';
                                         logsContainer.style.opacity = '0';
                                         logsContainer.style.transition = 'max-height 0s ease, opacity 0.3s ease';
-                                        setTimeout(() => {
-                                            logsContainer.style.display = 'none';
-                                        }, 300);
+                                        logsContainer.style.display = 'none';
                                     }
 
                                     saveMenuState();
