@@ -16,7 +16,7 @@
                     .log-day-container {
                         position: relative;
                         left: 3px;
-                        max-height: 0px;
+                        /* max-height: 99999px; */
                         padding: 3px;
                         margin-top: 5px;
                         text-align: left;
@@ -36,9 +36,9 @@
                     }
 
                     .visible {
+                        overflow: hidden;
                         opacity: 1;
-                        max-height: 99999px;
-                        /* Set the desired expanded max-height */
+                        max-height: 1000px;
                     }
 
                     .log-month-container,
@@ -178,8 +178,8 @@
 
                 <% logs.forEach((logYear, yearIndex)=> { %>
                     <div class="log-year-container">
-                        <div class="log-year" id="year<%= yearIndex %>">
-                            <button onclick="toggleLogsContainer(this)">
+                        <div class="log-year" id="year<%= yearIndex %>" onclick="toggleLogsContainer(event, this)">
+                            <button class="toggle-button">
                                 <span class="button-content">
                                     <span class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
                                     <span class="folder-buttons">
@@ -187,24 +187,24 @@
                                     </span>
                                 </span>
                             </button>
-                            <!-- Download Button for Year Folder -->
                             <span class="dl-d-icons-container-year">
                                 <button class="log-button"
-                                    onclick="downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
+                                    onclick="event.stopPropagation(); downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
                                     <i class="material-symbols-outlined dl-d-icons"
                                         style="display: inline-block;">get_app</i>
                                 </button>
-                                <!-- Delete Button for Year Folder -->
-                                <button class="log-button" onclick="deleteYearLogs('<%= logYear.year %>')">
+                                <button class="log-button"
+                                    onclick="event.stopPropagation(); deleteYearLogs('<%= logYear.year %>')">
                                     <i class="material-symbols-outlined dl-d-icons"
                                         style="display: inline-block;">close</i>
                                 </button>
                             </span>
                             <div class="log-month-container">
                                 <% logYear.months.forEach((logMonth, monthIndex)=> { %>
-                                    <div class="log-month-row">
-                                        <div class="log-month" id="month<%= monthIndex %>">
-                                            <button onclick="toggleLogsContainer(this)">
+                                    <div class="log-month-row" onclick="event.stopPropagation();">
+                                        <div class="log-month" id="month<%= monthIndex %>"
+                                            onclick="toggleLogsContainer(event, this)">
+                                            <button class="toggle-button">
                                                 <span class="button-content">
                                                     <span
                                                         class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
@@ -213,39 +213,35 @@
                                                     </span>
                                                 </span>
                                             </button>
-                                            <!-- Download Button for Month Folder -->
                                             <span class="dl-d-icons-container-month">
                                                 <button class="log-button"
-                                                    onclick="downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
+                                                    onclick="event.stopPropagation(); downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
                                                     <i class="material-symbols-outlined dl-d-icons"
                                                         style="display: inline-block;">get_app</i>
                                                 </button>
-                                                <!-- Delete Button for Month Folder -->
                                                 <button class="log-button"
-                                                    onclick="deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
+                                                    onclick="event.stopPropagation(); deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
                                                     <i class="material-symbols-outlined dl-d-icons"
                                                         style="display: inline-block;">close</i>
                                                 </button>
                                             </span>
                                             <div class="log-day-container">
                                                 <% logMonth.logs.forEach(logFile=> { %>
-                                                    <div class="log-day" onclick="event.stopPropagation()">
+                                                    <div class="log-day" onclick="event.stopPropagation();">
                                                         <button class="log-button"
                                                             onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                             <span class="folder-buttons-logfile">
                                                                 <%= logFile %>
                                                             </span>
                                                         </button>
-                                                        <!-- Download Button for Daily Logs -->
                                                         <span class="dl-d-icons-container-day">
                                                             <button class="log-button"
-                                                                onclick="downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                                onclick="event.stopPropagation(); downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                                 <i class="material-symbols-outlined dl-d-icons"
                                                                     style="display: inline-block;">get_app</i>
                                                             </button>
-                                                            <!-- Delete Button for Daily Logs -->
                                                             <button class="log-button"
-                                                                onclick="deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                                onclick="event.stopPropagation(); deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                                 <i class="material-symbols-outlined dl-d-icons"
                                                                     style="display: inline-block;">close</i>
                                                             </button>
@@ -256,29 +252,46 @@
                                         </div>
                                     </div>
                                     <% }); %>
-
                             </div>
                         </div>
                     </div>
                     <% }); %>
 
-
                         <script>
-                            const toggleLogsContainer = (button) => {
-                                const parentElement = button.parentElement;
-                                const logsContainer = parentElement.querySelector('.log-month-container, .log-day-container') || parentElement.querySelector('.log-year-container');
-                                const arrow = button.querySelector('.arrow-logs');
+                            const toggleLogsContainer = (event, element) => {
+                                event.stopPropagation();
+
+                                const logsContainer = element.querySelector('.log-month-container, .log-day-container') || element.querySelector('.log-year-container');
+                                const arrow = element.querySelector('.arrow-logs');
+
                                 if (logsContainer && arrow) {
-                                    logsContainer.classList.toggle('open');
+                                    const isOpen = logsContainer.classList.toggle('open');
                                     arrow.classList.toggle('rotate');
-                                    if (logsContainer.classList.contains('open')) {
-                                        logsContainer.style.maxHeight = (logsContainer.scrollHeight+10000) + 'px'; // Set the dynamic max-height
+
+                                    if (isOpen) {
+                                        logsContainer.style.maxHeight = '0';
+                                        logsContainer.style.opacity = '0';
+                                        logsContainer.style.display = 'block';
+                                        const containerHeight = logsContainer.scrollHeight;
+                                        logsContainer.style.maxHeight = containerHeight + 'px';
+                                        logsContainer.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
+                                        setTimeout(() => {
+                                            logsContainer.style.opacity = '1';
+                                        }, 10);
                                     } else {
-                                        logsContainer.style.maxHeight = '0'; // Collapse the container by setting max-height to 0
+                                        logsContainer.style.maxHeight = '0';
+                                        logsContainer.style.opacity = '0';
+                                        logsContainer.style.transition = 'max-height 0s ease, opacity 0.3s ease';
+                                        setTimeout(() => {
+                                            logsContainer.style.display = 'none';
+                                        }, 300);
                                     }
+
                                     saveMenuState();
                                 }
                             };
+
+
 
 
                             const saveMenuState = () => {
