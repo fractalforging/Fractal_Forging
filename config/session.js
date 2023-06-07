@@ -12,6 +12,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const sessionConfig = (app, dbPath, secret) => {
+  const sessionDurationHours = process.env.SESSION_DURATION_HOURS;
+  const sessionDurationMilliseconds = sessionDurationHours * 60 * 60 * 1000;
+
   app.set('views', 'pages');
   app.set("view engine", "ejs");
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -23,10 +26,10 @@ const sessionConfig = (app, dbPath, secret) => {
       secret: secret,
       store: MongoStore.create({ 
         mongoUrl: dbPath,
-        ttl: 12 * 60 * 60 // 12 hours
+        ttl: sessionDurationMilliseconds / 1000, // Convert milliseconds to seconds
       }),
       cookie: {
-        maxAge: 12 * 60 * 60 * 1000 // 12 hours in milliseconds
+        maxAge: sessionDurationMilliseconds
       },
       resave: false,
       saveUninitialized: false,
