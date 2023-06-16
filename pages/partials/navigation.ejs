@@ -63,12 +63,10 @@
       <% if (currentUser.roles==='admin' ) { %>
         <li><a href="/register">Register</a></li>
         <li><a href="/users">Accounts</a></li>
-        <% if (currentUser.username==='admin' ) { %>
-          <li><a href="/logs">Logs</a></li>
-          <% } %>
-            <% } %>
-              <li><a href="/settings">Settings</a></li>
-              <li><a href="/logout">Logout</a></li>
+        <li><a href="/logs">Logs</a></li>
+        <% } %>
+          <li><a href="/settings">Settings</a></li>
+          <li><a href="/logout">Logout</a></li>
     </div>
   </div>
   <li class="nav-breaks"><a href="/secret">Breaks</a></li>
