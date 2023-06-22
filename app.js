@@ -120,5 +120,5 @@ app.post('/clear-message', async (req, res) => {
 //=====================
 // START SERVER
 
-import './routes/keepAlive.js'; 
+// import './routes/keepAlive.js'; 
 server.listen(port, () => logger.info(`Server Up and running on port: ${kleur.grey(port)}`));
