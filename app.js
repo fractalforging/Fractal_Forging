@@ -38,7 +38,7 @@ import User from './models/user.js';
 import BreakTrack from "./models/BreakTrack.js";
 import database from './config/database.js';
 database.connectMongoDB(dbPath);
-database.initialize();
+database.initialize(); 
 
 //=====================
 // SESSION CONFIG. 
