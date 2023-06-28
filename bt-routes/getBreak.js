@@ -1,3 +1,5 @@
+'use strict';
+
 const BreakTrack = require("../models/BreakTrack.js");
 
 module.exports = function (app) {

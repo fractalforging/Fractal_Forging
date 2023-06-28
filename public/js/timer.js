@@ -1,12 +1,14 @@
+'use strict';
+
 console.log("T I M E R . J S   L O A D E D");
 
 /////////////////// - TIMER - /////////////////////
 
-startTimer = (myDuration, display, id) => {
+const startTimer = (myDuration, display, id) => {
   let timer = myDuration - 60;
   let minutes;
   let seconds;
-  let interval = setInterval(function () {
+  let interval = setInterval( () => {
     minutes = ('00' + parseInt(timer / 60, 10)).slice(-2);
     seconds = ('00' + parseInt(timer % 60, 10)).slice(-2);
     display.textContent = minutes + ":" + seconds;
@@ -21,7 +23,7 @@ startTimer = (myDuration, display, id) => {
   console.log("A C T I V E  -   T I M E R    S T A R T E D");
 }
 
-function onTimerEnded(id) {
+const onTimerEnded = (id) => {
   let display = document.querySelector(`.timer-${id}`);
   if (!display) return;
 
@@ -52,8 +54,8 @@ function onTimerEnded(id) {
 
 ///////// - START BUTTON - //////////
 
-async function onStartButtonClick(event) {
-  socket.emit('reload');
+const onStartButtonClick = async (event) => {
+  //socket.emit('reload');
   //console.log('Start button clicked');
   const breakId = event.target.dataset.id;
   try {
@@ -72,7 +74,7 @@ async function onStartButtonClick(event) {
   } catch (error) { console.error("Error starting the break: ", error); }
 }
 
-async function removeBreak(breakId, beforeStart, isAdmin = false) {
+const removeBreak = async (breakId, beforeStart, isAdmin = false) => {
   try {
     const url = isAdmin
       ? `/remove/${breakId}?isAdmin=true&beforeStart=${beforeStart}`
@@ -89,7 +91,9 @@ async function removeBreak(breakId, beforeStart, isAdmin = false) {
     } else {
       console.error("Error removing the break.");
     }
-  } catch (error) { console.error("Error removing the break: ", error); }
+  } catch (error) { 
+    //console.error("Error removing the break: ", error); 
+  }
 }
 
 

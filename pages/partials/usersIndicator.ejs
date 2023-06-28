@@ -1,104 +1,15 @@
-<!-- ////////////// SOCKET.IO - GLOBAL RELOAD ////////////////-->
-
-<script src="/socket.io/socket.io.js"></script>
-
 <!-- ////// - USERS ONLINE INDICATOR - ////////-->
 
-<script>
-    const socketOptions = {};
-  <% if (typeof currentUser !== 'undefined') { %>
-        socketOptions.query = { username: '<%= currentUser.username %>' };
-  <% } %>
-  const socket = io(socketOptions);
-
-    socket.on('connect', () => {
-        console.log('SOCKET.IO - Connected to server');
-    });
-
-    socket.on('disconnect', () => {
-        console.log('SOCKET.IO - Disconnected from server');
-    });
-
-    socket.on('reload', () => {
-        console.log('Reload event received');
-        setTimeout(() => location.reload(), 100);
-    });
-
-    socket.on('userCount', (count) => {
-        document.querySelector('#userCount').innerText = count;
-    });
-
-    socket.on('userList', (users) => {
-    const userList = document.querySelector('#userList');
-    userList.innerHTML = '';
-    
-    const onlineItem = document.createElement('li');
-    onlineItem.innerText = 'Online:';
-    userList.appendChild(onlineItem);
-
-    const hrItem = document.createElement('li');
-    hrItem.innerHTML = '<hr>';
-    userList.appendChild(hrItem);
-
-    users.forEach((user) => {
-        const listItem = document.createElement('li');
-        listItem.innerText = user;
-        userList.appendChild(listItem);
-    });
-});
-
-
-</script>
-
-
-<script>
-
-    function toggleUserList() {
-        const userList = document.querySelector('#userList');
-        if (userList.style.display === 'block') {
-            userList.style.display = 'none';
-            userList.classList.remove('show');
-        } else {
-            userList.style.display = 'block';
-            setTimeout(() => {
-                userList.classList.add('show');
-            }, 10);
-        }
-    }
-
-    document.addEventListener('click', (event) => {
-        const userList = document.querySelector('#userList');
-        const userCountButton = document.querySelector('#userCount');
-
-        if (!userList.contains(event.target) && !userCountButton.contains(event.target)) {
-            userList.style.display = 'none';
-            userList.classList.remove('show');
-        }
-    });
-
-    setInterval(() => {
-        socket.emit('heartbeat');
-    }, 5 * 1000);
-
-</script>
-
-
-<span class="users-container">
-    <% if (currentUser.roles==='admin' ) { %>
-    <button id="userCount" onclick="toggleUserList()">0</button>
-    <ul id="userList"></ul>
-    <% } %>
-</span>
-
+<!-- /// - CSS - ///-->
 
 <style>
     #userCount {
         font-family: var(--break-list-item-timer-font-family);
         top: -7px;
-        left: 225px;
+        left: 226px;
         margin-right: -35px;
-        background-color: var(--break-list-item-background-color);
-        border: 2px solid var(--hr-divider-color);
+        background-color: var(--indicator-icon-background-color);
+        border: 2px solid var(--indicator-icon-border-color);
         color: var(--text-color);
         text-align: center;
         text-decoration: none;
@@ -112,48 +23,71 @@
         outline: none;
         box-shadow: 0 2px 4px #00000026;
         position: absolute;
-        transition: all var(--animation-duration-long) ease;
+        -webkit-box-shadow: inset 1px 1px 5px transparent, 1px 1px 8px transparent;
+        box-shadow: inset 1px 1px 5px transparent, 1px 1px 8px transparent;
+        transition: background-color var(--animation-duration-long) ease,
+            color var(--animation-duration-long) ease,
+            border-color var(--animation-duration-base) ease;
+    }
+
+    #userCount:hover {
+        border-color: var(--indicator-icon-border-hover-color);
+        /* No need for transition property here as it's already defined in the base style */
+        -webkit-box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
+        box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
     }
 
     #userList {
         outline: var(--break-list-item-background-color);
-        display: none;
+        max-height: 0;
+        opacity: 0;
         position: absolute;
-        top: 35px;
+        top: 25px;
         left: 50%;
-        transform: translateX(89px);
+        transform: translateX(95px);
         background-color: var(--navigation-dropdown-background-color);
         min-width: 100px;
         max-width: 200px;
-        box-shadow: 0px 8px 16px 0px #00000033;
+        box-shadow: 0px 4px 8px 0px #00000033;
         list-style-type: none;
         margin: 0;
         padding: 0;
-        border-radius: 15px;
-        z-index: 1;
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        z-index: 3;
+        transition: max-height var(--animation-duration-base) ease-in-out, opacity var(--animation-duration-short) ease-in-out;
+        overflow: hidden;
+        /* add this line */
+    }
+
+    #userList.hide {
+        max-height: 0;
         opacity: 0;
-        transition: all var(--animation-duration-short) ease;
+        visibility: hidden;
     }
 
     #userList.show {
+        max-height: 400px;
         opacity: 1;
+        visibility: visible;
     }
 
     #userList:before {
         content: '';
         position: absolute;
-        top: -13px; 
+        top: -13px;
         left: 50%;
         transform: translateX(-50%);
-        border-width: 0 12px 12px; 
+        border-width: 0 12px 12px;
         border-style: solid;
         border-color: transparent transparent var(--navigation-dropdown-background-color);
     }
 
-    #userList li {
-        padding-bottom: 10px;
-        padding-top: -8px;
-        margin: 5px;
+    #userList span {
+        padding-bottom: 8px;
+        padding-top: -3px;
+        margin: 0px;
         text-decoration: none;
         color: var(--text-color);
         display: block;
@@ -161,19 +95,61 @@
         border-radius: 5px;
     }
 
-    #userList li:first-child {
-        margin-top: 10px;
+    #userList span:first-child {
+        margin-top: 8px;
         font-weight: bold;
         cursor: default;
     }
-    
+
     #userList hr {
         position: relative;
-        left: 9px;
+        left: 16px;
         border: none;
         width: 70px;
         height: 1px;
-        background-color: var(--hr-divider-userslist-color); 
-        margin: 0px; 
+        background-color: var(--hr-divider-userslist-color);
+        margin: -2px;
     }
 </style>
+
+<!-- /// - HTML - ///-->
+
+<span class="users-container">
+    <% if (currentUser.roles==='admin' ) { %>
+        <button id="userCount" onclick="toggleUserList()">0</button>
+        <ul id="userList" class="hide"></ul>
+        <% } %>
+</span>
+
+<!-- /// - JS - ///-->
+
+<script>
+    'use strict';
+
+    const toggleUserList = () => {
+        const userList = document.querySelector('#userList');
+        if (userList.classList.contains('show')) {
+            userList.classList.remove('show');
+            userList.classList.add('hide');
+        } else {
+            userList.classList.remove('hide');
+            setTimeout(() => {
+                userList.classList.add('show');
+            }, 10);
+        }
+    }
+
+    document.addEventListener('click', (event) => {
+        const userList = document.querySelector('#userList');
+        const userCountButton = document.querySelector('#userCount');
+    <% if (currentUser.roles === 'admin') { %>
+    if (!userList.contains(event.target) && !userCountButton.contains(event.target)) {
+                userList.classList.remove('show');  // just remove the 'show' class
+            }
+    <% } %>
+});
+
+    setInterval(() => {
+        socket.emit('heartbeat');
+    }, 5 * 1000);
+</script>

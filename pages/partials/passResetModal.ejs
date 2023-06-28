@@ -2,18 +2,16 @@
 
 <div id="reset-password-modal" class="reset-password-modal">
     <div class="reset-password-modal-content">
- 
-        <greet class="reset-pass-title">Reset Password</greet><span
-            class="reset-password-close">&times;</span>
-        <form action="/resetpassword" method="post" id="reset-password-form" class="passTimeForm passFormTop">
+        <greet class="reset-pass-title">Reset Password</greet><span class="reset-password-close">&times;</span>
+        <form action="/resetpassword" method="post" id="reset-password-form" class="reset-password-form">
             <div class="input-container">
-                <input type="password" id="newpassword" name="newpassword" autocomplete="off"
-                    class="reset-input" maxlength="" value="">
+                <input type="password" id="newpassword" name="newpassword" autocomplete="off" class="reset-input"
+                    maxlength="" value="">
                 <span class="placeholder1 newpassword">&nbsp;New Password&nbsp;</span>
             </div>
             <div class="input-container">
-                <input type="password" id="confirmpassword" name="confirmpassword"
-                    autocomplete="off" class="reset-input" maxlength="" value="">
+                <input type="password" id="confirmpassword" name="confirmpassword" autocomplete="off"
+                    class="reset-input" maxlength="" value="">
                 <span class="placeholder1">&nbsp;Confirm Password&nbsp;</span>
             </div>
             <button type="submit" class="form-button">OK</button>
@@ -21,10 +19,12 @@
         </form>
     </div>
 </div>
- 
+
 <script>
 
- <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
+    <!-- ////////////////// - HANDLING PASSWORD RESET - /////////////////// -->
+
+    'use strict';
 
     const resetPassword = async (userId, newPassword, confirmPassword) => {
         try {
@@ -44,7 +44,6 @@
             return { success: false, error: error.message };
         }
     };
-
 
     const displayResetPasswordModal = (userId) => {
         const modal = document.getElementById("reset-password-modal");
@@ -75,6 +74,7 @@
                 location.reload();
             }
         });
+        document.getElementById("newpassword").focus();
     };
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -88,24 +88,6 @@
                 displayResetPasswordModal(userId);
             })
         );
-    });
-
-    <!-- ////////////// - PREVENT PLAHOLDER MOVEMENT WHEN TEXT - ////////////////-->
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const inputFields = document.querySelectorAll('.reset-input');
-        inputFields.forEach(input => {
-            input.addEventListener('input', handleInput);
-            handleInput.call(input);
-        });
-
-        function handleInput() {
-            if (this.value) {
-                this.parentElement.classList.add('has-text');
-            } else {
-                this.parentElement.classList.remove('has-text');
-            }
-        }
     });
 
 </script>

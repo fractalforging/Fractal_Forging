@@ -1,4 +1,6 @@
-function updateLocalTimes() {
+'use strict';
+
+const updateLocalTimes = () => {
     const submittedTimes = document.querySelectorAll('.submitted-time');
     const startedTimes = document.querySelectorAll('.started-time');
     submittedTimes.forEach(timeElement => {
@@ -14,13 +16,8 @@ function updateLocalTimes() {
         }
     });
 }
-function makeInfoVisible() {
-    const infos = document.querySelectorAll('info');
-    infos.forEach((info) => {
-        info.classList.add('visible');
-    });
-}
-function makeInfoVisible() {
+
+const makeInfoVisible = () => {
     const infotitles = document.querySelectorAll('infotitle');
     const infos = document.querySelectorAll('info');
 
@@ -32,5 +29,6 @@ function makeInfoVisible() {
         info.classList.add('visible');
     });
 }
+
 updateLocalTimes();
 makeInfoVisible();

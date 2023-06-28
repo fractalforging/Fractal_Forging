@@ -1,8 +1,10 @@
-const mongoose = require('mongoose');
+'use strict';
+
+import mongoose from 'mongoose';
 
 const lastResetTimestampSchema = new mongoose.Schema({
   timestamp: Date
 });
 
 const LastResetTimestamp = mongoose.model('LastResetTimestamp', lastResetTimestampSchema);
-module.exports = LastResetTimestamp;
+export default LastResetTimestamp;

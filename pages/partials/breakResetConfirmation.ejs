@@ -1,0 +1,60 @@
+<!-- ////////////// - EMERGENCY RESET BREAK TIME - ////////////////-->
+<% if (currentUser.username === "admin") { %>
+<button id="reset-break-time" class="reset-break-time-button">Reset Breaks</button>
+
+<div id="confirmation-modal" class="confirmation-modal">
+    <div class="confirmation-modal-content">
+        <greet class="confirmation-modal-title">Reset total break time?</greet>
+        <span class="confirmation-modal-close">&times;</span>
+        <form id="confirm-modal-form" class="confirm-modal-form">
+            <button id="modal-ok" class="form-button">OK</button>
+        </form>
+    </div>
+</div>
+
+<br><br>
+
+<script>
+    'use strict';
+
+    window.addEventListener('DOMContentLoaded', () => {
+        const modal = document.getElementById("confirmation-modal");
+        const close = modal.querySelector(".confirmation-modal-close");
+        close.onclick = () => { modal.style.display = "none"; };
+        document.getElementById('reset-break-time').addEventListener('click', showConfirmationModal);
+        document.getElementById('modal-ok').addEventListener('click', handleModalOk);
+        const socket = io();
+        // socket.on('reload', () => {
+        //     window.location.reload();
+        // });
+    });
+    const showConfirmationModal = () => {
+        document.getElementById('confirmation-modal').style.display = 'block';
+    }
+
+    const handleModalOk = () => {
+        document.getElementById('confirmation-modal').style.display = 'none';
+        resetBreakTimeForAllUsers();
+    }
+
+    const resetBreakTimeForAllUsers = async () => {
+        try {
+            const response = await fetch('/resetbreaktime', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.status === 200) {
+                console.log('Response status:', response.status);
+            } else {
+                console.log('Response status:', response.status);
+            }
+        } catch (error) {
+            console.error('Error resetting break time:', error);
+        }
+    }
+
+</script>
+<% } %>

@@ -1,6 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const logger = require('../routes/logger.js');
+'use strict';
+
+import express from 'express';
+import { Router } from 'express';
+import logger from '../routes/logger.js';
+
+const router = Router();
 
 const endBreak = (BreakTrack) => {
   router.post("/:id/end", async (req, res, next) => {
@@ -10,7 +14,7 @@ const endBreak = (BreakTrack) => {
 
       res.sendStatus(200);
     } catch (err) {
-      logger.error("Error updating hasEnded field: ", err);
+      logger.error("Error updating hasEnded field: ", err, { username: req.user.username });
       res.sendStatus(500);
     }
   });
@@ -18,4 +22,4 @@ const endBreak = (BreakTrack) => {
   return router;
 };
 
-module.exports = endBreak;
+export default endBreak;

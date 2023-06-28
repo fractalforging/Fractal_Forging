@@ -1,5 +1,5 @@
 <!-- ////////////// FONTS + ICONS LOADER ////////////////-->
-
+ 
 <!-- ////// - HTML WITH FONTS + ICONS - ////// -->
 
 <div style="opacity: 0;">
@@ -10,32 +10,38 @@
     <span class="not-started">not started</span>
 </div>
 
+<!-- ////// - LOADER - ////// -->
+
+<div class="loader">
+    <div class="spinner"></div>
+</div>
+
 <!-- ////// - CSS - ////// -->
 
 <style>
     .loader {
         position: fixed;
-        top: 0;
+        top: -10%;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: #ffffff;
+        background-color: #00000000;
         z-index: 1000;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    body {
+    /* body {
         opacity: 0;
-    }
+    } */
 
     .spinner {
-        border: 4px solid rgba(0, 0, 0, 0.1);
+        border: 4px solid #0000001a;
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        border-left-color: #000;
+        border-left-color: #3c5c85;
         animation: spin 1s linear infinite;
     }
 
@@ -53,8 +59,9 @@
 <!-- ////// - JS - ////// -->
 
 <script>
+    'use strict';
 
-    function loadFonts() {
+    const loadFonts = () => {
         const fetchMPlus1 = fetch('https://fonts.googleapis.com/css2?family=M+PLUS+1&display=swap')
             .then((response) => response.text())
             .then((css) => {
@@ -90,16 +97,16 @@
         ]);
     }
 
-    function delay(ms) {
+    const delay = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     Promise.all([document.fonts.ready, loadFonts(), delay(1000)]).then(() => {
         setTimeout(() => {
-            document.body.style.opacity = '1';
-            document.body.style.transition = 'opacity 0.2s ease';
+            document.querySelector('#login-form').style.opacity = '1';
+            document.querySelector('#login-form').style.transition = 'opacity 0.2s ease';
             document.querySelector('.loader').style.display = 'none';
-        }, 100);
+        }, 10);
     });
 
 </script>

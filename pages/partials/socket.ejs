@@ -1,0 +1,54 @@
+<!-- ////////////// SOCKET.IO - GLOBAL RELOAD ////////////////-->
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    'use strict';
+    
+    const socketOptions = {};
+  <% if (typeof currentUser !== 'undefined') { %>
+        socketOptions.query = { username: '<%= currentUser.username %>' };
+  <% } %>
+  const socket = io(socketOptions);
+
+    socket.on('connect', () => {
+        console.log('SOCKET.IO - Connected to server');
+    });
+
+    socket.on('disconnect', () => {
+        console.log('SOCKET.IO - Disconnected from server');
+    });
+
+    socket.on('reload', () => {
+        console.log('Reload event received');
+        setTimeout(() => location.reload(), 100);
+    });
+
+    <% if (currentUser.roles==='admin' ) { %>
+    try {
+        socket.on('userCount', (count) => {
+            document.querySelector('#userCount').innerText = count;
+        });
+
+        socket.on('userList', (users) => {
+            const userList = document.querySelector('#userList');
+            userList.innerHTML = '';
+
+            const onlineItem = document.createElement('span');
+            onlineItem.innerHTML = 'Online:';
+            userList.appendChild(onlineItem);
+
+            const hrItem = document.createElement('span');
+            hrItem.innerHTML = '<hr>';
+            userList.appendChild(hrItem);
+
+            users.forEach((user) => {
+                const listItem = document.createElement('span');
+                listItem.innerHTML = user + '<br>';
+                userList.appendChild(listItem);
+            });
+        });
+    } catch (error) {};
+    <% } %>
+
+</script>

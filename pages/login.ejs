@@ -1,22 +1,84 @@
 <%- include('partials/preload.ejs') %>
+
+<div id="login-form" style="opacity: 0;">
   <%- include('partials/header.ejs') %>
   <%- include('partials/messageModals.ejs') %>
-  
-    <!-- ////////////// - LOGIN FORM - ////////////////-->
 
-      <form action="/login" method="POST" class="credentials">
-        <div class="input-container">
-          <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength="" value="">
-          <span class="placeholder1 username">&nbsp;Username&nbsp;</span>
-        </div>
-        <div class="input-container">
-          <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength=""
-            value="">
-          <span class="placeholder1 password">&nbsp;Password&nbsp;</span>
-        </div>
-        <button id="login-submit-button" type="submit" class="form-button">Login</button>
-      </form>
+  <!-- ////////////// - LOGIN FORM - ////////////////-->
 
-      <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+  <form action="/login" method="POST" class="credentials">
+    <div class="input-container">
+      <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength="" value="">
+      <span class="placeholder1 username">&nbsp;Username&nbsp;</span>
+    </div>
+    <div class="input-container">
+      <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength="" value="">
+      <span class="placeholder1 password">&nbsp;Password&nbsp;</span>
+    </div>
+    <button id="submit-button" type="submit" class="form-button">Login</button>
+  </form>
+</div>
 
-      <%- include('partials/bottomjs.ejs') %>
+<!-- ////// - LOADER - ////// -->
+
+<div id="loader" class="loader" style="display: none;">
+  <div class="spinner"></div>
+</div>
+
+<!-- ////// - FORM SUBMISSION + AJAX - ////// -->
+
+<script>
+ const submitForm = document.querySelector('#login-form');
+const username = document.querySelector('#username');
+const password = document.querySelector('#password');
+const submitButton = document.querySelector('#submit-button');
+const loader = document.querySelector('#loader');
+
+// const [myModal_Neg, myModalText_Neg, myModal_Pos, myModalText_Pos] =
+//   ["#myModal-Neg", "#message-neg", "#myModal-Pos", "#message-pos"].map(document.querySelector.bind(document))
+
+submitForm.addEventListener('submit', function (event) {
+  event.preventDefault();
+  submitButton.disabled = true;
+  submitForm.style.opacity = '0';
+  loader.style.display = 'flex';
+
+  fetch('/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ username: username.value, password: password.value }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.message) {
+      if (data.redirectURL) {
+        [myModal_Neg, myModal_Pos].forEach(modal => modal.style.display = 'none');
+        myModalText_Pos.innerHTML = data.message;
+        myModal_Pos.style.display = 'block';
+        setTimeout(() => {
+          window.location.href = data.redirectURL;
+        }, 0);
+      } else {
+        submitForm.style.opacity = '1';
+        loader.style.display = 'none';
+        [myModal_Pos, myModal_Neg].forEach(modal => modal.style.display = 'none');
+        myModalText_Neg.innerHTML = data.message;
+        myModal_Neg.style.display = 'block';
+      }
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  })
+  .finally(() => {
+    submitButton.disabled = false;
+  });
+});
+</script>
+
+<!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+
+<%- include('partials/bottomjs.ejs') %>
+

@@ -1,40 +1,38 @@
-const express = require('express');
-const router = express.Router();
-const kleur = require('kleur');
-const passport = require('passport');
-const logger = require('./logger.js');
+import express from 'express';
+import passport from 'passport';
+import { ensureLoggedOut } from 'connect-ensure-login';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
 
-router.post('/', async function (req, res, next) {
-  passport.authenticate('local', async function (err, user, info) {
-    req.session.username = req.body.username;
-    //req.session.message = "true";
+const loginRoute = express.Router();
+
+loginRoute.get('/', ensureLoggedOut('/secret'), (req, res) => {
+  res.render('login', { layout: 'layouts/default', pageTitle: 'Login' });
+});
+
+loginRoute.post('/', ensureLoggedOut('/secret'), (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
     if (err) {
-      req.session.message = "error1";
-      logger.error('An error1 occurred while logging in:', err);
-      return res.render("login", { message: "An error occurred while logging in" });
+      logger.error(err, { username: req.user.username });
+      return res.status(500).json({ message: 'An internal error occurred' });
     }
+
     if (!user) {
-      req.session.message = "false";
       logger.error('Incorrect username or password');
-      return res.render("login", { message: "Incorrect email or password" });
+      return res.status(401).json({ message: 'Incorrect username or password' });
     }
-    if (err || !user) {
-      req.session.message = "errorx";
-      return;
-    }
-    req.logIn(user, async function (err) {
+
+    req.logIn(user, (err) => {
       if (err) {
-        req.session.message = "error2";
-        logger.error('An error2 occurred while logging in:', err);
-        return res.render("login", { message: "An error occurred while logging in" });
+        logger.error(err, { username: req.user.username });
+        return res.status(500).json({ message: 'An internal error occurred' });
       }
-      user.isOnline = true;
-      await user.save();
-      logger.warn('Login successful for user: ' + kleur.magenta(user.username));
-      //req.session.message = "true";
-      return res.redirect("secret");
+
+      const username = user.username || 'unknown'; // provide a fallback
+      logger.warn(`Login successful for user: ${kleur.magenta(user.username)}`, { username: req.user.username });
+      return res.status(200).json({ message: 'Login successful', redirectURL: '/secret' });
     });
   })(req, res, next);
 });
 
-module.exports = router;
+export default loginRoute;

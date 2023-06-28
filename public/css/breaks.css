@@ -70,24 +70,21 @@
 
 .break-list-item-user,
 .break-list-item-admin {
-  /* min-height: 20px; */
-  /* max-height: 20px; */
   height: 20px;
   padding: 10px;
   margin-top: 10px;
   text-align: left;
   display: flex;
-  background-color: var(--break-list-item-background-color);
+  box-shadow: 0px 3px 7px 0px var(--break-list-item-shadow-color);
+  background: linear-gradient(var(--break-list-item-background-color), var(--break-list-item-background-color)) padding-box,
+    linear-gradient(to bottom, var(--break-list-item-sidegradient1-color), var(--break-list-item-sidegradient2-color)) border-box;
   color: var(--break-list-item-text-color);
-  border: 1px solid var(--break-list-item-sidegradient1-color);
-  border-radius: 5px;
+  border: 1px solid transparent;
+  border-radius: 10px;
   overflow: hidden;
-  transition: background-color var(--animation-duration-more) ease-in-out,
-    color var(--animation-duration-more) ease-in-out,
-    border var(--animation-duration-more) ease-in-out;
-    /* min-height var(--animation-duration-more) ease-in-out,
-     max-height var(--animation-duration-more) ease-in-out, */
-    /* height var(--animation-duration-short) ease-in-out; */
+  transition: background-color var(--animation-duration-short) ease-in-out,
+    color var(--animation-duration-short) ease-in-out,
+    border var(--animation-duration-short) ease-in-out;
 }
 
 .break-list-item-user {
@@ -100,15 +97,17 @@
 }
 
 .break-list-item-admin.expanded {
-  /* max-height: 1000px; */
-   height: 83px; 
-   transition: height var(--animation-duration-short) ease-in-out;
+  height: 83px;
+  transition: height var(--animation-duration-short) ease-in-out;
 }
 
 .break-list-item-admin.expanded_accounts {
-  /* max-height: 1000px; */
-   height: 48px; 
-   transition: height var(--animation-duration-short) ease-in-out;
+  height: 48px;
+  transition: height var(--animation-duration-short) ease-in-out;
+}
+ 
+.break-list-item-admin:hover .arrow {
+  color: var(--links-hover-color);
 }
 
 .break-list-item-name-user,
@@ -119,7 +118,7 @@
   font-weight: var(--break-list-item-font-weight);
   flex-wrap: wrap;
   align-items: left;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 
 .user-name {
@@ -143,7 +142,7 @@
 }
 
 .arrow {
-  color: var(--break-list-item-remove-color);
+  color: var(--break-list-item-icons-color);
   position: relative;
   top: -2px;
   left: -8px;
@@ -151,17 +150,29 @@
   display: inline-block;
   cursor: pointer;
   transform-origin: center center;
-  transform: scale(0.8) translateX(0);
-  transition: all var(--animation-duration-more) ease-in-out;
+  transform: scale(0.8);
+  animation: fade-in 0.5s ease-in-out forwards;
 }
 
 .arrow.open .material-symbols-outlined {
   transform: rotate(90deg);
-  /* transition: all var(--animation-duration-short) ease-in-out; */
 }
 
 .material-symbols-outlined {
-  animation: fade-in 0.5s ease-in-out forwards;
+  
+  transition: all var(--animation-duration-min) ease-in-out;
+}
+
+.icons-hover:hover {
+  color: var(--links-hover-color);
+}
+
+.icons-hover-remove:hover {
+  color: var(--links-hover-color);
+}
+
+.icons-hover-remove:hover ~ .break-list-item-name-admin .arrow {
+  color: var(--links-color);
 }
 
 .extra-info {
@@ -242,6 +253,7 @@ nonstart {
   }
 }
 
+.name-change-button,
 .reset-break-time-button,
 .time-change-button,
 .reset-password-button,
@@ -254,17 +266,32 @@ nonstart {
   width: auto;
   height: 22px;
   font-size: 14px;
-  border: 1px solid var(--credentials-border-color);
-  color: var(--break-list-item-text-color);
-  background: url() 96% / 15% no-repeat var(--credentials-box-background-color);
+  border: 1px solid transparent;
+  color: var(--credentials-submit-button-text-color);
+  /* background: url() 96% / 15% no-repeat var(--credentials-box-background-color); */
+  background: linear-gradient(var(--credentials-submit-button-background-1-color), var(--credentials-submit-button-background-2-color)) padding-box;
   text-align: center;
-  border-radius: 3px;
+  border-radius: 7px;
   text-indent: -1px;
   cursor: pointer;
-  animation: fade-in 1s ease-in-out forwards 0s;
-  transition: all var(--animation-duration-short) ease-in-out;
+  animation: fade-in var(--animation-duration-base) ease-in-out forwards 0s;
+  transition: all var(--animation-duration-min) ease-in-out;
 }
 
+.name-change-button:hover,
+.reset-break-time-button:hover,
+.time-change-button:hover,
+.reset-password-button:hover,
+.item-button:hover,
+.start-break:hover {
+  background: linear-gradient(var(--credentials-submit-button-background-1-color), var(--credentials-submit-button-background-2-color)) padding-box;
+  outline: 0;
+  -webkit-box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
+  box-shadow: inset 1px 1px 5px #00000013, 1px 1px 8px var(--input-box-outline-shadow-color);
+  border: 1px solid var(--input-box-outline-color);
+}
+
+.name-change-button,
 .reset-break-time-button,
 .time-change-button,
 .reset-password-button {
@@ -272,9 +299,15 @@ nonstart {
   margin-right: 5px;
 }
 
+.item-button option {
+  background-color: var(--break-list-item-background-color);
+  border-radius: 5px;
+  border: none;
+}
+
 .remove-user,
 .remove-admin {
-  color: var(--break-list-item-remove-color);
+  color: var(--break-list-item-icons-color);
   margin-right: 5px;
   cursor: pointer;
   text-decoration: none;
@@ -322,13 +355,6 @@ filer {
   color: var(--break-list-item-filler-color);
 }
 
-.reset-break-time-button:hover,
-.time-change-button:hover,
-.reset-password-button:hover,
-.item-button:hover {
-  background: url() 96% / 15% no-repeat var(--break-plus-button-symbol-color);
-}
-
 /*/////// - TIMER INFO - ///////*/
 
 nonstart,
@@ -338,8 +364,8 @@ info {
   position: relative;
   left: -8px;
   visibility: hidden;
-  transition: all 1s ease-in-out;
-  animation: fade-in 0.5s ease-in-out forwards;
+  transition: all var(--animation-duration-short) ease-in-out;
+  animation: fade-in var(--animation-duration-short) ease-in-out forwards;
 }
 
 .dotted {
@@ -350,15 +376,15 @@ info {
 
 .visible {
   visibility: visible;
-  transition-delay: 0.5s;
+  transition-delay: var(--animation-duration-short);
   transition: all 1s ease-in-out;
-  animation: fade-in 0.5s ease-in-out forwards;
+  animation: fade-in var(--animation-duration-short) ease-in-out forwards;
 }
 
 /* /////////// - FADES - //////////// */
 
 .fade-in {
-  animation: fade-in 0.5s ease-in-out forwards;
+  animation: fade-in var(--animation-duration-short) ease-in-out forwards;
 }
 
 @keyframes fade-in {
@@ -372,7 +398,7 @@ info {
 }
 
 .fade-out {
-  animation: fade-out 0.3s ease-in-out forwards;
+  animation: fade-out var(--animation-duration-short) ease-in-out forwards;
 }
 
 @keyframes fade-out {

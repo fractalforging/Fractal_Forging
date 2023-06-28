@@ -1,0 +1,99 @@
+<!-- ////////////// - NAME CHANGE MODAL - ////////////////-->
+
+<div id="name-change-modal" class="name-change-modal">
+    <div class="name-change-modal-content">
+        <greet class="name-change-title">Change Username</greet><span class="name-change-close">&times;</span>
+        <form action="/namechange" method="post" id="name-change-form" class="name-change-form">
+            <div class="input-container">
+                <input type="text" id="newname" name="newname" autocomplete="off" class="name-input" maxlength=""
+                    value="">
+                <greet class="placeholder1 newname">&nbsp;Change Username&nbsp;</greet>
+            </div>
+            <button type="submit" class="form-button">OK</button>
+            <p id="name-error-message" style="display:none; color: red;"></p>
+        </form>
+    </div>
+</div>
+
+<script>
+    'use strict';
+
+    const changeName = async (userId, newName) => {
+        try {
+            const response = await fetch(`/namechange`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId, newName }),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error);
+            }
+
+            return await response.json();
+        } catch (error) {
+            return { success: false, error: error.message };
+        }
+    };
+
+    const displayNameChangeModal = async (userId) => {
+        const modal = document.getElementById("name-change-modal");
+        const close = modal.querySelector(".name-change-close");
+        const form = modal.querySelector("#name-change-form");
+        const newNameInput = document.getElementById("newname");
+
+        const response = await fetch(`/namechange/${userId}`);
+        const user = await response.json();
+        newNameInput.value = user.username;
+
+        newNameInput.dispatchEvent(new Event('input'));
+
+        modal.style.display = "block";
+        const userIdInput = document.createElement("input");
+        userIdInput.type = "hidden";
+        userIdInput.name = "userId";
+        userIdInput.value = userId;
+        form.appendChild(userIdInput);
+
+        const onSubmit = async (e) => {
+            e.preventDefault();
+            const newName = document.getElementById("newname").value;
+            const errorMessage = document.getElementById("name-error-message");
+
+            const result = await changeName(userId, newName);
+
+            if (!result.success) {
+                errorMessage.textContent = result.error;
+                errorMessage.style.display = "block";
+            } else {
+                errorMessage.style.display = "none";
+                modal.style.display = "none";
+                location.reload();
+            }
+        };
+
+        form.addEventListener("submit", onSubmit);
+
+        close.onclick = () => {
+            modal.style.display = "none";
+            form.removeEventListener("submit", onSubmit);
+        };
+
+        document.getElementById("newname").focus();
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll(".name-change-button").forEach(button =>
+            button.addEventListener("click", e => {
+                e.preventDefault();
+                const li = e.target.closest("li");
+                const userId = li.dataset.id;
+                displayNameChangeModal(userId);
+            })
+        );
+    });
+
+
+
+</script>

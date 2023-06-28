@@ -1,28 +1,33 @@
-const { createLogger, format, transports } = require('winston');
-const DailyRotateFile = require('winston-daily-rotate-file');
-const moment = require('moment-timezone');
-const kleur = require('kleur');
-const debug = require('debug')('myapp:debug');
-
-// ENVIRONMENT VARIABLES
-const dotenv = require("dotenv")
+import { createLogger, format, transports } from 'winston';
+import moment from 'moment-timezone';
+import kleur from 'kleur';
+import debug from 'debug';
+import DailyRotateFile from 'winston-daily-rotate-file';
+import dotenv from "dotenv";
 dotenv.config({ path: "variables.env" });
-const location = process.env.LOCATION
+
+const location = process.env.LOCATION;
 
 const timestampInTimeZone = () => {
   return kleur.cyan(moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss'));
 };
 
-const dailyRotateFileTransport = new transports.DailyRotateFile({
-  filename: '_logs/' + moment().format('MM-YYYY') + '/%DATE%.log',
+const dailyRotateFileTransport = new DailyRotateFile({
+  filename: '_logs/' + moment().format('YYYY') + moment().format('/MM') + '/%DATE%.log',
   datePattern: 'DD-MM-YYYY',
   maxSize: '100m',
   maxFiles: '360d',
-});
+}); 
 
-const logger = createLogger({
+const loggerRoute = createLogger({
   level: 'debug',
   format: format.combine(
+    format(info => {
+      if (info.username === 'admin') {
+        return false;
+      }
+      return info;
+    })(),
     format.timestamp({ format: timestampInTimeZone }),
     format.printf(({ timestamp, level, message }) => {
       let colorizedLevel;
@@ -42,6 +47,7 @@ const logger = createLogger({
         default:
           colorizedLevel = level;
       }
+      
       return `[${timestamp}] ${colorizedLevel}: ${message}`;
     })
   ),
@@ -50,4 +56,4 @@ const logger = createLogger({
 
 debug('Debug log message');
 
-module.exports = logger;
+export default loggerRoute;

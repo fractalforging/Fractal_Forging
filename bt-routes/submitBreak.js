@@ -1,99 +1,91 @@
-const express = require('express');
-const router = express.Router();
-const logger = require('../routes/logger.js');
-const kleur = require('kleur');
-const BreakTrack = require('../models/BreakTrack.js');
-const BreakSlots = require('../models/BreakSlots.js');
+import { Router } from 'express';
+import mongoose from 'mongoose';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
+import BreakSlots from '../models/BreakSlots.js';
 
-const moveToNormalList = async (BreakTrack) => {
-  const availableSlotsData = await BreakSlots.findOne();
-  const availableSlots = availableSlotsData.slots;
-  const activeBreaks = await BreakTrack.countDocuments({ status: 'active' });
+const submitBreakRoute = (io, BreakTrack, User) => {
+  const router = Router();
 
-  if (activeBreaks < availableSlots) {
-    const nextInQueue = await BreakTrack.findOne({ status: 'queued' }).sort({ date: 1 });
-    if (nextInQueue) {
-      nextInQueue.status = 'active';
-      await nextInQueue.save();
+  const executeWithRetry = async (session, transactionFunction, retryCount = 3) => {
+    for (let i = 0; i < retryCount; i++) {
+      try {
+        await transactionFunction(session);
+        await session.commitTransaction();
+        return;
+      } catch (error) {
+        console.error('Error occurred, retrying transaction', error);
+        await session.abortTransaction();
+      }
     }
+    throw new Error('Transaction failed after retries');
   }
-};
-const moveQueuedBreaksToNormalList = async (BreakTrack, availableSlots) => {
-  const activeBreaks = await BreakTrack.countDocuments({ status: 'active' });
-  const remainingSlots = availableSlots - activeBreaks;
-  if (remainingSlots > 0) {
-    const queuedBreaks = await BreakTrack.find({ status: 'queued' })
-      .sort({ date: 1 })
-      .limit(remainingSlots);
-    for (const queuedBreak of queuedBreaks) {
-      queuedBreak.status = 'active';
-      await queuedBreak.save();
-    }
-  }
-};
-const submitBreaks = (io, BreakTrack, User) => {
-  router.post("/", async function (req, res, next) {
-    const user = req.user.username;
-    const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 });
-    const breakDuration = req.body.duration;
-    const currentUser = await User.findOne({ username: user });
+
+  router.post("/", async (req, res) => {
+    const { username: user } = req.user;
+    const breakDuration = Number(req.body.duration);
     const breakDurationInSeconds = breakDuration * 60;
-    if (latestBreak && !latestBreak.endTime) {
-      req.session.message = 'Only 1 break at a time';
-      logger.error(req.session.message);
-      return res.redirect("/secret");
-    } else if (currentUser.remainingBreakTime < breakDurationInSeconds) {
-      if (currentUser.remainingBreakTime === 0) {
-        req.session.message = 'Break time over';
-      } else {
-        req.session.message = 'Not enough';
-      }
-      logger.info(req.session.message);
-      return res.redirect("/secret");
-    } else {
-      const availableSlots = (await BreakSlots.findOne()).slots;
-      const activeBreaks = await BreakTrack.countDocuments({ status: 'active' });
-      if (activeBreaks < availableSlots) {
+  
+    let session;
+  
+    try {
+      session = await mongoose.startSession();
+      session.startTransaction();
+  
+      try {
+        const latestBreak = await BreakTrack.findOne({ user }).sort({ startTime: -1 }).session(session);
+        const currentUser = await User.findOne({ username: user }).session(session);
+        const availableSlots = await BreakSlots.findOne().session(session);
+        const activeBreaks = await BreakTrack.countDocuments({ status: 'active' }).session(session);
+  
+        if (latestBreak && !latestBreak.endTime) {
+          req.session.message = 'Only 1 break at a time';
+          logger.error(`${kleur.magenta(user)} tried submitting a second break unsuccessfully since only 1 break is allowed at a time.`, { username: req.user.username });
+          throw new Error('Only 1 break at a time');
+        }
+  
+        if (currentUser.remainingBreakTime < breakDurationInSeconds) {
+          req.session.message = currentUser.remainingBreakTime === 0 ? 'Break time over' : 'Not enough';
+          logger.info(`${kleur.magenta(user)} tried submitting a break unsuccessfully since not enough break time is available.`, { username: req.user.username });
+          throw new Error('Not enough break time available');
+        }
+  
         const breakTracker = new BreakTrack({
           user,
           startTime: new Date().toUTCString(),
           duration: breakDuration,
           date: new Date().toUTCString(),
-          status: 'active'
+          status: activeBreaks < availableSlots.slots ? 'active' : 'queued',
+          lock: false
         });
-        try {
-          await breakTracker.save();
-          logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s)`);
-          await moveToNormalList(BreakTrack);
-          io.emit('reload');
-          return res.redirect("/secret");
-        } catch (err) {
-          return res.redirect("/secret");
+  
+        await breakTracker.save({ session });
+  
+        logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) ${breakTracker.status === 'queued' ? 'and added to the queue' : ''}`, { username: req.user.username });
+        io.emit('reload');
+  
+        await session.commitTransaction();
+  
+        return res.redirect("/secret");
+      } catch (error) {
+        console.error('Error occurred, retrying transaction', error);
+        await session.abortTransaction();
+  
+        if (session) {
+          session.endSession();
         }
-      } else {
-        const breakTracker = new BreakTrack({
-          user,
-          startTime: new Date().toUTCString(),
-          duration: breakDuration,
-          date: new Date().toUTCString(),
-          status: 'queued'
-        });
-        try {
-          await breakTracker.save();
-          req.session.message = 'Added to queue';
-          logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) and added to the queue`);
-          await moveToNormalList(BreakTrack);
-          io.emit('reload');
-          return res.redirect("/secret");
-        } catch (err) {
-          return res.redirect("/secret");
-        }
+  
+        logger.error(`Error occurred while submitting the break: ${error}`, { username: req.user.username });
+        return res.redirect("/secret");
       }
+  
+    } catch (error) {
+      logger.error(`Failed to start transaction: ${error}`, { username: req.user.username });
+      return res.redirect("/secret");
     }
-  });
+  });  
+
   return router;
 }
 
-module.exports = { submitBreaks, moveToNormalList, moveQueuedBreaksToNormalList };
-
-
+export default submitBreakRoute;

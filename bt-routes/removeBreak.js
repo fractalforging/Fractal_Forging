@@ -1,20 +1,41 @@
-const express = require('express');
-const router = express.Router();
-const logger = require('../routes/logger.js');
-const kleur = require('kleur');
-const { moveToNormalList } = require('./submitBreak');
+'use strict';
+
+import { Router } from 'express';
+import mongoose from 'mongoose';
+import logger from '../routes/logger.js';
+import kleur from 'kleur';
+import BreakTrack from '../models/BreakTrack.js';
+import BreakSlots from '../models/BreakSlots.js';
+
+const router = Router();
 
 const removeBreak = (io, BreakTrack, User) => {
   router.get("/:id", async (req, res, next) => {
     const id = req.params.id;
     const beforeStart = req.query.beforeStart === 'true';
     const isAdmin = req.query.isAdmin === 'true';
+    
+    const session = await mongoose.startSession();
+
     try {
-      const breakToRemove = await BreakTrack.findById(id);
-      const userToUpdate = await User.findOne({ username: breakToRemove.user });
-      let actionUser = req.user;
-      await BreakTrack.findByIdAndRemove(id);
-      await moveToNormalList(BreakTrack);
+      session.startTransaction();
+      
+      const breakToRemove = await BreakTrack.findById(id).session(session);
+      const userToUpdate = await User.findOne({ username: breakToRemove.user }).session(session);
+      
+      await BreakTrack.findByIdAndRemove(id, { session });
+      
+      const availableSlotsData = await BreakSlots.findOne().session(session);
+      const availableSlots = availableSlotsData.slots;
+      const activeBreaks = await BreakTrack.countDocuments({ status: 'active' }).session(session);
+  
+      if (activeBreaks < availableSlots) {
+        const nextInQueue = await BreakTrack.findOne({ status: 'queued' }).sort({ date: 1 }).session(session);
+        if (nextInQueue) {
+          nextInQueue.status = 'active';
+          await nextInQueue.save({ session });
+        }
+      }
       
       if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
         const currentTime = new Date();
@@ -33,9 +54,12 @@ const removeBreak = (io, BreakTrack, User) => {
         }
 
         userToUpdate.remainingBreakTime += roundedRemainingBreakTime;
-        await userToUpdate.save();
+        await userToUpdate.save({ session });
       }
       
+      await session.commitTransaction();
+      
+      let actionUser = req.user;
       let logMessage = '';
       if (isAdmin) {
         logMessage = `admin removed ${kleur.magenta(userToUpdate.username)}'s break `;
@@ -44,22 +68,25 @@ const removeBreak = (io, BreakTrack, User) => {
       }
       if (beforeStart) {
         io.emit('reload');
-        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break before break start`);
+        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break before break start`, { username: req.user.username });
       } else if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
         io.emit('reload');
-        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break start`);
+        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break start`, { username: req.user.username });
       } else {
         io.emit('reload');
-        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break end`);
+        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break end`, { username: req.user.username });
       }
       return res.redirect("/secret");
     } catch (err) {
-      logger.error("Error removing the break: ", err);
+      await session.abortTransaction();
+      logger.error("Error removing the break: ", err, { username: req.user.username });
       return res.status(500).send(err);
+    } finally {
+      session.endSession();
     }
   });
 
   return router;
 };
 
-module.exports = removeBreak;
+export default removeBreak;

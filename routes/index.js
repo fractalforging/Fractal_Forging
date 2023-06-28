@@ -1,20 +1,29 @@
-const express = require('express');
-const router = express.Router();
-const { isLoggedIn, isAdmin } = require('../middleware/authentication');
+'use strict';
+
+import express from 'express';
+import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+
+const indexRoute = express.Router();
 
 // INDEX > LOGIN
-router.get("/", async function (req, res, next) {
+indexRoute.get("/", (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.redirect("/secret");
+  }
   return res.render("login");
 });
 
 // LOGIN
-router.get("/login", async function (req, res, next) {
+indexRoute.get("/login", (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.redirect("/secret");
+  }
   return res.render("login");
 });
 
 // REGISTER FORM
-router.get("/register", isAdmin, async function (req, res, next) {
+indexRoute.get("/register", isLoggedIn, isAdmin, (req, res) => {
   return res.render("register", { currentUser: req.user });
 });
 
-module.exports = router;
+export default indexRoute;

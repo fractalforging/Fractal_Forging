@@ -1,5 +1,7 @@
-const BreakTracker = require('../models/BreakTrack.js');
-const BreakSlots = require('../models/BreakSlots.js');
+'use strict';
+
+import BreakTracker from '../models/BreakTrack.js';
+import BreakSlots from '../models/BreakSlots.js';
 
 async function getBreakTrackerData() {
   try {
@@ -21,7 +23,4 @@ async function getBreakSlotsData() {
   }
 }
 
-module.exports = {
-  getBreakTrackerData,
-  getBreakSlotsData,
-};
+export { getBreakTrackerData, getBreakSlotsData };

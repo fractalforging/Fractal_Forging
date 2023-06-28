@@ -1,11 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const { isLoggedIn, isAdmin } = require('../middleware/authentication.js');
-const User = require('../models/user');
-const { getBreakTrackerData, getBreakSlotsData } = require('./helperFunctions.js');
+'use strict';
+
+import { Router } from 'express';
+import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+import User from '../models/user.js';
+import { getBreakTrackerData, getBreakSlotsData } from './helperFunctions.js';
+
+const secretRoute = Router();
 
 // USER LANDING PAGE
-router.get("/", isLoggedIn, async function (req, res, next) {
+secretRoute.get("/", isLoggedIn, async function (req, res, next) {
   const breakTracker = await getBreakTrackerData();
   const breakSlots = await getBreakSlotsData();
   const user = await User.findOne({ username: req.user.username});
@@ -18,14 +21,12 @@ router.get("/", isLoggedIn, async function (req, res, next) {
 });
 
 // ADMIN LANDING PAGE
-router.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
+secretRoute.get("/secret_admin", isLoggedIn, isAdmin, async function (req, res, next) {
   const breakSlots = await getBreakSlotsData();
   const breakTracker = await getBreakTrackerData();
   if (req.user.roles === "admin") {
     return res.render("secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user});
-  } /*else {
-    return res.redirect("/secret_admin", { name: req.user.username, breakTracker: breakTracker, role: res.locals.role, breakSlots: breakSlots, currentUser: req.user });
-  }*/
+  } 
 });
 
-module.exports = router;
+export default secretRoute;

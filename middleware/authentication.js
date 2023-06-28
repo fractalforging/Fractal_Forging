@@ -1,19 +1,17 @@
-async function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-      return next();
-    }
-    res.redirect("/login");
+'use strict';
+
+const isLoggedIn = async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
   }
-  
-  async function isAdmin(req, res, next) {
-    if (req.user && req.user.roles === "admin") {
-      return next();
-    }
-    res.redirect("/secret");
+  res.redirect("/login");
+}
+
+const isAdmin = async (req, res, next) => {
+  if (req.user && req.user.roles === "admin") {
+    return next();
   }
-  
-  module.exports = {
-    isLoggedIn,
-    isAdmin,
-  };
-  
+  res.redirect("/secret");
+}
+
+export { isLoggedIn, isAdmin };
