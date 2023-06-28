@@ -4,6 +4,8 @@ import kleur from 'kleur';
 import debug from 'debug';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import dotenv from "dotenv";
+import fs from 'fs';
+import path from 'path';
 dotenv.config({ path: "variables.env" });
 
 const location = process.env.LOCATION;
@@ -12,8 +14,11 @@ const timestampInTimeZone = () => {
   return kleur.cyan(moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss'));
 };
 
+const logDirectory = '_logs/' + moment().format('YYYY') + moment().format('/MM');
+fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory, { recursive: true });
+
 const dailyRotateFileTransport = new DailyRotateFile({
-  filename: '_logs/' + moment().format('YYYY') + moment().format('/MM') + '/%DATE%.log',
+  filename: path.join(logDirectory, '/%DATE%.log'),
   datePattern: 'DD-MM-YYYY',
   maxSize: '100m',
   maxFiles: '360d',
