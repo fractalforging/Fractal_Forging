@@ -4,6 +4,8 @@ import kleur from 'kleur';
 import debug from 'debug';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import dotenv from "dotenv";
+import fs from 'fs';
+import path from 'path';
 dotenv.config({ path: "variables.env" });
 
 const location = process.env.LOCATION;
@@ -12,22 +14,9 @@ const timestampInTimeZone = () => {
   return kleur.cyan(moment.tz(new Date(), 'Europe/' + location).format('DD/MM/YYYY HH:mm:ss'));
 };
 
-const dailyRotateFileTransport = new DailyRotateFile({
-  filename: '_logs/' + moment().format('YYYY') + moment().format('/MM') + '/%DATE%.log',
-  datePattern: 'DD-MM-YYYY',
-  maxSize: '100m',
-  maxFiles: '360d',
-}); 
-
 const loggerRoute = createLogger({
   level: 'debug',
   format: format.combine(
-    format(info => {
-      if (info.username === 'admin') {
-        return false;
-      }
-      return info;
-    })(),
     format.timestamp({ format: timestampInTimeZone }),
     format.printf(({ timestamp, level, message }) => {
       let colorizedLevel;
@@ -51,9 +40,33 @@ const loggerRoute = createLogger({
       return `[${timestamp}] ${colorizedLevel}: ${message}`;
     })
   ),
-  transports: [dailyRotateFileTransport, new transports.Console()],
+  transports: [new transports.Console()],
+});
+
+const logLevels = ['info', 'error', 'warn', 'debug'];
+
+const customLog = {};
+logLevels.forEach((level) => {
+  customLog[level] = (message, info = {}) => {
+    if (info.username === 'admin') {
+      return;
+    }
+    const logDirectory = '_logs/' + moment().format('YYYY') + moment().format('/MM');
+    fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory, { recursive: true });
+
+    const dailyRotateFileTransport = new DailyRotateFile({
+      filename: path.join(logDirectory, '/%DATE%.log'),
+      datePattern: 'DD-MM-YYYY',
+      maxSize: '100m',
+      maxFiles: '360d',
+    });
+
+    loggerRoute.add(dailyRotateFileTransport);
+    loggerRoute.log(level, message);
+    loggerRoute.remove(dailyRotateFileTransport);
+  };
 });
 
 debug('Debug log message');
 
-export default loggerRoute;
+export { customLog as default };

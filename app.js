@@ -1,7 +1,7 @@
 //=====================
 // IMPORTS 
 
-'use strict';
+'use strict'; 
 
 import express from 'express';
 import logger from './routes/logger.js';

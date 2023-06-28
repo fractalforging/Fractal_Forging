@@ -73,7 +73,7 @@ hr.divider-spc-nav {
   border-radius: 15px;
   box-shadow: 0px 0px 15px var(--credentials-box-shadow-color);
   position: relative;
-  transition: all var(--animation-duration-more) ease-in-out;
+  transition: all var(--animation-duration-base) ease-in-out;
 }
 
 input {
