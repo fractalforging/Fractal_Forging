@@ -28,14 +28,11 @@
 <!-- ////// - FORM SUBMISSION + AJAX - ////// -->
 
 <script>
- const submitForm = document.querySelector('#login-form');
+const submitForm = document.querySelector('#login-form');
 const username = document.querySelector('#username');
 const password = document.querySelector('#password');
 const submitButton = document.querySelector('#submit-button');
 const loader = document.querySelector('#loader');
-
-// const [myModal_Neg, myModalText_Neg, myModal_Pos, myModalText_Pos] =
-//   ["#myModal-Neg", "#message-neg", "#myModal-Pos", "#message-pos"].map(document.querySelector.bind(document))
 
 submitForm.addEventListener('submit', function (event) {
   event.preventDefault();

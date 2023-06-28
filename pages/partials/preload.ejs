@@ -101,7 +101,7 @@
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
-    Promise.all([document.fonts.ready, loadFonts(), delay(1000)]).then(() => {
+    Promise.all([document.fonts.ready, loadFonts(), delay(0)]).then(() => {
         setTimeout(() => {
             document.querySelector('#login-form').style.opacity = '1';
             document.querySelector('#login-form').style.transition = 'opacity 0.2s ease';
