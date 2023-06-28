@@ -104,9 +104,9 @@
     Promise.all([document.fonts.ready, loadFonts(), delay(0)]).then(() => {
         setTimeout(() => {
             document.querySelector('#login-form').style.opacity = '1';
-            document.querySelector('#login-form').style.transition = 'opacity 0.2s ease';
+            document.querySelector('#login-form').style.transition = 'opacity 0.3s ease';
             document.querySelector('.loader').style.display = 'none';
-        }, 10);
+        }, 0);
     });
 
 </script>
