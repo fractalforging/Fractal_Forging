@@ -61,7 +61,7 @@ const submitBreakRoute = (io, BreakTrack, User) => {
   
         await breakTracker.save({ session });
   
-        logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minute(s) ${breakTracker.status === 'queued' ? 'and added to the queue' : ''}`, { username: req.user.username });
+        logger.info(`${kleur.magenta(user)} submitted a break of ${breakDuration} minutes ${breakTracker.status === 'queued' ? 'and added to the queue' : ''}`, { username: req.user.username });
         io.emit('reload');
   
         await session.commitTransaction();
