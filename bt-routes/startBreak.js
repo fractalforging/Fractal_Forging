@@ -49,7 +49,7 @@ const startBreak = (io, BreakTrack, User) => {
         // Emit the 'reload' event here after confirming the break has started successfully
         io.emit('reload');
         
-        logger.info(`${kleur.magenta(req.user.username)} started a break of ${breakEntry.duration} minute(s)`, { username: req.user.username });
+        logger.info(`${kleur.magenta(req.user.username)} started a break of ${breakEntry.duration} minutes`, { username: req.user.username });
         
         return res.status(200).send("Break status updated successfully.");
       } catch (error) {
