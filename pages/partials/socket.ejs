@@ -24,7 +24,6 @@
         setTimeout(() => location.reload(), 100);
     });
 
-    <% if (currentUser.roles==='admin' ) { %>
     try {
         socket.on('userCount', (count) => {
             document.querySelector('#userCount').innerText = count;
@@ -49,6 +48,6 @@
             });
         });
     } catch (error) {};
-    <% } %>
+    
 
 </script>
