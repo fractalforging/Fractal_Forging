@@ -140,11 +140,9 @@
     document.addEventListener('click', (event) => {
         const userList = document.querySelector('#userList');
         const userCountButton = document.querySelector('#userCount');
-    <% if (currentUser.roles === 'admin') { %>
     if (!userList.contains(event.target) && !userCountButton.contains(event.target)) {
                 userList.classList.remove('show');  // just remove the 'show' class
             }
-    <% } %>
 });
 
     setInterval(() => {
