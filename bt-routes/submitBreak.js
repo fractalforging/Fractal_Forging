@@ -41,7 +41,7 @@ const submitBreakRoute = (io, BreakTrack, User) => {
         if (latestBreak && !latestBreak.endTime) {
           req.session.message = 'Only 1 break at a time';
           logger.error(`${kleur.magenta(user)} tried submitting a second break unsuccessfully since only 1 break is allowed at a time.`, { username: req.user.username });
-          throw new Error('Only 1 break at a time');
+          //throw new Error('Only 1 break at a time');
         }
   
         if (currentUser.remainingBreakTime < breakDurationInSeconds) {
