@@ -64,12 +64,14 @@ const removeBreak = (io, BreakTrack, User) => {
       let actionUser = req.user;
 
         if (breakToRemove.hasEnded) {
-          logger.info(`${kleur.magenta(breakToRemove.user)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break after break end.`, { username: req.user.username });
+          io.emit('reload');
+          logger.info(`${kleur.magenta(actionUser.username)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break after break end`, { username: req.user.username });
         } else {
-          logger.info(`${kleur.magenta(actionUser.username)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break with ${kleur.yellow(Math.floor(roundedRemainingBreakTime / 60) + ' minutes')} remaining. Remaining break time has been credited back to ${kleur.magenta(breakToRemove.user + '\'s')}'s total break time available.`, { username: req.user.username });
+          io.emit('reload');
+          logger.info(`${kleur.magenta(actionUser.username)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break with ${kleur.yellow(Math.floor(roundedRemainingBreakTime / 60) + ' minutes')} remaining. Remaining break time has been credited back to ${kleur.magenta(breakToRemove.user + '\'s')}'s total break time available`, { username: req.user.username });
         }
       
-      io.emit('removeBreak', { id: id, beforeStart: beforeStart });
+      //io.emit('removeBreak', { id: id, beforeStart: beforeStart });
       
       res.sendStatus(200);
     } catch (err) {
