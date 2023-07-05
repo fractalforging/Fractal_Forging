@@ -28,7 +28,7 @@ const removeBreak = (io, BreakTrack, User) => {
       const availableSlotsData = await BreakSlots.findOne().session(session);
       const availableSlots = availableSlotsData.slots;
       const activeBreaks = await BreakTrack.countDocuments({ status: 'active' }).session(session);
-  
+
       if (activeBreaks < availableSlots) {
         const nextInQueue = await BreakTrack.findOne({ status: 'queued' }).sort({ date: 1 }).session(session);
         if (nextInQueue) {
@@ -63,15 +63,16 @@ const removeBreak = (io, BreakTrack, User) => {
 
       let actionUser = req.user;
 
-        if (breakToRemove.hasEnded) {
-          io.emit('reload');
-          logger.info(`${kleur.magenta(actionUser.username)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break after break end`, { username: req.user.username });
-        } else {
-          io.emit('reload');
-          logger.info(`${kleur.magenta(actionUser.username)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break with ${kleur.yellow(Math.floor(roundedRemainingBreakTime / 60) + ' minutes')} remaining. Remaining break time has been credited back to ${kleur.magenta(breakToRemove.user + '\'s')}'s total break time available`, { username: req.user.username });
-        }
-      
-      //io.emit('removeBreak', { id: id, beforeStart: beforeStart });
+      if (breakToRemove.hasEnded) {
+        io.emit('reload');
+        logger.info(`${kleur.magenta(actionUser.username)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break after break end`, { username: req.user.username });
+      } else if (!breakToRemove.hasStarted && beforeStart) {
+        io.emit('reload');
+        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(breakToRemove.user + '\'s')} break before break start`, { username: req.user.username });
+      } else {
+        io.emit('reload');
+        logger.info(`${kleur.magenta(actionUser.username)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break with ${kleur.yellow(Math.floor(roundedRemainingBreakTime / 60) + ' minutes')} remaining. Remaining break time has been credited back to ${kleur.magenta(breakToRemove.user + '\'s')}'s total break time available`, { username: req.user.username });
+      }
       
       res.sendStatus(200);
     } catch (err) {
@@ -91,5 +92,3 @@ const removeBreak = (io, BreakTrack, User) => {
 };
 
 export default removeBreak;
-
-
