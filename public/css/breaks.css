@@ -268,14 +268,13 @@ nonstart {
   font-size: 14px;
   border: 1px solid transparent;
   color: var(--credentials-submit-button-text-color);
-  /* background: url() 96% / 15% no-repeat var(--credentials-box-background-color); */
   background: linear-gradient(var(--credentials-submit-button-background-1-color), var(--credentials-submit-button-background-2-color)) padding-box;
   text-align: center;
   border-radius: 7px;
   text-indent: -1px;
   cursor: pointer;
   animation: fade-in var(--animation-duration-base) ease-in-out forwards 0s;
-  transition: all var(--animation-duration-min) ease-in-out;
+  transition: all var(--animation-duration-short) ease-in-out;
 }
 
 .name-change-button:hover,

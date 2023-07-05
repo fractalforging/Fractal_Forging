@@ -1,5 +1,3 @@
-'use strict';
-
 import { Router } from 'express';
 import mongoose from 'mongoose';
 import logger from '../routes/logger.js';
@@ -17,6 +15,8 @@ const removeBreak = (io, BreakTrack, User) => {
     
     const session = await mongoose.startSession();
 
+    let hasCommitted = false;
+
     try {
       session.startTransaction();
       
@@ -28,7 +28,7 @@ const removeBreak = (io, BreakTrack, User) => {
       const availableSlotsData = await BreakSlots.findOne().session(session);
       const availableSlots = availableSlotsData.slots;
       const activeBreaks = await BreakTrack.countDocuments({ status: 'active' }).session(session);
-  
+
       if (activeBreaks < availableSlots) {
         const nextInQueue = await BreakTrack.findOne({ status: 'queued' }).sort({ date: 1 }).session(session);
         if (nextInQueue) {
@@ -37,6 +37,8 @@ const removeBreak = (io, BreakTrack, User) => {
         }
       }
       
+      let roundedRemainingBreakTime = 0;
+
       if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
         const currentTime = new Date();
         const breakStartTime = new Date(breakToRemove.breakStartTimeStamp);
@@ -44,7 +46,6 @@ const removeBreak = (io, BreakTrack, User) => {
         const remainingBreakTime = (breakToRemove.duration * 60 * 1000) - timeEnjoyed;
         const remainingBreakTimeInSeconds = remainingBreakTime / 1000;
         
-        let roundedRemainingBreakTime = 0;
         if (remainingBreakTimeInSeconds >= 0 && remainingBreakTimeInSeconds < 30) {
           roundedRemainingBreakTime = 0;
         } else if (remainingBreakTimeInSeconds >= 30 && remainingBreakTimeInSeconds < 90) {
@@ -58,29 +59,30 @@ const removeBreak = (io, BreakTrack, User) => {
       }
       
       await session.commitTransaction();
-      
+      hasCommitted = true;
+
       let actionUser = req.user;
-      let logMessage = '';
-      if (isAdmin) {
-        logMessage = `admin removed ${kleur.magenta(userToUpdate.username)}'s break `;
-      } else {
-        logMessage = `${kleur.magenta(userToUpdate.username)} removed break `;
-      }
-      if (beforeStart) {
+
+      if (breakToRemove.hasEnded) {
         io.emit('reload');
-        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break before break start`, { username: req.user.username });
-      } else if (breakToRemove.hasStarted && !breakToRemove.hasEnded) {
+        logger.info(`${kleur.magenta(actionUser.username)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break after break end`, { username: req.user.username });
+      } else if (!breakToRemove.hasStarted && beforeStart) {
         io.emit('reload');
-        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break start`, { username: req.user.username });
+        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(breakToRemove.user + '\'s')} break before break start`, { username: req.user.username });
       } else {
         io.emit('reload');
-        logger.info(`${kleur.magenta(actionUser.username)} removed ${kleur.magenta(userToUpdate.username)}'s break after break end`, { username: req.user.username });
+        logger.info(`${kleur.magenta(actionUser.username)} ended ${kleur.magenta(breakToRemove.user + '\'s')} break with ${kleur.yellow(Math.floor(roundedRemainingBreakTime / 60) + ' minutes')} remaining. Remaining break time has been credited back to ${kleur.magenta(breakToRemove.user + '\'s')}'s total break time available`, { username: req.user.username });
       }
-      return res.redirect("/secret");
+      
+      res.sendStatus(200);
     } catch (err) {
-      await session.abortTransaction();
-      logger.error("Error removing the break: ", err, { username: req.user.username });
-      return res.status(500).send(err);
+      logger.error("Error removing break: ", err, { username: req.user.username });
+      
+      if (!hasCommitted) {
+        await session.abortTransaction();
+      }
+
+      res.sendStatus(500);
     } finally {
       session.endSession();
     }

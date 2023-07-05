@@ -1,6 +1,3 @@
-'use strict';
-
-import express from 'express';
 import { Router } from 'express';
 import logger from '../routes/logger.js';
 
@@ -10,8 +7,11 @@ const endBreak = (BreakTrack) => {
   router.post("/:id/end", async (req, res, next) => {
     const id = req.params.id;
     try {
-      await BreakTrack.findByIdAndUpdate(id, { hasEnded: true });
-
+      const breakToEnd = await BreakTrack.findById(id);
+      breakToEnd.hasEnded = true;
+      breakToEnd.endTime = new Date().toISOString();
+      await breakToEnd.save();
+      
       res.sendStatus(200);
     } catch (err) {
       logger.error("Error updating hasEnded field: ", err, { username: req.user.username });
