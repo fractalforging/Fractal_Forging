@@ -15,7 +15,7 @@ const server = http.createServer(app);
 app.use(compression());
 
 //======================
-// ENVIRONMENT VARIABLES 
+// ENVIRONMENT VARIABLES
 
 dotenv.config({ path: "variables.env" });
 const dbPath = process.env.DB_PATH;
