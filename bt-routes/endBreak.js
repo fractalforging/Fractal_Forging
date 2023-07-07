@@ -8,6 +8,11 @@ const endBreak = (BreakTrack) => {
     const id = req.params.id;
     try {
       const breakToEnd = await BreakTrack.findById(id);
+      if (!breakToEnd) {
+        logger.error(`Break entry with ID ${id} not found.`, { username: req.user.username });
+        return res.status(404).send("Break entry not found.");
+      }
+      
       breakToEnd.hasEnded = true;
       breakToEnd.endTime = new Date().toISOString();
       await breakToEnd.save();
