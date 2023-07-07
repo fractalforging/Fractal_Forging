@@ -62,8 +62,8 @@ const resetBreakTime = (io, User, location) => {
     req.session.message = "Breaks reset";
     await resetBreakTimes();
     io.emit('reload');
-    setTimeout(() => {
-    }, 25);
+    // setTimeout(() => {
+    // }, 25);
     res.sendStatus(200);
   });
 
