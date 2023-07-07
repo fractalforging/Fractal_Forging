@@ -8,17 +8,20 @@ const endBreak = (BreakTrack) => {
     const id = req.params.id;
     try {
       const breakToEnd = await BreakTrack.findById(id);
-      if (!breakToEnd) {
-        logger.error(`Break entry with ID ${id} not found.`, { username: req.user.username });
-        return res.status(404).send("Break entry not found.");
-      }
-      
       breakToEnd.hasEnded = true;
       breakToEnd.endTime = new Date().toISOString();
       await breakToEnd.save();
       
       res.sendStatus(200);
     } catch (err) {
+      // Log the full error object
+      console.error("Full error object: ", err);
+
+      // Log the error message, name and stack trace separately
+      console.error("Error name: ", err.name);
+      console.error("Error message: ", err.message);
+      console.error("Error stack: ", err.stack);
+
       logger.error("Error updating hasEnded field: ", err, { username: req.user.username });
       res.sendStatus(500);
     }
