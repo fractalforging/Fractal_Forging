@@ -277,6 +277,11 @@ nonstart {
   transition: all var(--animation-duration-short) ease-in-out;
 }
 
+.item-button{
+  width: 60px;
+  outline: none;
+}
+
 .name-change-button:hover,
 .reset-break-time-button:hover,
 .time-change-button:hover,

@@ -63,7 +63,7 @@
                                                 data-user-id="<%= user._id %>">Password</button>
                                             <button class="name-change-button"
                                                 data-user-id="<%= user._id %>">Name</button>
-                                            <select class="item-button">
+                                            <select class="item-button" tabindex="-1">
                                                 <% if (user.roles==='admin' ) { %>
                                                     <option value="admin" selected>Admin</option>
                                                     <option value="user">User</option>
