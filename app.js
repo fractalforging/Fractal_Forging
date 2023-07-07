@@ -8,11 +8,11 @@ import logger from './routes/logger.js';
 import dotenv from "dotenv";
 import kleur from 'kleur';
 import http from 'http';
-import compression from 'compression';
 import mongoose from 'mongoose';
+import compression from 'compression';
+app.use(compression());
 const app = express();
 const server = http.createServer(app);
-app.use(compression());
  
 //======================
 // ENVIRONMENT VARIABLES
