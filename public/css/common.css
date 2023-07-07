@@ -315,6 +315,11 @@ slots {
   transition: all var(--animation-duration-min) ease-in-out;
 }
 
+.search-container {
+  top:15px;
+  position: relative;
+}
+
 /* ////// - RESET PASS ERROR MISMATCH - ////// */
 
 #error-message {
@@ -398,18 +403,3 @@ slots {
   right: -8px;
 }
 
-/*///// - CLOCK - /////*/
-
-.clock-container {
-  position: relative;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.clock {
-  position: absolute;
-  top: 0px;
-  left: -40px;
-  font-size: 18px;
-  font-family: var(--break-list-item-timer-font-family);
-}

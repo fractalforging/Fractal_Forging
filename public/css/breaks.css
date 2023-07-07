@@ -303,6 +303,11 @@ nonstart {
   margin-right: 5px;
 }
 
+.reset-break-time-button {
+  top: 8px;
+  position: relative;
+}
+
 .item-button option {
   background-color: var(--break-list-item-background-color);
   border-radius: 5px;

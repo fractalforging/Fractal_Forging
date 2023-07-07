@@ -8,330 +8,341 @@
                 &nbsp;
                 <br>
 
+                <!-- ////////////////// - HEADER - ////////////////// -->
+
                 <hr class="divider">
 
-                <style>
-                    .log-year-container,
-                    .log-month-container,
-                    .log-day-container {
-                        display: grid;
-                        grid-template-columns: auto auto;
-                        justify-content: space-between;
-                        align-items: center;
-                        position: relative;
-                        left: 3px;
-                        padding: 3px;
-                        margin-top: 5px;
-                        text-align: left;
-                        box-shadow: 0px 3px 7px 0px var(--break-list-item-shadow-color);
-                        background: linear-gradient(var(--break-list-item-background-color), var(--break-list-item-background-color)) padding-box,
-                            linear-gradient(to bottom, var(--break-list-item-sidegradient1-color), var(--break-list-item-sidegradient2-color)) border-box;
-                        color: var(--break-list-item-text-color);
-                        border: 1px solid transparent;
-                        border-radius: 10px;
-                        vertical-align: middle;
-                        opacity: 0;
-                        overflow: hidden;
-                        transition: all 10s ease;
-                    }
+                <pagetitle>Logs</pagetitle><br>
 
-                    .visible {
-                        overflow: hidden;
-                        opacity: 1;
-                        max-height: 1000px;
-                    }
+                <%- include('partials/clock.ejs') %>
 
-                    .log-month-container,
-                    .log-day-container {
-                        display: none;
-                    }
+                <hr class="divider">
 
-                    .open {
-                        display: block;
-                    }
+                <!-- ////////////////// - CSS - ////////////////// -->
 
-                    .log-year-container {
-                        width: 270px;
-                        display: block;
-                    }
+                    <style>
+                        .log-year-container,
+                        .log-month-container,
+                        .log-day-container {
+                            display: grid;
+                            grid-template-columns: auto auto;
+                            justify-content: space-between;
+                            align-items: center;
+                            position: relative;
+                            left: 3px;
+                            padding: 3px;
+                            margin-top: 5px;
+                            text-align: left;
+                            box-shadow: 0px 3px 7px 0px var(--break-list-item-shadow-color);
+                            background: linear-gradient(var(--break-list-item-background-color), var(--break-list-item-background-color)) padding-box,
+                                linear-gradient(to bottom, var(--break-list-item-sidegradient1-color), var(--break-list-item-sidegradient2-color)) border-box;
+                            color: var(--break-list-item-text-color);
+                            border: 1px solid transparent;
+                            border-radius: 10px;
+                            vertical-align: middle;
+                            opacity: 0;
+                            overflow: hidden;
+                            transition: all 10s ease;
+                        }
 
-                    .log-month-container {
-                        width: 256px;
-                    }
+                        .visible {
+                            overflow: hidden;
+                            opacity: 1;
+                            max-height: 1000px;
+                        }
 
-                    .log-day-container {
-                        width: 242px;
-                        overflow: hidden;
-                    }
+                        .log-month-container,
+                        .log-day-container {
+                            display: none;
+                        }
 
-                    .log-year button,
-                    .log-month button,
-                    .log-day button {
-                        font-family: 'M PLUS 1';
-                        top: 5px;
-                        background: none;
-                        border: none;
-                        color: var(--links-color);
-                        cursor: pointer;
-                        margin-left: 0px;
-                        transition: color 0.5s ease;
-                        font-size: 14px;
-                        text-align: left;
-                        color: #ffffff;
-                        padding: 5px 10px;
-                        border-radius: 4px;
-                        transition: all 0.3s ease;
-                    }
+                        .open {
+                            display: block;
+                        }
 
-                    .log-year {
-                        position: relative;
-                        top: 0px;
-                    }
+                        .log-year-container {
+                            width: 270px;
+                            display: block;
+                        }
 
-                    .log-year button:hover,
-                    .log-month button:hover,
-                    .log-day button:hover {
-                        font-family: 'M PLUS 1';
-                    }
+                        .log-month-container {
+                            width: 256px;
+                        }
 
-                    .log-year button .button-content:hover .arrow-logs,
-                    .log-month button .button-content:hover .arrow-logs,
-                    .log-day button .button-content:hover .arrow-logs {
-                        color: var(--links-hover-color);
-                    }
+                        .log-day-container {
+                            width: 242px;
+                            overflow: hidden;
+                        }
 
-                    .arrow-logs {
-                        color: var(--break-list-item-icons-color);
-                        position: relative;
-                        top: 0px;
-                        left: -8px;
-                        margin-right: -8px;
-                        display: inline-block;
-                        cursor: pointer;
-                        transform-origin: center center;
-                        font-size: 20px;
-                        transition: all var(--animation-duration-min) ease-in-out;
-                        transition: transform var(--animation-duration-min) ease-in-out;
-                    }
+                        .log-year button,
+                        .log-month button,
+                        .log-day button {
+                            font-family: 'M PLUS 1';
+                            top: 5px;
+                            background: none;
+                            border: none;
+                            color: var(--links-color);
+                            cursor: pointer;
+                            margin-left: 0px;
+                            transition: color 0.5s ease;
+                            font-size: 14px;
+                            text-align: left;
+                            color: #ffffff;
+                            padding: 5px 10px;
+                            border-radius: 4px;
+                            transition: all 0.3s ease;
+                        }
 
-                    .arrow-logs:hover {
-                        color: var(--links-hover-color);
-                    }
+                        .log-year {
+                            position: relative;
+                            top: 0px;
+                        }
 
-                    .dl-d-icons-container-year,
-                    .dl-d-icons-container-month,
-                    .dl-d-icons-container-day {
-                        color: var(--break-list-item-icons-color);
-                        display: flex;
-                        margin-right: 5px;
-                    }
+                        .log-year button:hover,
+                        .log-month button:hover,
+                        .log-day button:hover {
+                            font-family: 'M PLUS 1';
+                        }
 
-                    .dl-d-icons {
-                        font-size: 18px;
-                        position: relative;
-                        top: 0px;
-                        margin-right: -10px;
-                        vertical-align: middle;
-                        transform: scale(0.9);
-                    }
+                        .log-year button .button-content:hover .arrow-logs,
+                        .log-month button .button-content:hover .arrow-logs,
+                        .log-day button .button-content:hover .arrow-logs {
+                            color: var(--links-hover-color);
+                        }
 
-                    .dl-d-icons:hover {
-                        color: var(--links-hover-color);
-                    }
+                        .arrow-logs {
+                            color: var(--break-list-item-icons-color);
+                            position: relative;
+                            top: 0px;
+                            left: -8px;
+                            margin-right: -8px;
+                            display: inline-block;
+                            cursor: pointer;
+                            transform-origin: center center;
+                            font-size: 20px;
+                            transition: all var(--animation-duration-min) ease-in-out;
+                            transition: transform var(--animation-duration-min) ease-in-out;
+                        }
 
-                    .folder-buttons-logfile,
-                    .folder-buttons {
-                        color: var(--break-list-item-text-color);
-                        position: relative;
-                        top: 1px;
-                    }
+                        .arrow-logs:hover {
+                            color: var(--links-hover-color);
+                        }
 
-                    .rotate {
-                        transform: rotate(90deg);
-                        transition: transform var(--animation-duration-min) ease-in-out;
-                    }
+                        .dl-d-icons-container-year,
+                        .dl-d-icons-container-month,
+                        .dl-d-icons-container-day {
+                            color: var(--break-list-item-icons-color);
+                            display: flex;
+                            margin-right: 5px;
+                        }
 
-                    .material-symbols-outlined {
-                        color: var(--break-list-item-icons-color);
-                        vertical-align: middle;
-                        transition: all var(--animation-duration-min) ease-in-out;
-                    }
+                        .dl-d-icons {
+                            font-size: 18px;
+                            position: relative;
+                            top: 0px;
+                            margin-right: -10px;
+                            vertical-align: middle;
+                            transform: scale(0.9);
+                        }
 
-                    .log-month-row {
-                        position: relative;
-                        width: 100%;
-                    }
+                        .dl-d-icons:hover {
+                            color: var(--links-hover-color);
+                        }
 
-                    .dl-d-icons-container {
-                        float: right;
-                        margin-right: 7px;
-                        margin-top: 2px;
-                    }
-                    
-                </style>
+                        .folder-buttons-logfile,
+                        .folder-buttons {
+                            color: var(--break-list-item-text-color);
+                            position: relative;
+                            top: 1px;
+                        }
 
-                <greet>Logs</greet>
+                        .rotate {
+                            transform: rotate(90deg);
+                            transition: transform var(--animation-duration-min) ease-in-out;
+                        }
 
-                <br><br><br>
+                        .material-symbols-outlined {
+                            color: var(--break-list-item-icons-color);
+                            vertical-align: middle;
+                            transition: all var(--animation-duration-min) ease-in-out;
+                        }
 
-                <% logs.forEach((logYear, yearIndex)=> { %>
-                    <div class="log-year-container">
-                        <div class="log-year" id="year<%= yearIndex %>" onclick="toggleLogsContainer(event, this)">
-                            <button class="toggle-button">
-                                <span class="button-content">
-                                    <span class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
-                                    <span class="folder-buttons">
-                                        <%= logYear.year %>
+                        .log-month-row {
+                            position: relative;
+                            width: 100%;
+                        }
+
+                        .dl-d-icons-container {
+                            float: right;
+                            margin-right: 7px;
+                            margin-top: 2px;
+                        }
+                    </style>
+
+                    <br>
+
+                    <% logs.forEach((logYear, yearIndex)=> { %>
+                        <div class="log-year-container">
+                            <div class="log-year" id="year<%= yearIndex %>" onclick="toggleLogsContainer(event, this)">
+                                <button class="toggle-button">
+                                    <span class="button-content">
+                                        <span class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
+                                        <span class="folder-buttons">
+                                            <%= logYear.year %>
+                                        </span>
                                     </span>
-                                </span>
-                            </button>
-                            <span class="dl-d-icons-container dl-d-icons-container-year">
-                                <button class="log-button"
-                                    onclick="event.stopPropagation(); downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
-                                    <i class="material-symbols-outlined dl-d-icons"
-                                        style="display: inline-block;">get_app</i>
                                 </button>
-                                <% if (currentUser.username==='admin' ) { %>
+                                <span class="dl-d-icons-container dl-d-icons-container-year">
                                     <button class="log-button"
-                                        onclick="event.stopPropagation(); deleteYearLogs('<%= logYear.year %>')">
+                                        onclick="event.stopPropagation(); downloadYearLogs('<%= logYear.year %>', '<%= JSON.stringify(logYear.months) %>')">
                                         <i class="material-symbols-outlined dl-d-icons"
-                                            style="display: inline-block;">close</i>
+                                            style="display: inline-block;">get_app</i>
                                     </button>
-                                    <% } %>
-                            </span>
-                            <div class="log-month-container">
-                                <% logYear.months.forEach((logMonth, monthIndex)=> { %>
-                                    <div class="log-month-row" onclick="event.stopPropagation();">
-                                        <div class="log-month" id="month<%= monthIndex %>"
-                                            onclick="toggleLogsContainer(event, this)">
-                                            <button class="toggle-button">
-                                                <span class="button-content">
-                                                    <span
-                                                        class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
-                                                    <span class="folder-buttons">
-                                                        <%= logMonth.month %>
+                                    <% if (currentUser.username==='admin' ) { %>
+                                        <button class="log-button"
+                                            onclick="event.stopPropagation(); deleteYearLogs('<%= logYear.year %>')">
+                                            <i class="material-symbols-outlined dl-d-icons"
+                                                style="display: inline-block;">close</i>
+                                        </button>
+                                        <% } %>
+                                </span>
+                                <div class="log-month-container">
+                                    <% logYear.months.forEach((logMonth, monthIndex)=> { %>
+                                        <div class="log-month-row" onclick="event.stopPropagation();">
+                                            <div class="log-month" id="month<%= monthIndex %>"
+                                                onclick="toggleLogsContainer(event, this)">
+                                                <button class="toggle-button">
+                                                    <span class="button-content">
+                                                        <span
+                                                            class="material-symbols-outlined arrow-logs">keyboard_arrow_right</span>
+                                                        <span class="folder-buttons">
+                                                            <%= logMonth.month %>
+                                                        </span>
                                                     </span>
-                                                </span>
-                                            </button>
-                                            <span class="dl-d-icons-container dl-d-icons-container-month">
-                                                    <button class="log-button" onclick="event.stopPropagation(); downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
-                                                        <i class="material-symbols-outlined dl-d-icons" style="display: inline-block;">get_app</i>
+                                                </button>
+                                                <span class="dl-d-icons-container dl-d-icons-container-month">
+                                                    <button class="log-button"
+                                                        onclick="event.stopPropagation(); downloadMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>', '<%= JSON.stringify(logMonth.logs) %>')">
+                                                        <i class="material-symbols-outlined dl-d-icons"
+                                                            style="display: inline-block;">get_app</i>
                                                     </button>
                                                     <% if (currentUser.username==='admin' ) { %>
-                                                        <button class="log-button" onclick="event.stopPropagation(); deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
-                                                            <i class="material-symbols-outlined dl-d-icons" style="display: inline-block;">close</i>
-                                                        </button>
-                                                    <% } %>
-                                            </span>
-                                            <div class="log-day-container">
-                                                <% logMonth.logs.forEach(logFile=> { %>
-                                                    <div class="log-day" onclick="event.stopPropagation();">
                                                         <button class="log-button"
-                                                            onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                            <span class="folder-buttons-logfile">
-                                                                <%= logFile %>
-                                                            </span>
+                                                            onclick="event.stopPropagation(); deleteMonthLogs('<%= logYear.year %>', '<%= logMonth.month %>')">
+                                                            <i class="material-symbols-outlined dl-d-icons"
+                                                                style="display: inline-block;">close</i>
                                                         </button>
-                                                        <span class="dl-d-icons-container dl-d-icons-container-day">
+                                                        <% } %>
+                                                </span>
+                                                <div class="log-day-container">
+                                                    <% logMonth.logs.forEach(logFile=> { %>
+                                                        <div class="log-day" onclick="event.stopPropagation();">
                                                             <button class="log-button"
-                                                                onclick="event.stopPropagation(); downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
-                                                                <i class="material-symbols-outlined dl-d-icons"
-                                                                    style="display: inline-block;">get_app</i>
+                                                                onclick="fetchLogContent('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                                <span class="folder-buttons-logfile">
+                                                                    <%= logFile %>
+                                                                </span>
                                                             </button>
-                                                            <% if (currentUser.username==='admin' ) { %>
+                                                            <span class="dl-d-icons-container dl-d-icons-container-day">
                                                                 <button class="log-button"
-                                                                    onclick="event.stopPropagation(); deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                                    onclick="event.stopPropagation(); downloadLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
                                                                     <i class="material-symbols-outlined dl-d-icons"
-                                                                        style="display: inline-block;">close</i>
+                                                                        style="display: inline-block;">get_app</i>
                                                                 </button>
-                                                                <% } %>
-                                                        </span>
-                                                    </div>
-                                                    <% }); %>
+                                                                <% if (currentUser.username==='admin' ) { %>
+                                                                    <button class="log-button"
+                                                                        onclick="event.stopPropagation(); deleteLogFile('<%= logYear.year %>', '<%= logMonth.month %>', '<%= logFile %>')">
+                                                                        <i class="material-symbols-outlined dl-d-icons"
+                                                                            style="display: inline-block;">close</i>
+                                                                    </button>
+                                                                    <% } %>
+                                                            </span>
+                                                        </div>
+                                                        <% }); %>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <% }); %>
+                                        <% }); %>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <% }); %>
+                        <% }); %>
 
-                        <script>
-                            const toggleLogsContainer = (event, element) => {
-                                event.stopPropagation();
+                            <script>
+                                const toggleLogsContainer = (event, element) => {
+                                    event.stopPropagation();
 
-                                const logsContainer = element.querySelector('.log-month-container, .log-day-container') || element.querySelector('.log-year-container');
-                                const arrow = element.querySelector('.arrow-logs');
+                                    const logsContainer = element.querySelector('.log-month-container, .log-day-container') || element.querySelector('.log-year-container');
+                                    const arrow = element.querySelector('.arrow-logs');
 
-                                if (logsContainer && arrow) {
-                                    const isOpen = logsContainer.classList.toggle('open');
-                                    arrow.classList.toggle('rotate');
+                                    if (logsContainer && arrow) {
+                                        const isOpen = logsContainer.classList.toggle('open');
+                                        arrow.classList.toggle('rotate');
 
-                                    if (isOpen) {
-                                        logsContainer.style.opacity = '0';
-                                        logsContainer.style.display = 'block';
-                                        const containerHeight = logsContainer.scrollHeight;
-                                        logsContainer.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
-                                        logsContainer.style.opacity = '1';
-                                    } else {
-                                        logsContainer.style.opacity = '0';
-                                        logsContainer.style.transition = 'max-height 0s ease, opacity 0.3s ease';
-                                        logsContainer.style.display = 'none';
+                                        if (isOpen) {
+                                            logsContainer.style.opacity = '0';
+                                            logsContainer.style.display = 'block';
+                                            const containerHeight = logsContainer.scrollHeight;
+                                            logsContainer.style.transition = 'max-height 0.3s ease, opacity 0.3s ease';
+                                            logsContainer.style.opacity = '1';
+                                        } else {
+                                            logsContainer.style.opacity = '0';
+                                            logsContainer.style.transition = 'max-height 0s ease, opacity 0.3s ease';
+                                            logsContainer.style.display = 'none';
+                                        }
+
+                                        saveMenuState();
                                     }
+                                };
 
-                                    saveMenuState();
+                                const saveMenuState = () => {
+                                    const menuState = {};
+                                    const logContainers = document.querySelectorAll('.log-year-container, .log-month-container, .log-day-container');
+                                    logContainers.forEach(container => {
+                                        const id = container.parentElement.id;
+                                        const isOpen = container.classList.contains('open');
+                                        menuState[id] = isOpen;
+                                    });
+                                    localStorage.setItem('menuState', JSON.stringify(menuState));
                                 }
-                            };
 
-                            const saveMenuState = () => {
-                                const menuState = {};
-                                const logContainers = document.querySelectorAll('.log-year-container, .log-month-container, .log-day-container');
-                                logContainers.forEach(container => {
-                                    const id = container.parentElement.id;
-                                    const isOpen = container.classList.contains('open');
-                                    menuState[id] = isOpen;
-                                });
-                                localStorage.setItem('menuState', JSON.stringify(menuState));
-                            }
-
-                            const loadMenuState = () => {
-                                const menuState = JSON.parse(localStorage.getItem('menuState'));
-                                if (menuState) {
-                                    for (const id in menuState) {
-                                        const isOpen = menuState[id];
-                                        const container = document.getElementById(id);
-                                        if (isOpen && container) {
-                                            const logsContainer = container.querySelector('.log-year-container, .log-month-container, .log-day-container');
-                                            if (logsContainer) {
-                                                container.querySelector('.arrow-logs').classList.add('rotate');
-                                                logsContainer.classList.add('open');
+                                const loadMenuState = () => {
+                                    const menuState = JSON.parse(localStorage.getItem('menuState'));
+                                    if (menuState) {
+                                        for (const id in menuState) {
+                                            const isOpen = menuState[id];
+                                            const container = document.getElementById(id);
+                                            if (isOpen && container) {
+                                                const logsContainer = container.querySelector('.log-year-container, .log-month-container, .log-day-container');
+                                                if (logsContainer) {
+                                                    container.querySelector('.arrow-logs').classList.add('rotate');
+                                                    logsContainer.classList.add('open');
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
 
 
-                            window.addEventListener('DOMContentLoaded', () => {
-                                const logContainers = document.querySelectorAll('.log-year-container, .log-month-container, .log-day-container');
-                                logContainers.forEach((container, index) => {
-                                    setTimeout(() => {
-                                        container.classList.add('visible');
-                                    }, 200 * (index + 1));
+                                window.addEventListener('DOMContentLoaded', () => {
+                                    const logContainers = document.querySelectorAll('.log-year-container, .log-month-container, .log-day-container');
+                                    logContainers.forEach((container, index) => {
+                                        setTimeout(() => {
+                                            container.classList.add('visible');
+                                        }, 200 * (index + 1));
+                                    });
+                                    loadMenuState();
                                 });
-                                loadMenuState();
-                            });
 
-                            const fetchLogContent = async (year, month, day) => {
-                                try {
-                                    const response = await fetch(`/logs/${year}/${month}/${day}`);
-                                    const data = await response.json();
+                                const fetchLogContent = async (year, month, day) => {
+                                    try {
+                                        const response = await fetch(`/logs/${year}/${month}/${day}`);
+                                        const data = await response.json();
 
-                                    let params = 'toolbar=no, popup=yes, directories=no, titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=no, resizable=no,width=750,height=450,left=100,top=100';
-                                    let logWindow = window.open('', '', params);
+                                        let params = 'toolbar=no, popup=yes, directories=no, titlebar=no, toolbar=no, location=no, status=no, menubar=no, scrollbars=no, resizable=no,width=750,height=450,left=100,top=100';
+                                        let logWindow = window.open('', '', params);
 
-                                    logWindow.document.write(`
+                                        logWindow.document.write(`
                                 <!DOCTYPE html>
                                 <html>
                                 <head>
@@ -362,191 +373,191 @@
                                 </html>
                             `);
 
-                                    logWindow.document.close();
-                                } catch (error) {
-                                    console.error("Error fetching log content:", error);
+                                        logWindow.document.close();
+                                    } catch (error) {
+                                        console.error("Error fetching log content:", error);
+                                    }
                                 }
-                            }
 
-                            const downloadLogFile = (year, month, day) => {
-                                const link = document.createElement('a');
-                                link.href = `/logs/${year}/${month}/${day}/download`;
-                                link.download = `${year}-${month}-${day}.log`;
-                                document.body.appendChild(link);
-                                link.click();
-                                document.body.removeChild(link);
-                            }
-
-                            const deleteLogFile = async (year, month, day) => {
-                                try {
-                                    const response = await fetch(`/logs/${year}/${month}/${day}`, { method: 'DELETE' });
-                                    if (response.ok) {
-                                        console.log('Log file successfully deleted');
-                                        location.reload();
-                                    }
-                                } catch (error) {
-                                    console.error("Error deleting log file:", error);
+                                const downloadLogFile = (year, month, day) => {
+                                    const link = document.createElement('a');
+                                    link.href = `/logs/${year}/${month}/${day}/download`;
+                                    link.download = `${year}-${month}-${day}.log`;
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
                                 }
-                            }
 
-                            const downloadMonthLogs = async (year, month) => {
-                                try {
-                                    const response = await fetch(`/logs/${year}/${month}/download`, { method: 'GET' });
-                                    if (!response.ok) {
-                                        throw new Error('Download failed');
+                                const deleteLogFile = async (year, month, day) => {
+                                    try {
+                                        const response = await fetch(`/logs/${year}/${month}/${day}`, { method: 'DELETE' });
+                                        if (response.ok) {
+                                            console.log('Log file successfully deleted');
+                                            location.reload();
+                                        }
+                                    } catch (error) {
+                                        console.error("Error deleting log file:", error);
                                     }
-
-                                    const blob = await response.blob();
-                                    const url = window.URL.createObjectURL(blob);
-                                    const a = document.createElement('a');
-                                    a.href = url;
-                                    a.target = '_blank';
-                                    a.download = `${year}-${month}-logs.zip`;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    a.remove();
-                                } catch (error) {
-                                    console.error('Error during download:', error);
                                 }
-                            };
 
-                            const downloadYearLogs = async (year) => {
-                                try {
-                                    const response = await fetch(`/logs/${year}/download`, { method: 'GET' });
-                                    if (!response.ok) {
-                                        throw new Error('Download failed');
+                                const downloadMonthLogs = async (year, month) => {
+                                    try {
+                                        const response = await fetch(`/logs/${year}/${month}/download`, { method: 'GET' });
+                                        if (!response.ok) {
+                                            throw new Error('Download failed');
+                                        }
+
+                                        const blob = await response.blob();
+                                        const url = window.URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.target = '_blank';
+                                        a.download = `${year}-${month}-logs.zip`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        a.remove();
+                                    } catch (error) {
+                                        console.error('Error during download:', error);
                                     }
+                                };
 
-                                    const blob = await response.blob();
-                                    const url = window.URL.createObjectURL(blob);
-                                    const a = document.createElement('a');
-                                    a.href = url;
-                                    a.target = '_blank';
-                                    a.download = `${year}-logs.zip`;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    a.remove();
-                                } catch (error) {
-                                    console.error('Error during download:', error);
-                                }
-                            };
+                                const downloadYearLogs = async (year) => {
+                                    try {
+                                        const response = await fetch(`/logs/${year}/download`, { method: 'GET' });
+                                        if (!response.ok) {
+                                            throw new Error('Download failed');
+                                        }
 
-                            const deleteMonthLogs = async (year, month) => {
-                                try {
-                                    const response = await fetch(`/logs/${year}/${month}`, { method: 'DELETE' });
-                                    if (response.ok) {
-                                        console.log('Logs for the month successfully deleted');
-                                        location.reload();
+                                        const blob = await response.blob();
+                                        const url = window.URL.createObjectURL(blob);
+                                        const a = document.createElement('a');
+                                        a.href = url;
+                                        a.target = '_blank';
+                                        a.download = `${year}-logs.zip`;
+                                        document.body.appendChild(a);
+                                        a.click();
+                                        a.remove();
+                                    } catch (error) {
+                                        console.error('Error during download:', error);
                                     }
-                                } catch (error) {
-                                    console.error('Error deleting logs for the month:', error);
-                                }
-                            };
+                                };
 
-                            const deleteYearLogs = async (year) => {
-                                try {
-                                    const response = await fetch(`/logs/${year}`, { method: 'DELETE' });
-                                    if (response.ok) {
-                                        console.log('Logs for the year successfully deleted');
-                                        location.reload();
+                                const deleteMonthLogs = async (year, month) => {
+                                    try {
+                                        const response = await fetch(`/logs/${year}/${month}`, { method: 'DELETE' });
+                                        if (response.ok) {
+                                            console.log('Logs for the month successfully deleted');
+                                            location.reload();
+                                        }
+                                    } catch (error) {
+                                        console.error('Error deleting logs for the month:', error);
                                     }
-                                } catch (error) {
-                                    console.error('Error deleting logs for the year:', error);
-                                }
-                            };
+                                };
 
-                        </script>
-
-                        <!-- ////////////////// - ARROW HOVERING - ////////////////// -->
-
-                        <script>
-
-                            let styles = getComputedStyle(document.documentElement);
-                            let linksColor = styles.getPropertyValue('--links-color').trim();
-                            let linksHoverColor = styles.getPropertyValue('--links-hover-color').trim();
-
-                            document.querySelectorAll('.log-year-container').forEach((container) => {
-                                let arrowIcon = container.querySelector('.log-year .arrow-logs');
-                                let closeButton = container.querySelector('.log-year .dl-d-icons-container-year .dl-d-icons');
-
-                                container.addEventListener('mouseover', function () {
-                                    if (arrowIcon) {
-                                        arrowIcon.style.color = linksHoverColor;
+                                const deleteYearLogs = async (year) => {
+                                    try {
+                                        const response = await fetch(`/logs/${year}`, { method: 'DELETE' });
+                                        if (response.ok) {
+                                            console.log('Logs for the year successfully deleted');
+                                            location.reload();
+                                        }
+                                    } catch (error) {
+                                        console.error('Error deleting logs for the year:', error);
                                     }
-                                });
+                                };
 
-                                container.addEventListener('mouseout', function () {
-                                    if (arrowIcon) {
-                                        arrowIcon.style.color = linksColor;
-                                    }
-                                });
+                            </script>
 
-                                if (closeButton) {
-                                    closeButton.addEventListener('mouseover', function () {
+                            <!-- ////////////////// - ARROW HOVERING - ////////////////// -->
+
+                            <script>
+
+                                let styles = getComputedStyle(document.documentElement);
+                                let linksColor = styles.getPropertyValue('--links-color').trim();
+                                let linksHoverColor = styles.getPropertyValue('--links-hover-color').trim();
+
+                                document.querySelectorAll('.log-year-container').forEach((container) => {
+                                    let arrowIcon = container.querySelector('.log-year .arrow-logs');
+                                    let closeButton = container.querySelector('.log-year .dl-d-icons-container-year .dl-d-icons');
+
+                                    container.addEventListener('mouseover', function () {
+                                        if (arrowIcon) {
+                                            arrowIcon.style.color = linksHoverColor;
+                                        }
+                                    });
+
+                                    container.addEventListener('mouseout', function () {
                                         if (arrowIcon) {
                                             arrowIcon.style.color = linksColor;
                                         }
                                     });
 
-                                    closeButton.addEventListener('mouseout', function () {
-                                        if (arrowIcon) {
-                                            arrowIcon.style.color = '';
+                                    if (closeButton) {
+                                        closeButton.addEventListener('mouseover', function () {
+                                            if (arrowIcon) {
+                                                arrowIcon.style.color = linksColor;
+                                            }
+                                        });
+
+                                        closeButton.addEventListener('mouseout', function () {
+                                            if (arrowIcon) {
+                                                arrowIcon.style.color = '';
+                                            }
+                                        });
+                                    }
+
+                                    container.addEventListener('click', function () {
+                                        let button = container.querySelector('.log-year button');
+                                        if (button) {
+                                            button.click();
                                         }
                                     });
-                                }
 
-                                container.addEventListener('click', function () {
-                                    let button = container.querySelector('.log-year button');
-                                    if (button) {
-                                        button.click();
-                                    }
                                 });
 
-                            });
+                                document.querySelectorAll('.log-month-row').forEach((row) => {
+                                    let arrowIcon = row.querySelector('.log-month .arrow-logs');
+                                    let closeButton = row.querySelector('.log-month .dl-d-icons-container-month .dl-d-icons');
 
-                            document.querySelectorAll('.log-month-row').forEach((row) => {
-                                let arrowIcon = row.querySelector('.log-month .arrow-logs');
-                                let closeButton = row.querySelector('.log-month .dl-d-icons-container-month .dl-d-icons');
+                                    row.addEventListener('mouseover', function () {
+                                        if (arrowIcon) {
+                                            arrowIcon.style.color = linksHoverColor;
+                                        }
+                                    });
 
-                                row.addEventListener('mouseover', function () {
-                                    if (arrowIcon) {
-                                        arrowIcon.style.color = linksHoverColor;
-                                    }
-                                });
-
-                                row.addEventListener('mouseout', function () {
-                                    if (arrowIcon) {
-                                        arrowIcon.style.color = linksColor;
-                                    }
-                                });
-
-                                if (closeButton) {
-                                    closeButton.addEventListener('mouseover', function () {
+                                    row.addEventListener('mouseout', function () {
                                         if (arrowIcon) {
                                             arrowIcon.style.color = linksColor;
                                         }
                                     });
 
-                                    closeButton.addEventListener('mouseout', function () {
-                                        if (arrowIcon) {
-                                            arrowIcon.style.color = '';
+                                    if (closeButton) {
+                                        closeButton.addEventListener('mouseover', function () {
+                                            if (arrowIcon) {
+                                                arrowIcon.style.color = linksColor;
+                                            }
+                                        });
+
+                                        closeButton.addEventListener('mouseout', function () {
+                                            if (arrowIcon) {
+                                                arrowIcon.style.color = '';
+                                            }
+                                        });
+                                    }
+
+                                    row.addEventListener('click', function () {
+                                        let button = row.querySelector('.log-month button');
+                                        if (button) {
+                                            button.click();
                                         }
                                     });
-                                }
-
-                                row.addEventListener('click', function () {
-                                    let button = row.querySelector('.log-month button');
-                                    if (button) {
-                                        button.click();
-                                    }
                                 });
-                            });
 
 
-                        </script>
+                            </script>
 
-                        <br><br><br>
+                            <br><br><br>
 
-                        <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+                            <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
 
-                        <%- include('partials/bottomjs.ejs') %>
+                            <%- include('partials/bottomjs.ejs') %>

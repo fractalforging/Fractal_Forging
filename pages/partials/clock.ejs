@@ -1,0 +1,45 @@
+<!-- ////////////// - CLOCK - ////////////////-->
+
+<style>
+    .clock-container {
+        position: relative;
+        top: 5px;
+        margin-bottom: 5px;
+        display: inline-block;
+        white-space: nowrap;
+        transition: all var(--animation-duration-base) ease-in-out;
+    }
+
+    .clock {
+        position: absolute;
+        top: 0px;
+        left: -40px;
+        font-size: 18px;
+        font-family: var(--break-list-item-timer-font-family);
+    }
+</style>
+
+<span class="clock-container"><span id="clock" class="clock">
+    </span>
+</span>
+
+<br><br>
+
+<script>
+    'use strict';
+
+    const updateClock = () => {
+        const now = new Date();
+        const formatter = new Intl.DateTimeFormat(undefined, {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+        const timeString = formatter.format(now);
+        document.getElementById('clock').innerText = timeString;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
