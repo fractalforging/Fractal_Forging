@@ -55,6 +55,8 @@ const removeBreak = (io, BreakTrack, User) => {
           roundedRemainingBreakTime = 0;
         } else if (remainingBreakTimeInSeconds >= 30 && remainingBreakTimeInSeconds < 90) {
           roundedRemainingBreakTime = 60;
+        } else if (remainingBreakTimeInSeconds < 0) {
+          roundedRemainingBreakTime = 0;
         } else {
           roundedRemainingBreakTime = Math.floor((remainingBreakTimeInSeconds + 30) / 60) * 60;
         }
@@ -62,6 +64,7 @@ const removeBreak = (io, BreakTrack, User) => {
         userToUpdate.remainingBreakTime += roundedRemainingBreakTime;
         await userToUpdate.save({ session });
       }
+
 
       await session.commitTransaction();
       hasCommitted = true;
