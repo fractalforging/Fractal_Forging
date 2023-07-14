@@ -12,7 +12,7 @@ import mongoose from 'mongoose';
 import compression from 'compression';
 const app = express();
 const server = http.createServer(app);
-app.use(compression());
+app.use(compression()); 
 
 //======================
 // ENVIRONMENT VARIABLES
