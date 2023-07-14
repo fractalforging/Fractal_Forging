@@ -9,16 +9,22 @@
           &nbsp;
           <br>
 
+          <!-- ////////////////// - HEADER - ////////////////// -->
+
           <hr class="divider">
 
-          <!-- ////////////////// - GREET - ////////////////// -->
+          <pagetitle>Settings</pagetitle><br>
 
-          <greet>Settings</greet><br><br><br>
+          <%- include('partials/clock.ejs') %>
 
-          <joke>Theme</joke><br>
+            <hr class="divider">
 
-          <%- include('partials/themes.ejs') %>
+            <!-- ////////////// - THEME TOGGLE - ////////////////-->
 
-            <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+            <joke>Theme</joke><br>
 
-            <%- include('partials/bottomjs.ejs') %>
+            <%- include('partials/themes.ejs') %>
+
+              <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+
+              <%- include('partials/bottomjs.ejs') %>

@@ -14,6 +14,14 @@ const endBreak = (BreakTrack) => {
       
       res.sendStatus(200);
     } catch (err) {
+      // Log the full error object
+      console.error("Full error object: ", err);
+
+      // Log the error message, name and stack trace separately
+      console.error("Error name: ", err.name);
+      console.error("Error message: ", err.message);
+      console.error("Error stack: ", err.stack);
+
       logger.error("Error updating hasEnded field: ", err, { username: req.user.username });
       res.sendStatus(500);
     }

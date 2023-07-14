@@ -277,6 +277,11 @@ nonstart {
   transition: all var(--animation-duration-short) ease-in-out;
 }
 
+.item-button{
+  width: 60px;
+  outline: none;
+}
+
 .name-change-button:hover,
 .reset-break-time-button:hover,
 .time-change-button:hover,
@@ -296,6 +301,11 @@ nonstart {
 .reset-password-button {
   margin-left: auto;
   margin-right: 5px;
+}
+
+.reset-break-time-button {
+  top: 8px;
+  position: relative;
 }
 
 .item-button option {

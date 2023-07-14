@@ -8,31 +8,37 @@
         &nbsp;
         <br>
 
+        <!-- ////////////////// - HEADER - ////////////////// -->
+
         <hr class="divider">
 
-        <!-- ////////////////// - FORM - ////////////////// -->
+        <pagetitle>Register an account</pagetitle><br>
 
-        <pagetitle>Register an account</pagetitle>
+        <%- include('partials/clock.ejs') %>
 
-        <form action="/register" method="POST" class="credentials">
-          <div class="input-container">
-            <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength=""
-              value="">
-            <span class="placeholder1 username">&nbsp;Username&nbsp;</span>
-          </div>
-          <div class="input-container">
-            <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength=""
-              value="">
-            <span class="placeholder1 password">&nbsp;Password&nbsp;</span>
-          </div>
-          <div class="input-container">
-            <input type="password" id="confirmpassword" name="confirmpassword" autocomplete="off" class="inputfield"
-              maxlength="" value="">
-            <span class="placeholder1">&nbsp;Confirm Password&nbsp;</span>
-          </div>
-          <button class="form-button">Submit</button>
-        </form>
+          <hr class="divider">
 
-        <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+          <!-- ////////////////// - FORM - ////////////////// -->
 
-        <%- include('partials/bottomjs.ejs') %>
+          <form action="/register" method="POST" class="credentials">
+            <div class="input-container">
+              <input type="text" id="username" name="username" autocomplete="off" class="inputfield" maxlength=""
+                value="">
+              <span class="placeholder1 username">&nbsp;Username&nbsp;</span>
+            </div>
+            <div class="input-container">
+              <input type="password" id="password" name="password" autocomplete="off" class="inputfield" maxlength=""
+                value="">
+              <span class="placeholder1 password">&nbsp;Password&nbsp;</span>
+            </div>
+            <div class="input-container">
+              <input type="password" id="confirmpassword" name="confirmpassword" autocomplete="off" class="inputfield"
+                maxlength="" value="">
+              <span class="placeholder1">&nbsp;Confirm Password&nbsp;</span>
+            </div>
+            <button class="form-button">Submit</button>
+          </form>
+
+          <!-- ////////////// - BOTTOM PARTIALS - ////////////////-->
+
+          <%- include('partials/bottomjs.ejs') %>
