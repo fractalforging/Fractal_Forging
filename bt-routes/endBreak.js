@@ -22,7 +22,7 @@ const endBreak = (BreakTrack) => {
       console.error("Error message: ", err.message);
       console.error("Error stack: ", err.stack);
 
-      logger.error("Error updating hasEnded field: ", err, { username: req.user.username });
+      logger.error(`Error updating hasEnded field: ${err}`, { username: req.user.username });
       res.sendStatus(500);
     }
   });
