@@ -6,6 +6,7 @@ import logger from '../routes/logger.js';
 import kleur from 'kleur';
 import LastResetTimestamp from '../models/LastResetTimestamp.js';
 import mongoose from 'mongoose';
+import config from '../config.js';
 
 const resetBreakTime = (io, User, location) => {
   const router = express.Router();
@@ -34,7 +35,7 @@ const resetBreakTime = (io, User, location) => {
     const session = await mongoose.startSession();
     session.startTransaction();
     try {
-      const resetBreakTimeInSeconds = 35 * 60;
+      const resetBreakTimeInSeconds = config.breakTime.totalMinutes * 60;
       await User.updateMany({}, { remainingBreakTime: resetBreakTimeInSeconds }, { session });
       const now = moment.tz(new Date(), 'Europe/' + location).toDate();
       const lastResetTimestampObj = await LastResetTimestamp.findOne().session(session);
