@@ -5,6 +5,7 @@ import User from '../models/user.js';
 import logger from './logger.js'; 
 import kleur from 'kleur';
 import { isLoggedIn, isAdmin } from '../middleware/authentication.js';
+import config from '../config.js';
 
 const changeTimeRoute = Router();
 
@@ -14,7 +15,7 @@ changeTimeRoute.post("/", isLoggedIn, isAdmin, async (req, res) => {
     const userId = req.body.userId;
     const user = await User.findById(userId);
     const newTime = parseInt(req.body.newTime);
-    if (newTime === null || isNaN(newTime) || newTime < 0 || newTime > 35) {
+    if (newTime === null || isNaN(newTime) || newTime < 0 || newTime > config.breakTime.totalMinutes) {
       logger.error(`Invalid new break time value for ${kleur.magenta(user.username)} submited by ${kleur.magenta(actionUser.username)}`, { username: req.user.username });
       return res.status(400).json({ error: "Invalid break time value" });
     }
@@ -35,7 +36,6 @@ changeTimeRoute.get("/:userId", isLoggedIn, isAdmin, async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    // Assuming breakTime is stored in minutes, adjust if necessary
     const breakTime = user.remainingBreakTime / 60;
     return res.status(200).json({ breakTime });
   } catch (error) {
